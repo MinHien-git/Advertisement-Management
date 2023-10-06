@@ -1,0 +1,20 @@
+<%- include('../../includes/head.ejs',{_page_title:"Home"})%>
+<link rel ="stylesheet" href="/styles/navbar.css"/>
+</head>
+<body>
+    <%- include('../../includes/header.ejs')%>
+    <main>
+        <div id="map"></div>
+    </main>
+    <script>
+        mapboxgl.accessToken = 'sk.eyJ1IjoibWluLWhpZW4iLCJhIjoiY2xuZWxpY3JpMGdiZzJycXBoaml1Z3JlYyJ9.t3L76K9KhGAo-_7rge3LfQ';
+        const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/streets-v12', // style URL
+        center: [-74.5, 40], // starting position [lng, lat]
+        zoom: 9 // starting zoom
+        });
+    </script>
+</body>
+</html>
