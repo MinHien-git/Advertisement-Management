@@ -1,5 +1,5 @@
 <%- include('../../includes/head.ejs',{_page_title:"Home"})%>
-<link rel ="stylesheet" href="/styles/navbar.css"/>
+<link rel ="stylesheet" href="/styles/map.css"/>
 </head>
 <body>
     <%- include('../../includes/header.ejs')%>
@@ -7,14 +7,32 @@
         <div id="map"></div>
     </main>
     <script>
-        mapboxgl.accessToken = 'sk.eyJ1IjoibWluLWhpZW4iLCJhIjoiY2xuZWxpY3JpMGdiZzJycXBoaml1Z3JlYyJ9.t3L76K9KhGAo-_7rge3LfQ';
-        const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: 'mapbox://styles/mapbox/streets-v12', // style URL
-        center: [-74.5, 40], // starting position [lng, lat]
-        zoom: 9 // starting zoom
-        });
+        if ("geolocation" in navigator) { 
+            navigator.geolocation.getCurrentPosition(position => { 
+                mapboxgl.accessToken = 'pk.eyJ1IjoibWluLWhpZW4iLCJhIjoiY2xuZWxtdmNoMGkxbTJrcmwyc2ZyM3k0YiJ9.xKiZ-Vf1xKiDQlKlsTkBng';
+                const map = new mapboxgl.Map({
+                container: 'map', // container ID
+                // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+                style: 'mapbox://styles/mapbox/streets-v12', // style URL
+                center: [position.coords.longitude, position.coords.latitude], // starting position [lng, lat]
+                zoom: 12 // starting zoom
+            });
+
+            map.addControl(new mapboxgl.NavigationControl());
+            map.addControl(
+                new mapboxgl.GeolocateControl({
+                positionOptions: {
+                enableHighAccuracy: true
+                },
+                // When active the map will receive updates to the device's location as it changes.
+                trackUserLocation: true,
+                // Draw an arrow next to the location dot to indicate which direction the device is heading.
+                showUserHeading: true
+                })
+            );
+            }); 
+        } else { /* geolocation IS NOT available, handle it */ }
+        
     </script>
 </body>
 </html>
