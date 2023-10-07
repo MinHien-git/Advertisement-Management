@@ -7,7 +7,7 @@ const _get_login = (request, response) => {
 const _login = async (request, response) => {
   let { email, password } = request.body;
   let user = new User(email, password);
-
+  console.log(request.locals);
   let _user = await user._login();
   if (_user) {
     auth_ultis.create_user_session(request, _user, () => {
@@ -32,4 +32,9 @@ const _register = async (request, response) => {
     return response.redirect("/?register=failed");
   }
 };
-module.exports = { _get_login, _login, _get_register, _register };
+
+const _logout = (request, response) => {
+  auth_ultis.delete_user_authentication(request);
+  response.redirect("/");
+};
+module.exports = { _get_login, _login, _get_register, _register, _logout };

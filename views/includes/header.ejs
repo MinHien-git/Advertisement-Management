@@ -2,7 +2,11 @@
     <div id="burger"></div>
     <nav id="primary-navigation-bar">
         <ul id="primary-items-list">
+        <%if (!locals.isAuth) { %>
             <li><img id="profile" src="/images/user.png" alt ="profile"></li>
+            <%}else{%>
+            <li><form id="logout" method="post" action ="/logout"><button type="submit"><img id="logout" src="/images/logout.png" alt ="logout"></button></form></li>
+            <%}%>
         </ul>
     </nav>
     <%- include('../users/home/authentication.ejs')%>

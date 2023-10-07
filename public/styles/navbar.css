@@ -41,7 +41,7 @@
   margin-right: 2.5rem;
 }
 
-#primary-items-list > * > img {
+#primary-items-list > * img {
   width: 1.25rem;
 }
 
@@ -55,6 +55,11 @@
   position: block;
   transform: translateY(0);
   opacity: 1;
+}
+
+#logout button {
+  background-color: transparent;
+  border: 0;
 }
 /* for tablet */
 @media only screen and (min-width: 600px) {
