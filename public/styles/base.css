@@ -14,6 +14,8 @@
 body,
 html {
   min-height: 100vh;
+  overflow-x: hidden;
+  position: sticky;
 }
 
 ul {
@@ -29,4 +31,8 @@ li {
 
 .flex {
   display: flex;
+}
+
+.under-line {
+  text-decoration: underline;
 }

@@ -3,13 +3,13 @@
 </head>
 <body>
     <%- include('../../includes/header.ejs')%>
-    <main>
+    <main id="map-container">
         <div id="map"></div>
     </main>
     <script>
         if ("geolocation" in navigator) { 
             navigator.geolocation.getCurrentPosition(position => { 
-                mapboxgl.accessToken = 'pk.eyJ1IjoibWluLWhpZW4iLCJhIjoiY2xuZWxtdmNoMGkxbTJrcmwyc2ZyM3k0YiJ9.xKiZ-Vf1xKiDQlKlsTkBng';
+                mapboxgl.accessToken = 'pk.eyJ1IjoibWluLWhpZW4iLCJhIjoiY2xuZWt3ODRiMGQyZjJycml4aWNqdzJnOSJ9.gm7kTZ04NHQlKB6IEm7tqQ';
                 const map = new mapboxgl.Map({
                 container: 'map', // container ID
                 // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
