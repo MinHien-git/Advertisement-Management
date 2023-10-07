@@ -5,11 +5,13 @@ const app = express();
 const auth_routes = require("./routes/authentication.route");
 const map_routes = require("./routes/home.route");
 const db = require("./database/database");
+const create_session_config = require("./config/session");
+const express_session = require("express-session");
+const session_config = create_session_config();
 
 require("dotenv").config();
 
 const port = process.env.PORT;
-
 app.use(express.json({ limit: "50mb" }));
 app.use(
   express.urlencoded({
@@ -19,10 +21,12 @@ app.use(
   })
 );
 
+app.use(express_session(session_config));
+app.use(express.static("public"));
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.use(express.static("public"));
 app.use(auth_routes);
 app.use(map_routes);
 

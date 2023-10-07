@@ -17,10 +17,20 @@ module.exports = class User {
     this.address = address;
   }
 
-  _login() {}
+  async _login() {
+    const user = await db
+      .getDb()
+      .collection("users")
+      .findOne({ email: this.email });
+    if (user) {
+      if (await bcrypt.compare(this.password, user.password)) {
+        return user;
+      }
+    }
+    return undefined;
+  }
 
   async _register() {
-    // if (await !db.getDb().collection("users").findOne({ email: this.email })) {
     if (
       !(await db.getDb().collection("users").findOne({ email: this.email }))
     ) {
@@ -31,11 +41,7 @@ module.exports = class User {
         .insertOne({ ...this, password });
       return user;
     }
-    console.log(
-      await db.getDb().collection("users").findOne({ email: this.email })
-    );
     return undefined;
-    // }
   }
 
   _update() {}

@@ -1,5 +1,5 @@
 const User = require("../models/users.model");
-
+const auth_ultis = require("../utils/authentication");
 const _get_login = (request, response) => {
   response.render("users/authentication/login");
 };
@@ -8,7 +8,14 @@ const _login = async (request, response) => {
   let { email, password } = request.body;
   let user = new User(email, password);
 
-  await user._login();
+  let _user = await user._login();
+  if (_user) {
+    auth_ultis.create_user_session(request, _user, () => {
+      return response.redirect("/");
+    });
+  } else {
+    return response.redirect("/?login=failed");
+  }
 };
 
 const _get_register = (request, response) => {
