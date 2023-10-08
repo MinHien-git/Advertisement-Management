@@ -1,20 +1,13 @@
 const bcrypt = require("bcrypt");
 const db = require("../database/database");
+const { ObjectId } = require("mongodb");
 module.exports = class User {
-  constructor(
-    email,
-    password,
-    phone = "",
-    name = "",
-    address = "",
-    birth = ""
-  ) {
+  constructor(email, password, phone = "", name = "", birth = "") {
     this.email = email;
     this.password = password;
     this.name = name;
     this.birth = birth;
     this.phone = phone;
-    this.address = address;
   }
 
   async _login() {
@@ -44,9 +37,38 @@ module.exports = class User {
     return undefined;
   }
 
-  _update() {}
+  async _update(id) {
+    const user = await db.findOneAndUpdate(
+      {
+        _id: new ObjectId(id),
+      },
+      {
+        $set: {
+          email: this.email,
+          birth: this.birth,
+          email: this.email,
+          phone: this.phone,
+        },
+      },
+      { returnDocument: "after" }
+    );
 
-  _change_password() {}
+    return user;
+  }
 
-  _forgot_password() {}
+  async _change_password(new_password) {
+    const user = await db.findOne({ email: this.email });
+    if (user && (await bcrypt.compare(this.password, user.password))) {
+      let password = await bcrypt.hash(new_password, 12);
+      const user = await db.findOneAndUpdate(
+        { email: this.email },
+        { password: password },
+        { returnDocument: "after" }
+      );
+
+      return user;
+    }
+  }
+
+  async _forgot_password() {}
 };

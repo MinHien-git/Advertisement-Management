@@ -16,3 +16,34 @@
   overflow-x: hidden;
   z-index: -1;
 }
+
+.mapboxgl-ctrl-geocoder {
+  width: 20rem !important;
+}
+.mapboxgl-ctrl-geocoder--icon {
+  top: 0.65rem !important;
+}
+.mapboxgl-ctrl-geocoder--input {
+  font-family: "Roboto Mono", monospace !important;
+  font-size: 1rem !important;
+  padding-block: 1rem !important;
+  height: 2.5rem !important;
+}
+
+.mapboxgl-ctrl-geocoder {
+  left: 2rem !important;
+  top: 2.5rem !important;
+  height: 2.5rem !important;
+}
+
+@media screen and (min-width: 640px) {
+  .mapboxgl-ctrl-geocoder--icon {
+    top: 0.75rem !important;
+  }
+
+  .mapboxgl-ctrl-geocoder {
+    left: 5rem !important;
+    top: 1.5rem !important;
+    height: 2.5rem !important;
+  }
+}

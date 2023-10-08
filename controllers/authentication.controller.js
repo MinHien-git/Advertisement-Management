@@ -37,4 +37,33 @@ const _logout = (request, response) => {
   auth_ultis.delete_user_authentication(request);
   response.redirect("/");
 };
-module.exports = { _get_login, _login, _get_register, _register, _logout };
+
+const _update_infomation = async (request, response) => {
+  let { email, birth, name, phone } = request.body;
+  let user = new User(email, "", phone, name, birth);
+  let { id } = request.params;
+
+  if (await user._update(id)) {
+  }
+};
+
+const _update_password = async (request, response) => {
+  let { old_password, new_password } = request.body;
+  let user = new User(email, old_password, phone, name, birth);
+
+  if (await user._change_password(new_password)) {
+  }
+};
+
+const _forgot_password = async (request, response) => {
+  let { email } = request.body;
+};
+module.exports = {
+  _get_login,
+  _login,
+  _get_register,
+  _register,
+  _logout,
+  _update_infomation,
+  _update_password,
+};
