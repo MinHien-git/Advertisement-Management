@@ -17,33 +17,42 @@
   z-index: -1;
 }
 
-.mapboxgl-ctrl-geocoder {
-  width: 20rem !important;
+#btnLocation {
+  height: 2.5rem;
+  width: 2.5rem;
+  z-index: 1000;
+  background-color: white;
+  border-radius: 5px;
+  color: transparent;
+  position: absolute;
+  border: 0;
+  bottom: 2.5rem;
+  right: 1.5rem;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
-.mapboxgl-ctrl-geocoder--icon {
-  top: 0.65rem !important;
-}
-.mapboxgl-ctrl-geocoder--input {
-  font-family: "Roboto Mono", monospace !important;
-  font-size: 1rem !important;
-  padding-block: 1rem !important;
-  height: 2.5rem !important;
+#btnLocation span {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: url("../images/location.png");
+  background-size: 50% 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  z-index: 100;
 }
 
-.mapboxgl-ctrl-geocoder {
-  left: 2rem !important;
-  top: 2.5rem !important;
-  height: 2.5rem !important;
-}
-
-@media screen and (min-width: 640px) {
-  .mapboxgl-ctrl-geocoder--icon {
-    top: 0.75rem !important;
-  }
-
-  .mapboxgl-ctrl-geocoder {
-    left: 5rem !important;
-    top: 1.5rem !important;
-    height: 2.5rem !important;
-  }
+#search-input {
+  z-index: 1000;
+  position: absolute !important;
+  top: 2rem !important;
+  height: 2.5rem;
+  width: 25rem;
+  border-radius: 2px;
+  left: 5.5rem !important;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  border: 0;
+  padding-left: 1rem;
 }
