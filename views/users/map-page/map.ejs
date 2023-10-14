@@ -1,124 +1,384 @@
 <%- include('../../includes/head.ejs',{_page_title:"Home"})%>
-<link rel ="stylesheet" href="/styles/map.css"/>
+<link rel="stylesheet" href="/styles/map.css" />
 </head>
+
 <body>
-    <%- include('../../includes/header.ejs')%>
-    <main id="map-container">
-        <div id="map"></div>
-        <button id = "btnLocation" title = "button-click"><span></span></button>
-        <input id = "search-input" title = "search-box" placeholder="Enter your location" class="controls" type="text">
-    </main>
-    <script>
- (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-    key: "AIzaSyABCKw9vJHxxmvonYqbr2NPwnjZuNKxaro",
-    v: "weekly",
-    libraries:"places",
-    callback:"initAutocomplete"
-  });
-  let map;
-  let myLocation
-let btnLocation = document.getElementById("btnLocation");
-let markers = []
-async function initMap(position) {
-  // Request needed libraries.
-  const { Map } = await google.maps.importLibrary("maps");
-  map = new Map(document.getElementById("map"), {
-    zoom: 20,
-    center: position,
-    mapId: "DEMO_MAP_ID",
-     mapTypeControlOptions: {
-      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-      position: google.maps.ControlPosition.TOP_RIGHT
-    },
-    zoomControl: true,
-    zoomControlOptions: {
-      position: google.maps.ControlPosition.TOP_RIGHT
-    },
-    scaleControl: true,
-    streetViewControl: true,
-    streetViewControlOptions: {
-      position: google.maps.ControlPosition.TOP_RIGHT
-    }
-  });
+  <%- include('../../includes/header.ejs')%>
+  <main id="map-container">
+    <div id="map"></div>
+    <button id="btnLocation" title="button-click"><span></span></button>
+    <input id="search-input" title="search-box" placeholder="Enter your location" class="controls" type="text">
+  </main>
+  <script type="text/javascript">
+    (g => {
+      var h, a, k, p = "The Google Maps JavaScript API",
+        c = "google",
+        l = "importLibrary",
+        q = "__ib__",
+        m = document,
+        b = window;
+      b = b[c] || (b[c] = {});
+      var d = b.maps || (b.maps = {}),
+        r = new Set,
+        e = new URLSearchParams,
+        u = () => h || (h = new Promise(async (f, n) => {
+          await (a = m.createElement("script"));
+          e.set("libraries", [...r] + "");
+          for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+          e.set("callback", c + ".maps." + q);
+          a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+          d[q] = f;
+          a.onerror = () => h = n(Error(p + " could not load."));
+          a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+          m.head.append(a)
+        }));
+      d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
+    })({
+      key: "AIzaSyABCKw9vJHxxmvonYqbr2NPwnjZuNKxaro",
+      v: "beta",
+      libraries: "places",
+      callback: "initAutocomplete"
+    });
+    let map, popup, Popup;;
+    let myLocation
+    let btnLocation = document.getElementById("btnLocation");
+    let markers = []
+    let lastInteractedFeatureIds = [];
+    let lastClickedFeatureIds = [];
+    let datasetLayer;
+    let current_review_feature
 
-  
-   const input = document.getElementById("search-input");
-   const searchBox = new google.maps.places.SearchBox(input);
-   // Create the search box and link it to the UI element.
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    // Bias the SearchBox results towards current map's viewport.
-    map.addListener("bounds_changed", () => {
+    const styleOptions = {
+      strokeWeight: 2,
+      strokeOpacity: 1,
+      fillOpacity: 0.3,
+    };
+
+    const styleClicked = {
+      ...styleOptions,
+      fillOpacity: 0.5,
+    };
+    const styleMouseMove = {
+      ...styleOptions,
+      strokeWeight: 4.0,
+      fillOpacity: 1,
+    };
+
+    async function initMap(position) {
+      // Request needed libraries.
+      const {
+        Map
+      } = await google.maps.importLibrary("maps");
+      map = new Map(document.getElementById("map"), {
+        zoom: 20,
+        center: position,
+        mapId: "5138ed8aef82ae42",
+        mapTypeControlOptions: {
+          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        scaleControl: true,
+        streetViewControl: true,
+        streetViewControlOptions: {
+          position: google.maps.ControlPosition.TOP_RIGHT
+        }
+      });
+
+
+      class Popup extends google.maps.OverlayView {
+        position;
+        containerDiv;
+        constructor(position, content) {
+          super();
+          this.position = position;
+          content.classList.add("popup-bubble");
+
+          // This zero-height div is positioned at the bottom of the bubble.
+          const bubbleAnchor = document.createElement("div");
+
+          bubbleAnchor.classList.add("popup-bubble-anchor");
+          bubbleAnchor.appendChild(content);
+
+          let infomation_button = document.createElement("button")
+          infomation_button.setAttribute("id", "info-button")
+          infomation_button.addEventListener("click", () => {
+            console.log(position)
+          })
+
+          let type = document.createElement("h3")
+          type.innerText = current_review_feature.type
+
+          let place = document.createElement("p")
+          place.innerText = current_review_feature.place
+
+          let size = document.createElement("p")
+          size.innerHTML = `Kích thước: <span class="bold">${current_review_feature.size}</span>`
+
+          let amount = document.createElement("p")
+          amount.innerHTML = `Số lượng: <span class="bold">${current_review_feature.amount}</span>`
+
+          let type_advertise = document.createElement("p")
+          type_advertise.innerHTML = `Hình thức: <span class="bold">${current_review_feature.type_advertise}</span>`
+
+          let place_type = document.createElement("p")
+          place_type.innerHTML = `Phân Loại: <span class="bold">${current_review_feature.place_type}</span>`
+
+          content.append(type)
+          content.append(place)
+          content.append(size)
+          content.append(amount)
+          content.append(type_advertise)
+          content.append(place_type)
+          content.append(infomation_button)
+          // This zero-height div is positioned at the bottom of the tip.
+          this.containerDiv = document.createElement("div");
+          this.containerDiv.classList.add("popup-container");
+          this.containerDiv.appendChild(bubbleAnchor);
+          // Optionally stop clicks, etc., from bubbling up to the map.
+          Popup.preventMapHitsAndGesturesFrom(this.containerDiv);
+        }
+        // Called when the popup is added to the map.
+        onAdd() {
+          this.getPanes().floatPane.appendChild(this.containerDiv);
+        }
+        //Called when the popup is removed from the map.
+        onRemove() {
+          if (this.containerDiv.parentElement) {
+            this.containerDiv.parentElement.removeChild(this.containerDiv);
+          }
+        }
+        //Called each frame when the popup needs to draw itself.
+        draw() {
+          const divPosition = this.getProjection().fromLatLngToDivPixel(
+            this.position,
+          );
+          // Hide the popup when it is far out of view.
+          const display =
+            Math.abs(divPosition.x)
+
+            <
+            4000 && Math.abs(divPosition.y) < 4000 ? "block" : "none";
+          if (display === "block") {
+            this.containerDiv.style.left = divPosition.x + "px";
+            this.containerDiv.style.top = divPosition.y + "px";
+          }
+          if (this.containerDiv.style.display !== display) {
+            this.containerDiv.style.display = display;
+          }
+        }
+      }
+
+      const input = document.getElementById("search-input");
+      const searchBox = new google.maps.places.SearchBox(input);
+
+      // Create the search box and link it to the UI element.
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      // Bias the SearchBox results towards current map's viewport.
+      map.addListener("bounds_changed", () => {
         searchBox.setBounds(map.getBounds());
-    });
+      });
+      datasetLayer = map.getDatasetFeatureLayer("94136b10-15ef-4f13-a1bf-5d1b2669f91d");
 
-searchBox.addListener("places_changed", () => {
-    const places = searchBox.getPlaces();
+      datasetLayer.addListener("click", handleClick);
+      datasetLayer.addListener("mousemove", handleMouseMove);
 
-    if (places.length == 0) {
-      return;
+      map.addListener("mousemove", () => {
+        // If the map gets a mousemove, that means there are no feature layers
+        // with listeners registered under the mouse, so we clear the last
+        // interacted feature ids.
+        if (lastInteractedFeatureIds?.length) {
+          lastInteractedFeatureIds = [];
+          datasetLayer.style = applyStyle
+
+        }
+      });
+
+      datasetLayer.style = setStyle;
+      console.log(datasetLayer.style)
+      const attributionDiv = document.createElement("div");
+      const attributionControl = createAttribution(map);
+      attributionDiv.appendChild(attributionControl);
+      map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(attributionDiv);
+      searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+          return;
+        }
+
+        // Clear out the old markers.
+        markers.forEach((marker) => {
+          marker.setMap(null);
+        });
+        markers = [];
+
+        // For each place, get the icon, name and location.
+        const bounds = new google.maps.LatLngBounds();
+
+        places.forEach((place) => {
+          if (!place.geometry || !place.geometry.location) {
+            console.log("Returned place contains no geometry");
+            return;
+          }
+
+          const icon = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25),
+          };
+
+          // Create a marker for each place.
+          markers.push(
+            new google.maps.Marker({
+              map,
+              icon,
+              title: place.name,
+              position: place.geometry.location,
+            }),
+          );
+          if (place.geometry.viewport) {
+            // Only geocodes have viewport.
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+        });
+        map.fitBounds(bounds);
+
+      });
+
+      function handleClick( /* MouseEvent */ e) {
+        if (e.features) {
+          if (popup) {
+            popup.onRemove()
+            map.setCenter(e.latLng.toJSON())
+          }
+          let content = document.createElement("div");
+          content.setAttribute("id", "content");
+          current_review_feature = e.features[0].datasetAttributes
+          console.log(current_review_feature)
+          popup = new Popup(
+            new google.maps.LatLng(e.latLng.toJSON().lat, e.latLng.toJSON().lng),
+            content
+          );
+          popup.setMap(map);
+          lastClickedFeatureIds = e.features.map(
+            (f) => f.datasetAttributes["globalid"],
+          );
+        }
+
+        //@ts-ignore
+        datasetLayer.style = applyStyle
+
+      }
+
+      function handleMouseMove( /* MouseEvent */ e) {
+        if (e.features) {
+          lastInteractedFeatureIds = e.features.map(
+            (f) => f.datasetAttributes["globalid"],
+          );
+        }
+
+        //@ts-ignore
+        datasetLayer.style = applyStyle
+
+      }
+
+      btnLocation.addEventListener('click', function() {
+        goToMyLocation();
+      });
+
+      function goToMyLocation() {
+        map.setCenter(myLocation);
+      }
+
+      function setStyle(params) {
+        const datasetFeature = params.feature;
+        let color = "red"
+        const place_type =
+          datasetFeature.datasetAttributes["place_type"]
+        if (place_type == "Đất Công/Công viên/Hành lang") {
+          color = 'red';
+        } else {
+          color = 'rgb(0, 132, 255)';
+        }
+        return /** @type {google.maps.Data.StyleOptions} */ ({
+          ...styleOptions,
+          fillColor: color,
+          strokeColor: color,
+          strokeWeight: 2
+        });
+      }
+
+      function applyStyle( /* FeatureStyleFunctionOptions */ params) {
+        const datasetFeature = params.feature;
+        let color = "red"
+        const place_type = datasetFeature.datasetAttributes["place_type"]
+
+        if (place_type == "Đất Công/Công viên/Hành lang") {
+          color = 'red';
+        } else {
+          color = 'rgb(0, 132, 255)';
+        }
+        // Note, 'globalid' is an attribute in this dataset.
+        //@ts-ignore
+        if (
+          lastClickedFeatureIds.includes(datasetFeature.datasetAttributes["globalid"])
+        ) {
+          return {
+            ...styleClicked,
+            fillColor: color,
+            strokeColor: color,
+          };
+        }
+
+        //@ts-ignore
+        if (
+          lastInteractedFeatureIds.includes(datasetFeature.datasetAttributes["globalid"])
+        ) {
+          return {
+            ...styleMouseMove,
+            fillColor: color,
+            strokeColor: color,
+          }
+        }
+        return {
+          ...styleOptions,
+          fillColor: color,
+          strokeColor: color,
+        }
+      }
     }
 
-    // Clear out the old markers.
-    markers.forEach((marker) => {
-      marker.setMap(null);
-    });
-    markers = [];
+    function createAttribution(map) {
+      const attributionLabel = document.createElement("div");
 
-    // For each place, get the icon, name and location.
-    const bounds = new google.maps.LatLngBounds();
-
-    places.forEach((place) => {
-      if (!place.geometry || !place.geometry.location) {
-        console.log("Returned place contains no geometry");
-        return;
-      }
-
-      const icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25),
-      };
-
-      // Create a marker for each place.
-      markers.push(
-        new google.maps.Marker({
-          map,
-          icon,
-          title: place.name,
-          position: place.geometry.location,
-        }),
-      );
-      if (place.geometry.viewport) {
-        // Only geocodes have viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
-    map.fitBounds(bounds);
-  });
-}
-
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
+      // Define CSS styles.
+      attributionLabel.style.backgroundColor = "#fff";
+      attributionLabel.style.opacity = "0.7";
+      attributionLabel.style.fontFamily = "Roboto Mono,Arial,sans-serif";
+      attributionLabel.style.fontSize = "10px";
+      attributionLabel.style.padding = "2px";
+      attributionLabel.style.margin = "2px";
+      attributionLabel.textContent = "Data source: NYC Open Data";
+      return attributionLabel;
+    }
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
         myLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
         };
         initMap(myLocation);
-       
-    })}
-
-btnLocation.addEventListener('click', function() {
-  goToMyLocation();
-});
-
-function goToMyLocation() {
-  map.setCenter(myLocation);
-}
-
-</script>
+      })
+    }
+  </script>
 </body>
+
 </html>
