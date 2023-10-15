@@ -36,3 +36,7 @@ li {
 .under-line {
   text-decoration: underline;
 }
+
+.bold {
+  font-weight: bold;
+}
