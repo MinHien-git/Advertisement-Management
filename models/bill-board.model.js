@@ -1,6 +1,6 @@
 const { getDb } = require("../database/database");
 
-class Advertisement {
+module.exports = class Billboard {
   constructor(type_billboard, geometry, properties, license) {
     this.type_billboard = type_billboard;
     this.position = position;
@@ -17,4 +17,4 @@ class Advertisement {
       ],
     });
   }
-}
+};
