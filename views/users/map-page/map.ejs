@@ -39,15 +39,15 @@
       libraries: "places",
       callback: "initAutocomplete"
     });
-    let map, popup, Popup;;
-    let myLocation
+    let map, popup, Popup;
+    let myLocation;
     let btnLocation = document.getElementById("btnLocation");
-    let markers = []
+    let markers = [];
     let lastInteractedFeatureIds = [];
     let lastClickedFeatureIds = [];
     let datasetLayer;
-    let current_review_feature
-
+    let current_review_feature;
+    
     const styleOptions = {
       strokeWeight: 2,
       strokeOpacity: 1,
@@ -64,13 +64,13 @@
       fillOpacity: 1,
     };
 
-    async function initMap(position) {
+    async function initMap(position, zoom_amount) {
       // Request needed libraries.
       const {
         Map
       } = await google.maps.importLibrary("maps");
       map = new Map(document.getElementById("map"), {
-        zoom: 20,
+        zoom: zoom_amount,
         center: position,
         mapId: "5138ed8aef82ae42",
         mapTypeControlOptions: {
@@ -198,7 +198,7 @@
       });
 
       datasetLayer.style = setStyle;
-      console.log(datasetLayer.style)
+      console.log(datasetLayer.style);
       const attributionDiv = document.createElement("div");
       const attributionControl = createAttribution(map);
       attributionDiv.appendChild(attributionControl);
@@ -369,13 +369,21 @@
       attributionLabel.textContent = "Data source: NYC Open Data";
       return attributionLabel;
     }
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         myLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        initMap(myLocation);
+        initMap(myLocation, 20);
+      },
+      function(position) {
+        myLocation = {
+          lat: 16.024696, 
+          lng: 107.615464
+        };
+        initMap(myLocation, 6);
       })
     }
   </script>
