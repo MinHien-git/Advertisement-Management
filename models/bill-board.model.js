@@ -1,19 +1,20 @@
-class Advertisement {
-  constructor(
-    type_billboard,
-    position,
-    type_advertisement,
-    size,
-    amount,
-    advertise_form,
-    license
-  ) {
+const { getDb } = require("../database/database");
+
+module.exports = class Billboard {
+  constructor(type_billboard, geometry, properties, license) {
     this.type_billboard = type_billboard;
     this.position = position;
-    this.type_advertisement = type_advertisement;
-    this.size = size;
-    this.amount = amount;
-    this.advertise_form = advertise_form;
+    this.geometry = geometry;
+    this.properties = properties;
     this.license = license;
   }
-}
+
+  async _get_billboard() {
+    await getDb.collection("billboards").findOne({
+      $or: [
+        { position: this.position },
+        { "geometry.coordinates": this.geometry },
+      ],
+    });
+  }
+};

@@ -1,13 +1,38 @@
-class Report {
-    constructor(
-        billboard_id,
-        report_title,
-        report_content,
-        reporter_email
-    ) {
-        this.billboard_id = billboard_id
-        this.report_title = report_title
-        this.report_content = report_content
-        this.reporter_email = reporter_email
-    }
-}
+const { ObjectId } = require("mongodb");
+const db = require("../database/database");
+
+module.exports = class Report {
+  constructor(email, phone, position, name, district, ward, images) {
+    this.email = email;
+    this.district = district;
+    this.phone = phone;
+    this.name = name;
+    this.ward = ward;
+    this.position = position;
+    this.state = REPORT_TYPE.INCOMPLETE;
+    this.images = images;
+  }
+  async _get_report() {
+    const report = await db
+      .getDb()
+      .collection("reports")
+      .find({ position: this.position });
+    return report;
+  }
+
+  async _send_report() {
+    const report = await db
+      .getDb()
+      .collection("reports")
+      .insertOne({ ...this });
+    return report;
+  }
+
+  static async _update_report_state(id, state) {
+    const report = await db
+      .getDb()
+      .collection("reports")
+      .findOneAndUpdate({ _id: new ObjectId(id) }, { state: state });
+    return report;
+  }
+};
