@@ -1,0 +1,42 @@
+*,
+*::before,
+*::after {
+  font-family: "Roboto Mono", monospace;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-text-select: none;
+  -webkit-user-select: none;
+}
+
+body,
+html {
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: sticky;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.under-line {
+  text-decoration: underline;
+}
+
+.bold {
+  font-weight: bold;
+}

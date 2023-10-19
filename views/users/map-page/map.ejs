@@ -1,0 +1,167 @@
+<%- include('../../includes/head.ejs',{_page_title:"Home"})%>
+<link rel="stylesheet" href="/styles/map.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
+<script src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js"></script>
+</head>
+
+<body>
+  <%- include('../../includes/header.ejs')%>
+  <main id="map-container">
+    <div id="map"></div>
+    <div id="info">
+      
+    </div>
+  </main>
+
+  <script type="text/javascript">
+    var map = null;
+    var defaultCoord = [10.7743, 106.6669]; // coord mặc định, 9 giữa HCMC
+    var zoomLevel = 13;
+    const api_key = "3dbf2ce56c45401b855931d7f3828a85"
+    var popup = L.popup();
+    var billboards = <%- JSON.stringify(billboards)  %>;
+    var infoboards = document.getElementById("info")
+    let current_feature = null
+
+    var current_marker = null
+    var requestOptions = {
+  method: 'GET',
+};
+
+    var geojsonMarkerOptions = {
+      radius: 8,
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.8
+    };
+
+    function setInfoBoard(){
+      if (current_feature){
+        infoboards.innerHTML = ""
+        infoboards.innerHTML = `<div class="info_container">
+        <div class="info_container-image1"></div>
+        <div class="info_container-image2"></div>
+        <div class="info-container-info">
+        <h2>${current_feature.properties.type}</h2>
+        <p>${current_feature.properties.place}</p>
+        <p>Kích thước: <span class="bold">${current_feature.properties.size}</span></p>
+        <p>Số lượng: <span class="bold">${current_feature.properties.amount}</span></p>
+        <p>Hình thức: <span class="bold">${current_feature.properties.type_advertise}</span></p>
+        <p>Phân Loại: <span class="bold">${current_feature.properties.place_type}</span></p>
+      </div>
+      </div>`
+      }
+    }
+
+    function onMapClick(e) {
+      let data;
+      fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&apiKey=3dbf2ce56c45401b855931d7f3828a85`, requestOptions)
+      .then(response =>response.json())
+      .then(result => {data = result; console.log(result);popup
+        .setLatLng(e.latlng)
+        .setContent(`<h3>${data.features[0].properties.address_line1}</h3>
+          <p>${data.features[0].properties.address_line2}</p>`)
+        .openOn(map);})
+      .catch(error => console.log('error', error));
+    }
+
+    window.onload = function() {
+      // init map
+      map = L.map('map', {
+        attributionControl: false
+      }).setView(defaultCoord, 20)
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      const address_search_controller = L.control.addressSearch(api_key, {
+        position: "topleft",
+        resultCallback: (address) => {
+          if (current_marker) {
+            map.removeLayer(current_marker)
+          }
+          current_marker = L.marker([address.lat, address.lon]).addTo(map)
+          map.setView([address.lat, address.lon])
+        }
+      })
+
+      map.zoomControl.setPosition('topright');
+      var lc = L.control
+        .locate({
+          position: "topright",
+          strings: {
+            title: "Show me where I am, yo!"
+          },
+          enableHighAccuracy: true,
+          keepCurrentZoomLevel: true
+        })
+        .addTo(map);
+      map.addControl(address_search_controller)
+      map.on('click', onMapClick);
+
+      let geojsonLayer = L.geoJSON(billboards, {
+        pointToLayer: function(feature, latlng) {
+          const attributionDiv = document.createElement("div");
+          const button_container = document.createElement("div");
+          const report_button = document.createElement("button");
+          const info_button = document.createElement("button");
+
+          attributionDiv.setAttribute("id", "content" + feature._id)
+          button_container.classList.add("button_container")
+          info_button.classList.add("info")
+          info_button.setAttribute("id", "info-" + feature._id)
+          report_button.classList.add("info")
+          report_button.setAttribute("id", "report-" + feature._id)
+
+          attributionDiv.innerHTML = `<h3>${feature.properties.type}</h3>
+          <p>${feature.properties.place}</p>
+          <p>Kích thước: <span class="bold">${feature.properties.size}</span></p>
+          <p>Số lượng: <span class="bold">${feature.properties.amount}</span></p>
+          <p>Hình thức: <span class="bold">${feature.properties.type_advertise}</span></p>
+          <p>Phân Loại: <span class="bold">${feature.properties.place_type}</span></p>
+          `
+          info_button.innerHTML = `<img src="../images/information.png" alt="information">Thông tin`
+          report_button.innerHTML = `<img src="../images/information.png" alt="report">Báo cáo`
+
+          button_container.appendChild(info_button)
+          button_container.appendChild(report_button)
+
+          report_button.addEventListener('click', (e) => {
+            current_feature = feature;
+            console.log("report-info :" + feature._id , feature)
+          });
+          info_button.addEventListener('click', (e) => {
+            console.log("check-info :" + feature._id, feature)
+            current_feature = feature;
+            setInfoBoard()
+            if (!infoboards.classList.contains("active"))
+              infoboards.classList.add("active")
+          });
+          attributionDiv.appendChild(button_container)
+
+          return L.circleMarker(latlng, geojsonMarkerOptions).bindPopup(attributionDiv);
+        },
+        style: function(feature) {
+          switch (feature.properties.place_type) {
+            case 'Đất Công/Công viên/Hành lang':
+              return {
+                color: "#ff0000", fillColor: "#ff0000"
+              };
+            case 'Trường Học':
+              return {
+                color: "#0000ff", fillColor: "#0000ff"
+              };
+          }
+        },
+
+      }).addTo(map);
+    };
+  </script>
+</body>
+
+</html>
