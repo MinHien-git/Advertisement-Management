@@ -1,0 +1,33 @@
+<%- include('../../includes/head.ejs',{_page_title:"Sign in"})%>
+</head>
+<body>
+    <%- include('../../includes/header.ejs')%>
+    <main>
+        <h1 id="report_header">Thông tin báo cáo chi tiết</h1>
+        <div id="report_list"></div>
+    </main>
+    <script type="text/javascript">
+        const report_list = [];
+        
+        const Report_to_HTML = (report) => {
+            const new_report = document.createElement("div");
+            new_report.innerHTML += "<p> Email: " + report.email + "</p>";
+            new_report.innerHTML += "<p> Phường: " + report.district + "</p>";
+            new_report.innerHTML += "<p> Tên: " + report.name + "</p>";
+            new_report.innerHTML += "<p> Quận/Huyện: " + report.ward + "</p>";
+            new_report.innerHTML += "<p> Vị trí: " + report.position + "</p>";
+            new_report.innerHTML += "<p>" + report.images + "</p>";
+            new_report.innerHTML += "<p> Trạng thái báo cáo: " + report.state + "</p>";
+            return new_report;
+        }
+
+        const report = await db.getDb().collection("reports")
+                               .find();
+
+        const list_div = document.getElementById("report_list");
+        report_list.forEach((report) => {
+            list_div.appendChild(Report_to_HTML(report));
+        });
+    </script>
+</body>
+</html>

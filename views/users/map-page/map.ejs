@@ -20,7 +20,7 @@
     var zoomLevel = 13;
     const api_key = "3dbf2ce56c45401b855931d7f3828a85"
     var popup = L.popup();
-    var billboards = <%- JSON.stringify(billboards)  %>;
+    var billboards = JSON.stringify(billboards);
     var current_marker = null
     var geojsonMarkerOptions = {
       radius: 8,
