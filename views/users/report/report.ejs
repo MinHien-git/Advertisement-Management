@@ -1,0 +1,33 @@
+<%- include('../../includes/head.ejs',{_page_title:"Report"})%>
+</head>
+<body>
+    <main>
+        <h1 id="report_header">Gửi báo cáo</h1>
+
+        <form action="/report" class="form-container" method="post">
+            <div class="form-section">
+                <label for="name">Tên</label>
+                <input type="text" name="name" id="name">
+            </div>
+            <div class="form-section">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email">
+            </div>
+            <div class="form-section">
+                <label for="phone">Số điện thoại</label>
+                <input type="tel" name="phone" id="phone">
+            </div>
+            <input type="text" name="ward" hidden value=<% ward %> >
+            <input type="text" name="district" hidden value=<% district %> >
+            <input type="text" name="position" hidden value=<% position %> >
+            <input type="image" name="image" hidden>
+            <div class="form-section">
+                <input type="submit" value="Gửi báo cáo">
+            </div>
+        </form>
+    </main>
+    <script type="text/javascript">
+
+    </script>
+</body>
+</html>

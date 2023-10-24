@@ -23,14 +23,14 @@
     var zoomLevel = 13;
     const api_key = "3dbf2ce56c45401b855931d7f3828a85"
     var popup = L.popup();
-    var billboards = "<%- JSON.stringify(billboards)  %>";
+    var billboards = <%- JSON.stringify(billboards)  %>;
     var infoboards = document.getElementById("info")
     let current_feature = null
 
     var current_marker = null
     var requestOptions = {
-  method: 'GET',
-};
+      method: 'GET',
+    };
 
     var geojsonMarkerOptions = {
       radius: 8,
@@ -39,7 +39,7 @@
       fillOpacity: 0.8
     };
 
-    function setInfoBoard(){
+    function setInfoBoard() {
       if (current_feature){
         infoboards.innerHTML = ""
         infoboards.innerHTML = `<div class="info_container">
@@ -132,7 +132,10 @@
           button_container.appendChild(report_button)
 
           report_button.addEventListener('click', (e) => {
-            current_feature = feature;
+            current_feature = feature
+            const address = feature.properties.place.split(", ")
+            console.log("redirect report link: " + `/report?position=${feature.geometry.coordinates}&ward=${address[1]}&district=${address[2]}`)
+            window.location.href = `/report?position=${feature.geometry.coordinates}&ward=${address[1]}&district=${address[2]}`
             console.log("report-info :" + feature._id , feature)
           });
           info_button.addEventListener('click', (e) => {

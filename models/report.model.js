@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const db = require("../database/database");
+const report_const = require("../constants/report.type")
 
 module.exports = class Report {
   constructor(email, phone, position, name, district, ward, images) {
@@ -9,7 +10,7 @@ module.exports = class Report {
     this.name = name;
     this.ward = ward;
     this.position = position;
-    this.state = REPORT_TYPE.INCOMPLETE;
+    this.state = report_const.REPORT_STATE.INCOMPLETE;
     this.images = images;
   }
   async _get_report() {
@@ -24,6 +25,8 @@ module.exports = class Report {
     const report = await db
       .getDb()
       .collection("reports")
+      .collection(this.district)
+      .collection(this.ward)
       .insertOne({ ...this });
     return report;
   }

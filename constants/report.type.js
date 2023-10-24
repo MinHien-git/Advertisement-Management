@@ -9,3 +9,5 @@ let REPORT_TYPE = {
   COMMENTS,
   TROUBLESHOOTING,
 };
+
+module.exports = { REPORT_STATE, REPORT_TYPE }

@@ -7,22 +7,19 @@
         <div id="report_list"></div>
     </main>
     <script type="text/javascript">
-        const report_list = [];
+        const report_list = <%- JSON.stringify(reports) %>;
         
         const Report_to_HTML = (report) => {
-            const new_report = document.createElement("div");
-            new_report.innerHTML += "<p> Email: " + report.email + "</p>";
-            new_report.innerHTML += "<p> Phường: " + report.district + "</p>";
-            new_report.innerHTML += "<p> Tên: " + report.name + "</p>";
-            new_report.innerHTML += "<p> Quận/Huyện: " + report.ward + "</p>";
-            new_report.innerHTML += "<p> Vị trí: " + report.position + "</p>";
-            new_report.innerHTML += "<p>" + report.images + "</p>";
-            new_report.innerHTML += "<p> Trạng thái báo cáo: " + report.state + "</p>";
+            const new_report = document.createElement("div")
+            new_report.innerHTML += `<p> Email: ${report.email}</p>
+            <p> Tên: ${report.name}</p>
+            <p> Phường: ${report.ward}</p>
+            <p> Quận/Huyện: ${report.district}</p>
+            <p> Vị trí: ${report.position}</p>
+            <p> ${report.images}</p>
+            <p> Trạng thái báo cáo: ${report.state}</p>`
             return new_report;
         }
-
-        const report = await db.getDb().collection("reports")
-                               .find();
 
         const list_div = document.getElementById("report_list");
         report_list.forEach((report) => {
