@@ -12,6 +12,9 @@
   <%- include('../../includes/header.ejs')%>
   <main id="map-container">
     <div id="map"></div>
+    <div id="info">
+      
+    </div>
   </main>
 
   <script type="text/javascript">
@@ -20,8 +23,15 @@
     var zoomLevel = 13;
     const api_key = "3dbf2ce56c45401b855931d7f3828a85"
     var popup = L.popup();
-    var billboards = JSON.stringify(billboards);
+    var billboards = "<%- JSON.stringify(billboards)  %>";
+    var infoboards = document.getElementById("info")
+    let current_feature = null
+
     var current_marker = null
+    var requestOptions = {
+  method: 'GET',
+};
+
     var geojsonMarkerOptions = {
       radius: 8,
       weight: 1,
@@ -29,11 +39,34 @@
       fillOpacity: 0.8
     };
 
+    function setInfoBoard(){
+      if (current_feature){
+        infoboards.innerHTML = ""
+        infoboards.innerHTML = `<div class="info_container">
+        <div class="info_container-image1"></div>
+        <div class="info_container-image2"></div>
+        <div class="info-container-info">
+        <h2>${current_feature.properties.type}</h2>
+        <p>${current_feature.properties.place}</p>
+        <p>Kích thước: <span class="bold">${current_feature.properties.size}</span></p>
+        <p>Số lượng: <span class="bold">${current_feature.properties.amount}</span></p>
+        <p>Hình thức: <span class="bold">${current_feature.properties.type_advertise}</span></p>
+        <p>Phân Loại: <span class="bold">${current_feature.properties.place_type}</span></p>
+      </div>
+      </div>`
+      }
+    }
+
     function onMapClick(e) {
-      popup
+      let data;
+      fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&apiKey=3dbf2ce56c45401b855931d7f3828a85`, requestOptions)
+      .then(response =>response.json())
+      .then(result => {data = result; console.log(result);popup
         .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(map);
+        .setContent(`<h3>${data.features[0].properties.address_line1}</h3>
+          <p>${data.features[0].properties.address_line2}</p>`)
+        .openOn(map);})
+      .catch(error => console.log('error', error));
     }
 
     window.onload = function() {
@@ -99,10 +132,15 @@
           button_container.appendChild(report_button)
 
           report_button.addEventListener('click', (e) => {
-            console.log("report-info :" + feature._id)
+            current_feature = feature;
+            console.log("report-info :" + feature._id , feature)
           });
           info_button.addEventListener('click', (e) => {
-            console.log("check-info :" + feature._id)
+            console.log("check-info :" + feature._id, feature)
+            current_feature = feature;
+            setInfoBoard()
+            if (!infoboards.classList.contains("active"))
+              infoboards.classList.add("active")
           });
           attributionDiv.appendChild(button_container)
 
