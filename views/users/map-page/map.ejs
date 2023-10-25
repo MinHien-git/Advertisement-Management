@@ -10,10 +10,11 @@
 
 <body>
   <%- include('../../includes/header.ejs')%>
+  <%- include('../home/authentication.ejs')%>
+
   <main id="map-container">
     <div id="map"></div>
-    <div id="info">
-      
+    <div id="info">  
     </div>
   </main>
 
@@ -130,7 +131,7 @@
           <p>Phân Loại: <span class="bold">${feature.properties.place_type}</span></p>
           `
           info_button.innerHTML = `<img src="../images/information.png" alt="information">Thông tin`
-          report_button.innerHTML = `<img src="../images/information.png" alt="report">Báo cáo`
+          report_button.innerHTML =ward || street ?`<img src="../images/information.png" alt="report">Chỉnh sửa`  :`<img src="../images/information.png" alt="report">Báo cáo` 
 
           button_container.appendChild(info_button)
           button_container.appendChild(report_button)

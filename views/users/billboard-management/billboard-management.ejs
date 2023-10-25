@@ -1,0 +1,69 @@
+<%- include('../../includes/head.ejs',{_page_title:"Management"})%>
+<link rel="stylesheet" href="/styles/map.css" />
+<link rel="stylesheet" href="/styles/billboard-management.css" />
+</head>
+
+ <body>
+    <%- include('../../includes/header.ejs')%>
+    <form id ="search-bar-container">
+        <input id="search-bar" type="text" placeholder="Enter an address here">
+    </form>
+    <main>
+        <div id="table">
+            <ul>
+            <li><ul>
+              <li>Bảng quảng cáo</li>
+              <li>Địa điểm</li>
+              <li>Trạng thái</li>
+              <li>Chi tiết</li>
+            </ul></li>
+            <% for (let i = 0; i< billboards.length;++i) {%>
+            <li class="card"> 
+              <ul>
+                <li><%= billboards[i].properties.type%></li>
+                <li><%= billboards[i].properties.place%></li>
+                <li>Chưa duyệt</li>
+                <li><label for = "<%= billboards[i]._id %>">Chi tiết</label></li>
+              </ul>
+              <input type="checkbox" class="card-checkbox" id="<%= billboards[i]._id %>">
+              <div class="billboard-information-container">
+                <div class="billboard-image">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="billboard-information">
+                    <ul class="billboard">
+                        <li>
+                            <p>Thông tin bảng quảng cáo:</p>
+                            <ul>
+                                <li>Kích thước: <span class="bold"><%= billboards[i].properties.size%></span></li>
+                                <li>Số lượng: <span class="bold"><%= billboards[i].properties.amount%></span></li>
+                                <li>Hình thức: <span class="bold"><%= billboards[i].properties.type_advertise%></span></li>
+                                <li>Phân loại: <span class="bold"><%= billboards[i].properties.place_type%></span></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>Thông tin công ty:</p>
+                            <ul>
+                                <li>Thông tin công ty: <span class="bold">ABC Company</span></li>
+                                <li>Thông tin liên lạc: <span class="bold">ABCCompany@email.com</span></li>
+                                <li>Ngày bắt đầu: <span class="bold">dd/mm/yyyy</li>
+                                <li>Ngày kết thúc: <span class="bold">dd/mm/yyyy</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="button-container">
+                        <li> <button class="button">Register</button></li>
+                        <li> <button class="button">Register</button></li>
+                        <li> <button class="button">Register</button></li>
+                    </ul>
+                </div>
+              </div>
+            </li>
+            <% } %>
+            </ul>
+        </div>
+    </main>
+ </body>
+
+ </html>
