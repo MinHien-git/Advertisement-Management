@@ -18,17 +18,21 @@
   </main>
 
   <script type="text/javascript">
-    var map = null;
-    var defaultCoord = [10.7743, 106.6669]; // coord mặc định, 9 giữa HCMC
-    var zoomLevel = 13;
+    let map = null;
+    let defaultCoord = [10.7743, 106.6669]; // coord mặc định, 9 giữa HCMC
+    let zoomLevel = 13;
     const api_key = "3dbf2ce56c45401b855931d7f3828a85"
-    var popup = L.popup();
-    var billboards = <%- JSON.stringify(billboards)  %>;
-    var infoboards = document.getElementById("info")
+    let popup = L.popup();
+    let billboards = <%- JSON.stringify(billboards) %>;
+
+    let ward =  '<%- locals.ward%>';
+    let street = '<%- locals.street%>';
+
+    let infoboards = document.getElementById("info")
     let current_feature = null
 
-    var current_marker = null
-    var requestOptions = {
+    let current_marker = null
+    let requestOptions = {
       method: 'GET',
     };
 
@@ -103,7 +107,7 @@
         .addTo(map);
       map.addControl(address_search_controller)
       map.on('click', onMapClick);
-
+        console.log(ward,street)
       let geojsonLayer = L.geoJSON(billboards, {
         pointToLayer: function(feature, latlng) {
           const attributionDiv = document.createElement("div");

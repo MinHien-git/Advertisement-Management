@@ -58,6 +58,7 @@ const _update_password = async (request, response) => {
 const _forgot_password = async (request, response) => {
   let { email } = request.body;
 };
+
 module.exports = {
   _get_login,
   _login,
