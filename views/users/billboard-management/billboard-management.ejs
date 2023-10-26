@@ -5,6 +5,7 @@
 
  <body>
     <%- include('../../includes/header.ejs')%>
+    <%- include('../../includes/popups/authourize_request_popup.ejs')%>
     <form id ="search-bar-container">
         <input id="search-bar" type="text" placeholder="Enter an address here">
     </form>
@@ -53,9 +54,9 @@
                         </li>
                     </ul>
                     <ul class="button-container">
-                        <li> <button class="button">Register</button></li>
-                        <li> <button class="button">Register</button></li>
-                        <li> <button class="button">Register</button></li>
+                        <li> <button class="button" onclick="authourize_billboard_request(`<%= JSON.stringify(billboards[i]) %>`)">Cấp phép</button></li>
+                        <li> <button class="button" onclick="edit_billboard_request(`<%= JSON.stringify(billboards[i]) %>`)">Chính sửa</button></li>
+                        <li> <button class="button" onclick="cancel_billboard_request(`<%= JSON.stringify(billboards[i]) %>`)">Hủy yêu cầu</button></li>
                     </ul>
                 </div>
               </div>
@@ -64,6 +65,20 @@
             </ul>
         </div>
     </main>
+    <script>
+        const authourize_billboard_request = (billboard) => {
+            console.log(billboard)
+        }
+
+        
+        const edit_billboard_request = (billboard) => {
+            console.log(billboard)
+        }
+
+        const cancel_billboard_request = (billboard) => {
+            console.log(billboard)
+        }
+    </script>
  </body>
 
  </html>
