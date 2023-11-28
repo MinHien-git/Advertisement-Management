@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Thống kê báo cáo - Sở VHTT</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <link rel="stylesheet" href="s/styles/global.css" />
+    <link rel="stylesheet" href="s/styles/navbar.css" />
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/page_content.css" />
+    <link rel="stylesheet" href="styles/modal.css" />
+
+    <script src="scripts/navigation.js"></script>
+    <script src="scripts/report_list.js"></script>
+  </head>
+
+  <body>
+    <style>
+      .list__flex :not(.list__col2, .list__col5) {
+        flex-grow: 1;
+        flex-basis: 10%;
+      }
+      .list__col2 {
+        flex-basis: 20%;
+        flex-grow: 3;
+      }
+      .list__col5 {
+        margin: 0;
+        margin-right: 1rem;
+        padding: 0;
+        max-width: 0;
+        height: auto;
+        flex-basis: 0;
+      }
+    </style>
+    <script src="s/scripts/navbar.js" defer></script>
+    <div class="wrapper">
+      <header id="primary-header" class="official">
+        <div id="burger"></div>
+        <nav class="navbar navbar-expand d-block" id="primary-navigation-bar">
+          <ul id="primary-items-list" class="my-3">
+            <li id="profile">
+              <i
+                class="bi bi-person-circle vertical__center"
+                id="nav__item__icon"
+              ></i>
+              <span>user name</span>
+            </li>
+            <li id="manage__billboards" onclick="navigate(this.id)">
+              <i class="bi bi-clipboard2-check" id="nav__item__icon"></i>
+              <span>Quản lí điểm QC</span>
+            </li>
+            <li id="check__requests" onclick="navigate(this.id)">
+              <i class="bi bi-check-circle" id="nav__item__icon"></i>
+              <span>Duyệt YC cấp phép</span>
+            </li>
+            <li id="list__reports" class="current" onclick="navigate(this.id)">
+              <i class="bi bi-file-earmark-text" id="nav__item__icon"></i>
+              <span>Thống kê báo cáo</span>
+            </li>
+            <li id="manage__accounts" onclick="navigate(this.id)">
+              <i class="bi bi-person-gear" id="nav__item__icon"></i>
+              <span>Quản lí tài khoản CB</span>
+            </li>
+            <li>
+              <form id="logout" method="post" action="/logout">
+                <button type="submit">
+                  <i class="bi bi-box-arrow-left" id="logout__icon"></i>
+                  <span>Đăng xuất</span>
+                </button>
+              </form>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <div class="container" id="main__container">
+          <h1 class="fw-bold h2" id="page__title">Thống kê báo cáo</h1>
+          <form action="" class="d-flex search__form">
+            <input
+              type="text"
+              class="form-control me-2"
+              placeholder="Nhập thông tin"
+            />
+            <button
+              type="submit"
+              class="btn btn-primary nowrap"
+              id="search__btn"
+            >
+              Tìm kiếm
+            </button>
+            <button type="submit" class="btn btn-dark nowrap">
+              <i class="bi bi-arrow-down-up"></i>
+              Sắp xếp
+            </button>
+            <button type="submit" class="btn btn-dark nowrap">
+              <i class="bi bi-funnel"></i> &nbsp;Lọc
+            </button>
+          </form>
+
+          <div id="main__list">
+            <div id="info__desc">
+              <div class="list__title__container mt-3">
+                <ul class="list__flex fw-bold">
+                  <li class="list__col1">Loại báo cáo</li>
+                  <li class="list__col2">Địa điểm</li>
+                  <li class="list__col3">Thời gian</li>
+                  <li class="list__col4">Trạng thái</li>
+                  <li class="list__col5 flex-grow-0">
+                    <button class="btn btn-link ps-4" disabled></button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!--modal-->
+            <div
+              class="modal fade"
+              id="modal"
+              tabindex="-1"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              role="dialog"
+              aria-labelledby="modalTitle"
+              aria-hidden="true"
+            >
+              <div
+                class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg"
+                role="document"
+              >
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title fw-bold" id="modalTitle">
+                      &ensp;Chi tiết báo cáo
+                    </h4>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                      id="m-btn"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <p><strong>Tên người gửi:</strong> Nguyễn Văn A</p>
+                    <p><strong>Email:</strong> anhA@gmail.com</p>
+                    <p><strong>Số điện thoại:</strong> 0123456789</p>
+                    <p><strong>Địa điểm quảng cáo:</strong> Đường ABC...</p>
+                    <p></p>
+                    <h5 class="fw-bold">&ensp; Nội dung báo cáo</h5>
+                    <p>
+                      <strong>Mô tả:</strong>Lorem ipsum dolor sit amet
+                      consectetur, adipisicing elit. Voluptate deleniti dolores
+                      eius quis, praesentium ullam id eligendi repellendus
+                      corrupti dolorem!
+                    </p>
+                    <p><strong>Hình ảnh</strong></p>
+                    <img
+                      src="/assets/images/bien-quang-cao-1024x683.jpg"
+                      id="img1"
+                    />
+                    <p><strong>Cách thức xử lí</strong></p>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      At deserunt unde earum rem nobis doloribus ratione vitae
+                      ipsum animi. Illum tempora non exercitationem dicta
+                      ratione.
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      id="m-btn"
+                      data-bs-toggle="modal"
+                      onclick="showToast('accept__success__toast')"
+                    >
+                      Cấp phép
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      id="m-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalInput"
+                    >
+                      Y/c đổi cách thức
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      id="m-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalConfirm"
+                    >
+                      Bác bỏ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yêu cầu đổi cách thức box -->
+        <div>
+          <!-- Modal Body -->
+          <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+          <div
+            class="modal fade"
+            id="modalInput"
+            tabindex="-1"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            role="dialog"
+            aria-labelledby="modalTitleInput"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md"
+              role="document"
+            >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title fw-bold" id="modalTitleInput">
+                    Thay đổi cách thức xử lí
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    data-bs-dismiss="modal"
+                    id="m-btn"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <label for="comment">Nội dung:</label>
+                  <textarea
+                    class="form-control"
+                    rows="5"
+                    id="comment"
+                    name="text"
+                  ></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                    onclick="showToast('send__success__toast')"
+                  >
+                    Yêu cầu
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Xác nhận bác bỏ box -->
+        <div>
+          <!-- Modal Body -->
+          <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+          <div
+            class="modal fade"
+            id="modalConfirm"
+            tabindex="-1"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            role="dialog"
+            aria-labelledby="modalTitleConfirm"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+              role="document"
+            >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title fw-bold" id="modalTitleConfirm">
+                    Xác nhận
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    data-bs-dismiss="modal"
+                    id="m-btn"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <p>Bạn có chắc chắn muốn bác bỏ yêu cầu không?</p>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-light"
+                    data-bs-dismiss="modal"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    onclick="showToast('deny__success__toast')"
+                  >
+                    Bác bỏ
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ô thông báo thành công -->
+        <div
+          class="toast-container position-fixed bottom-0 end-0 p-3"
+          style="z-index: 1"
+        >
+          <div
+            class="toast align-items-center text-bg-success border-0"
+            id="accept__success__toast"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div class="d-flex">
+              <div class="toast-body">
+                <i class="bi bi-check-lg"></i>
+                Cấp phép thành công!
+              </div>
+              <button
+                type="button"
+                class="btn-close btn-close-white me-2 m-auto"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+          <div
+            class="toast align-items-center text-bg-success border-0"
+            id="send__success__toast"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div class="d-flex">
+              <div class="toast-body">
+                <i class="bi bi-envelope-check"></i>
+                Đã gửi yêu cầu!
+              </div>
+              <button
+                type="button"
+                class="btn-close btn-close-white me-2 m-auto"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+          <div
+            class="toast align-items-center text-bg-success border-0"
+            id="deny__success__toast"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div class="d-flex">
+              <div class="toast-body">
+                <i class="bi bi-x-lg"></i>
+                Đã bác bỏ báo cáo!
+              </div>
+              <button
+                type="button"
+                class="btn-close btn-close-white me-2 m-auto"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer>
+        <!-- place footer here -->
+      </footer>
+    </div>
+
+    <script>
+      loadReports();
+    </script>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+      integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

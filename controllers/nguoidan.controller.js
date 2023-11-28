@@ -14,9 +14,27 @@ const _get_report = (request, response) => {
 };
 
 const _post_report = (request, response) => {
-  let { name, email, phone, ward, district, position, image } = request.body;
-  let report = new Report(email, phone, position, name, district, ward, image);
-  report._send_report();
+  let {
+    sender_name,
+    sender_email,
+    sender_number,
+    place,
+    attached_files,
+    details,
+  } = request.body;
+  let ward = place.split(",")[1];
+  let district = place.split(",")[2];
+  let report = new Report(
+    sender_email,
+    sender_number,
+    place,
+    sender_name,
+    district,
+    ward,
+    attached_files,
+    details
+  );
+  if (report._send_report()) console.log("send");
   return response.redirect("/");
 };
 

@@ -1,0 +1,18 @@
+#content>#table>ul>li:not(:nth-child(1))>ul{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 5px;
+}
+
+#content>#table>ul > li> ul> li:nth-child(1){
+    width: 8rem;
+}
+
+#content>#table>ul> li> ul> li:nth-child(2){
+    width: calc(100% - 14rem);
+    text-overflow: clip;
+}
+
+#content>#table>ul> li>ul>label:nth-child(3){
+    padding: auto;
+    margin: 0 auto;
+}

@@ -1,0 +1,189 @@
+#report-popup,
+#request-popup {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  inset: 0;
+  z-index: 101;
+  background-color: hsl(0 0% 95%/ 80%);
+}
+.active#report-popup,
+.active#request-popup {
+  display: flex;
+}
+#report-popup textarea,
+#request-popup textarea {
+  font-size: 0.75rem;
+  resize: none;
+  padding-inline: 0.5rem;
+  height: auto;
+  padding-block: 0.5rem 1rem;
+}
+#report-popup input[type="file"],
+#request-popup input[type="file"] {
+  display: none;
+}
+#report-section-form-container {
+  width: 80%;
+  height: auto;
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+#authentication-form-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+#authentication-form-button-container > button {
+  background-color: transparent;
+  border: hidden;
+  padding-block: 1rem;
+  width: 35%;
+  position: relative;
+}
+
+#authentication-form-button-container > button::after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 0;
+  background-color: rgb(0, 132, 255);
+  bottom: 0;
+  left: 0;
+  border-radius: 5px;
+  transition: 100ms ease-in-out;
+}
+
+#authentication-form-button-container > button.active::after {
+  width: 100%;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.form-container > h2 {
+  margin-top: 1.25rem;
+  margin-bottom: 1rem;
+}
+.form-section {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  width: 75%;
+}
+
+.form-section label {
+  font-weight: bold;
+  font-size: 0.625rem;
+}
+
+.form-section input {
+  padding-block: 0.5rem;
+  padding-left: 0.55rem;
+  width: 100%;
+}
+.form-section span {
+  font-size: 0.8rem;
+}
+
+.form-container .submit-button {
+  width: 100%;
+  border-radius: 5px;
+  border: 0;
+  padding-block: 0.75rem;
+  font-weight: bold;
+}
+
+.submit {
+  background-color: rgb(0, 132, 255);
+  margin-top: 1rem;
+}
+.form-section p {
+  font-size: 0.5rem;
+  color: rgb(0, 105, 203);
+  font-weight: bold;
+  text-align: center;
+}
+.file-section .file-button {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: auto;
+}
+
+#attached_files {
+  padding-block: 0rem;
+}
+.file-section p {
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  font-size: 0.625rem;
+}
+
+.file-section label {
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  font-size: 0.625rem;
+  width: 25%;
+  padding-block: 0.25rem;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid gainsboro;
+}
+
+hr {
+  width: 60%;
+  height: 1px;
+  margin-bottom: 1rem;
+}
+
+.form-container .second-choice {
+  border: 3px solid rgb(0, 132, 255);
+  color: rgb(0, 132, 255);
+}
+
+#inscreen-report-close,
+#inscreen-request-close {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  position: absolute;
+  right: 0.5rem;
+  top: 2rem;
+}
+
+#inscreen-form-login > .form-section:last-child,
+#inscreen-form-report > .form-section:last-child {
+  margin-bottom: 1.5rem;
+}
+
+#inscreen-form-register > .form-section:last-child,
+#inscreen-form-report > .form-section:last-child {
+  margin-bottom: 1.5rem;
+}
+
+@media only screen and (min-width: 600px) {
+  #report-section-form-container {
+    width: 30%;
+    max-width: 25rem;
+    min-width: 15rem;
+    height: auto;
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem 1rem;
+    position: relative;
+  }
+}

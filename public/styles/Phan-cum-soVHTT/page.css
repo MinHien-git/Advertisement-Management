@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+
+/*|| RESET*/
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	user-select: auto;
+	-moz-user-select: auto;
+	-webkit-text-select: auto;
+	-webkit-user-select: auto;
+}
+
+img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+input,
+button,
+textarea {
+	font: inherit;
+}
+
+/* || VARIABLES */
+:root {
+	/* FONTS*/
+	--FF: "Roboto Mono", "Courier New", Courier, monospace;
+	--FS: clamp(1rem, 1.5vh, 1.2rem);
+
+	/* COLORS*/
+	--BGCOLOR-FADE: rgb(252, 220, 160);
+	--BGCOLOR: orange;
+	--BGIMAGE: linear-gradient(to bottom, var(--BGCOLOR), var(--BGCOLOR-FADE));
+	--BODY-BGCOLOR: #fff;
+	--BORDER-COLOR: #333;
+	--FONT-COLOR: #000;
+	--HEADER-BGCOLOR: #000;
+	--HEADER-FCOLOR: #fff;
+	--HIGHLIGHT-COLOR: rgb(51, 178, 51);
+	--LINK-ACTIVE: orange;
+	--LINK-COLOR: #000;
+	--LINK-HOVER: hsla(0, 0%, 0%, 0.6);
+	--NAV-BGCOLOR: #fff;
+
+	/* BORDERS */
+	--BORDERS: 1px solid var(--BORDER-COLOR);
+	--BORDER-RADIUS: 15px;
+
+	/*STANDARD PADDING */
+	--PADDING-TOP_BOTTOM: 0.25em;
+	--PADDING-SIDE: 2.5%;
+
+	/* STANDARD MARGIN */
+	--MARGIN: clamp(1em, 2.5vh, 1.5em) 0;
+}
+
+/* || UTILITY CLASSES */
+.offscreen {
+	position: absolute;
+	left: -10000px;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+.center {
+	text-align: center;
+}
+
+.hidden {
+	display: none;
+}
+
+/* || GENERAL STYLES */
+* {
+	scroll-behavior: smooth;
+	font-size: var(--FS);
+	font-family: var(--FF);
+}
+
+.wrapper {
+	display: flex;
+	align-content: stretch;
+}
+
+html {
+	overflow-x: visible;
+}
+
+.btn {
+	padding-block: 0.25rem;
+}
