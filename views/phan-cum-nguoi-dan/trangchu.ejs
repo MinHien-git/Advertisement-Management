@@ -63,17 +63,7 @@
   </head>
   <body>
     <script src="/scripts/navbar.js" defer></script>
-    <header id="primary-header" class="flex" style="position: fixed">
-      <div id="burger"></div>
-      <nav id="primary-navigation-bar">
-        <ul id="primary-items-list" class="my-3">
-          <li id="profile">
-            <i class="bi bi-person-circle vertical__center nav__item__icon"></i>
-          </li>
-        </ul>
-      </nav>
-    </header>
-
+    <%- include('../includes/header.ejs')%>
     <main id="map-container">
       <div id="map"></div>
       <div id="info"></div>
