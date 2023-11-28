@@ -25,8 +25,6 @@ module.exports = class Report {
     const report = await db
       .getDb()
       .collection("reports")
-      .collection(this.district)
-      .collection(this.ward)
       .insertOne({ ...this });
     return report;
   }
