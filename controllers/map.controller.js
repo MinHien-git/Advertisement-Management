@@ -7,7 +7,7 @@ const _get_map = async (request, response) => {
   let street = response.locals.street ? response.locals.street : "";
 
   billboards = billboards.filter((i)=> {
-    if (ward == '' && province == '')
+    if (ward == '' && street == '')
       return i
     let address = i?.properties?.place.split(', ')
 
