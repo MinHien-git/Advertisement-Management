@@ -1,12 +1,13 @@
-const _get_advertisement = () => {};
-const _get_license = () => {};
-const _post_license_request = () => {};
-const _post_decline_license = () => {};
-const _post_license_edit_request = () => {};
-const _get_report = () => {};
-const _get_report_information = () => {};
-const _post_report_edit = () => {};
-
+const _get_advertisement = (req, res) => {};
+const _get_license = (req, res) => {};
+const _post_license_request = (req, res) => {};
+const _post_decline_license = (req, res) => {};
+const _post_license_edit_request = (req, res) => {};
+const _get_report = (req, res) => {};
+const _get_report_information = (req, res) => {};
+const _post_report_edit = (req, res) => {};
+const _get_request_edit = (req, res) => {};
+const _post_request_edit = (req, res) => {};
 module.exports = {
   _get_advertisement,
   _get_license,
@@ -16,4 +17,6 @@ module.exports = {
   _get_report,
   _get_report_information,
   _post_report_edit,
+  _get_request_edit,
+  _post_request_edit,
 };
