@@ -91,6 +91,8 @@
 }
 
 .form-container {
+  overflow-y: auto;
+  max-height: 95vh;
   display: flex;
   flex-direction: column;
   align-items: center;

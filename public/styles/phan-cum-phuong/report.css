@@ -95,6 +95,8 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  overflow-y: auto;
+  max-height: 95vh;
 }
 .form-container > h2 {
   margin-top: 1.25rem;
