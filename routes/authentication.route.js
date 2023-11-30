@@ -17,6 +17,4 @@ router.post("/update/:id", authentication_controller._update_infomation);
 
 router.post("/update-password", authentication_controller._update_password);
 
-router.post("/forgot-password", authentication_controller._update_password);
-
 module.exports = router;

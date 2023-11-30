@@ -1,6 +1,5 @@
 let Report = require("../models/report.model");
 let db = require("../database/database");
-const session = require("express-session");
 
 const _get_report = (request, response) => {
   const params = new Proxy(new URLSearchParams(request.url.seach), {
