@@ -56,43 +56,7 @@
   <body>
     <script src="s/scripts/navbar.js" defer></script>
     <div class="wrapper">
-      <header id="primary-header" class="flex official">
-        <div id="burger"></div>
-        <nav id="primary-navigation-bar">
-          <ul id="primary-items-list" class="my-3">
-            <li id="profile">
-              <i
-                class="bi bi-person-circle vertical__center nav__item__icon"
-              ></i>
-              <span><a>user name</a></span>
-            </li>
-            <li id="report-list">
-              <i class="bi bi-clipboard2-check nav__item__icon"></i>
-              <span><a>Danh sách báo cáo</a></span>
-            </li>
-            <li id="license-list">
-              <i class="bi bi-check-circle nav__item__icon"></i>
-              <span><a>Yêu cầu cấp phép</a></span>
-            </li>
-            <li id="edit-list">
-              <i class="bi bi-pencil nav__item__icon"></i>
-              <span><a>Yêu cầu chỉnh sửa</a></span>
-            </li>
-            <li id="billboard-list">
-              <i class="bi bi-signpost-2 nav__item__icon"></i>
-              <span><a>Danh sách quảng cáo</a></span>
-            </li>
-            <li>
-              <form id="logout" method="post" action="/logout">
-                <button type="submit">
-                  <i class="bi bi-box-arrow-left" id="logout"></i>
-                  <span>Đăng xuất</span>
-                </button>
-              </form>
-            </li>
-          </ul>
-        </nav>
-      </header>
+      <%- include('../includes/header.ejs')%>
 
       <div class="flex official" id="content">
         <main>
