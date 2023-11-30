@@ -1,0 +1,33 @@
+#editor {
+  text-align: left;
+  min-height: 8.5rem;
+  height: auto;
+}
+
+.ql-toolbar button {
+  transform: scale(0.75) !important;
+}
+
+#editor p {
+  text-align: left;
+  font-size: 0.725rem !important;
+  color: black;
+}
+
+#editor h1 {
+  text-align: left;
+  font-size: 1.25rem !important;
+  color: black;
+}
+
+#editor h2 {
+  text-align: left;
+  font-size: 1rem !important;
+  color: black;
+}
+
+#editor h3 {
+  text-align: left;
+  font-size: 0.825rem !important;
+  color: black;
+}

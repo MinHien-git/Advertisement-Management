@@ -1,17 +1,19 @@
 const { ObjectId } = require("mongodb");
 const db = require("../database/database");
-const report_const = require("../constants/report.type")
+const report_const = require("../constants/report.type");
 
 module.exports = class Report {
-  constructor(email, phone, position, name, district, ward, images) {
-    this.email = email;
+  constructor(email, phone, position, name, district, ward, images, details) {
+    this.sender_email = email;
     this.district = district;
-    this.phone = phone;
-    this.name = name;
+    this.sender_number = phone;
+    this.sender_name = name;
     this.ward = ward;
-    this.position = position;
+    this.place = position;
     this.state = report_const.REPORT_STATE.INCOMPLETE;
     this.images = images;
+    this.send_day = new Date();
+    this.details = details;
   }
   async _get_report() {
     const report = await db

@@ -1,0 +1,43 @@
+#modal-btn {
+	background-color: transparent;
+	padding: 0;
+	margin: 0;
+	width: 1rem;
+}
+
+modal-body {
+	padding-right: 30;
+}
+
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+
+#alert-container {
+	display: none;
+	padding: 10px;
+	background-color: #4caf50;
+	color: white;
+	border-radius: 5px;
+	margin-top: 10px;
+
+	position: fixed;
+	bottom: 20px; /* Adjust the distance from the bottom */
+	right: 20px; /* Adjust the distance from the right */
+	z-index: 1050; /* Adjust the z-index as needed */
+}
+
+#alert-container.show {
+	display: block;
+}
+
+#modalInput.show {
+	display: block;
+}
+
+#modalConfirm.show {
+	display: block;
+}

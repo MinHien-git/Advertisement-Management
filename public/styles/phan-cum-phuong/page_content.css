@@ -1,0 +1,152 @@
+@import "./page.css";
+
+/* ||PAGE */
+main {
+  flex-grow: 1;
+  background-color: white;
+}
+
+#main__container :not(h1) {
+  font-size: 0.9rem;
+}
+
+/* ||SEARCH FORM AND BUTTONS */
+.search__form button {
+  margin-right: 0.5%;
+}
+
+#page__title {
+  margin: 2rem 0 3rem 0;
+}
+
+#map__btn {
+  float: right;
+  margin: 0 0.4rem 1rem 0;
+  padding: 0.4rem;
+  width: 12.5rem;
+}
+
+#create__account__btn {
+  float: right;
+  margin: 0 0.4rem 1rem 0;
+  padding: 0.4rem;
+  width: 12.5rem;
+}
+
+#search__btn {
+  margin-right: 2%;
+}
+
+.search__form {
+  clear: both;
+}
+
+/* ||LIST */
+.list__title__container {
+  padding: 0rem 1rem 1rem;
+}
+
+.list__flex {
+  display: flex;
+}
+
+.list__flex li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.list__flex .list__col2 {
+  flex-grow: 3;
+  flex-basis: 40%;
+}
+
+.list__flex :not(.list__col2, .list__col4) {
+  flex-grow: 1;
+  flex-basis: 10%;
+}
+
+/*\\LIST CARDS*/
+.card {
+  background-color: white;
+}
+
+#full__info__list {
+  display: flex;
+  justify-content: space-around;
+}
+
+.mock__image__container {
+  display: flex;
+  padding-bottom: 1rem;
+  gap: 3%;
+}
+
+.mock__image {
+  width: 150px;
+  height: 200px;
+  border-radius: 5px;
+  background-color: rgba(0, 255, 255, 0.366);
+}
+
+.buttons__container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 1rem;
+  justify-content: start;
+}
+.buttons__container * {
+  width: 100%;
+}
+
+#main__list .card {
+  margin-bottom: 0.5rem;
+  height: fit-content;
+}
+
+.multi__input__field {
+  display: flex;
+}
+
+.multi__input__field p {
+  padding-top: 0.25rem;
+  text-align: center;
+}
+
+.small__input {
+  width: 45%;
+  height: fit-content;
+}
+
+#to__list__btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 1rem;
+}
+.list__flex * {
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+  font-size: 0.825rem !important;
+}
+
+.list__flex .list__col2 {
+  width: 30%;
+}
+
+#main__list {
+  margin-top: 2vh;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.card-body li {
+  font-size: 0.75rem !important;
+}
+
+.card-body span {
+  font-size: 0.825rem !important;
+}

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Quản lí tài khoản cán bộ - Sở VHTT</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <link rel="stylesheet" href="s/styles/global.css" />
+    <link rel="stylesheet" href="s/styles/navbar.css" />
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/page_content.css" />
+
+    <script src="scripts/billboard_list.js"></script>
+    <script src="scripts/navigation.js"></script>
+  </head>
+
+  <body>
+    <script src="s/scripts/navbar.js" defer></script>
+    <div class="wrapper">
+      <header id="primary-header" class="official">
+        <div id="burger"></div>
+        <nav class="navbar navbar-expand d-block" id="primary-navigation-bar">
+          <ul id="primary-items-list" class="my-3">
+            <li id="profile">
+              <i
+                class="bi bi-person-circle vertical__center"
+                id="nav__item__icon"
+              ></i>
+              <span>user name</span>
+            </li>
+            <li id="manage__billboards" onclick="navigate(this.id)">
+              <i class="bi bi-clipboard2-check" id="nav__item__icon"></i>
+              <span>Quản lí điểm QC</span>
+            </li>
+            <li id="check__requests" onclick="navigate(this.id)">
+              <i class="bi bi-check-circle" id="nav__item__icon"></i>
+              <span>Duyệt YC cấp phép</span>
+            </li>
+            <li id="list__reports" onclick="navigate(this.id)">
+              <i class="bi bi-file-earmark-text" id="nav__item__icon"></i>
+              <span>Thống kê báo cáo</span>
+            </li>
+            <li
+              id="manage__accounts"
+              class="current"
+              onclick="navigate(this.id)"
+            >
+              <i class="bi bi-person-gear" id="nav__item__icon"></i>
+              <span>Quản lí tài khoản CB</span>
+            </li>
+            <li>
+              <form id="logout" method="post" action="/logout">
+                <button type="submit">
+                  <i class="bi bi-box-arrow-left" id="logout__icon"></i>
+                  <span>Đăng xuất</span>
+                </button>
+              </form>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <div class="container" id="main__container">
+          <h1 class="fw-bold h2 mb-0" id="page__title">Quản lí tài khoản</h1>
+          <button
+            type="submit"
+            class="btn btn-success nowrap"
+            id="create__account__btn"
+            data-bs-toggle="modal"
+            data-bs-target="#Create__account__modal"
+          >
+            +&ensp;Tạo tài khoản
+          </button>
+          <form action="" class="d-flex search__form">
+            <input
+              type="text"
+              class="form-control me-2"
+              placeholder="Nhập thông tin"
+            />
+            <button
+              type="submit"
+              class="btn btn-primary nowrap"
+              id="search__btn"
+            >
+              Tìm kiếm
+            </button>
+            <button type="submit" class="btn btn-dark nowrap">
+              <i class="bi bi-arrow-down-up"></i>
+              Sắp xếp
+            </button>
+            <button type="submit" class="btn btn-dark nowrap">
+              <i class="bi bi-funnel"></i> &nbsp;Lọc
+            </button>
+          </form>
+
+          <div id="main__list">
+            <div id="info__desc">
+              <div class="list__title__container mt-3">
+                <ul class="list__flex fw-bold">
+                  <li class="list__col1">Mã nhân viên</li>
+                  <li class="list__col2">Họ tên</li>
+                  <li class="list__col3">Khu vực trực thuộc</li>
+                  <li class="list__col4">
+                    <button class="btn btn-link ps-4" disabled></button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="card shadow-sm" id="list__item1">
+              <div class="card-header" id="brief__info1">
+                <ul class="list__flex">
+                  <li class="list__col1">******</li>
+                  <li class="list__col2">Nguyễn Văn A</li>
+                  <li class="list__col3">Quận X, Phường Y</li>
+                  <li class="list__col4">
+                    <button
+                      class="btn collapsed"
+                      id="collapse__btn1"
+                      type="button"
+                      onclick="toggleCollapseButton('collapse__btn1')"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#full__info1"
+                      aria-expanded="false"
+                      aria-controls="full__info1"
+                    >
+                      <i class="bi bi-chevron-down"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div
+                id="full__info1"
+                class="collapse"
+                aria-labelledby="brief__info1"
+                data-bs-parent="#billboards__list"
+              >
+                <div class="card-body">
+                  <ul id="full__info__list">
+                    <li>
+                      <p><strong>Email:</strong> ***@***.***</p>
+                      <p><strong>SĐT:</strong> ********</p>
+                    </li>
+                    <li>
+                      <ul class="buttons__container">
+                        <li>
+                          <button
+                            class="btn btn-primary me-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#Modify__modal"
+                          >
+                            <i class="bi bi-pencil"></i>Chỉnh sửa
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            class="btn btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#delete__confirm__modal"
+                          >
+                            <i class="bi bi-trash"></i>Xoá TK
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="card shadow-sm" id="list__item2">
+              <div class="card-header" id="brief__info2">
+                <ul class="list__flex">
+                  <li class="list__col1">******</li>
+                  <li class="list__col2">Nguyễn Văn B</li>
+                  <li class="list__col3">Quận X, Phường Y</li>
+                  <li class="list__col4">
+                    <button
+                      class="btn collapsed"
+                      id="collapse__btn2"
+                      type="button"
+                      onclick="toggleCollapseButton('collapse__btn2')"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#full__info2"
+                      aria-expanded="false"
+                      aria-controls="full__info2"
+                    >
+                      <i class="bi bi-chevron-down"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div
+                id="full__info2"
+                class="collapse"
+                aria-labelledby="brief__info2"
+                data-bs-parent="#billboards__list"
+              >
+                <div class="card-body">
+                  <ul id="full__info__list">
+                    <li>
+                      <p><strong>Email:</strong> ***@***.***</p>
+                      <p><strong>SĐT:</strong> ********</p>
+                    </li>
+                    <li>
+                      <ul class="buttons__container">
+                        <li>
+                          <button
+                            class="btn btn-primary me-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#Modify__modal"
+                          >
+                            <i class="bi bi-pencil"></i>Chỉnh sửa
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            class="btn btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#delete__confirm__modal"
+                          >
+                            <i class="bi bi-trash"></i>Xoá TK
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="card shadow-sm" id="list__item3">
+              <div class="card-header" id="brief__info3">
+                <ul class="list__flex">
+                  <li class="list__col1">******</li>
+                  <li class="list__col2">Nguyễn Văn C</li>
+                  <li class="list__col3">Quận X, Phường Y</li>
+                  <li class="list__col4">
+                    <button
+                      class="btn collapsed"
+                      id="collapse__btn3"
+                      type="button"
+                      onclick="toggleCollapseButton('collapse__btn3')"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#full__info3"
+                      aria-expanded="false"
+                      aria-controls="full__info3"
+                    >
+                      <i class="bi bi-chevron-down"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div
+                id="full__info3"
+                class="collapse"
+                aria-labelledby="brief__info3"
+                data-bs-parent="#billboards__list"
+              >
+                <div class="card-body">
+                  <ul id="full__info__list">
+                    <li>
+                      <p><strong>Email:</strong> ***@***.***</p>
+                      <p><strong>SĐT:</strong> ********</p>
+                    </li>
+                    <li>
+                      <ul class="buttons__container">
+                        <li>
+                          <button
+                            class="btn btn-primary me-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#Modify__modal"
+                          >
+                            <i class="bi bi-pencil"></i>Chỉnh sửa
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            class="btn btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#delete__confirm__modal"
+                          >
+                            <i class="bi bi-trash"></i>Xoá TK
+                          </button>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="Modify__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3 class="modal-title fw-bold fs-5" id="Modal__label">
+                      Chỉnh sửa thông tin
+                    </h3>
+                    <button
+                      class="btn-close"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="">
+                      <label for="Employee-Name" class="fw-bold">Họ tên:</label>
+                      <input
+                        type="text"
+                        name="e-Name"
+                        class="form-control mb-3"
+                        id="Employee-name"
+                      />
+
+                      <label for="Employee-ID" class="fw-bold"
+                        >Mã nhân viên</label
+                      >
+                      <input
+                        type="text"
+                        name="e-Id"
+                        class="form-control mb-3"
+                        id="Employee-ID"
+                      />
+
+                      <label for="Employee-Email" class="fw-bold">Email</label>
+                      <input
+                        type="email"
+                        name="e-Email"
+                        class="form-control mb-3"
+                        id="Employee-Email"
+                      />
+
+                      <label for="Employee-Number" class="fw-bold"
+                        >Số điện thoại</label
+                      >
+                      <input
+                        type="text"
+                        name="e-Number"
+                        class="form-control mb-3"
+                        id="Employee-Number"
+                      />
+
+                      <label for="Area" class="fw-bold"
+                        >Khu vực trực thuộc</label
+                      >
+                      <ul class="sub__list__flex">
+                        <li class="list__col1">
+                          <select
+                            class="form-select mb-3"
+                            id="district__number"
+                            aria-label="district number selector"
+                          >
+                            <option selected>Quận...</option>
+                            <option value="1">Quận 1</option>
+                            <option value="2">Quận 2</option>
+                            <option value="3">Quận 3</option>
+                          </select>
+                        </li>
+                        <li class="list__col2">
+                          <select
+                            class="form-select mb-3"
+                            id="ward__number"
+                            aria-label="ward number selector"
+                          >
+                            <option selected>Phường...</option>
+                            <option value="1">Phường 1</option>
+                            <option value="2">Phường 2</option>
+                            <option value="3">Phường 3</option>
+                          </select>
+                        </li>
+                      </ul>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Huỷ
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-bs-dismiss="modal"
+                      onclick="showToast('save__success__toast')"
+                      id="save__changes__btn"
+                    >
+                      Lưu thay đổi
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="Create__account__modal"
+              tabindex="-1"
+              aria-labelledby="Create__account__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3
+                      class="modal-title fw-bold fs-5"
+                      id="Create__account__label"
+                    >
+                      Tạo tài khoản mới
+                    </h3>
+                    <button
+                      class="btn-close"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="">
+                      <label for="Employee-Name" class="fw-bold">Họ tên:</label>
+                      <input
+                        type="text"
+                        name="e-Name"
+                        class="form-control mb-3"
+                        id="Employee-name"
+                      />
+
+                      <label for="Employee-ID" class="fw-bold"
+                        >Mã nhân viên</label
+                      >
+                      <input
+                        type="text"
+                        name="e-Id"
+                        class="form-control mb-3"
+                        id="Employee-ID"
+                      />
+
+                      <label for="Employee-Email" class="fw-bold">Email</label>
+                      <input
+                        type="email"
+                        name="e-Email"
+                        class="form-control mb-3"
+                        id="Employee-Email"
+                      />
+
+                      <label for="Employee-Number" class="fw-bold"
+                        >Số điện thoại</label
+                      >
+                      <input
+                        type="text"
+                        name="e-Number"
+                        class="form-control mb-3"
+                        id="Employee-Number"
+                      />
+
+                      <label for="Area" class="fw-bold"
+                        >Khu vực trực thuộc</label
+                      >
+                      <ul class="sub__list__flex">
+                        <li class="list__col1">
+                          <select
+                            class="form-select mb-3"
+                            id="district__number"
+                            aria-label="district number selector"
+                          >
+                            <option selected>Quận...</option>
+                            <option value="1">Quận 1</option>
+                            <option value="2">Quận 2</option>
+                            <option value="3">Quận 3</option>
+                          </select>
+                        </li>
+                        <li class="list__col2">
+                          <select
+                            class="form-select mb-3"
+                            id="ward__number"
+                            aria-label="ward number selector"
+                          >
+                            <option selected>Phường...</option>
+                            <option value="1">Phường 1</option>
+                            <option value="2">Phường 2</option>
+                            <option value="3">Phường 3</option>
+                          </select>
+                        </li>
+                      </ul>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Huỷ
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      data-bs-dismiss="modal"
+                      onclick="showToast('create__success__toast')"
+                      id="save__changes__btn"
+                    >
+                      Tạo tài khoản
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="delete__confirm__modal"
+              tabindex="-1"
+              aria-labelledby="delete__modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3
+                      class="modal-title fw-bold fs-5"
+                      id="delete__modal__label"
+                    >
+                      Xác nhận xoá
+                    </h3>
+                    <button
+                      class="btn-close"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Bạn có chắc chắn muốn xoá tài khoản này không?
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Huỷ
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      data-bs-dismiss="modal"
+                      onclick="showToast('delete__success__toast')"
+                      id="delete__btn"
+                    >
+                      Xoá
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="create__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-check-lg"></i>
+                    Đã tạo tài khoản!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="save__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-check-lg"></i>
+                    Đã lưu thay đổi!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="delete__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-trash"></i>
+                    Đã xoá tài khoản!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer>
+        <!-- place footer here -->
+      </footer>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded");
+    </script>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+      integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

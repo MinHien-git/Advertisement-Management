@@ -8,7 +8,8 @@ const check_authentication_status = (request, response, next) => {
 
   response.locals.uid = uid;
   response.locals.isAuth = true;
-  
+  response.locals.type_user = request.session.type_user;
+
   response.locals.ward = ward;
   response.locals.street = street;
   next();

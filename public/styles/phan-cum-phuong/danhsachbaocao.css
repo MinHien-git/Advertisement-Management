@@ -1,0 +1,17 @@
+#content>#table>ul > li> ul> li:nth-child(1){
+    width: 10rem;
+}
+
+#content>#table>ul> li> ul> li:nth-child(2){
+    width: calc(100% - 22rem);
+    text-overflow: clip;
+}
+
+#content>#table>ul> li>ul>li:nth-child(3){
+    width: 6rem;
+}
+
+#content>#table>ul> li>ul>label:nth-child(4){
+    margin: 0 auto;
+    width: 6rem;
+}
