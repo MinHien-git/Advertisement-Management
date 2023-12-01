@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express();
+
 router.get("management/advertise");
 router.get("management/license");
 router.post("management/license/request");
