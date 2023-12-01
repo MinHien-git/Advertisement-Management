@@ -1,6 +1,6 @@
 #primary-header {
   display: flex;
-  position: sticky;
+  position: fixed;
   left: 0;
   box-shadow: none;
   width: 100vw;
@@ -13,6 +13,10 @@
   background-color: transparent;
   transition: 200ms all ease-in-out;
 }
+.wrapper #primary-header {
+  position: sticky;
+}
+
 #primary-header.active {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,

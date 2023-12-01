@@ -29,60 +29,19 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
 
-    <link rel="stylesheet" href="s/styles/global.css" />
-    <link rel="stylesheet" href="s/styles/navbar.css" />
-    <link rel="stylesheet" href="styles/navbar.css" />
-    <link rel="stylesheet" href="styles/page_content.css" />
+    <link rel="stylesheet" href="/styles/global.css" />
+    <link rel="stylesheet" href="/styles/navbar.css" />
+    <link rel="stylesheet" href="/styles/navbar.css" />
+    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
 
-    <script src="scripts/billboard_list.js"></script>
-    <script src="scripts/navigation.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/billboard_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
   </head>
 
   <body>
-    <script src="s/scripts/navbar.js" defer></script>
+    <script src="/scripts/navbar.js" defer></script>
     <div class="wrapper">
-      <header id="primary-header" class="official">
-        <div id="burger"></div>
-        <nav class="navbar navbar-expand d-block" id="primary-navigation-bar">
-          <ul id="primary-items-list" class="my-3">
-            <li id="profile">
-              <i
-                class="bi bi-person-circle vertical__center"
-                id="nav__item__icon"
-              ></i>
-              <span>user name</span>
-            </li>
-            <li id="manage__billboards" onclick="navigate(this.id)">
-              <i class="bi bi-clipboard2-check" id="nav__item__icon"></i>
-              <span>Quản lí điểm QC</span>
-            </li>
-            <li id="check__requests" onclick="navigate(this.id)">
-              <i class="bi bi-check-circle" id="nav__item__icon"></i>
-              <span>Duyệt YC cấp phép</span>
-            </li>
-            <li id="list__reports" onclick="navigate(this.id)">
-              <i class="bi bi-file-earmark-text" id="nav__item__icon"></i>
-              <span>Thống kê báo cáo</span>
-            </li>
-            <li
-              id="manage__accounts"
-              class="current"
-              onclick="navigate(this.id)"
-            >
-              <i class="bi bi-person-gear" id="nav__item__icon"></i>
-              <span>Quản lí tài khoản CB</span>
-            </li>
-            <li>
-              <form id="logout" method="post" action="/logout">
-                <button type="submit">
-                  <i class="bi bi-box-arrow-left" id="logout__icon"></i>
-                  <span>Đăng xuất</span>
-                </button>
-              </form>
-            </li>
-          </ul>
-        </nav>
-      </header>
+      <%- include('../includes/header.ejs')%>
       <main>
         <div class="container" id="main__container">
           <h1 class="fw-bold h2 mb-0" id="page__title">Quản lí tài khoản</h1>
