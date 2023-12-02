@@ -18,10 +18,6 @@ router.post(
   "/dashboard/license/decline",
   phuongQuanController._post_decline_license
 );
-router.post(
-  "/dashboard/license/edit",
-  phuongQuanController._post_license_request
-);
 
 //Danh sách báo cáo
 router.get("/dashboard/report", phuongQuanController._get_report);

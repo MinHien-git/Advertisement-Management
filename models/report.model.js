@@ -3,12 +3,10 @@ const db = require("../database/database");
 const report_const = require("../constants/report.type");
 
 module.exports = class Report {
-  constructor(email, phone, position, name, district, ward, images, details) {
+  constructor(email, phone, position, name, images, details) {
     this.sender_email = email;
-    this.district = district;
     this.sender_number = phone;
     this.sender_name = name;
-    this.ward = ward;
     this.place = position;
     this.state = report_const.REPORT_STATE.INCOMPLETE;
     this.images = images;
@@ -31,11 +29,14 @@ module.exports = class Report {
     return report;
   }
 
-  static async _update_report_state(id, state) {
+  static async _update_report_state(id, state, handling_method) {
     const report = await db
       .getDb()
       .collection("reports")
-      .findOneAndUpdate({ _id: new ObjectId(id) }, { state: state });
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { state: state, handling_method: handling_method }
+      );
     return report;
   }
 };

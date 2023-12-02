@@ -33,11 +33,9 @@ const _post_report = (request, response) => {
     attached_files,
     details
   );
-  if (report._send_report()) console.log("send");
+  if (report._send_report()) console.log("send!");
   return response.redirect("/");
 };
-
-const _update_report_state = (request, response) => {};
 
 const _get_report_manage = async (request, response) => {
   let user = db.getDb().collection("users").find({ id: request.session.id });
@@ -47,6 +45,5 @@ const _get_report_manage = async (request, response) => {
 module.exports = {
   _get_report,
   _post_report,
-  _update_report_state,
   _get_report_manage,
 };
