@@ -20,8 +20,6 @@ const _post_report = (request, response) => {
   return response.redirect("/");
 };
 
-const _update_report_state = (request, response) => {};
-
 const _get_report_manage = async (request, response) => {
   let user = db.getDb().collection("users").find({ id: request.session.id });
   // TODO: manage user role and what report to show
@@ -30,6 +28,5 @@ const _get_report_manage = async (request, response) => {
 module.exports = {
   _get_report,
   _post_report,
-  _update_report_state,
   _get_report_manage,
 };
