@@ -1,13 +1,17 @@
 const bcrypt = require("bcrypt");
 const db = require("../database/database");
+const USER_TYPE = require("../constants/user.type");
 const { ObjectId } = require("mongodb");
+
+
 module.exports = class User {
-  constructor(email, password, phone = "", name = "", birth = "") {
+  constructor(email, password, type_user, phone = "", name = "", birth = "") {
     this.email = email;
     this.password = password;
     this.name = name;
     this.birth = birth;
     this.phone = phone;
+    this.type_user = type_user;
   }
 
   async _login() {

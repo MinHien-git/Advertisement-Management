@@ -3,7 +3,7 @@ const create_user_session = (request, user, action) => {
   request.session.email = user.email;
   request.session.ward = user.ward;
   request.session.street = user.street;
-  request.session.type_user = user.type_user ? user.type_user : 0;
+  request.session.type_user = user.type_user ? user.type_user : type.Civilian;
   request.session.save(action);
 };
 
@@ -14,6 +14,7 @@ const delete_user_authentication = (request) => {
   request.session.street = null;
   request.session.type_user = 0;
 };
+
 module.exports = {
   create_user_session,
   delete_user_authentication,

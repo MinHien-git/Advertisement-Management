@@ -1,3 +1,8 @@
+const User = require("../models/users.model");
+const Billboard = require("../models/bill-board.model");
+const Report = require("../models/report.model");
+const db = require("../database/database");
+
 //Danh sách bảng quảng cáo
 const _get_advertisement = (req, res) => {
   res.render("phan-cum-phuong/quanlyquangcao");
@@ -6,9 +11,18 @@ const _get_advertisement = (req, res) => {
 const _get_license = (req, res) => {
   res.render("phan-cum-phuong/danhsachcapphep");
 };
-const _post_license_request = (req, res) => {};
-const _post_decline_license = (req, res) => {};
-const _post_license_edit_request = (req, res) => {};
+
+const _post_license_request = (req, res) => {
+
+};
+
+const _post_decline_license = (req, res) => {
+
+};
+
+const _post_license_edit_request = (req, res) => {
+
+};
 
 //Thông tin báo cáo
 const _get_report = (req, res) => {
@@ -19,10 +33,24 @@ const _get_report_information = (req, res) => {
 };
 
 //Yêu cầu chỉnh sửa biển quảng cáo
-const _post_report_edit = (req, res) => {};
+const _post_report_edit = async (req, res) => {
+  const { type_billboard, geometry, position, properties, license } = req.body;
+
+  const user = User(type_billboard, geometry, position, properties, license);
+
+  db.getDb().collection("customers").updateOne({ $or: [
+    { position: this.position },
+    { "geometry.coordinates": this.geometry },],}
+    , { ...user }, function(err, res) {
+        if (err) throw err;
+        console.log("1 document updated");
+      });
+};
+
 const _get_request_edit = (req, res) => {
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
+
 const _post_request_edit = (req, res) => {};
 module.exports = {
   _get_advertisement,
