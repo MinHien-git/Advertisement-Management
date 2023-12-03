@@ -1,18 +1,33 @@
 const User = require("../models/users.model");
 const Billboard = require("../models/bill-board.model");
 const Report = require("../models/report.model");
+const License = require("../models/license.model");
 const db = require("../database/database");
 
 const { request } = require("../routes/phuongquan.route");
 
 //Danh sách bảng quảng cáo
-const _get_advertisement = (req, res) => {
+const _get_advertisement = async (req, res) => {
+  res.locals.type_user = 1;
+  res.locals.isAuth = true;
+  res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
+  res.locals.billboards.forEach(element => {
+    element.license = new License("", "Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
+  });
   res.render("phan-cum-phuong/quanlyquangcao");
 };
+
 //Yêu cầu cấp phép biển quáng cáo
-const _get_license = (req, res) => {
+const _get_license = async (req, res) => {
+  res.locals.type_user = 1;
+  res.locals.isAuth = true;
+  res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
+  res.locals.billboards.forEach(element => {
+    element.license = new License("", "Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
+  });
   res.render("phan-cum-phuong/danhsachcapphep");
 };
+
 const _post_license_request = (req, res) => {
   let { email, position, from, images, details } = req.body;
   let request = new Request(email, from, name, images, details, 0);
@@ -29,10 +44,16 @@ const _post_decline_license = (req, res) => {
 };
 
 //Thông tin báo cáo
-const _get_report = (req, res) => {
+const _get_report = async (req, res) => {
+  res.locals.type_user = 1;
+  res.locals.isAuth = true;
+  res.locals.reports = await db.getDb().collection("reports").find({}).toArray();
   res.render("phan-cum-phuong/danhsachbaocao");
 };
+
 const _get_report_information = (req, res) => {
+  res.locals.type_user = 1;
+  locals.isAuth = true;
   res.render("phan-cum-phuong/chitietbaocao");
 };
 
@@ -46,22 +67,14 @@ const _post_report_edit = (req, res) => {
   }
   return res.redirect("/");
 };
-//Yêu cầu chỉnh sửa biển quảng cáo
-const _post_report_edit = async (req, res) => {
-  const { type_billboard, geometry, position, properties, license } = req.body;
 
-  const user = User(type_billboard, geometry, position, properties, license);
-
-  db.getDb().collection("customers").updateOne({ $or: [
-    { position: this.position },
-    { "geometry.coordinates": this.geometry },],}
-    , { ...user }, function(err, res) {
-        if (err) throw err;
-        console.log("1 document updated");
-      });
-};
-
-const _get_request_edit = (req, res) => {
+const _get_request_edit = async (req, res) => {
+  res.locals.type_user = 1;
+  res.locals.isAuth = true;
+  res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
+  res.locals.billboards.forEach(element => {
+    element.license = new License("", "Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
+  });
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 

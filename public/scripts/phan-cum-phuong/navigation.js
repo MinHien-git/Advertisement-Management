@@ -1,17 +1,17 @@
 document.getElementById("report-list").addEventListener("click", () => {
-    window.location.href = "/Phan-cum-phuong-quan/danhsachbaocao.html";
+    window.location.href = "/dashboard/report";
 })
 
 document.getElementById("license-list").addEventListener("click", () => {
-    window.location.href = "/Phan-cum-phuong-quan/danhsachcapphep.html";
+    window.location.href = "/dashboard/license";
 })
 
 document.getElementById("edit-list").addEventListener("click", () => {
-    window.location.href = "/Phan-cum-phuong-quan/danhsachchinhsua.html";
+    window.location.href = "/dashboard/request/edit";
 })
 
 document.getElementById("billboard-list").addEventListener("click", () => {
-    window.location.href = "/Phan-cum-phuong-quan/quanlyquangcao.html";
+    window.location.href = "/dashboard/advertise";
 })
 
 function navigate(item_id) {

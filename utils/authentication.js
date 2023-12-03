@@ -3,7 +3,7 @@ const create_user_session = (request, user, action) => {
   request.session.email = user.email;
   request.session.ward = user.ward;
   request.session.street = user.street;
-  request.session.type_user = user.type_user ? user.type_user : type.Civilian;
+  request.session.type_user = user.type_user ? user.type_user : 0;
   request.session.save(action);
 };
 

@@ -1,4 +1,4 @@
-class License {
+module.exports = class License {
   constructor(
     advertisement_content,
     company_name,

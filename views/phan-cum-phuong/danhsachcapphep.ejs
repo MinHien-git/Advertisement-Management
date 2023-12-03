@@ -95,6 +95,118 @@
               </div>
             </div>
 
+            <% for (let i = 0; i < locals.billboards.length; i++) { %>
+              <% const advertisement = locals.billboards[i]; %>
+              <% const id = advertisement._id; %>
+            <div id=<%='"list__item' + id + '"'%>
+              " class="card shadow-sm">
+              <div class="card-header" id="brief__info<%= id %>">
+                <ul class="list__flex">
+                  <li class="list__col1">
+                    <%= advertisement.properties.type %>
+                  </li>
+                  <li class="list__col2"><%= advertisement.properties.place %></li>
+                  <% if (advertisement.address) { %>
+                  <li class="list__col3 fw-semibold" style="color: #329a44">
+                    Đã duyệt
+                  </li>
+                  <% } else { %>
+                  <li class="list__col3 fw-semibold" style="color: #e7b400">
+                    Chưa duyệt
+                  </li>
+                  <% } %>
+                  <li class="list__col4">
+                    <button
+                      class="btn collapsed"
+                      id="collapse__btn<%= id %>"
+                      type="button"
+                      onclick="toggleCollapseButton('collapse__btn<%= id %>')"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#full__info<%= id %>"
+                      aria-expanded="false"
+                      aria-controls="full__info<%= id %>"
+                    >
+                      <i class="bi bi-chevron-down"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              <div
+                id="full__info<%= id %>"
+                class="collapse"
+                aria-labelledby="brief__info<%= id %>"
+              >
+                <div class="card-body">
+                  <ul id="full__info__list">
+                    <li class="mock__image__container">
+                      <div class="mock__image">&nbsp;</div>
+                      <div class="mock__image">&nbsp;</div>
+                    </li>
+                    <li>
+                      <p class="fw-bold">Thông tin bảng quảng cáo</p>
+                      <ul>
+                        <li>
+                          Kích thước:
+                          <span class="fw-bold"
+                            ><%= advertisement.properties.size %></span
+                          >
+                        </li>
+                        <li>
+                          Số lượng:
+                          <span class="fw-bold"
+                            ><%= advertisement.properties.amount %></span
+                          >
+                        </li>
+                        <li>
+                          Hình thức:
+                          <span class="fw-bold"
+                            ><%= advertisement.properties.type_advertise %></span
+                          >
+                        </li>
+                        <li>
+                          Phân loại:
+                          <span class="fw-bold"
+                            ><%= advertisement.properties.place_type %></span
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <p class="fw-bold">Thông tin công ty</p>
+                      <ul>
+                        <li>
+                          Tên công ty:
+                          <span class="fw-bold"
+                            ><%= advertisement.license.company_name %></span
+                          >
+                        </li>
+                        <li>
+                          Email liên hệ:
+                          <span class="fw-bold"
+                            ><%= advertisement.license.company_contact %></span
+                          >
+                        </li>
+                        <li>
+                          Ngày bắt đầu:
+                          <span class="fw-bold"
+                            ><%= advertisement.license.start_date %></span
+                          >
+                        </li>
+                        <li>
+                          Ngày kết thúc:
+                          <span class="fw-bold"
+                            ><%= advertisement.license.end_date %></span
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <% } %>
+
             <div
               class="modal fade"
               id="Modify__modal"

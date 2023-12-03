@@ -1,31 +1,3 @@
-class Billboard {
-  constructor(geometry, properties, license, company_info) {
-    this.globalid = properties.globalid;
-    this.type_billboard = properties.type;
-    this.address = properties.place;
-    this.geometry = geometry;
-    this.properties = properties;
-    this.company_info = company_info;
-    this.license = license;
-  }
-}
-
-function assignStatus(item_id) {
-  const status_num = item_id % 4;
-  let status = new String("	");
-  switch (+status_num) {
-    case 1: {
-      status = `<li class="list__col3 fw-semibold" style="color: #329a44">Đã duyệt</li>`;
-      break;
-    }
-    default: {
-      status = `<li class="list__col3 fw-semibold" style="color: #e7b400">Chưa duyệt</li>`;
-      break;
-    }
-  }
-  return status;
-}
-
 function assignButton(item_id) {
   const status_num = item_id % 4;
   let button_container = new String("	");

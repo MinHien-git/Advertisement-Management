@@ -27,10 +27,10 @@
       referrerpolicy="no-referrer"
     ></script>
     <link
-    href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
-    rel="stylesheet"
-  />
-  <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
+      href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
     <link rel="stylesheet" href="/styles/phan-cum-phuong/trangchu.css" />
     <link rel="stylesheet" href="/styles/navbar.css" />
     <link rel="stylesheet" href="/styles/global.css" />
@@ -48,15 +48,13 @@
   </head>
   <body>
     <script src="/scripts/navbar.js" defer></script>
-  
+
     <div class="wrapper">
       <%- include('../includes/header.ejs')%>
-      
+
       <main>
         <div class="container" id="main__container">
-          <h1 class="fw-bold h2 mb-0" id="page__title">
-            Danh sách báo cáo
-          </h1>
+          <h1 class="fw-bold h2 mb-0" id="page__title">Danh sách báo cáo</h1>
           <button
             type="submit"
             class="btn btn-primary nowrap"
@@ -98,8 +96,44 @@
                 </ul>
               </div>
             </div>
+
+            <% for (let i = 0; i < locals.reports.length; i++) { %> <% const
+            report = locals.reports[i]; %>
+            <div class="card shadow-sm report" id="list__item<%= report._id %>">
+              <div class="card-header" id="brief__info<%= report._id %>">
+                <ul class="list__flex">
+                  <% if (report.type === 0) { %>
+                  <li class="list__col1" style="color: #ff7b7b">
+                    Tố giác sai phạm
+                  </li>
+                  <% } %> <% if (report.type === 1) { %>
+                  <li class="list__col1" style="color: #699bf7">
+                    Đăng ký nội dung
+                  </li>
+                  <% } %> <% if (report.type === 2) { %>
+                  <li class="list__col1" style="color: #00a41a">
+                    Đóng góp ý kiến
+                  </li>
+                  <% } %> <% if (report.type === 3) { %>
+                  <li class="list__col1" style="color: #ffc701">
+                    Giải đáp thắc mắc
+                  </li>
+                  <% } %>
+                  <li class="list__col2"><%= report.place %></li>
+                  <li class="list__col3"><%= report.send_day %></li>
+                  <% if (report.status === 1) {%>
+                  <li class="list__col4" style="color: #00a41a">Đã xử lý</li>
+                  <% } else { %>
+                  <li class="list__col4" style="color: #ffc701">Đang xử lý</li>
+                  <% } %>
+                </ul>
+              </div>
+              <% } %>
+            </div>
           </div>
         </div>
+      </main>
+    </div>
     <script src="/scripts/popup.js"></script>
     <script src="/scripts/phan-cum-phuong/trangchu.js"></script>
     <script src="/scripts/phan-cum-phuong/edit.js"></script>

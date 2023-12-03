@@ -3,7 +3,8 @@ const db = require("../database/database");
 const report_const = require("../constants/report.type");
 
 module.exports = class Report {
-  constructor(email, phone, position, name, images, details) {
+  constructor(type, email, phone, position, name, images, details) {
+    this.type = type;
     this.sender_email = email;
     this.sender_number = phone;
     this.sender_name = name;
