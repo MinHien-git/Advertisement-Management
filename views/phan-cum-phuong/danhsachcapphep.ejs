@@ -95,285 +95,308 @@
               </div>
             </div>
 
-            <% for (let i = 0; i < locals.billboards.length; i++) { %>
-              <% const advertisement = locals.billboards[i]; %>
-              <% const id = advertisement._id; %>
-            <div id=<%='"list__item' + id + '"'%>
-              " class="card shadow-sm">
-              <div class="card-header" id="brief__info<%= id %>">
-                <ul class="list__flex">
-                  <li class="list__col1">
-                    <%= advertisement.properties.type %>
+            <% for (let i = 0; i < locals.billboards.length; i++) { %> <% const
+            advertisement = locals.billboards[i]; %> <% const id =
+            advertisement._id; %> <div id=<%='"list__item' + id + '"'%> "
+            class="card shadow-sm">
+            <div class="card-header" id="brief__info<%= id %>">
+              <ul class="list__flex">
+                <li class="list__col1"><%= advertisement.properties.type %></li>
+                <li class="list__col2">
+                  <%= advertisement.properties.place %>
+                </li>
+                <% if (advertisement.address) { %>
+                <li class="list__col3 fw-semibold" style="color: #329a44">
+                  Đã duyệt
+                </li>
+                <% } else { %>
+                <li class="list__col3 fw-semibold" style="color: #e7b400">
+                  Chưa duyệt
+                </li>
+                <% } %>
+                <li class="list__col4">
+                  <button
+                    class="btn collapsed"
+                    id="collapse__btn<%= id %>"
+                    type="button"
+                    onclick="toggleCollapseButton('collapse__btn<%= id %>')"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#full__info<%= id %>"
+                    aria-expanded="false"
+                    aria-controls="full__info<%= id %>"
+                  >
+                    <i class="bi bi-chevron-down"></i>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <div
+              id="full__info<%= id %>"
+              class="collapse"
+              aria-labelledby="brief__info<%= id %>"
+            >
+              <div class="card-body">
+                <ul id="full__info__list">
+                  <li class="mock__image__container">
+                    <div class="mock__image">&nbsp;</div>
+                    <div class="mock__image">&nbsp;</div>
                   </li>
-                  <li class="list__col2"><%= advertisement.properties.place %></li>
-                  <% if (advertisement.address) { %>
-                  <li class="list__col3 fw-semibold" style="color: #329a44">
-                    Đã duyệt
+                  <li>
+                    <p class="fw-bold">Thông tin bảng quảng cáo</p>
+                    <ul>
+                      <li>
+                        Kích thước:
+                        <span class="fw-bold"
+                          ><%= advertisement.properties.size %></span
+                        >
+                      </li>
+                      <li>
+                        Số lượng:
+                        <span class="fw-bold"
+                          ><%= advertisement.properties.amount %></span
+                        >
+                      </li>
+                      <li>
+                        Hình thức:
+                        <span class="fw-bold"
+                          ><%= advertisement.properties.type_advertise %></span
+                        >
+                      </li>
+                      <li>
+                        Phân loại:
+                        <span class="fw-bold"
+                          ><%= advertisement.properties.place_type %></span
+                        >
+                      </li>
+                    </ul>
                   </li>
-                  <% } else { %>
-                  <li class="list__col3 fw-semibold" style="color: #e7b400">
-                    Chưa duyệt
+                  <li>
+                    <p class="fw-bold">Thông tin công ty</p>
+                    <ul>
+                      <li>
+                        Tên công ty:
+                        <span class="fw-bold"
+                          ><%= advertisement.license.company_name %></span
+                        >
+                      </li>
+                      <li>
+                        Email liên hệ:
+                        <span class="fw-bold"
+                          ><%= advertisement.license.company_contact %></span
+                        >
+                      </li>
+                      <li>
+                        Ngày bắt đầu:
+                        <span class="fw-bold"
+                          ><%= advertisement.license.start_date %></span
+                        >
+                      </li>
+                      <li>
+                        Ngày kết thúc:
+                        <span class="fw-bold"
+                          ><%= advertisement.license.end_date %></span
+                        >
+                      </li>
+                    </ul>
                   </li>
-                  <% } %>
-                  <li class="list__col4">
-                    <button
-                      class="btn collapsed"
-                      id="collapse__btn<%= id %>"
-                      type="button"
-                      onclick="toggleCollapseButton('collapse__btn<%= id %>')"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#full__info<%= id %>"
-                      aria-expanded="false"
-                      aria-controls="full__info<%= id %>"
-                    >
-                      <i class="bi bi-chevron-down"></i>
-                    </button>
+                  <li>
+                    <ul class="buttons__container">
+                      <% if (!advertisement.license) { %>
+                      <li>
+                        <button
+                          class="btn btn-success"
+                          onclick="create_authorize_request('<%= advertisement.place %>')"
+                        >
+                          <i class="bi bi-check-circle"></i> Tạo yêu cầu
+                        </button>
+                      </li>
+                      <% } else { %>
+                      <li>
+                        <button
+                          onclick="cancel_license('<%= id %>')"
+                          class="btn btn-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#delete__confirm__modal"
+                        >
+                          <i class="bi bi-trash"></i> Huỷ yêu cầu
+                        </button>
+                      </li>
+                      <% } %>
+                    </ul>
                   </li>
                 </ul>
               </div>
-
-              <div
-                id="full__info<%= id %>"
-                class="collapse"
-                aria-labelledby="brief__info<%= id %>"
-              >
-                <div class="card-body">
-                  <ul id="full__info__list">
-                    <li class="mock__image__container">
-                      <div class="mock__image">&nbsp;</div>
-                      <div class="mock__image">&nbsp;</div>
-                    </li>
-                    <li>
-                      <p class="fw-bold">Thông tin bảng quảng cáo</p>
-                      <ul>
-                        <li>
-                          Kích thước:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.size %></span
-                          >
-                        </li>
-                        <li>
-                          Số lượng:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.amount %></span
-                          >
-                        </li>
-                        <li>
-                          Hình thức:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.type_advertise %></span
-                          >
-                        </li>
-                        <li>
-                          Phân loại:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.place_type %></span
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <p class="fw-bold">Thông tin công ty</p>
-                      <ul>
-                        <li>
-                          Tên công ty:
-                          <span class="fw-bold"
-                            ><%= advertisement.license.company_name %></span
-                          >
-                        </li>
-                        <li>
-                          Email liên hệ:
-                          <span class="fw-bold"
-                            ><%= advertisement.license.company_contact %></span
-                          >
-                        </li>
-                        <li>
-                          Ngày bắt đầu:
-                          <span class="fw-bold"
-                            ><%= advertisement.license.start_date %></span
-                          >
-                        </li>
-                        <li>
-                          Ngày kết thúc:
-                          <span class="fw-bold"
-                            ><%= advertisement.license.end_date %></span
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </div>
             </div>
-            <% } %>
+          </div>
+          <% } %>
 
-            <div
-              class="modal fade"
-              id="Modify__modal"
-              tabindex="-1"
-              aria-labelledby="Modal__label"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h3 class="modal-title fw-bold fs-5" id="Modal__label">
-                      Chỉnh sửa thông tin
-                    </h3>
-                    <button
-                      class="btn-close"
-                      type="button"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="">
-                      <label for="billboard__type" class="fw-bold"
-                        >Loại bảng quảng cáo</label
-                      >
-                      <select
-                        class="form-select mb-3"
-                        id="billboard__type"
-                        aria-label="Billboard type selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1">Trụ/Cụm pano</option>
-                        <option value="2">Trụ bảng hiflex</option>
-                        <option value="3">Trụ màn hình điện tử LED</option>
-                        <option value="4">Trụ hộp đèn</option>
-                        <option value="5">Bảng hiflex ốp tường</option>
-                        <option value="6">Màn hình điện tử ốp tường</option>
-                        <option value="7">Trụ treo băng rôn dọc</option>
-                        <option value="8">Trụ treo băng rôn ngang</option>
-                        <option value="9">Cổng chào</option>
-                        <option value="10">Trung tâm thương mại</option>
-                      </select>
+          <div
+            class="modal fade"
+            id="Modify__modal"
+            tabindex="-1"
+            aria-labelledby="Modal__label"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title fw-bold fs-5" id="Modal__label">
+                    Chỉnh sửa thông tin
+                  </h3>
+                  <button
+                    class="btn-close"
+                    type="button"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form action="">
+                    <label for="billboard__type" class="fw-bold"
+                      >Loại bảng quảng cáo</label
+                    >
+                    <select
+                      class="form-select mb-3"
+                      id="billboard__type"
+                      aria-label="Billboard type selector"
+                    >
+                      <option selected>Chọn...</option>
+                      <option value="1">Trụ/Cụm pano</option>
+                      <option value="2">Trụ bảng hiflex</option>
+                      <option value="3">Trụ màn hình điện tử LED</option>
+                      <option value="4">Trụ hộp đèn</option>
+                      <option value="5">Bảng hiflex ốp tường</option>
+                      <option value="6">Màn hình điện tử ốp tường</option>
+                      <option value="7">Trụ treo băng rôn dọc</option>
+                      <option value="8">Trụ treo băng rôn ngang</option>
+                      <option value="9">Cổng chào</option>
+                      <option value="10">Trung tâm thương mại</option>
+                    </select>
 
-                      <label for="billboard__address" class="fw-bold"
-                        >Địa điểm</label
-                      >
+                    <label for="billboard__address" class="fw-bold"
+                      >Địa điểm</label
+                    >
+                    <input
+                      type="text"
+                      name="address"
+                      class="form-control mb-3"
+                      id="billboard__address"
+                      placeholder="123 Đường ABC, Phường XX, Quận XY"
+                    />
+
+                    <label for="ad__type" class="fw-bold"
+                      >Hình thức quảng cáo</label
+                    >
+                    <select
+                      class="form-select mb-3"
+                      id="ad__type"
+                      aria-label="advertisement type selector"
+                    >
+                      <option selected>Chọn...</option>
+                      <option value="1">Cổ động chính trị</option>
+                      <option value="2">Quảng cáo thương mại</option>
+                      <option value="3">Xã hội hoá</option>
+                    </select>
+
+                    <label for="land__type" class="fw-bold">Phân loại</label>
+                    <select
+                      class="form-select mb-3"
+                      id="land__type"
+                      aria-label="Land type selector"
+                    >
+                      <option selected>Chọn...</option>
+                      <option value="1">
+                        Đất công/Công viên/Hành lang an toàn giao thông
+                      </option>
+                      <option value="2">Đất tư nhân/Nhà ở riêng lẻ</option>
+                      <option value="3">Trung tâm thương mại</option>
+                      <option value="4">Chợ</option>
+                      <option value="5">Cây xăng</option>
+                      <option value="6">Nhà chờ xe buýt</option>
+                    </select>
+
+                    <label for="billboard__size" class="fw-bold"
+                      >Kích thước</label
+                    >
+                    <div class="multi__input__field" id="billboard__size">
                       <input
                         type="text"
                         name="address"
-                        class="form-control mb-3"
-                        id="billboard__address"
-                        placeholder="123 Đường ABC, Phường XX, Quận XY"
+                        class="form-control small__input"
+                        id="billboard__height"
+                        placeholder="Chiều cao"
                       />
+                      <p class="fw-bold m-0">m x &nbsp;&nbsp;</p>
 
-                      <label for="ad__type" class="fw-bold"
-                        >Hình thức quảng cáo</label
-                      >
-                      <select
-                        class="form-select mb-3"
-                        id="ad__type"
-                        aria-label="advertisement type selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1">Cổ động chính trị</option>
-                        <option value="2">Quảng cáo thương mại</option>
-                        <option value="3">Xã hội hoá</option>
-                      </select>
+                      <input
+                        type="text"
+                        name="address"
+                        class="form-control small__input"
+                        id="billboard__width"
+                        placeholder="Chiều dài"
+                      />
+                      <p class="fw-bold m-0">&nbsp;m</p>
+                    </div>
 
-                      <label for="land__type" class="fw-bold">Phân loại</label>
-                      <select
-                        class="form-select mb-3"
-                        id="land__type"
-                        aria-label="Land type selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1">
-                          Đất công/Công viên/Hành lang an toàn giao thông
-                        </option>
-                        <option value="2">Đất tư nhân/Nhà ở riêng lẻ</option>
-                        <option value="3">Trung tâm thương mại</option>
-                        <option value="4">Chợ</option>
-                        <option value="5">Cây xăng</option>
-                        <option value="6">Nhà chờ xe buýt</option>
-                      </select>
-
-                      <label for="billboard__size" class="fw-bold"
-                        >Kích thước</label
-                      >
-                      <div class="multi__input__field" id="billboard__size">
-                        <input
-                          type="text"
-                          name="address"
-                          class="form-control small__input"
-                          id="billboard__height"
-                          placeholder="Chiều cao"
-                        />
-                        <p class="fw-bold m-0">m x &nbsp;&nbsp;</p>
-
-                        <input
-                          type="text"
-                          name="address"
-                          class="form-control small__input"
-                          id="billboard__width"
-                          placeholder="Chiều dài"
-                        />
-                        <p class="fw-bold m-0">&nbsp;m</p>
-                      </div>
-
-                      <label for="billboard__amount" class="fw-bold"
-                        >Số lượng</label
-                      >
-                      <div class="multi__input__field" id="billboard__amount">
-                        <input
-                          type="text"
-                          name="address"
-                          class="form-control small__input"
-                          id="billboard__amount"
-                          placeholder="Số trụ"
-                        />
-                        <p class="fw-bold m-0">trụ x &nbsp;&nbsp;</p>
-
-                        <input
-                          type="text"
-                          name="address"
-                          class="form-control small__input"
-                          id="billboard__width"
-                          placeholder="Số bảng"
-                        />
-                        <p class="fw-bold m-0">&nbsp;bảng</p>
-                      </div>
-
-                      <label for="billboard__status" class="fw-bold"
-                        >Trạng thái</label
-                      >
-                      <select
-                        class="form-select mb-3"
-                        id="billboard__status"
-                        aria-label="Billboard status selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1" class="link-primary">
-                          Đã quy hoạch
-                        </option>
-                        <option value="2" class="link-danger">
-                          Chưa quy hoạch
-                        </option>
-                      </select>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
+                    <label for="billboard__amount" class="fw-bold"
+                      >Số lượng</label
                     >
-                      Huỷ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-primary"
-                      data-bs-dismiss="modal"
-                      onclick="showToast('save__success__toast')"
-                      id="save__changes__btn"
+                    <div class="multi__input__field" id="billboard__amount">
+                      <input
+                        type="text"
+                        name="address"
+                        class="form-control small__input"
+                        id="billboard__amount"
+                        placeholder="Số trụ"
+                      />
+                      <p class="fw-bold m-0">trụ x &nbsp;&nbsp;</p>
+
+                      <input
+                        type="text"
+                        name="address"
+                        class="form-control small__input"
+                        id="billboard__width"
+                        placeholder="Số bảng"
+                      />
+                      <p class="fw-bold m-0">&nbsp;bảng</p>
+                    </div>
+
+                    <label for="billboard__status" class="fw-bold"
+                      >Trạng thái</label
                     >
-                      Lưu thay đổi
-                    </button>
-                  </div>
+                    <select
+                      class="form-select mb-3"
+                      id="billboard__status"
+                      aria-label="Billboard status selector"
+                    >
+                      <option selected>Chọn...</option>
+                      <option value="1" class="link-primary">
+                        Đã quy hoạch
+                      </option>
+                      <option value="2" class="link-danger">
+                        Chưa quy hoạch
+                      </option>
+                    </select>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Huỷ
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                    onclick="showToast('save__success__toast')"
+                    id="save__changes__btn"
+                  >
+                    Lưu thay đổi
+                  </button>
                 </div>
               </div>
             </div>

@@ -16,11 +16,11 @@ document.getElementById("billboard-list").addEventListener("click", () => {
 
 function navigate(item_id) {
 	if (item_id == "to__list__btn") {
-        let link = "/Phan-cum-phuong-quan/quanlyquangcao.html";
+        let link = "/dashboard/advertise";
 	    window.location.href = link;
     }
     if (item_id == "map__btn") {
-        let link = "/Phan-cum-phuong-quan/trangchu.html";
+        let link = "/dashboard";
 	    window.location.href = link;
     }
 }

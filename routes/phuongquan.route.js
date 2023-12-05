@@ -2,6 +2,10 @@ const express = require("express");
 const router = express();
 
 const phuongQuanController = require("../controllers/phuongquan.controller");
+
+//Bản đồ
+router.get("/dashboard", phuongQuanController._get_map);
+
 //Danh sách bảng quảng cáo
 router.get("/dashboard/advertise", phuongQuanController._get_advertisement);
 
@@ -15,8 +19,8 @@ router.post(
 
 //Từ chối Yêu cầu cấp phép
 router.post(
-  "/dashboard/license/decline",
-  phuongQuanController._post_decline_license
+  "/dashboard/license/cancel",
+  phuongQuanController._post_cancel_license
 );
 
 //Danh sách báo cáo
@@ -30,5 +34,5 @@ router.post("/dashboard/report/:id", phuongQuanController._post_report_edit);
 
 //Yêu cầu chỉnh sửa
 router.get("/dashboard/request/edit", phuongQuanController._get_request_edit);
-router.post("/dashboard/request/:id", phuongQuanController._post_request_edit);
+router.post("/dashboard/request", phuongQuanController._post_request_edit);
 module.exports = router;

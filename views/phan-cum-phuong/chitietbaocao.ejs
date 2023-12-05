@@ -63,26 +63,16 @@
           <h3 class="bold">Chi tiết báo cáo</h3>
           <div class="billboard-info">
             <p>
-              Tên người gửi: Nguyễn Văn A <br />
-              Email: abc@xyz.com <br />
-              Số điện thoại: 0123456789 <br />
-              Nơi quảng cáo: 102 Đ. Nguyễn Hữu Cảnh, Phường 22, Bình Thạnh,
-              Thành phố Hồ Chí Minh, Vietnam.
+              Tên người gửi: <%= locals.report.sender_name %> <br />
+              Email: <%= locals.report.sender_email %> <br />
+              Số điện thoại: <%= locals.report.sender_number %> <br />
+              Nơi quảng cáo: <%= locals.report.place %>
             </p>
           </div>
           <div class="report-info">
             <h6 class="bold">Nội dung báo cáo</h6>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Pellentesque vel dictum mi. Praesent ut accumsan turpis. Fusce
-              eget pretium tellus, nec dapibus arcu. Curabitur tempus quam vitae
-              ex cursus condimentum. Fusce id porttitor erat. Maecenas lacus
-              mauris, efficitur lobortis congue in, finibus ac est. Morbi
-              laoreet, mi nec mattis malesuada, eros urna euismod diam, ut
-              lacinia lectus neque vel ante. Sed feugiat justo sit amet vehicula
-              tincidunt. Aenean viverra feugiat velit, a posuere lectus pharetra
-              vitae. Nunc non vestibulum nibh, in congue ligula. Proin vel diam
-              nec lacus lobortis sodales.
+              <%= locals.report.details %>
             </p>
           </div>
           <h6 class="bold">Hình ảnh đi kèm:</h6>
@@ -127,17 +117,25 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      document.getElementById("back-button").addEventListener("click", () => {
-        window.location.href = "/Phan-cum-phuong-quan/danhsachbaocao.html";
-      });
-      document.getElementById("submit-button").addEventListener("click", () => {
-        window.location.href = "/Phan-cum-phuong-quan/danhsachbaocao.html";
-      });
-      document.getElementById("cancel-button").addEventListener("click", () => {
-        window.location.href = "/Phan-cum-phuong-quan/danhsachbaocao.html";
-      });
       var quill = new Quill("#editor", {
         theme: "snow",
+      });
+      document.getElementById("back-button").addEventListener("click", () => {
+        
+        window.location.href = "/dashboard/report";
+      });
+      document.getElementById("submit-button").addEventListener("click", () => {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", window.location.href, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ handling_method: quill.getText(), state: 1 }));
+        window.location.href = "/dashboard/report";
+      });
+      document.getElementById("cancel-button").addEventListener("click", () => {
+        xhr.open("POST", window.location.href, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ handling_method: quill.getText(), state: 2 }));
+        window.location.href = "/dashboard/report";
       });
     </script>
 

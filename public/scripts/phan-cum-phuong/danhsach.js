@@ -188,7 +188,7 @@ function create_edit_request() {
         id="inscreen-form-login"
         class="form-container active"
         method="post"
-        action="/login"
+        action="/dashboard/request"
       >
         <h2>Chỉnh sửa Bảng QC</h2>
         <div class="form-section">

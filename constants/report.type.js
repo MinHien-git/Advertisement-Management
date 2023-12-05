@@ -21,4 +21,4 @@ let REQUEST_STATE_TYPE = {
   DECLINE: 2,
 };
 
-module.exports = { REPORT_STATE, REPORT_TYPE };
+module.exports = { REPORT_STATE, REPORT_TYPE, REQUEST_STATE_TYPE };

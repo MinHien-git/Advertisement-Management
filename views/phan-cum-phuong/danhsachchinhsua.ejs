@@ -200,6 +200,31 @@
                         </li>
                       </ul>
                     </li>
+                    <li>
+                      <ul class="buttons__container">
+                        <% if (!advertisement.license) { %>
+                        <li>
+                          <button
+                            class="btn btn-success"
+                            onclick="create_authorize_request('<%= advertisement.place %>')"
+                          >
+                            <i class="bi bi-check-circle"></i> Tạo yêu cầu
+                          </button>
+                        </li>
+                        <% } else { %>
+                        <li>
+                          <button
+                            onclick="cancel_license('<%= id %>')"
+                            class="btn btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#delete__confirm__modal"
+                          >
+                            <i class="bi bi-trash"></i> Huỷ yêu cầu
+                          </button>
+                        </li>
+                        <% } %>
+                      </ul>
+                    </li>
                   </ul>
                 </div>
               </div>

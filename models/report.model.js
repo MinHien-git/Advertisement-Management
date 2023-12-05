@@ -13,6 +13,7 @@ module.exports = class Report {
     this.images = images;
     this.send_day = new Date();
     this.details = details;
+    this.handling_method;
   }
   async _get_report() {
     const report = await db
