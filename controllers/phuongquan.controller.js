@@ -12,7 +12,7 @@ const _get_map = async (req, res) => {
   res.locals.isAuth = true;
   res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
   res.locals.billboards.forEach(element => {
-    element.license = new License("", "Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
+    element.license = new License("Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
   });
   res.render("phan-cum-phuong/trangchu");
 };
@@ -23,7 +23,7 @@ const _get_advertisement = async (req, res) => {
   res.locals.isAuth = true;
   res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
   res.locals.billboards.forEach(element => {
-    element.license = new License("", "Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
+    element.license = new License("Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
   });
   res.render("phan-cum-phuong/quanlyquangcao");
 };
@@ -33,20 +33,15 @@ const _get_license = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
   res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
-  res.locals.billboards.forEach(element => {
-    element.license = new License("", "Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
-  });
   res.render("phan-cum-phuong/danhsachcapphep");
 };
 
 const _post_license_request = async (req, res) => {
-  let { email, from, name, images, details } = request.body;
-  let ward = place.split(",")[1];
-  let district = place.split(",")[2];
+  let { id, email, from, name, contact, start, end, images, details } = req.body;
   let billboard = await db.getDb().collection("billboard").findOne({ place: from });
-  let license = new License(name, email, Date(), Date(), 0);
-  if (license.send_request(billboard._id)) console.log("send!");
-  return license.redirect("/");
+  let license = new License(name, contact, start, end, 1);
+  if (license.send_request(id ? new ObjectId(id) : billboard._id)) console.log("send!");
+  return res.redirect("/dashboard/license");
 };
 
 const _post_cancel_license = async (req, res) => {
@@ -89,18 +84,26 @@ const _get_request_edit = async (req, res) => {
   res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
   res.locals.billboards.forEach(element => {
     if (!element.license) {
-      element.license = new License("", "Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
+      element.license = new License("Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
     }
   });
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
 const _post_request_edit = async (req, res) => {
-  let { email, position, from, images, details } = req.body;
-  const billboard = await db.getDb().collection("billboard").findOne({ place: position });
-  let request = new Request(email, from, billboard, images, details, 0);
+  let { email, from, images, details } = req.body;
+  let change = new Billboard(req.body.type_billboard, null, {
+    amount: "1 trụ/bảng",
+    place: req.body.place,
+    size: "2.5mx10m",
+    place_type: req.body.place_type,
+    type: req.body.type,
+    type_advertise: req.body.type_advertise
+  }, new License(req.body.name, req.body.contact, req.body.start, req.body.end));
+  const billboard = await db.getDb().collection("billboard").findOne({ _id: req.body._id });
+  let request = new Request(email, from, billboard, change, images, details, 0);
   if (await request.send_request()) console.log("send!");
-  return response.redirect("/dashboard/license");
+  return res.redirect("/dashboard/license");
 };
 
 module.exports = {

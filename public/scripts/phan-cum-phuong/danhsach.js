@@ -170,9 +170,12 @@ $.getJSON("../data/billboard.json", function (data) {
     console.log("complete");
   });
 
-function create_edit_request() {
+function create_edit_request(billboard) {
   if (edit_node) {
     body.removeChild(edit_node);
+  }
+  if (billboard) {
+    billboard = JSON.parse(billboard);
   }
   let report = `
       <section class="active popup" id="report-popup">
@@ -197,13 +200,13 @@ function create_edit_request() {
           type="text"
           name="type"
           id="type"
-          value=""
+          value="${billboard?.properties.type}"
           placeholder="Chọn..."
         />
         </div>
         <div class="form-section">
         <label for="street">Địa điểm:</label>
-        <textarea id="street"></textarea>
+        <textarea id="street">${billboard?.properties.place}</textarea>
         </div>
         <div class="form-section">
         <label for="form">Hình thức:</label>
@@ -211,7 +214,7 @@ function create_edit_request() {
         type="text"
         name="form"
         id="form"
-        value=""
+        value="${billboard?.properties.type_advertise}"
         placeholder="Chọn..."
         />
       </div>
@@ -232,7 +235,7 @@ function create_edit_request() {
         type="number"
         name="width"
         id="width"
-        value=""
+        value="${billboard?.properties.size.split(",")[0]}"
         placeholder="XY"
         />
       </div>
@@ -242,7 +245,7 @@ function create_edit_request() {
         type="number"
         name="height"
         id="height"
-        value=""
+        value="${billboard?.properties.size.split(",")[1]}"
         placeholder="XY"
       />
       </div>
@@ -285,7 +288,7 @@ function create_edit_request() {
           type="text"
           name="name"
           id="name"
-          value=""
+          value="${billboard?.license?.company_name}"
           placeholder="tên công ty"
         />
         </div>
@@ -295,7 +298,7 @@ function create_edit_request() {
           type="text"
           name="contact"
           id="contact"
-          value=""
+          value="${billboard?.license?.company_contact}"
           placeholder="Email công ty"
         />
         </div>
@@ -306,7 +309,7 @@ function create_edit_request() {
         type="date"
         name="start"
         id="start"
-        value=""
+        value="${billboard?.license?.start_date}"
         placeholder="XY"
         />
       </div>
@@ -316,7 +319,7 @@ function create_edit_request() {
         type="date"
         name="end"
         id="end"
-        value=""
+        value="${billboard?.license?.end_date}"
         placeholder="XY"
       />
       </div>

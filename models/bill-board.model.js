@@ -1,7 +1,7 @@
 const { getDb } = require("../database/database");
 
 module.exports = class Billboard {
-  constructor(type_billboard, geometry, properties, license, change_request = null) {
+  constructor(type_billboard, geometry, properties, license = null, change_request = null) {
     this.type_billboard = type_billboard;
     this.position = position;
     this.geometry = geometry;

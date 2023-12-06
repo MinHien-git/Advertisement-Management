@@ -4,10 +4,11 @@ const db = require("../database/database");
 const { request } = require("../routes/phuongquan.route");
 
 module.exports = class Request {
-  constructor(email, from, billboard, images, details, type) {
+  constructor(email, from, billboard, change, images, details, type) {
     this.sender_email = email;
     this.sender_name = from;
     this.billboard = billboard;
+    this.change = change;
     this.state = report_const.REQUEST_STATE_TYPE.INCOMPLETE;
     this.images = images;
     this.send_day = new Date();

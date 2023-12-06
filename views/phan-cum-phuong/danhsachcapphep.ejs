@@ -105,14 +105,20 @@
                 <li class="list__col2">
                   <%= advertisement.properties.place %>
                 </li>
-                <% if (advertisement.address) { %>
-                <li class="list__col3 fw-semibold" style="color: #329a44">
-                  Đã duyệt
-                </li>
+                <% if (advertisement.license) { %>
+                  <% if (advertisement.license.state === 0) {%>
+                    <li class="list__col3 fw-semibold" style="color: #329a44">
+                      Đã duyệt
+                    </li>
+                  <% } else { %>
+                    <li class="list__col3 fw-semibold" style="color: #e7b400">
+                      Chưa duyệt
+                    </li>
+                  <% } %>
                 <% } else { %>
-                <li class="list__col3 fw-semibold" style="color: #e7b400">
-                  Chưa duyệt
-                </li>
+                  <li class="list__col3 fw-semibold" style="color: #e7b400">
+                    Chưa cấp phép
+                  </li>
                 <% } %>
                 <li class="list__col4">
                   <button
@@ -171,6 +177,7 @@
                       </li>
                     </ul>
                   </li>
+                  <% if (advertisement.license) { %>
                   <li>
                     <p class="fw-bold">Thông tin công ty</p>
                     <ul>
@@ -200,18 +207,19 @@
                       </li>
                     </ul>
                   </li>
+                  <% } %>
                   <li>
                     <ul class="buttons__container">
                       <% if (!advertisement.license) { %>
                       <li>
                         <button
                           class="btn btn-success"
-                          onclick="create_authorize_request('<%= advertisement.place %>')"
+                          onclick="create_authorize_request('<%= advertisement.properties.place %>', '<%= advertisement._id %>')"
                         >
                           <i class="bi bi-check-circle"></i> Tạo yêu cầu
                         </button>
                       </li>
-                      <% } else { %>
+                      <% } else if (advertisement.license.state === 1) { %>
                       <li>
                         <button
                           onclick="cancel_license('<%= id %>')"

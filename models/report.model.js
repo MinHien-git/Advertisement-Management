@@ -37,7 +37,7 @@ module.exports = class Report {
       .collection("reports")
       .findOneAndUpdate(
         { _id: new ObjectId(id) },
-        { state: state, handling_method: handling_method }
+        { $set: { state: state, handling_method: handling_method } }
       );
     return report;
   }

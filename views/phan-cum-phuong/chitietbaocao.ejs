@@ -125,13 +125,14 @@
         window.location.href = "/dashboard/report";
       });
       document.getElementById("submit-button").addEventListener("click", () => {
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open("POST", window.location.href, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({ handling_method: quill.getText(), state: 1 }));
         window.location.href = "/dashboard/report";
       });
       document.getElementById("cancel-button").addEventListener("click", () => {
+        let xhr = new XMLHttpRequest();
         xhr.open("POST", window.location.href, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({ handling_method: quill.getText(), state: 2 }));
