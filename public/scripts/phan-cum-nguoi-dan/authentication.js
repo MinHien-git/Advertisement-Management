@@ -25,10 +25,10 @@ let authent_popup = `
             </div>
             <hr>
             <div class="form-section">
-                <button class="btn btn-dark submit-button facebook-submit">Login with Facebook (vào phường/quận)</button>
+                <a href="/auth/facebook" class="btn btn-dark submit-button facebook-submit">Login with Facebook</a>
             </div>
             <div class="form-section">
-                <button class="btn btn-dark submit-button google-submit">Login with Google (vào sở VHTT)</button>
+                <a href="/auth/google" class="btn btn-dark submit-button google-submit">Login with Google</a>
             </div>
             <hr>
             <div class="form-section">

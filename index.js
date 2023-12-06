@@ -14,6 +14,7 @@ const db = require("./database/database");
 const create_session_config = require("./config/session");
 const express_session = require("express-session");
 const session_config = create_session_config();
+const passport = require("passport");
 
 require("dotenv").config();
 
@@ -29,6 +30,15 @@ app.use(
 
 app.use(express_session(session_config));
 app.use(express.static("public"));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function (user, cb) {
+  cb(null, user);
+});
+passport.deserializeUser(function (obj, cb) {
+  cb(null, obj);
+});
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
