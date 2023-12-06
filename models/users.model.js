@@ -3,14 +3,27 @@ const db = require("../database/database");
 const USER_TYPE = require("../constants/user.type");
 const { ObjectId } = require("mongodb");
 
-
 module.exports = class User {
-  constructor(email, password, type_user, phone = "", name = "", birth = "") {
+  constructor(
+    email,
+    password,
+    type_user,
+    phone = "",
+    name = "",
+    birth = "",
+    provider = "none"
+  ) {
     this.email = email;
-    this.password = password;
+    if (provider !== "none") {
+      this.provider = provider;
+      this.birth = "";
+      this.phone = "";
+    } else {
+      this.password = password;
+      this.birth = birth;
+      this.phone = phone;
+    }
     this.name = name;
-    this.birth = birth;
-    this.phone = phone;
     this.type_user = type_user;
   }
 

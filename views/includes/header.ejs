@@ -1,8 +1,8 @@
 <%if (locals.type_user === 0 || !locals.type_user) { %>
-  <header id="primary-header" class="flex">
-<%} else if(locals.type_user === 1 || locals.type_user === 2){%>
+<header id="primary-header" class="flex">
+  <%} else if(locals.type_user === 1 || locals.type_user === 2){%>
   <header id="primary-header" class="flex official">
-<%}%>
+    <%}%>
     <div id="burger"></div>
     <nav id="primary-navigation-bar">
       <ul id="primary-items-list" class="my-3">
@@ -10,8 +10,16 @@
         <li id="profile">
           <i class="bi bi-person-circle vertical__center nav__item__icon"></i>
         </li>
-        <%}else{%> <% if(locals.type_user || locals.type_user === 0){%>
-        <%if(locals.type_user === 1){ %>
+        <%}else{%> <% if(locals.type_user === 0){%>
+        <li>
+          <form id="logout" method="post" action="/logout">
+            <button type="submit">
+              <i class="bi bi-box-arrow-left" style="font-size: 1.5rem"></i>
+              <!-- <span>Đăng xuất</span> -->
+            </button>
+          </form>
+        </li>
+        <%}else if(locals.type_user === 1){ %>
         <li id="profile">
           <i class="bi bi-person-circle vertical__center nav__item__icon"></i>
           <span>user name</span>
@@ -84,16 +92,7 @@
             </button>
           </form>
         </li>
-        <%}%> <%}else{%>
-        <li>
-          <form id="logout" method="post" action="/logout">
-            <button type="submit">
-              <i class="bi bi-box-arrow-left" style="font-size: 1.5rem"></i>
-              <!-- <span>Đăng xuất</span> -->
-            </button>
-          </form>
-        </li>
-        <%}%> <%}%>
+        <%}}%>
       </ul>
     </nav>
   </header>

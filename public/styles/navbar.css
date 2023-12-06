@@ -193,7 +193,10 @@
   .official #primary-items-list li:last-child span {
     color: #ff7b7b;
   }
-
+  #logout {
+    justify-content: center;
+  }
+  #logout,
   #logout button {
     display: flex;
     align-items: center;

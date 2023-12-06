@@ -127,6 +127,7 @@ textarea {
   font-weight: bold;
   padding-block: 0.75rem;
   width: auto;
+  font-size: 0.625rem !important;
 }
 
 .wrapper {
