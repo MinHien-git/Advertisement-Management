@@ -57,22 +57,23 @@
           <i
             class="bi bi-person-circle vertical__center"
             id="nav__item__icon"
+            style="font-size: 1.5rem"
           ></i>
           <span>user name</span>
         </li>
-        <li id="manage__billboards" onclick="navigate(this.id)">
-          <i class="bi bi-clipboard2-check" id="nav__item__icon"></i>
+        <li id="manage__billboards" class="current" onclick="navigate(this.id)">
+          <i class="bi bi-clipboard2-check" id="nav__item__icon" style="font-size: 1.5rem"></i>
           <span>Quản lí điểm QC</span>
         </li>
         <li id="check__requests" onclick="navigate(this.id)">
-          <i class="bi bi-check-circle" id="nav__item__icon"></i>
+          <i class="bi bi-check-circle" id="nav__item__icon" style="font-size: 1.5rem"></i>
           <span>Duyệt YC cấp phép</span>
         </li>
         <li id="list__reports" onclick="navigate(this.id)">
-          <i class="bi bi-file-earmark-text" id="nav__item__icon"></i>
+          <i class="bi bi-file-earmark-text" id="nav__item__icon" style="font-size: 1.5rem"></i>
           <span>Thống kê báo cáo</span>
         </li>
-        <li id="manage__accounts" class="current" onclick="navigate(this.id)">
+        <li id="manage__accounts" onclick="navigate(this.id)">
           <i
             class="bi bi-person-gear"
             id="nav__item__icon"
@@ -80,7 +81,7 @@
           ></i>
           <span>Quản lí tài khoản CB</span>
         </li>
-        <li>
+        <li id="logout__li">
           <form id="logout" method="post" action="/logout">
             <button type="submit">
               <i
