@@ -11,7 +11,11 @@ const _login = async (request, response) => {
   let _user = await user._login();
   if (_user) {
     auth_ultis.create_user_session(request, _user, () => {
-      return response.redirect("/");
+      if (_user.type_user === 2) {
+          return response.redirect("/management");
+      } else {
+          return response.redirect("/");
+      }
     });
   } else {
     return response.redirect("/?login=failed");
