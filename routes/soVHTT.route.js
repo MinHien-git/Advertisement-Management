@@ -1,56 +1,55 @@
 const express = require("express");
 const router = express();
 const SOVHTTcontroller = require("../controllers/soVHTT.controller");
-//Quản lí quảng cáo
-router.get("/management/advertise", SOVHTTcontroller._get_advertisement);
+
+//Quản lí bảng quảng cáo
+router.get("/management/billboards", SOVHTTcontroller._get_billboards)
+//map
 router.post(
-  "/management/advertise/edit/:id",
-  SOVHTTcontroller._post_edit_advertisement
-);
+    "/management/billboards/edit/:id",
+    SOVHTTcontroller._post_edit_billboard
+)
 router.delete(
-  "/management/advertise/delete/:id",
-  SOVHTTcontroller._delete_advertisement
-);
-router.post(
-  "/management/advertise/create",
-  SOVHTTcontroller._create_advertisement
-);
+    "/management/billboards/delete/:id",
+    SOVHTTcontroller._delete_billboard
+)
+router.post("/management/billboards/create", SOVHTTcontroller._create_billboard)
 
 //Cấp phép quảng cáo
 //Xem DS yêu cầu
-router.get("/management/license", SOVHTTcontroller._get_license);
+router.get("/management/licenses", SOVHTTcontroller._get_licenses)
 //duyệt
 router.post(
-  "/management/license/approve",
-  SOVHTTcontroller._post_approve_license
-);
+    "/management/licenses/approve",
+    SOVHTTcontroller._post_approve_license
+)
 //YC chỉnh sửa
 router.post(
-  "/management/license/request",
-  SOVHTTcontroller._post_license_edit_request
-);
+    "/management/licenses/request",
+    SOVHTTcontroller._post_license_edit_request
+)
 //bác bỏ
 router.post(
-  "/management/license/decline",
-  SOVHTTcontroller._post_decline_license
-);
+    "/management/licenses/decline",
+    SOVHTTcontroller._post_decline_license
+)
 
-//Duyệt yêu cầu cấp phép/chỉnh sửa bảng QC
-router.get("/management/report", SOVHTTcontroller._get_report);
-router.get("/management/report/:id", SOVHTTcontroller._post_report_edit);
+//Duyệt yêu cầu cấp phép/chỉnh sửa nội dung QC
+router.get("/management/reports", SOVHTTcontroller._get_report)
+router.get("/management/reports/edit/:id", SOVHTTcontroller._post_report_edit)
 
 //Quản lí tài khoản
-router.get("/management/account", SOVHTTcontroller._get_accounts);
+router.get("/management/accounts", SOVHTTcontroller._get_accounts)
 router.post(
-  "/management/account/edit/:id",
-  SOVHTTcontroller._post_edit_accounts
-);
+    "/management/accounts/edit/:id",
+    SOVHTTcontroller._post_edit_accounts
+)
 router.delete(
-  "/management/account/delete/:id",
-  SOVHTTcontroller._post_delete_accounts
-);
+    "/management/accounts/delete/:id",
+    SOVHTTcontroller._post_delete_accounts
+)
 router.post(
-  "/management/account/create",
-  SOVHTTcontroller._post_create_accounts
-);
+    "/management/accounts/create",
+    SOVHTTcontroller._post_create_accounts
+)
 module.exports = router;
