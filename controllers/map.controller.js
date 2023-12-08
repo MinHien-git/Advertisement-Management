@@ -27,11 +27,6 @@ const _get_map = async (request, response) => {
             action: false,
             billboards: billboards,
         })
-    } else if (response.locals.type_user == 2) {
-        return response.render("phan-cum-soVHTT/map", {
-            action: false,
-            billboards: billboards,
-        })
     }
 }
 
@@ -51,12 +46,9 @@ const _manage_map = async (request, response) => {
         }
     })
     if (response.locals.street) {
-        return response.render(
-            "users/billboard-management/billboard-management",
-            {
-                billboards: billboards,
-            }
-        )
+        return response.render("phan-cum-soVHTT/map", {
+            billboards: billboards,
+        })
     }
     return response.redirect("/")
 }
