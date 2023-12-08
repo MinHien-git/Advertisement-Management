@@ -178,174 +178,128 @@ function create_edit_request(billboard) {
     billboard = JSON.parse(billboard);
   }
   let report = `
-      <section class="active popup" id="report-popup">
-      <div id="report-section-form-container">
-      <div id="inscreen-report-close" class="inscreen-report-close">
-        <img
-        id="inscreen-authen-close"
-        src="/images/close.png"
-        alt="close button"
-        />
-      </div>
-      <form
-        id="inscreen-form-login"
-        class="form-container active"
-        method="post"
-        action="/dashboard/request"
-      >
-        <h2>Chỉnh sửa Bảng QC</h2>
-        <div class="form-section">
-        <label for="type">Loại quảng cáo:</label>
-        <input
-          type="text"
-          name="type"
-          id="type"
-          value="${billboard?.properties.type}"
-          placeholder="Chọn..."
-        />
-        </div>
-        <div class="form-section">
-        <label for="street">Địa điểm:</label>
-        <textarea id="street">${billboard?.properties.place}</textarea>
-        </div>
-        <div class="form-section">
-        <label for="form">Hình thức:</label>
-        <input
-        type="text"
-        name="form"
-        id="form"
-        value="${billboard?.properties.type_advertise}"
-        placeholder="Chọn..."
-        />
-      </div>
-      <div class="form-section">
-        <label for="form">Phân loại:</label>
-        <input
-        type="text"
-        name="catetorize"
-        id="catetorize"
-        value=""
-        placeholder="Chọn..."
-        />
-      </div>
-      <div class="flex size-information inline">
-      <div class="form-section">
-        <label for="width">Dài:</label>
-        <input
-        type="number"
-        name="width"
-        id="width"
-        value="${billboard?.properties.size.split(",")[0]}"
-        placeholder="XY"
-        />
-      </div>
-      <div class="form-section">
-      <label for="height">Rộng</label>
-      <input
-        type="number"
-        name="height"
-        id="height"
-        value="${billboard?.properties.size.split(",")[1]}"
-        placeholder="XY"
-      />
-      </div>
-      </div>
-      <div class="flex size-information inline">
-      <div class="form-section">
-        <label for="stand">trụ:</label>
-        <input
-        type="number"
-        name="stand"
-        id="stand"
-        value=""
-        placeholder="XY"
-        />
-      </div>
-      <div class="form-section">
-      <label for="panel">bảng:</label>
-      <input
-        type="number"
-        name="panel"
-        id="panel"
-        value=""
-        placeholder="XY"
-      />
-      </div>
-      </div>
-      <div class="form-section">
-        <label for="state">Trạng thái:</label>
-        <input
-          type="text"
-          name="state"
-          id="state"
-          value=""
-          placeholder="Chọn..."
-        />
-        </div>
-        <div class="form-section">
-        <label for="name">Thông tin công ty:</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value="${billboard?.license?.company_name}"
-          placeholder="tên công ty"
-        />
-        </div>
-        <div class="form-section">
-        <label for="contact">Thông tin liên lạc:</label>
-        <input
-          type="text"
-          name="contact"
-          id="contact"
-          value="${billboard?.license?.company_contact}"
-          placeholder="Email công ty"
-        />
-        </div>
-        <div class="flex size-information inline">
-      <div class="form-section">
-        <label for="start">Ngày bđ:</label>
-        <input
-        type="date"
-        name="start"
-        id="start"
-        value="${billboard?.license?.start_date}"
-        placeholder="XY"
-        />
-      </div>
-      <div class="form-section">
-      <label for="end">Ngày kt:</label>
-      <input
-        type="date"
-        name="end"
-        id="end"
-        value="${billboard?.license?.end_date}"
-        placeholder="XY"
-      />
-      </div>
-      </div>
-      <div class="form-section file-section">
-        <p>Thông tin đính kèm:</p>
-        <div class="file-button">
-          <label for="attached_files">Chọn</label>
-          <input
-          type="file"
-          name="attached_files"
-          id="attached_files"
-          />
-        </div>
-        </div>
-        <div class ="px-4 d-flex justify-content-evenly w-100 btn-container">
-        <div class="form-section">
-        <button class="delete">Xoá</button>
-        </div>
-        <div class="form-section">
-        <button class="submit-button submit">Chỉnh sửa</button>
-        </div>
-        </div>
-      </form>
-      </div>
-      </section> `;
+  <section class="active popup" id="report-popup">
+  <div id="report-section-form-container">
+  <div id="inscreen-report-close" class="inscreen-report-close">
+	<img
+	id="inscreen-authen-close"
+	src="/images/close.png"
+	alt="close button"
+	/>
+  </div>
+  <form
+	id="inscreen-form-login"
+	class="form-container active"
+	method="post"
+	action="/dashboard/request"
+  >
+	<h2>Chỉnh sửa Bảng QC</h2>
+	<div class="form-section">
+	<input type="hidden" name="_id" value="${billboard?._id}">
+	<label for="type">Loại quảng cáo:</label>
+	<input type="text" name="type" id="type"
+	  value="${billboard?.properties.type}"
+	  placeholder="Chọn..."
+	/>
+	</div>
+	<div class="form-section">
+	<label for="street">Địa điểm:</label>
+	<input type="text" id="street" name="place" value="${billboard?.properties.place}">
+	</div>
+	<div class="form-section">
+	<label for="form">Hình thức:</label>
+	<input type="text" name="type_advertise" id="form"
+	value="${billboard?.properties.type_advertise}"
+	placeholder="Chọn..."
+	/>
+  </div>
+  <div class="form-section">
+	<label for="form">Phân loại:</label>
+	<input type="text" name="catetorize" id="catetorize" value="${billboard?.properties.place_type}" placeholder="Chọn..."/>
+  </div>
+  <div class="flex size-information inline">
+  <div class="form-section">
+	<label for="width">Dài:</label>
+	<input type="number" name="width" id="width"
+	value="${billboard?.properties.size.split(",")[0]}"
+	placeholder="XY"
+	/>
+  </div>
+  <div class="form-section">
+  <label for="height">Rộng</label>
+  <input type="number" name="height" id="height"
+	value="${billboard?.properties.size.split(",")[1]}"
+	placeholder="XY"/>
+  </div>
+  </div>
+  <div class="flex size-information inline">
+  <div class="form-section">
+	<label for="stand">trụ:</label>
+	<input type="number" name="stand" id="stand" value="" placeholder="XY"/>
+  </div>
+  <div class="form-section">
+  <label for="panel">bảng:</label>
+  <input type="number" name="panel" id="panel" value="" placeholder="XY"/>
+  </div>
+  </div>
+  <div class="form-section">
+	<label for="state">Trạng thái:</label>
+	<input
+	  type="text" name="state" id="state" value="" placeholder="Chọn..."
+	/>
+	</div>
+	<div class="form-section">
+	<label for="name">Thông tin công ty:</label>
+	<input type="text" name="name" id="name"
+	  value="${billboard?.license?.company_name}"
+	  placeholder="tên công ty"
+	/>
+	</div>
+	<div class="form-section">
+	<label for="contact">Thông tin liên lạc:</label>
+	<input type="text" name="contact" id="contact"
+	  value="${billboard?.license?.company_contact}"
+	  placeholder="Email công ty"
+	/>
+	</div>
+	<div class="flex size-information inline">
+  <div class="form-section">
+	<label for="start">Ngày bđ:</label>
+	<input type="date" name="start" id="start"
+	value="${billboard?.license?.start_date}"
+	placeholder="XY"
+	/>
+  </div>
+  <div class="form-section">
+  <label for="end">Ngày kt:</label>
+  <input
+	type="date" name="end" id="end" value="${billboard?.license?.end_date}"
+	placeholder="XY"
+  />
+  </div>
+  </div>
+  <div class="form-section file-section">
+	<p>Thông tin đính kèm:</p>
+	<div class="file-button">
+	  <label for="attached_files">Chọn</label>
+	  <input
+	  type="file"
+	  name="attached_files"
+	  id="attached_files"
+	  />
+	</div>
+	</div>
+	<div class ="px-4 d-flex justify-content-evenly w-100 btn-container">
+		<div class="form-section">
+			<button class="delete">Xoá</button>
+		</div>
+		<div class="form-section">
+			<button class="submit-button submit">Chỉnh sửa</button>
+		</div>
+	</div>
+  </form>
+  </div>
+  </section> `;
   edit_node = document.createElement("section");
   edit_node.setAttribute("id", "report-popup");
   edit_node.classList.add("active");

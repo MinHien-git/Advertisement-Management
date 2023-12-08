@@ -94,8 +94,8 @@
               </div>
             </div>
 
-            <% for (let i = 0; i < locals.billboards.length; i++) { %>
-              <% const advertisement = locals.billboards[i]; %>
+            <% for (let i = 0; i < locals.requests.length; i++) { %>
+              <% const advertisement = locals.requests[i].billboard; %>
               <% const id = advertisement._id; %>
             <div id=<%='"list__item' + id + '"'%>
               " class="card shadow-sm">
@@ -105,10 +105,14 @@
                     <%= advertisement.properties.type %>
                   </li>
                   <li class="list__col2"><%= advertisement.properties.place %></li>
-                  <% if (advertisement.address) { %>
+                  <% if (locals.requests[i].state === 1) { %>
                   <li class="list__col3 fw-semibold" style="color: #329a44">
                     Đã duyệt
                   </li>
+                  <% } else if (locals.requests[i].state === 2) { %>
+                    <li class="list__col3 fw-semibold" style="color: #ff7b7b">
+                      Từ chối
+                    </li>
                   <% } else { %>
                   <li class="list__col3 fw-semibold" style="color: #e7b400">
                     Chưa duyệt
@@ -171,57 +175,50 @@
                         </li>
                       </ul>
                     </li>
+                    <% if (advertisement.license) { %>
                     <li>
                       <p class="fw-bold">Thông tin công ty</p>
                       <ul>
                         <li>
                           Tên công ty:
                           <span class="fw-bold"
-                            ><%= advertisement.license.company_name %></span
+                            ><%= advertisement.license?.company_name %></span
                           >
                         </li>
                         <li>
                           Email liên hệ:
                           <span class="fw-bold"
-                            ><%= advertisement.license.company_contact %></span
+                            ><%= advertisement.license?.company_contact %></span
                           >
                         </li>
                         <li>
                           Ngày bắt đầu:
                           <span class="fw-bold"
-                            ><%= advertisement.license.start_date %></span
+                            ><%= advertisement.license?.start_date %></span
                           >
                         </li>
                         <li>
                           Ngày kết thúc:
                           <span class="fw-bold"
-                            ><%= advertisement.license.end_date %></span
+                            ><%= advertisement.license?.end_date %></span
                           >
                         </li>
                       </ul>
                     </li>
+                    <% } %>
                     <li>
                       <ul class="buttons__container">
-                        <% if (!advertisement.license) { %>
-                        <li>
-                          <button
-                            class="btn btn-success"
-                            onclick="create_authorize_request('<%= advertisement.place %>')"
-                          >
-                            <i class="bi bi-check-circle"></i> Tạo yêu cầu
-                          </button>
-                        </li>
-                        <% } else { %>
-                        <li>
-                          <button
-                            onclick="cancel_license('<%= id %>')"
-                            class="btn btn-danger"
-                            data-bs-toggle="modal"
-                            data-bs-target="#delete__confirm__modal"
-                          >
-                            <i class="bi bi-trash"></i> Huỷ yêu cầu
-                          </button>
-                        </li>
+                        <% if (locals.requests[i].state === 0) { %>
+                          <li>
+                            <button
+                              onclick="cancel_license('<%= id %>')"
+                              class="btn btn-danger"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete__confirm__modal"
+                            >
+                              <i class="bi bi-trash"></i> Huỷ yêu cầu
+                            </button>
+                          </li>
                         <% } %>
                       </ul>
                     </li>

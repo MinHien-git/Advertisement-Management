@@ -11,9 +11,6 @@ const _get_map = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
   res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
-  res.locals.billboards.forEach(element => {
-    element.license = new License("Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
-  });
   res.render("phan-cum-phuong/trangchu");
 };
 
@@ -22,9 +19,6 @@ const _get_advertisement = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
   res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
-  res.locals.billboards.forEach(element => {
-    element.license = new License("Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
-  });
   res.render("phan-cum-phuong/quanlyquangcao");
 };
 
@@ -81,17 +75,12 @@ const _post_report_edit = (req, res) => {
 const _get_request_edit = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
-  res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
-  res.locals.billboards.forEach(element => {
-    if (!element.license) {
-      element.license = new License("Shady Company", "notexist@non.com", "22/12/2022", "22/12/2023");
-    }
-  });
+  res.locals.requests = await db.getDb().collection("requests").find({}).toArray();
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
 const _post_request_edit = async (req, res) => {
-  let { email, from, images, details } = req.body;
+  let { _id, email, from, images, details } = req.body;
   let change = new Billboard(req.body.type_billboard, null, {
     amount: "1 trụ/bảng",
     place: req.body.place,
@@ -100,7 +89,7 @@ const _post_request_edit = async (req, res) => {
     type: req.body.type,
     type_advertise: req.body.type_advertise
   }, new License(req.body.name, req.body.contact, req.body.start, req.body.end));
-  const billboard = await db.getDb().collection("billboard").findOne({ _id: req.body._id });
+  const billboard = await db.getDb().collection("billboard").findOne({ _id: new ObjectId(_id) });
   let request = new Request(email, from, billboard, change, images, details, 0);
   if (await request.send_request()) console.log("send!");
   return res.redirect("/dashboard/license");

@@ -84,6 +84,16 @@
             <button type="submit" class="btn btn-dark nowrap">
               <i class="bi bi-funnel"></i> &nbsp;Lọc
             </button>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown button
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
           </form>
 
           <div id="main__list">
@@ -177,6 +187,7 @@
                         </li>
                       </ul>
                     </li>
+                    <% if (advertisement.license) { %>
                     <li>
                       <p class="fw-bold">Thông tin công ty</p>
                       <ul>
@@ -206,20 +217,29 @@
                         </li>
                       </ul>
                     </li>
+                    <% } else { %>
+                      <li>
+                        <p class="fw-bold">Chưa có giấy phép</p>
+                      </li>
+                    <% } %>
                     <li>
                       <ul class="buttons__container">
+                        <% if (!advertisement.license) { %>
                         <li>
-                          <button class="btn btn-primary" onclick='create_authorize_request()'>
+                          <button class="btn btn-primary" onclick='create_authorize_request("<%= advertisement.properties.place %>", "<%= advertisement._id %>")'>
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C cấp phép
                           </button>
                         </li>
+                        <% } %>
+                        <% if (!advertisement.change_request) { %>
                         <li>
                           <button class="btn btn-primary" onclick='create_edit_request(<%- JSON.stringify(advertisement) %>)'>
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C chỉnh sửa
                           </button>
                         </li>
+                        <% } %>
                       </ul>
                     </li>
                   </ul>
