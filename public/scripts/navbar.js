@@ -14,11 +14,23 @@ burger.on("click", (e) => {
 
 let navbar = document.querySelectorAll("#primary-items-list li");
 navbar.forEach((e) => {
-  e.addEventListener("mouseover", () => {
-    e.style.transition = "color 50ms ease-in-out";
-    e.style.color = "hsl(219, 90%, 69%)";
-  });
-  e.addEventListener("mouseout", () => {
-    e.style.color = "black";
-  });
-});
+    e.addEventListener("mouseover", () => {
+        e.style.color = "hsl(219, 100%, 41%)"
+    })
+    e.addEventListener("mouseout", () => {
+        e.style.color = "black"
+    })
+})
+
+let navbar_current = document.querySelectorAll(".current")
+navbar_current.forEach((e) => {
+    let icon = e.querySelector("#nav__item__icon")
+    e.addEventListener("mouseover", () => {
+        e.style.color = "hsl(219, 100%, 41%)"
+        icon.style.color = "hsl(219, 100%, 41%)"
+    })
+    e.addEventListener("mouseout", () => {
+        e.style.color = "white"
+        icon.style.color = "white"
+    })
+})
