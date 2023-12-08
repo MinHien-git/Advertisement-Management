@@ -60,10 +60,12 @@
   cursor: pointer;
   transition: all 250ms ease-in-out;
 }
+
 #primary-items-list li:hover {
   background-color: rgba(0, 89, 255, 0.2);
   border-radius: 2;
 }
+
 .nav__item__icon {
   color: rgb(59, 123, 250);
   font-size: 1.5rem;
@@ -85,7 +87,7 @@
 #logout button {
   background-color: transparent;
   border: 0;
-  color: #ff7b7b;
+  color: #ff2525;
   font-size: 1.5rem;
 }
 /* for tablet */
@@ -191,7 +193,7 @@
   }
 
   .official #primary-items-list li:last-child span {
-    color: #ff7b7b;
+    color: #ff2525;
   }
   #logout {
     justify-content: center;
@@ -205,6 +207,7 @@
 }
 
 .current {
-  background-color: rgba(0, 89, 255, 0.2);
+  background-color: rgba(0, 89, 255, 0.768);
   border-radius: 2;
+  color: white  
 }
