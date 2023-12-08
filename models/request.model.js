@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const report_const = require("../constants/report.type");
 const db = require("../database/database");
-const { request } = require("../routes/phuongquan.route");
+
 
 module.exports = class Request {
   constructor(email, from, billboard, change, images, details, type) {
@@ -28,7 +28,7 @@ module.exports = class Request {
       .getDb()
       .collection("billboard")
       .findOneAndUpdate(
-        { _id : this.billboard._id },
+        { _id : new ObjectId(this.billboard._id) },
         { $set: { 
           change_request : { 
             id: report.insertedId,
