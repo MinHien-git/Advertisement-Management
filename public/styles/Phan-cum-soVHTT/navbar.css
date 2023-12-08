@@ -1,4 +1,4 @@
-@import "/assets/styles/navbar.css";
+@import "../navbar.css";
 
 header * {
   font-size: 1.5rem;
@@ -17,10 +17,14 @@ header * {
   width: 100%;
 }
 
-#nav__item__icon {
-  color: rgb(59, 123, 250);
+#nav__item__icon{
+  color:hsla(219, 100%, 50%, 0.8);
+}
+.current #nav__item__icon{
+  color:white;
 }
 
-#logout__icon {
-  color: red;
+#primary-items-list #logout__li:hover {
+  background-color: rgba(255, 0, 0, 0.192);
+  border-radius: 2;
 }
