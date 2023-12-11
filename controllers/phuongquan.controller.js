@@ -7,6 +7,33 @@ const db = require("../database/database");
 
 const { ObjectId } = require('mongodb');
 
+const _process_query = (req, arr) => {
+  if (req.query.search) {
+    if (req.path == "/dashboard/advertise") {
+      arr = arr.filter((e) => { return e.properties.place.indexOf(req.query.search) >= 0; });
+    }
+    if (req.path == "/dashboard/report") {
+      arr = arr.filter((e) => { return e.place.indexOf(req.query.search) >= 0; });
+    }
+    if (req.path == "/dashboard/request/edit") {
+      arr = arr.filter((e) => { return e.billboard.properties.place.indexOf(req.query.search) >= 0; });
+    }
+  }
+  if (req.query.license) {
+    arr = arr.filter((e) => { return e.license.state == req.query.license; });
+  }
+  if (req.query.report_type) {
+    arr = arr.filter((e) => { return e.type == req.query.report_type; });
+  }
+  if (req.query.report_state) {
+    arr = arr.filter((e) => { return e.state == req.query.report_state; });
+  }
+  if (req.query.sort) {
+
+  }
+  return arr;
+}
+
 const _get_map = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
@@ -19,6 +46,8 @@ const _get_advertisement = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
   res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
+  res.locals.billboards = _process_query(req, res.locals.billboards);
+  
   res.render("phan-cum-phuong/quanlyquangcao");
 };
 
@@ -27,6 +56,7 @@ const _get_license = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
   res.locals.billboards = await db.getDb().collection("billboard").find({}).toArray();
+  res.locals.billboards = _process_query(req, res.locals.billboards);
   res.render("phan-cum-phuong/danhsachcapphep");
 };
 
@@ -51,6 +81,7 @@ const _get_report = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
   res.locals.reports = await db.getDb().collection("reports").find({}).toArray();
+  res.locals.reports = _process_query(req, res.locals.reports);
   res.render("phan-cum-phuong/danhsachbaocao");
 };
 
@@ -76,6 +107,7 @@ const _get_request_edit = async (req, res) => {
   res.locals.type_user = 1;
   res.locals.isAuth = true;
   res.locals.requests = await db.getDb().collection("requests").find({}).toArray();
+  res.locals.requests = _process_query(req, res.locals.requests);
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 

@@ -16,8 +16,8 @@ let REQUEST_TYPE = {
 };
 
 let REQUEST_STATE_TYPE = {
-  INCOMPLETE: 0,
-  COMPLETE: 1,
+  COMPLETE: 0,
+  INCOMPLETE: 1,
   DECLINE: 2,
 };
 
