@@ -102,13 +102,13 @@
                     <%= advertisement.properties.type %>
                   </li>
                   <li class="list__col2"><%= advertisement.properties.place %></li>
-                  <% if (advertisement.address) { %>
-                  <li class="list__col3 fw-semibold" style="color: #329a44">
-                    Đã duyệt
+                  <% if (advertisement.properties.status == "Đã quy hoạch") { %>
+                  <li class="list__col3 fw-semibold text-primary" id=" ">
+                    Đã quy hoạch
                   </li>
                   <% } else { %>
-                  <li class="list__col3 fw-semibold" style="color: #e7b400">
-                    Chưa duyệt
+                  <li class="list__col3 fw-semibold text-warning">
+                    Chưa quy hoạch
                   </li>
                   <% } %>
                   <li class="list__col4">
@@ -151,7 +151,7 @@
                         <li>
                           Số lượng:
                           <span class="fw-bold"
-                            ><%= advertisement.properties.amount %></span
+                            ><%= advertisement.properties.amount %> trụ/bảng</span
                           >
                         </li>
                         <li>
@@ -168,6 +168,7 @@
                         </li>
                       </ul>
                     </li>
+                    <% if (advertisement.license) { %>
                     <li>
                       <p class="fw-bold">Thông tin công ty</p>
                       <ul>
@@ -197,21 +198,34 @@
                         </li>
                       </ul>
                     </li>
+                    <% } else { %>
+                      <li>
+                        <p class="fw-bold">Chưa có giấy phép</p>
+                      </li>
+                    <% } %>
                     <li>
 											<ul class="buttons__container">
 												<li>
 													<button
 														class="btn btn-outline-warning me-3"
+                            onclick="passToEditModal(this)"
 														data-bs-toggle="modal"
-														data-bs-target="#Modify__modal">
+														data-bs-target="#Modify__modal"
+                            data-billboard-id="<%=id%>"
+                            data-billboard-address="<%= advertisement.properties.place %>"
+                            data-billboard-size="<%= advertisement.properties.size %>"
+                            data-billboard-amount="<%= advertisement.properties.amount %>"
+                            >
 														<i class="bi bi-pencil"></i>Chỉnh sửa
 													</button>
 												</li>
 												<li>
 													<button
 														class="btn btn-danger"
+                            onclick="passToDeleteModal(this)"
 														data-bs-toggle="modal"
-														data-bs-target="#delete__confirm__modal">
+														data-bs-target="#delete__confirm__modal"
+                            data-billboard-id="<%=id%>">
 														<i class="bi bi-trash"></i>Xoá
 													</button>
 												</li>
@@ -230,166 +244,165 @@
               aria-hidden="true"
             >
               <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h3 class="modal-title fw-bold fs-5" id="Modal__label">
-                      Chỉnh sửa thông tin
-                    </h3>
-                    <button
-                      class="btn-close"
-                      type="button"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="">
-                      <label for="billboard__type" class="fw-bold"
-                        >Loại bảng quảng cáo</label
-                      >
-                      <select
-                        class="form-select mb-3"
-                        id="billboard__type"
-                        aria-label="Billboard type selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1">Trụ/Cụm pano</option>
-                        <option value="2">Trụ bảng hiflex</option>
-                        <option value="3">Trụ màn hình điện tử LED</option>
-                        <option value="4">Trụ hộp đèn</option>
-                        <option value="5">Bảng hiflex ốp tường</option>
-                        <option value="6">Màn hình điện tử ốp tường</option>
-                        <option value="7">Trụ treo băng rôn dọc</option>
-                        <option value="8">Trụ treo băng rôn ngang</option>
-                        <option value="9">Cổng chào</option>
-                        <option value="10">Trung tâm thương mại</option>
-                      </select>
-
-                      <label for="billboard__address" class="fw-bold"
-                        >Địa điểm</label
-                      >
-                      <input
-                        type="text"
-                        name="address"
-                        class="form-control mb-3"
-                        id="billboard__address"
-                        placeholder="123 Đường ABC, Phường XX, Quận XY"
-                      />
-
-                      <label for="ad__type" class="fw-bold"
-                        >Hình thức quảng cáo</label
-                      >
-                      <select
-                        class="form-select mb-3"
-                        id="ad__type"
-                        aria-label="advertisement type selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1">Cổ động chính trị</option>
-                        <option value="2">Quảng cáo thương mại</option>
-                        <option value="3">Xã hội hoá</option>
-                      </select>
-
-                      <label for="land__type" class="fw-bold">Phân loại</label>
-                      <select
-                        class="form-select mb-3"
-                        id="land__type"
-                        aria-label="Land type selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1">
-                          Đất công/Công viên/Hành lang an toàn giao thông
-                        </option>
-                        <option value="2">Đất tư nhân/Nhà ở riêng lẻ</option>
-                        <option value="3">Trung tâm thương mại</option>
-                        <option value="4">Chợ</option>
-                        <option value="5">Cây xăng</option>
-                        <option value="6">Nhà chờ xe buýt</option>
-                      </select>
-
-                      <label for="billboard__size" class="fw-bold"
-                        >Kích thước</label
-                      >
-                      <div class="multi__input__field" id="billboard__size">
-                        <input
-                          type="text"
-                          name="address"
-                          class="form-control small__input"
-                          id="billboard__height"
-                          placeholder="Chiều cao"
-                        />
-                        <p class="fw-bold m-0">m x &nbsp;&nbsp;</p>
-
-                        <input
-                          type="text"
-                          name="address"
-                          class="form-control small__input"
-                          id="billboard__width"
-                          placeholder="Chiều dài"
-                        />
-                        <p class="fw-bold m-0">&nbsp;m</p>
+                <form action="" class="needs-validation" id="edit__billboard__form" onsubmit="editBillboard(event)">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h3 class="modal-title fw-bold fs-5" id="Modal__label">
+                          Chỉnh sửa thông tin
+                        </h3>
+                        <button
+                          class="btn-close"
+                          type="button"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
                       </div>
+                      <div class="modal-body">
+                        
+                          <label for="billboard__type__edit" class="fw-bold"
+                            >Loại bảng quảng cáo</label
+                          >
+                          <select
+                            class="form-select mb-3"
+                            id="billboard__type__edit"
+                            name="billboard_type_selector_edit"
+                            aria-label="Billboard type selector"
+                            required
+                          />
+                            <option value="">Chọn...</option>
+                            <option value="1">Trụ/Cụm pano</option>
+                            <option value="2">Trụ bảng hiflex</option>
+                            <option value="3">Trụ màn hình điện tử LED</option>
+                            <option value="4">Trụ hộp đèn</option>
+                            <option value="5">Bảng hiflex ốp tường</option>
+                            <option value="6">Màn hình điện tử ốp tường</option>
+                            <option value="7">Trụ treo băng rôn dọc</option>
+                            <option value="8">Trụ treo băng rôn ngang</option>
+                            <option value="9">Cổng chào</option>
+                            <option value="10">Trung tâm thương mại</option>
+                          </select>
 
-                      <label for="billboard__amount" class="fw-bold"
-                        >Số lượng</label
-                      >
-                      <div class="multi__input__field" id="billboard__amount">
-                        <input
-                          type="text"
-                          name="address"
-                          class="form-control small__input"
-                          id="billboard__amount"
-                          placeholder="Số trụ"
-                        />
-                        <p class="fw-bold m-0">trụ x &nbsp;&nbsp;</p>
+                          <label for="billboard__address__edit" class="fw-bold"
+                            >Địa điểm</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control mb-3"
+                            id="billboard__address__edit"
+                            name="billboard_address_input_edit"
+                            placeholder="123 Đường ABC, Phường XX, Quận XY"
+                            required
+                          />
 
-                        <input
-                          type="text"
-                          name="address"
-                          class="form-control small__input"
-                          id="billboard__width"
-                          placeholder="Số bảng"
-                        />
-                        <p class="fw-bold m-0">&nbsp;bảng</p>
+                          <label for="ad__type__edit" class="fw-bold"
+                            >Hình thức quảng cáo</label
+                          >
+                          <select
+                            class="form-select mb-3"
+                            id="ad__type__edit"
+                            name="ad_type_selector_edit"
+                            aria-label="advertisement type selector"
+                            required
+                          />
+                            <option value="">Chọn...</option>
+                            <option value="1">Cổ động chính trị</option>
+                            <option value="2">Quảng cáo thương mại</option>
+                            <option value="3">Xã hội hoá</option>
+                          </select>
+
+                          <label for="land__type__edit" class="fw-bold">Phân loại</label>
+                          <select
+                            class="form-select mb-3"
+                            id="land__type__edit"
+                            name="land_type_selector_edit"
+                            aria-label="Land type selector"
+                            required
+                          />
+                            <option value="">Chọn...</option>
+                            <option value="1">
+                              Đất công/Công viên/Hành lang an toàn giao thông
+                            </option>
+                            <option value="2">Đất tư nhân/Nhà ở riêng lẻ</option>
+                            <option value="3">Trung tâm thương mại</option>
+                            <option value="4">Chợ</option>
+                            <option value="5">Cây xăng</option>
+                            <option value="6">Nhà chờ xe buýt</option>
+                          </select>
+
+                          <label for="billboard__size__edit" class="fw-bold"
+                            >Kích thước</label
+                          >
+                          <div class="multi__input__field" id="billboard__size__edit">
+                            <input
+                              type="text"
+                              name="billboard_height_input_edit"
+                              class="form-control small__input"
+                              id="billboard__height__edit"
+                              placeholder="Chiều cao"
+                              required
+                            />
+                            <p class="fw-bold m-0">m x &nbsp;&nbsp;</p>
+
+                            <input
+                              type="text"
+                              name="billboard_width_input_edit"
+                              class="form-control small__input"
+                              id="billboard__width__edit"
+                              placeholder="Chiều dài"
+                              required
+                            />
+                            <p class="fw-bold m-0">&nbsp;m</p>
+                          </div>
+
+                          <label for="billboard__amount__edit" class="fw-bold"
+                            >Số lượng</label
+                          >
+                          <div class="multi__input__field mb-3" id="billboard__amount__edit">
+                            <input
+                              type="text"
+                              name="billboard_amount_input_edit"
+                              class="form-control small__input"
+                              id="billboard__amount__edit__input"
+                              placeholder="Số lượng"
+                              required
+                            />
+                            <p class="fw-bold m-0">&nbsp;trụ/bảng</p>
+
+                          </div>
+
+                          <label for="billboard__status__edit" class="fw-bold"
+                            >Trạng thái</label
+                          >
+                          <select
+                            class="form-select mb-3"
+                            id="billboard__status__edit"
+                            name="billboard_status_selector_edit"
+                            aria-label="Billboard status selector"
+                            required
+                          />
+                            <option value="">Chọn...</option>
+                            <option value="1" class="link-primary">
+                              Đã quy hoạch
+                            </option>
+                            <option value="2" class="link-danger">
+                              Chưa quy hoạch
+                            </option>
+                          </select>
+                        
                       </div>
-
-                      <label for="billboard__status" class="fw-bold"
-                        >Trạng thái</label
-                      >
-                      <select
-                        class="form-select mb-3"
-                        id="billboard__status"
-                        aria-label="Billboard status selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1" class="link-primary">
-                          Đã quy hoạch
-                        </option>
-                        <option value="2" class="link-danger">
-                          Chưa quy hoạch
-                        </option>
-                      </select>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Huỷ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-primary"
-                      data-bs-dismiss="modal"
-                      onclick="showToast('save__success__toast')"
-                      id="save__changes__btn"
-                    >
-                      Lưu thay đổi
-                    </button>
-                  </div>
-                </div>
+                      <div class="modal-footer">
+                        <input type="hidden" name="id_edit" id="id__edit" value="0">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Huỷ
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="save__changes__btn">Lưu thay đổi</button>
+                      </div>
+                    </div>
+                  </form>
               </div>
             </div>
 
@@ -420,22 +433,17 @@
                     Bạn có chắc chắn muốn xoá điểm quảng cáo này không?
                   </div>
                   <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Huỷ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-danger"
-                      data-bs-dismiss="modal"
-                      onclick="showToast('delete__success__toast')"
-                      id="delete__btn"
-                    >
-                      Xoá
-                    </button>
+                    <form form action="" id="delete__billboard__form" onsubmit="deleteBillboard(event)">
+                      <input type="hidden" name="id_delete" id="id__delete" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-danger" id="delete__btn">Xoá</button>
+                      </form>
                   </div>
                 </div>
               </div>
@@ -489,13 +497,11 @@
           </div>
         </div>
       </main>
+
       <footer>
         <!-- place footer here -->
       </footer>
     </div>
-    <script>
-      loadBillboards();
-    </script>
     <!-- Bootstrap JavaScript Libraries -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
