@@ -128,10 +128,3 @@ main {
   width: 45%;
   height: fit-content;
 }
-
-#to__list__btn {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 1rem;
-}
