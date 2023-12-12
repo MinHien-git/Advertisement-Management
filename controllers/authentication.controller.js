@@ -12,9 +12,9 @@ const _login = async (request, response) => {
   if (_user) {
     auth_ultis.create_user_session(request, _user, () => {
       if (_user.type_user === 2) {
-          return response.redirect("/management");
+        return response.redirect("/management/billboards");
       } else {
-          return response.redirect("/");
+        return response.redirect("/");
       }
     });
   } else {
