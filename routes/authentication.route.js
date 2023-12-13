@@ -67,9 +67,9 @@ passport.use(
           "",
           0,
           "",
-          profile.fullname,
+          profile.displayName,
           "",
-          "facebook"
+          "google"
         );
         await getDb()
           .collection("users")

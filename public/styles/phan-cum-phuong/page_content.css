@@ -48,24 +48,31 @@ main {
 
 .list__flex {
   display: flex;
+  gap: 1rem;
 }
 
 .list__flex li {
   display: flex;
   flex-direction: row;
   align-items: center;
+  text-overflow: clip;
 }
 
+/* .list__flex :not(.list__col2, .list__col4) {
+  width: 10%;
+} */
+.list__flex .list__col1 {
+  width: 20%;
+}
 .list__flex .list__col2 {
-  flex-grow: 3;
-  flex-basis: 40%;
+  width: 55%;
 }
-
-.list__flex :not(.list__col2, .list__col4) {
-  flex-grow: 1;
-  flex-basis: 10%;
+.list__flex .list__col3 {
+  width: 15%;
 }
-
+/* .list__flex .list__col4 {
+  width: 5%;
+} */
 /*\\LIST CARDS*/
 .card {
   background-color: white;
@@ -133,14 +140,11 @@ main {
   font-size: 0.825rem !important;
 }
 
-.list__flex .list__col2 {
-  width: 30%;
-}
-
 #main__list {
   margin-top: 2vh;
   max-height: 70vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .card-body li {
