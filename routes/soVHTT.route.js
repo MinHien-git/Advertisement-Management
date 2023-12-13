@@ -1,19 +1,19 @@
 const express = require("express");
 const router = express();
 const SOVHTTcontroller = require("../controllers/soVHTT.controller");
+const mapController = require("../controllers/map.controller");
 
 //Quản lí bảng quảng cáo
-router.get("/management/billboards", SOVHTTcontroller._get_billboards)
-//map
-router.post(
-    "/management/billboards/edit/:id",
-    SOVHTTcontroller._post_edit_billboard
-)
-router.delete(
-    "/management/billboards/delete/:id",
-    SOVHTTcontroller._delete_billboard
-)
-router.post("/management/billboards/create", SOVHTTcontroller._create_billboard)
+router.get("/management/billboards", SOVHTTcontroller._get_billboards);
+
+router.get("/management/billboards/map", mapController._manage_map);
+
+router.post("/management/billboards", SOVHTTcontroller._create_billboard);
+
+router.put("/management/billboards", SOVHTTcontroller._post_edit_billboard);
+
+router.delete("/management/billboards", SOVHTTcontroller._delete_billboard);
+
 
 //Cấp phép quảng cáo
 //Xem DS yêu cầu

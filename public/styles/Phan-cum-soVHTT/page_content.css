@@ -58,12 +58,12 @@ main {
 
 .list__flex .list__col2 {
   flex-grow: 3;
-  flex-basis: 40%;
+  flex-basis: 30%;
 }
 
 .list__flex :not(.list__col2, .list__col4) {
   flex-grow: 1;
-  flex-basis: 10%;
+  flex-basis: 15%;
 }
 
 /*\\LIST CARDS*/
@@ -121,16 +121,10 @@ main {
 .multi__input__field p {
   padding-top: 0.25rem;
   text-align: center;
+  font-size: 0.9em;
 }
 
 .small__input {
   width: 45%;
   height: fit-content;
-}
-
-#to__list__btn {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 1rem;
 }
