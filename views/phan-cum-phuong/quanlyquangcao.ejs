@@ -87,13 +87,11 @@
               <i class="bi bi-funnel"></i> &nbsp;Lọc
             </button>
             <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown button
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
+              <button class="dropbtn">Dropdown</button>
+              <div class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
               </div>
             </div>
           </form>
@@ -196,7 +194,7 @@
                         <li>
                           Tên công ty:
                           <span class="fw-bold"
-                            ><%= advertisement.license.company_name %></span
+                            ><%= advertisement.license.company_name ?advertisement.license.company_name  : ""  %></span
                           >
                         </li>
                         <li>
@@ -304,5 +302,6 @@
       integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
       crossorigin="anonymous"
     ></script>
+    
   </body>
 </html>

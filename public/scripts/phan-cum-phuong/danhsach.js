@@ -94,12 +94,16 @@ function createCard(advertisement) {
                       Tên công ty:
                       <span class="fw-bold">${
                         advertisement.company_info.name
+                          ? advertisement.company_info.name
+                          : ""
                       }</span>
                   </li>
                   <li>
                       Email liên hệ:
                       <span class="fw-bold">${
                         advertisement.company_info.contact
+                          ? advertisement.company_info.contact
+                          : ""
                       }</span>
                   </li>
                   <li>
@@ -196,26 +200,91 @@ function create_edit_request(billboard) {
 	<h2>Chỉnh sửa Bảng QC</h2>
 	<div class="form-section">
 	<input type="hidden" name="_id" value="${billboard?._id}">
-	<label for="type">Loại quảng cáo:</label>
-	<input type="text" name="type" id="type"
-	  value="${billboard?.properties.type}"
-	  placeholder="Chọn..."
-	/>
+	<label for="billboard__type__edit" class="fw-bold">Loại bảng quảng cáo</label>
+  <select
+    class="form-select mb-3"
+    id="billboard__type__edit"
+    name="billboard_type_selector_edit"
+    aria-label="Billboard type selector"
+    required
+  />
+    <option value="">Chọn...</option>
+    <option value="1">Trụ/Cụm pano</option>
+    <option value="2">Trụ bảng hiflex</option>
+    <option value="3">Trụ màn hình điện tử LED</option>
+    <option value="4">Trụ hộp đèn</option>
+    <option value="5">Bảng hiflex ốp tường</option>
+    <option value="6">Màn hình điện tử ốp tường</option>
+    <option value="7">Trụ treo băng rôn dọc</option>
+    <option value="8">Trụ treo băng rôn ngang</option>
+    <option value="9">Cổng chào</option>
+    <option value="10">Trung tâm thương mại</option>
+  </select>
+	
 	</div>
 	<div class="form-section">
 	<label for="street">Địa điểm:</label>
-	<input type="text" id="street" name="place" value="${billboard?.properties.place}">
+	<input type="text" id="street" name="place" value="${
+    billboard?.properties.place ? billboard?.properties.place : ""
+  }">
 	</div>
 	<div class="form-section">
-	<label for="form">Hình thức:</label>
-	<input type="text" name="type_advertise" id="form"
-	value="${billboard?.properties.type_advertise}"
-	placeholder="Chọn..."
-	/>
+  <label for="land__type__edit" class="fw-bold">Hình thức</label>
+	<select
+    class="form-select mb-3"
+    id="add__type__edit"
+    name="ad_type_selector_edit"
+    aria-label="ad type selector"
+    required
+  />
+  <option value="">Chọn...</option>
+  <option value="1" ${
+    billboard?.properties.type_advertise === "Cổ động chính trị"
+      ? "selected"
+      : ""
+  }>
+   Cổ động chính trị
+  </option>
+  <option value="2"
+<option value="1" ${
+    billboard?.properties.type_advertise === "An toàn giao thông"
+      ? "selected"
+      : ""
+  }>An toàn giao thông</option>
+  <option value="3"
+${
+  billboard?.properties.type_advertise === "Mỹ phẩm" ? "selected" : ""
+}>Mỹ phẩm</option>
+  <option value="4" ${
+    billboard?.properties.type_advertise === "Đồ ăn" ? "selected" : ""
+  }>Đồ ăn</option>
+  <option value="5" ${
+    billboard?.properties.type_advertise === "Điện ảnh" ? "selected" : ""
+  }>Điện ảnh</option>
+  <option value="6" ${
+    billboard?.properties.type_advertise === "Dịch vụ" ? "selected" : ""
+  }>Dịch vụ</option>
+  </select>
   </div>
   <div class="form-section">
-	<label for="form">Phân loại:</label>
-	<input type="text" name="catetorize" id="catetorize" value="${billboard?.properties.place_type}" placeholder="Chọn..."/>
+	<label for="land__type__edit" class="fw-bold">Phân loại</label>
+  <select
+    class="form-select mb-3"
+    id="land__type__edit"
+    name="land_type_selector_edit"
+    aria-label="Land type selector"
+    required
+  />
+    <option value="">Chọn...</option>
+    <option value="1">
+      Đất công/Công viên/Hành lang an toàn giao thông
+    </option>
+    <option value="2">Đất tư nhân/Nhà ở riêng lẻ</option>
+    <option value="3">Trung tâm thương mại</option>
+    <option value="4">Chợ</option>
+    <option value="5">Cây xăng</option>
+    <option value="6">Nhà chờ xe buýt</option>
+  </select>
   </div>
   <div class="flex size-information inline">
   <div class="form-section">
@@ -242,23 +311,23 @@ function create_edit_request(billboard) {
   <input type="number" name="panel" id="panel" value="" placeholder="XY"/>
   </div>
   </div>
-  <div class="form-section">
-	<label for="state">Trạng thái:</label>
-	<input
-	  type="text" name="state" id="state" value="" placeholder="Chọn..."
-	/>
-	</div>
 	<div class="form-section">
 	<label for="name">Thông tin công ty:</label>
 	<input type="text" name="name" id="name"
-	  value="${billboard?.license?.company_name}"
+	  value="${
+      billboard?.license?.company_name ? billboard?.license?.company_name : ""
+    }"
 	  placeholder="tên công ty"
 	/>
 	</div>
 	<div class="form-section">
 	<label for="contact">Thông tin liên lạc:</label>
 	<input type="text" name="contact" id="contact"
-	  value="${billboard?.license?.company_contact}"
+	  value="${
+      billboard?.license?.company_contact
+        ? billboard?.license?.company_contact
+        : ""
+    }"
 	  placeholder="Email công ty"
 	/>
 	</div>
