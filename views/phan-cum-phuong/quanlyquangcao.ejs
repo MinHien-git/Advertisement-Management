@@ -195,7 +195,7 @@
                         <li>
                           Tên công ty:
                           <span class="fw-bold"
-                            ><%= advertisement.license.company_name %></span
+                            ><%= advertisement.license.company_name ?advertisement.license.company_name  : ""  %></span
                           >
                         </li>
                         <li>

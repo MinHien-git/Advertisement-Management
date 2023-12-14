@@ -28,12 +28,16 @@ function setInfoBoard() {
     infoboards.innerHTML = "";
     infoboards.innerHTML = `<div class="info_container">
         <div class="info-close"><img src = "/images/close.png"></div>
-        <div class="info_container-image1"><img class="ad-image" src = "${
-          current_feature.properties.image
-        }" alt = "image-1"></div>
-        <div class="info_container-image2"><img class="ad-image" src = "${
-          current_feature.properties.image
-        }" alt = "image-2"></div>
+        ${
+          current_feature.properties?.image[0]
+            ? `<div class="info_container-image1"><img class="ad-image" src = "${current_feature.properties.image[0]}" alt = "image-1"></div>`
+            : ""
+        }
+        ${
+          current_feature.properties?.image[1]
+            ? `<div class="info_container-image2"><img class="ad-image" src = "${current_feature.properties.image[1]}" alt = "image-2"></div>`
+            : ""
+        }
         <div class="info-container-info">
           <h2>${current_feature.properties.type}</h2>
           <p>${current_feature.properties.place}</p>
@@ -51,11 +55,17 @@ function setInfoBoard() {
           }</span></p>
         </div>
         <div class="info-container-info">
+        ${
+          current_feature?.license
+            ? `
         <h3>Thông tin công ty</h3>
-        <p>Thông tin công ty: <span class="bold">ABC Company</span></p>
-        <p>Liên lạc: <span class="bold">ABCCompany@email.com</span></p>
-        <p>Ngày bắt đầu: <span class="bold">dd/mm/yyyy</span></p>
-        <p>Ngày kết thúc đầu: <span class="bold">dd/mm/yyyy</span></p>
+        <p>Thông tin công ty: <span class="bold">${current_feature.license.company_name}</span></p>
+        <p>Liên lạc: <span class="bold">${current_feature.license.company_contact}</span></p>
+        <p>Ngày bắt đầu: <span class="bold">${current_feature.license.start_date}</span></p>
+        <p>Ngày kết thúc đầu: <span class="bold">${current_feature.license.end_date}</p>
+        `
+            : "<p class =>Chưa có thông tin</p>"
+        }
         ${
           is_offical != 0
             ? `

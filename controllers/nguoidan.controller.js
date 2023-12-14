@@ -14,6 +14,7 @@ const _get_report = (request, response) => {
 
 const _post_report = (request, response) => {
   let {
+    type,
     sender_name,
     sender_email,
     sender_number,
@@ -24,12 +25,11 @@ const _post_report = (request, response) => {
   let ward = place.split(",")[1];
   let district = place.split(",")[2];
   let report = new Report(
+    type,
     sender_email,
     sender_number,
     place,
     sender_name,
-    district,
-    ward,
     attached_files,
     details
   );

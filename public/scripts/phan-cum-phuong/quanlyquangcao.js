@@ -112,11 +112,11 @@ $.getJSON("../data/billboard.json", function (data) {
     console.log("complete");
   });
 
-  function create_authorize_request(position = "", id = null) {
-	if (request_node) {
-	  body.removeChild(request_node);
-	}
-	let report = `
+function create_authorize_request(position = "", id = null) {
+  if (request_node) {
+    body.removeChild(request_node);
+  }
+  let report = `
 	<section class="active" id="request-popup">
 	<div id="report-section-form-container">
 	<div id="inscreen-request-close" class="inscreen-request-close">
@@ -261,18 +261,88 @@ function create_edit_request(billboard = null) {
 	</div>
 	<div class="form-section">
 	<label for="street">Địa điểm:</label>
-	<input type="text" id="street" name="place" value="${billboard?.properties.place}">
+	<input type="text" id="street" name="place" value="${
+    billboard?.properties.place
+  }">
 	</div>
 	<div class="form-section">
 	<label for="form">Hình thức:</label>
-	<input type="text" name="type_advertise" id="form"
-	value="${billboard?.properties.type_advertise}"
-	placeholder="Chọn..."
-	/>
+	<select
+    class="form-select mb-3"
+    id="ad__type__edit"
+    name="ad_type_selector_edit"
+    aria-label="ad type selector"
+    required
+  />
+    <option value="">Chọn...</option>
+    <option value="1" ${
+      billboard?.properties.type_advertise === "Cổ động chính trị"
+        ? "selected"
+        : ""
+    }>
+     Cổ động chính trị
+    </option>
+    <option value="2"
+	<option value="1" ${
+    billboard?.properties.type_advertise === "An toàn giao thông"
+      ? "selected"
+      : ""
+  }>An toàn giao thông</option>
+    <option value="3"
+	${
+    billboard?.properties.type_advertise === "Mỹ phẩm" ? "selected" : ""
+  }>Mỹ phẩm</option>
+    <option value="4" ${
+      billboard?.properties.type_advertise === "Đồ ăn" ? "selected" : ""
+    }>Đồ ăn</option>
+    <option value="5" ${
+      billboard?.properties.type_advertise === "Điện ảnh" ? "selected" : ""
+    }>Điện ảnh</option>
+    <option value="6" ${
+      billboard?.properties.type_advertise === "Dịch vụ" ? "selected" : ""
+    }>Dịch vụ</option>
+  </select>
   </div>
+ 
   <div class="form-section">
-	<label for="form">Phân loại:</label>
-	<input type="text" name="catetorize" id="catetorize" value="${billboard?.properties.place_type}" placeholder="Chọn..."/>
+  <label for="form">Loại quảng cáo:</label>
+  <select class="form-select mb-3"
+  id="billboard__type__edit"
+  name="billboard_type_selector_edit"
+  aria-label="billboard type selector"
+  required>
+  <option value="">Chọn...</option>
+  <option value="1" ${
+    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+  }>Trụ/Cụm pano</option>
+  <option value="2" ${
+    billboard?.properties.type === "Trụ bảng hiflex" ? "selected" : ""
+  }>Trụ bảng hiflex</option>
+  <option value="3" ${
+    billboard?.properties.type === "Trụ màn hình điện tử LED" ? "selected" : ""
+  }>Trụ màn hình điện tử LED</option>
+  <option value="4" ${
+    billboard?.properties.type === "Trụ hộp đèn" ? "selected" : ""
+  }>Trụ hộp đèn</option>
+  <option value="5" ${
+    billboard?.properties.type === "Bảng hiflex ốp tường" ? "selected" : ""
+  }>Bảng hiflex ốp tường</option>
+  <option value="6" ${
+    billboard?.properties.type === "Màn hình điện tử ốp tường" ? "selected" : ""
+  }>Màn hình điện tử ốp tường</option>
+  <option value="7" ${
+    billboard?.properties.type === "Trụ treo băng rôn dọc" ? "selected" : ""
+  }>Trụ treo băng rôn dọc</option>
+  <option value="8" ${
+    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+  }>Trụ treo băng rôn ngang</option>
+  <option value="9" ${
+    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+  }>Cổng chào</option>
+  <option value="10" ${
+    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+  }>Trung tâm thương mại</option>
+</select>
   </div>
   <div class="flex size-information inline">
   <div class="form-section">
@@ -308,14 +378,20 @@ function create_edit_request(billboard = null) {
 	<div class="form-section">
 	<label for="name">Thông tin công ty:</label>
 	<input type="text" name="name" id="name"
-	  value="${billboard?.license?.company_name}"
+	  value="${
+      billboard?.license?.company_name ? billboard?.license?.company_name : ""
+    }"
 	  placeholder="tên công ty"
 	/>
 	</div>
 	<div class="form-section">
 	<label for="contact">Thông tin liên lạc:</label>
 	<input type="text" name="contact" id="contact"
-	  value="${billboard?.license?.company_contact}"
+	  value="${
+      billboard?.license?.company_contact
+        ? billboard?.license?.company_contact
+        : ""
+    }"
 	  placeholder="Email công ty"
 	/>
 	</div>

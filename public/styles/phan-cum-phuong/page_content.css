@@ -62,22 +62,28 @@ main {
   width: 10%;
 } */
 .list__flex .list__col1 {
-  width: 20%;
+  width: 10rem;
 }
 .list__flex .list__col2 {
-  width: 55%;
+  width: calc(100% - 24rem);
 }
 .list__flex .list__col3 {
-  width: 15%;
+  width: 10rem;
 }
-/* .list__flex .list__col4 {
-  width: 5%;
-} */
+.list__flex .list__col4 {
+  width: 4rem;
+}
 /*\\LIST CARDS*/
 .card {
   background-color: white;
 }
-
+#info__desc {
+  width: 100%;
+}
+.card-header {
+  width: 100%;
+  overflow-x: auto;
+}
 #full__info__list {
   display: flex;
   justify-content: space-around;
