@@ -18,7 +18,7 @@ function get_report(position) {
       id="inscreen-form-login"
       class="form-container active"
       method="post"
-      action="/login"
+      action="/dashboard/request/edit"
     >
       <h2>Yêu cầu Chỉnh sửa</h2>
       <div class="form-section">
