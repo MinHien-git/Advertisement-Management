@@ -4,10 +4,6 @@ let zoomLevel = 13;
 const api_key = "3dbf2ce56c45401b855931d7f3828a85";
 let popup = L.popup();
 
-// $.getJSON("../../data/billboard.json", function (json) {
-//   billboards = json; // this will show the info it in firebug console
-// });
-console.log(billboards);
 let infoboards = document.getElementById("info");
 let current_feature = null;
 

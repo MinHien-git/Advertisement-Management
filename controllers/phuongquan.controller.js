@@ -19,17 +19,67 @@ const _process_query = (req, arr) => {
       arr = arr.filter((e) => { return e.billboard.properties.place.indexOf(req.query.search) >= 0; });
     }
   }
-  if (req.query.license) {
-    arr = arr.filter((e) => { return e.license.state == req.query.license; });
-  }
-  if (req.query.report_type) {
-    arr = arr.filter((e) => { return e.type == req.query.report_type; });
-  }
-  if (req.query.report_state) {
-    arr = arr.filter((e) => { return e.state == req.query.report_state; });
-  }
-  if (req.query.sort) {
 
+  if (req.query.license1 || req.query.license2 || req.query.license3) {
+    arr = arr.filter((e) => { 
+      return (e.license?.state === 0 && req.query.license1) 
+          || (e.license?.state === 1 && req.query.license2) 
+          || (!e.license && req.query.license3); 
+    });
+  }
+
+  if (req.query.report) {
+    arr = arr.filter((e) => { 
+      if (req.query.report == 0) {
+        return e.state === 0;
+      }
+      else {
+        return !(e.state === 0);
+      }
+    });
+  }
+  
+  if (req.query.report_type1 || req.query.report_type2 || req.query.report_type3 || req.query.report_type4) {
+    arr = arr.filter((e) => { 
+      return (e.type === 0 && req.query.report_type1) 
+          || (e.type === 1 && req.query.report_type2) 
+          || (e.type === 2 && req.query.report_type3) 
+          || (e.type === 3 && req.query.report_type4) 
+    });
+  }
+
+  if (req.query.request1 || req.query.request2) {
+    arr = arr.filter((e) => { 
+      return (e.state === 1 && req.query.request1) 
+          || (e.state === 0 && req.query.request2);
+    });
+  }
+
+  if (req.query.sort) {
+    if (req.path == "/dashboard/advertise") {
+      if (req.query.sort == 0) { 
+        arr.sort((a, b) => { a.properties.place.localeCompare(b.properties.place) }); 
+      }
+      else { 
+        arr.sort((a, b) => { b.properties.place.localeCompare(a.properties.place) }); 
+      }
+    }
+    if (req.path == "/dashboard/report") {
+      if (req.query.sort == 0) { 
+        arr.sort((a, b) => { a.place.localeCompare(b.place) }); 
+      }
+      else { 
+        arr.sort((a, b) => { b.place.localeCompare(a.place) }); 
+      }
+    }
+    if (req.path == "/dashboard/request/edit") {
+      if (req.query.sort == 0) { 
+        arr.sort((a, b) => { a.billboard.properties.place.localeCompare(b.billboard.properties.place) }); 
+      }
+      else { 
+        arr.sort((a, b) => { b.billboard.properties.place.localeCompare(a.billboard.properties.place) }); 
+      }
+    }
   }
   return arr;
 }

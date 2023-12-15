@@ -137,6 +137,7 @@ document.getElementById("map__btn").addEventListener("onclick", () => {
   window.location.href = "/Phan-cum-phuong-quan/trangchu.html";
 });
 
+/* 
 $.getJSON("../data/billboard.json", function (data) {
   advertisements = data;
 })
@@ -167,12 +168,7 @@ $.getJSON("../data/billboard.json", function (data) {
       table.appendChild(createCard(billboard));
     });
   })
-  .fail(function () {
-    console.log("error");
-  })
-  .always(function () {
-    console.log("complete");
-  });
+*/
 
 function create_edit_request(billboard) {
   if (edit_node) {

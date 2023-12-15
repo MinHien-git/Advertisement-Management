@@ -72,13 +72,26 @@
             >
               Tìm kiếm
             </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-arrow-down-up"></i>
-              Sắp xếp
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-funnel"></i> &nbsp;Lọc
-            </button>
+            <div class="dropdown">
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-arrow-down-up"></i>
+                Sắp xếp
+              </button>
+              <div class="dropdown-content">
+                <label><input type="radio" name="sort" value="0"> A-Z</label>
+                <label><input type="radio" name="sort" value="1"> Z-A</label>
+              </div>
+            </div>
+            <div class="dropdown">
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-funnel"></i> 
+                &nbsp;Lọc</button>
+              <div class="dropdown-content">
+                <p>Tình trạng chỉnh sửa</p>
+                <label><input type="checkbox" name="request1" value="1"> Đã duyệt</label>
+                <label><input type="checkbox" name="request2" value="1"> Chưa duyệt</label>
+              </div>
+            </div>
           </form>
 
           <div id="main__list">

@@ -113,22 +113,6 @@ function createReportListItem(report) {
 	return new_item
 }
 
-//load report list from report.json
-function loadReports() {
-	document.addEventListener("DOMContentLoaded", () => {
-		const list = document.getElementById("main__list")
-		let reports = []
-		$.getJSON("../data/report.json", (data) => {
-			reports = data
-		}).done(() => {
-			reports.forEach((rp) => {
-				let report = new Report(rp.geometry, rp.type, rp.properties)
-				list.appendChild(createReportListItem(report))
-			})
-		})
-	})
-}
-
 //show toast
 function showToast(toast_id) {
 	const toast_element = document.getElementById(toast_id)
