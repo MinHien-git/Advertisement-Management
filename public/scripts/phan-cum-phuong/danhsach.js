@@ -1,3 +1,15 @@
+function cancel_request(id) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      location.reload();
+    }
+  };
+  xhr.open("POST", "/dashboard/request/cancel", true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify({ id: id }));
+}
+
 function assignButton(item_id) {
   const status_num = item_id % 4;
   let button_container = new String("	");
