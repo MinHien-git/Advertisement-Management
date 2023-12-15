@@ -18,7 +18,7 @@ function get_resquest(position) {
       id="inscreen-form-login"
       class="form-container active"
       method="post"
-      action="/login"
+      action="/management/licenses/approve"
     >
       <h2>Cấp phép Quảng cáo</h2>
       <div class="form-section">

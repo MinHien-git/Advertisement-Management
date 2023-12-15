@@ -119,9 +119,11 @@ function onMapClick(e) {
           <p>Chưa có thông tin</p>
           </div>
           ${
-            is_offical != 0
+            is_offical == 0
+              ? '<button class="report"><img src="/images/report-fill.png" alt="report">Báo cáo</button>'
+              : is_offical == 1
               ? '<button class="edit"><img src="/images/edit-yellow.png" alt="report">Chỉnh sửa</button>'
-              : '<button class="report"><img src="/images/report-fill.png" alt="report">Báo cáo</button>'
+              : '<button class="edit"><img src="/images/edit-yellow.png" alt="report">Thêm Bảng</button>'
           }`
         )
         .openOn(map);
@@ -213,7 +215,11 @@ window.onload = function () {
 
       report_button.addEventListener("click", (e) => {
         current_feature = feature;
-        get_report(feature.properties.place);
+        if (is_offical != 2) {
+          get_report(feature.properties.place);
+        } else {
+          get_edit(feature.properties.place);
+        }
       });
 
       info_button.addEventListener("click", (e) => {
