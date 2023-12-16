@@ -1,9 +1,9 @@
 const check_authentication_status = (request, response, next) => {
   const uid = request.session.uid;
   const ward = request.session.ward;
-  const street = request.session.street;
+  const district = request.session.district;
   if (!uid) {
-    return next();
+      return next();
   }
 
   response.locals.uid = uid;
@@ -11,7 +11,7 @@ const check_authentication_status = (request, response, next) => {
   response.locals.type_user = request.session.type_user;
 
   response.locals.ward = ward;
-  response.locals.street = street;
+  response.locals.district = district;
   next();
 };
 
