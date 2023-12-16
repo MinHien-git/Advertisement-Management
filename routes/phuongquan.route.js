@@ -1,9 +1,39 @@
 const express = require("express");
 const router = express();
+const path = require("path");
+const { ObjectId } = require("mongodb");
+
 const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
+const storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, 'public/images/user_images');
+  },
+  filename: function (req, file, callback) {
+    if (path.extname(file.originalname).toLowerCase() === ".png") {
+      callback(null, (new ObjectId()).toString() + ".png");
+    }
+    if (path.extname(file.originalname).toLowerCase() === ".jpeg") {
+      callback(null, (new ObjectId()).toString() + ".jpeg");
+    }
+  }
+});
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (path.extname(file.originalname).toLowerCase() === ".png") {
+      cb(null, true);
+    }
+    else if (path.extname(file.originalname).toLowerCase() === ".jpeg") {
+      cb(null, true);
+    }
+    else {
+      cb(null, false);
+    }
+  }
+});
 
 const phuongQuanController = require("../controllers/phuongquan.controller");
+const { log } = require("console");
 
 //Bản đồ
 router.get("/dashboard", phuongQuanController._get_map);
@@ -34,6 +64,7 @@ router.get(
   "/dashboard/report/:id",
   phuongQuanController._get_report_information
 );
+
 router.post("/dashboard/report/:id", phuongQuanController._post_report_edit);
 
 //Yêu cầu chỉnh sửa

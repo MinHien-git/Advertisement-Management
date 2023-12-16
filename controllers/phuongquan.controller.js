@@ -112,9 +112,12 @@ const _get_license = async (req, res) => {
 };
 
 const _post_license_request = async (req, res) => {
-  let { id, email, from, name, contact, start, end, images, details } = req.body;
+  let { id, email, from, name, contact, start, end, details } = req.body;
   let billboard = await db.getDb().collection("billboard").findOne({ place: from });
-  let license = new License(name, contact, start, end, 1);
+  console.log(req);
+  console.log(req.files);
+  let files = req.files.map((v) => { return v.destination + v.filename });
+  let license = new License(name, contact, start, end, 1, files);
   if (license.send_request(id ? new ObjectId(id) : billboard._id)) console.log("send!");
   return res.redirect("/dashboard/license");
 };
@@ -179,7 +182,6 @@ const _post_request_edit = async (req, res) => {
 };
 
 module.exports = {
-  storage,
   _get_map,
   _get_advertisement,
   _get_license,

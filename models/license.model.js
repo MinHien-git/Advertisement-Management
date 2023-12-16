@@ -8,18 +8,20 @@ module.exports = class License {
     company_contact,
     start_date,
     end_date,
-    state
+    state,
+    images
   ) {
     this.company_name = company_name;
     this.company_contact = company_contact;
     this.start_date = start_date;
     this.end_date = end_date;
     this.state = state;
+    this.images = images;
   }
 
   static async get_license(id) {
     let license = await db.getDb().collection("billboard").findOne( { _id: new ObjectId(id) });
-    return new License( license.company_name, license.company_contact, license.start_date, license.end_date, license.state );
+    return new License( ...license );
   }
 
   async send_request(id) {

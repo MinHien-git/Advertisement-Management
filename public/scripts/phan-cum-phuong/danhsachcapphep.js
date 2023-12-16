@@ -30,6 +30,7 @@ function create_authorize_request(position = "", id = null) {
     id="inscreen-form-login"
     class="form-container active"
     method="post"
+    enctype="multipart/form-data"
     action="/dashboard/license/request"
   >
     <input type="hidden" name="id" value="${id}">

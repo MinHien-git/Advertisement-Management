@@ -16,22 +16,6 @@ const create_session_config = require("./config/session");
 const express_session = require("express-session");
 const session_config = create_session_config();
 const passport = require("passport");
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-  destination: function(req, file, callback) {
-    callback(null, '/images/users_images');
-  },
-  filename: function (req, file, callback) {
-    if (path.extname(req.file.originalname).toLowerCase() === ".png") {
-      callback(null, (new ObjectId()).toString() + ".png");
-
-    }
-    if (path.extname(req.file.originalname).toLowerCase() === ".jpeg") {
-      callback(null, (new ObjectId()).toString() + ".jpeg");
-    }
-  }
-});
 
 
 require("dotenv").config();

@@ -130,6 +130,7 @@ function create_authorize_request(position = "", id = null) {
 	  id="inscreen-form-login"
 	  class="form-container active"
 	  method="post"
+	  enctype="multipart/form-data"
 	  action="/dashboard/license/request"
 	>
 	  <input type="hidden" name="id" value="${id}">
@@ -248,6 +249,7 @@ function create_edit_request(billboard = null) {
 	id="inscreen-form-login"
 	class="form-container active"
 	method="post"
+	enctype="multipart/form-data"
 	action="/dashboard/request"
   >
 	<h2>Chỉnh sửa Bảng QC</h2>
