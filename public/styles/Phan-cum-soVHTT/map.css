@@ -1,0 +1,32 @@
+#btn__container{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+#btn__container button{
+  text-align: left;
+  margin: 0.4rem;
+}
+
+#map__btn__span{  
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+/* #to__list__btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 1rem;
+}
+#create__billboard__btn{
+  position: absolute;
+  bottom: 1rem;
+  right: 0;
+  margin: 1rem;
+} */
