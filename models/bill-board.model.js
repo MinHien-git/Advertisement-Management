@@ -33,4 +33,12 @@ module.exports = class Billboard {
                 { $set: { properties: { ...this.properties } } }
             );
     }
+    async _update_license_state(id) {
+        await getDb()
+            .collection("billboard")
+            .updateOne(
+                { _id: new ObjectId(id) },
+                { $set: { license: { ...this.license } } }
+            );
+    }
 };
