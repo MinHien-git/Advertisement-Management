@@ -227,6 +227,7 @@ function get_edit(position, billboard) {
   if (report_node) {
     body.removeChild(report_node);
   }
+
   let report = `
     <section class="active popup" id="report-popup">
     <div id="report-section-form-container">
@@ -243,17 +244,22 @@ function get_edit(position, billboard) {
       method="post"
       action="/management/billboards/edit"
     >
+    <input type="hidden" name ="id" value="${billboard?.properties.globalid}" />
+    <input type="hidden" name ="_id" value="${billboard?._id}" />
       <h2>Sửa Bảng Quảng Cáo</h2>
       <div class="form-section">
         <label for="type">Loại quảng cáo:</label>
         <select class="form-select mb-3"
   id="billboard__type"
-  name="billboard_type_selector_edit"
+  name="billboard__type"
   aria-label="billboard type selector"
   required>
   <option value="">Chọn...</option>
   <option value="1" ${
-    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+    billboard?.properties.type === "Trụ/Cụm pano" ||
+    billboard?.properties.type === "Trụ cụm,pano"
+      ? "selected"
+      : ""
   }>Trụ/Cụm pano</option>
   <option value="2" ${
     billboard?.properties.type === "Trụ bảng hiflex" ? "selected" : ""
@@ -274,19 +280,19 @@ function get_edit(position, billboard) {
     billboard?.properties.type === "Trụ treo băng rôn dọc" ? "selected" : ""
   }>Trụ treo băng rôn dọc</option>
   <option value="8" ${
-    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+    billboard?.properties.type === "Trụ treo băng rôn ngang" ? "selected" : ""
   }>Trụ treo băng rôn ngang</option>
   <option value="9" ${
-    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+    billboard?.properties.type === "Cổng chào" ? "selected" : ""
   }>Cổng chào</option>
   <option value="10" ${
-    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+    billboard?.properties.type === "Trung tâm thương mại" ? "selected" : ""
   }>Trung tâm thương mại</option>
 </select>
       </div>
       <div class="form-section">
         <label for="street">Địa điểm:</label>
-        <textarea id="street">${position}</textarea>
+        <textarea id="street" name=position>${position}</textarea>
       </div>
       <div class="form-section">
       <label for="form">Hình thức:</label>
@@ -363,6 +369,9 @@ function get_edit(position, billboard) {
   <option value="6" ${
     billboard.properties.place_type === "Nhà chờ xe buýt" ? "selected" : ""
   }>Nhà chờ xe buýt</option>
+  <option value="7" ${
+    billboard?.properties.type_advertise === "Trường Học" ? "selected" : ""
+  }>Trường học</option>
   </select>
     </div>
     <div class="flex size-information inline">
@@ -503,9 +512,5 @@ function get_edit(position, billboard) {
   close.on("click", () => {
     body.removeChild(report_node);
     report_node = null;
-  });
-
-  var quill = new Quill("#editor", {
-    theme: "snow",
   });
 }
