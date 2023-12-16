@@ -1,108 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bản đồ - Sở VHTT</title>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
-      crossorigin="anonymous" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bản đồ - Sở VHTT</title>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+            crossorigin="anonymous" />
 
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="/styles/navbar.css" />
-    <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="stylesheet" href="/styles/map.css" />
-    <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/map.css">
-    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/navbar.css" />
-    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+        <link rel="stylesheet" href="/styles/navbar.css" />
+        <link rel="stylesheet" href="/styles/global.css" />
+        <link rel="stylesheet" href="/styles/map.css" />
+        <link rel="stylesheet" href="/styles/global.css" />
+        <link rel="stylesheet" href="/styles/phan-cum-soVHTT/map.css" />
+        <link rel="stylesheet" href="/styles/phan-cum-soVHTT/navbar.css" />
+        <link
+            rel="stylesheet"
+            href="/styles/phan-cum-soVHTT/page_content.css" />
 
-    <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin="" />
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""></script>
-    <links
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
-      charset="utf-8"></script>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
-    <link rel="stylesheet" href="/styles/phan-cum-phuong/report.css" />
-    <link rel="stylesheet" href="/styles/editor.css" />
-    <script src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js"></script>
-    <link
-      href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
-      rel="stylesheet" />
-    <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
-  </head>
-  <body>
-    <script src="/scripts/navbar.js" defer></script>
-    <style>
-      #primary-header {
-        position: fixed;
-        top: 0;
-      }
-    </style>
-    <%- include('../includes/header.ejs')%>
-    <!-- <script>
+        <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin="" />
+        <script
+            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+        <links
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+        <script
+            src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
+            charset="utf-8"></script>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
+        <link rel="stylesheet" href="/styles/phan-cum-phuong/report.css" />
+        <link rel="stylesheet" href="/styles/editor.css" />
+        <script src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js"></script>
+        <link
+            href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
+            rel="stylesheet" />
+        <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
+    </head>
+    <body>
+        <script src="/scripts/navbar.js" defer></script>
+        <style>
+            #primary-header {
+                position: fixed;
+                top: 0;
+            }
+        </style>
+        <%- include('../includes/header.ejs')%>
+        <!-- <script>
       let nav = document.querySelector("#primary-header")
       nav.style.position= "fixed"
     </script> -->
-    <main id="map-container">
-      <div id="map"></div>
-      <div id="info"></div>
-      <div id="btn__container">
-        <!-- <button
+        <main id="map-container">
+            <div id="map"></div>
+            <div id="info"></div>
+            <div id="btn__container">
+                <!-- <button
         class="btn btn-success"
         id="create__billboard__btn"
         onclick="navigate(this.id)">
         <i class="bi bi-plus-circle"></i>
         <span id="map__btn__span">Thêm bảng QC</span>
       </button> -->
-      <button
-        class="btn btn-primary"
-        id="to__list__btn"
-        onclick="navigate(this.id)">
-        <i class="bi bi-card-list"></i>
-        <span id="map__btn__span">Danh sách</span>
-      </button>
-      </div>
-    </main>
-    <script>
-      let billboards = <%- JSON.stringify(billboards) %>;
-    </script>
-    <script src="/scripts/popup.js"></script>
-    <script src="/scripts/phan-cum-soVHTT/map.js"></script>
-    <script src="/scripts/phan-cum-phuong/edit.js"></script>
-    <script src="/scripts/phan-cum-soVHTT/request.js"></script>
-    <script src="/scripts/map.js"></script>
-    <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-      crossorigin="anonymous"></script>
+                <button
+                    class="btn btn-primary"
+                    id="to__list__btn"
+                    onclick="navigate(this.id)">
+                    <i class="bi bi-card-list"></i>
+                    <span id="map__btn__span">Danh sách</span>
+                </button>
+            </div>
+        </main>
+        <script>
+            let billboards = <%- JSON.stringify(billboards) %>;
+        </script>
+        <script src="/scripts/popup.js"></script>
+        <script src="/scripts/phan-cum-soVHTT/trangchu.js"></script>
+        <script src="/scripts/phan-cum-soVHTT/edit.js"></script>
+        <script src="/scripts/phan-cum-soVHTT/request.js"></script>
+        <script src="/scripts/map.js"></script>
+        <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
-      integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
-      crossorigin="anonymous"></script>
-  </body>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+            integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+            crossorigin="anonymous"></script>
+    </body>
 </html>

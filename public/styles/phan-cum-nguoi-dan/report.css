@@ -28,13 +28,19 @@
 }
 #report-section-form-container {
   width: 80%;
-  height: auto;
+  height: 90vh;
   background-color: white;
   border-radius: 10px;
   padding: 2rem 1rem;
   position: relative;
 }
-
+.form-container {
+  overflow-y: auto;
+  height: 80vh;
+}
+.form-container::-webkit-scrollbar {
+  width: 1px;
+}
 #authentication-form-button-container {
   display: flex;
   justify-content: center;
@@ -180,7 +186,7 @@ hr {
     width: 30%;
     max-width: 25rem;
     min-width: 15rem;
-    height: auto;
+    height: 90vh;
     background-color: white;
     border-radius: 10px;
     padding: 2rem 1rem;

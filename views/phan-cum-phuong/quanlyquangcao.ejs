@@ -38,8 +38,9 @@
     <link rel="stylesheet" href="/styles/phan-cum-phuong/report.css" />
     <link rel="stylesheet" href="/styles/editor.css" />
     <link rel="stylesheet" href="/styles/phan-cum-phuong/danhsach.css" />
-    <link rel="stylesheet" href="/styles/phan-cum-phuong/quanlyquangcao.css" />
     <link rel="stylesheet" href="/styles/phan-cum-phuong/page_content.css" />
+    <link rel="stylesheet" href="/styles/phan-cum-phuong/quanlyquangcao.css" />
+    
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -51,6 +52,7 @@
     <script src="/scripts/navbar.js" defer></script>
     <div class="wrapper">
       <%- include('../includes/header.ejs')%>
+      
       <main>
         <div class="container" id="main__container">
           <h1 class="fw-bold h2 mb-0" id="page__title">
@@ -78,21 +80,25 @@
             >
               Tìm kiếm
             </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-arrow-down-up"></i>
-              Sắp xếp
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-funnel"></i> &nbsp;Lọc
-            </button>
             <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown button
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-arrow-down-up"></i>
+                Sắp xếp
               </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
+              <div class="dropdown-content">
+                <label><input type="radio" name="sort" value="0"> A-Z</label>
+                <label><input type="radio" name="sort" value="1"> Z-A</label>
+              </div>
+            </div>
+            <div class="dropdown">
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-funnel"></i> 
+                &nbsp;Lọc</button>
+              <div class="dropdown-content">
+                <p>Tình trạng cấp phép</p>
+                <label><input type="checkbox" name="license1" value="1"> Đã duyệt</label>
+                <label><input type="checkbox" name="license2" value="1"> Chưa duyệt</label>
+                <label><input type="checkbox" name="license3" value="1"> Chưa cấp phép</label>
               </div>
             </div>
           </form>
@@ -103,8 +109,6 @@
                 <ul class="list__flex fw-bold">
                   <li class="list__col1">Bảng quảng cáo</li>
                   <li class="list__col2">Địa điểm</li>
-                  <li class="list__col3">Trạng thái</li>
-                  <li class="list__col4">
                     <button class="btn btn-link ps-4" disabled></button>
                   </li>
                 </ul>
@@ -122,16 +126,7 @@
                     <%= advertisement.properties.type %>
                   </li>
                   <li class="list__col2"><%= advertisement.properties.place %></li>
-                  <% if (advertisement.address) { %>
-                  <li class="list__col3 fw-semibold" style="color: #329a44">
-                    Đã duyệt
-                  </li>
-                  <% } else { %>
-                  <li class="list__col3 fw-semibold" style="color: #e7b400">
-                    Chưa duyệt
-                  </li>
-                  <% } %>
-                  <li class="list__col4">
+                  <li class="list__col3">
                     <button
                       class="btn collapsed"
                       id="collapse__btn<%= id %>"
@@ -195,7 +190,7 @@
                         <li>
                           Tên công ty:
                           <span class="fw-bold"
-                            ><%= advertisement.license.company_name %></span
+                            ><%= advertisement.license.company_name ?advertisement.license.company_name  : ""  %></span
                           >
                         </li>
                         <li>
@@ -303,5 +298,6 @@
       integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
       crossorigin="anonymous"
     ></script>
+    
   </body>
 </html>

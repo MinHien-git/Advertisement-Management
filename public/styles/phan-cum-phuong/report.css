@@ -10,6 +10,11 @@
   z-index: 101;
   background-color: hsl(0 0% 95%/ 80%);
 }
+
+#report-popup option,
+#request-popup option {
+  font-size: 0.75rem;
+}
 .active#report-popup,
 .active#request-popup {
   display: flex;

@@ -6,20 +6,21 @@ function get_report(position) {
   }
   let report = `
           <div id="report-section-form-container" class ="popup">
-          <div id="authentication-close-button" class="authentication-close-button">
+          <div id="report-close-button" class="authentication-close-button">
             <img
               id="inscreen-report-close"
               src="/images/close.png"
               alt="close button"
             />
           </div>
+          <h2 class="form-title">Báo Cáo</h2>
           <form
             id="inscreen-form-report"
             class="form-container active"
             method="post"
             action="/report"
           >
-            <h2>Báo Cáo</h2>
+           
             <div class="form-section">
               <label for="place">Địa chỉ báo cáo:</label>
               <textarea id="place" readonly name="place">${position}</textarea>
@@ -54,6 +55,21 @@ function get_report(position) {
                 placeholder="Điện thoại liên lạc"
               />
             </div>
+            <div class="form-section">
+            <label for="billboard__type__edit" class="fw-bold">Loại báo cáo</label>
+  <select
+    class="form-select mb-3"
+    id="report__type"
+    name="type"
+    aria-label="report type selector"
+    required
+  />
+    <option value="">Chọn...</option>
+    <option value="0">Tố cáo sai phạm</option>
+    <option value="1">Đăng ký nội dung</option>
+    <option value="2">Đóng góp ý kiến</option>
+    <option value="3">Giải đáp thắc mắc</option>
+    </select></div>
             <div class="form-section file-section">
               <p>Thông tin đính kèm:</p>
               <div class="file-button">
