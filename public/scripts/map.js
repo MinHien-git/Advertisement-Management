@@ -134,6 +134,10 @@ function onMapClick(e) {
 
       let btn = is_offical == 0 ? $(".report") : $(".edit");
       btn.on("click", () => {
+        if (is_offical === 2) {
+          lat_lnt = e.latlng;
+          console.log(lat_lnt);
+        }
         current_feature = data.features[0];
         get_report(data.features[0].properties.address_line2);
       });
@@ -222,7 +226,7 @@ window.onload = function () {
         if (is_offical != 2) {
           get_report(feature.properties.place);
         } else {
-          get_edit(feature.properties.place);
+          get_edit(feature.properties.place, feature);
         }
       });
 
