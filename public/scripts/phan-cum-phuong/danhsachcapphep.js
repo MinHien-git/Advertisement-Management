@@ -99,6 +99,7 @@ function create_authorize_request(position = "", id = null) {
           type="file"
           name="attached_files"
           id="attached_files"
+          multiple
         />
       </div>
     </div>

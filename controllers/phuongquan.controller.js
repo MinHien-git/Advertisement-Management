@@ -3,6 +3,7 @@ const Billboard = require("../models/bill-board.model");
 const Report = require("../models/report.model");
 const License = require("../models/license.model");
 const Request = require("../models/request.model");
+
 const db = require("../database/database");
 
 const { ObjectId } = require('mongodb');
@@ -178,6 +179,7 @@ const _post_request_edit = async (req, res) => {
 };
 
 module.exports = {
+  storage,
   _get_map,
   _get_advertisement,
   _get_license,

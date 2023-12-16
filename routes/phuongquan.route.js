@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express();
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 
 const phuongQuanController = require("../controllers/phuongquan.controller");
 
@@ -10,10 +12,12 @@ router.get("/dashboard", phuongQuanController._get_map);
 router.get("/dashboard/advertise", phuongQuanController._get_advertisement);
 
 //Yêu cầu cấp phép
-router.get("/dashboard/license", phuongQuanController._get_license);
+router.get("/dashboard/license", 
+  phuongQuanController._get_license);
 
 router.post(
   "/dashboard/license/request",
+  upload.array("attached_files"), 
   phuongQuanController._post_license_request
 );
 

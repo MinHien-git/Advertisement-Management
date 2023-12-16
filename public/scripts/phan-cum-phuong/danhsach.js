@@ -202,6 +202,7 @@ function create_edit_request(billboard) {
   <form
 	id="inscreen-form-login"
 	class="form-container active"
+  enctype="multipart/form-data"
 	method="post"
 	action="/dashboard/request"
   >
