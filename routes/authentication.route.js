@@ -127,7 +127,11 @@ router.get("/auth/success", async (request, response) => {
   });
   if (_user) {
     auth_ultis.create_user_session(request, _user, () => {
-      return response.redirect("/");
+      const link = "/";
+      if (_user.type_user == 2) {
+          link = "/management";
+      }
+      return response.redirect(link);
     });
   } else {
     return response.redirect("/?login=failed");

@@ -41,12 +41,13 @@
     />
 
     <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="stylesheet" href="/styles/navbar.css" />
-    <link rel="stylesheet" href="/styles/navbar.css" />
+
+    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/navbar.css" />
     <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
 
     <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
-    <script src="/scripts/phan-cum-soVHTT/billboard_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/lisence_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/page_functions.js"></script>
   </head>
 
   <body>
@@ -89,6 +90,170 @@
                     <button class="btn btn-link ps-4" disabled></button>
                   </li>
                 </ul>
+                <% for (let i=0; i < locals.billboards.length; i++) { %> <%
+                const advertisement=locals.billboards[i]; %> <% const
+                id=advertisement._id; %>
+                <div id="<%='list__item' + id %>" class="card shadow-sm">
+                  <div class="card-header" id="brief__info<%= id %>">
+                    <ul class="list__flex">
+                      <li class="list__col1">
+                        <%= advertisement.properties.type %>
+                      </li>
+                      <li class="list__col2">
+                        <%= advertisement.properties.place %>
+                      </li>
+                      <% if (advertisement.license) { %> <% if
+                      (advertisement.license.state === 0) {%>
+                      <li class="list__col3 fw-semibold text-success">
+                        Đã cấp phép
+                      </li>
+                      <% } else if (advertisement.license.state === 1){ %>
+                      <li class="list__col3 fw-semibold text-warning">
+                        Chưa cấp phép
+                      </li>
+                      <% } else if (advertisement.license.state === 2){ %>
+                      <li class="list__col3 fw-semibold text-danger">
+                        Đã từ chối
+                      </li>
+                      <% } %> <% } %>
+                      <li class="list__col4">
+                        <button
+                          class="btn collapsed"
+                          id="collapse__btn<%= id %>"
+                          type="button"
+                          onclick="toggleCollapseButton('collapse__btn<%= id %>')"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#full__info<%= id %>"
+                          aria-expanded="false"
+                          aria-controls="full__info<%= id %>">
+                          <i class="bi bi-chevron-down"></i>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div
+                    id="full__info<%= id %>"
+                    class="collapse"
+                    aria-labelledby="brief__info<%= id %>">
+                    <div class="card-body">
+                      <ul id="full__info__list">
+                        <li class="mock__image__container">
+                          <div class="mock__image">&nbsp;</div>
+                          <div class="mock__image">&nbsp;</div>
+                        </li>
+                        <li>
+                          <p class="fw-bold">Thông tin bảng quảng cáo</p>
+                          <ul>
+                            <li>
+                              Kích thước:
+                              <span class="fw-bold">
+                                <%= advertisement.properties.size %>
+                              </span>
+                            </li>
+                            <li>
+                              Số lượng:
+                              <span class="fw-bold">
+                                <%= advertisement.properties.amount %>
+                              </span>
+                            </li>
+                            <li>
+                              Hình thức:
+                              <span class="fw-bold">
+                                <%= advertisement.properties.type_advertise %>
+                              </span>
+                            </li>
+                            <li>
+                              Phân loại:
+                              <span class="fw-bold">
+                                <%= advertisement.properties.place_type %>
+                              </span>
+                            </li>
+                          </ul>
+                        </li>
+                        <% if (advertisement.license) { %>
+                        <li>
+                          <p class="fw-bold">Thông tin công ty</p>
+                          <ul>
+                            <li>
+                              Tên công ty:
+                              <span class="fw-bold">
+                                <%= advertisement.license.company_name %>
+                              </span>
+                            </li>
+                            <li>
+                              Email liên hệ:
+                              <span class="fw-bold">
+                                <%= advertisement.license.company_contact %>
+                              </span>
+                            </li>
+                            <li>
+                              Ngày bắt đầu:
+                              <span class="fw-bold">
+                                <%= advertisement.license.start_date %>
+                              </span>
+                            </li>
+                            <li>
+                              Ngày kết thúc:
+                              <span class="fw-bold">
+                                <%= advertisement.license.end_date %>
+                              </span>
+                            </li>
+                          </ul>
+                        </li>
+                        <% } %>
+                        <li>
+                          <ul class="buttons__container">
+                            <% if (advertisement.license.state === 1) { %>
+                            <li>
+													<button class="btn btn-success mb-2 nowrap"  data-bs-toggle="modal"
+														data-bs-target="#accept__confirm__modal"
+                            onclick="passToConfirmModal(this)"
+                            data-billboard-id="<%=id%>">
+														<i class="bi bi-check-circle"></i> Cấp phép
+													</button>
+												</li>
+												<li>
+													<button
+														class="btn btn-outline-warning mb-2 nowrap"
+														data-bs-toggle="modal"
+														data-bs-target="#require__changes__modal"
+                            data-billboard-id="<%=id%>"
+                            onclick="passToConfirmModal(this)">
+														<i class="bi bi-pencil"></i> YC chỉnh
+													</button>
+												</li>
+												<li>
+													<button
+														class="btn btn-danger nowrap"
+														data-bs-toggle="modal"
+														data-bs-target="#decline__confirm__modal"
+                            onclick="passToConfirmModal(this)"
+                            data-billboard-id="<%=id%>">
+														<i class="bi bi-x-lg"></i> Từ chối
+													</button>
+												</li>
+                            <% } else if (advertisement.license.state === 0) { %>
+												<li>
+													<button
+														class="btn btn-outline-warning mb-2 nowrap"
+														data-bs-toggle="modal"
+														data-bs-target="#require__changes__modal">
+														<i class="bi bi-pencil"></i> YC chỉnh
+													</button>
+												</li>
+                            <% } else if (advertisement.license.state === 2) { %>
+                        <li>
+													
+												</li>
+                            <% } %>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <% } %>
               </div>
             </div>
 
@@ -99,7 +264,7 @@
               aria-labelledby="require__changes__label"
               aria-hidden="true"
             >
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h3
@@ -117,70 +282,22 @@
                   </div>
                   <div class="modal-body">
                     <form action="">
-                      <label for="ad__type" class="fw-bold"
-                        >Hình thức quảng cáo</label
-                      >
-                      <select
-                        class="form-select mb-3"
-                        id="ad__type"
-                        aria-label="advertisement type selector"
-                      >
-                        <option selected>Chọn...</option>
-                        <option value="1">Cổ động chính trị</option>
-                        <option value="2">Quảng cáo thương mại</option>
-                        <option value="3">Xã hội hoá</option>
-                      </select>
-
-                      <label for="start__date" class="fw-bold"
-                        >Ngày bắt đầu</label
-                      >
-                      <input id="start__datepicker" placeholder="dd/mm/yyyy" />
-                      <script>
-                        $("#start__datepicker").datepicker({
-                          format: "dd/mm/yyyy",
-                          uiLibrary: "bootstrap5",
-                        });
-                      </script>
-                      <label for="end__date" class="fw-bold"
-                        >Ngày kết thúc</label
-                      >
-                      <input id="end__datepicker" placeholder="dd/mm/yyyy" />
-                      <script>
-                        $("#end__datepicker").datepicker({
-                          format: "dd/mm/yyyy",
-                          uiLibrary: "bootstrap5",
-                        });
-                      </script>
-
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="change__img__checkbox"
-                        onclick="toggleTextarea('change__img__checkbox', 'change__img__input')"
-                      />
-                      <label
-                        for="change__img__checkbox"
-                        class="form-check-label fw-bold"
-                      >
-                        Thay đổi ảnh quảng cáo
-                      </label>
-
                       <div
                         class="form-floating"
-                        id="change__img__input"
-                        style="display: none"
+                        id="change__input"
                       >
                         <textarea
                           class="form-control"
                           placeholder="Nhập nội dung muốn sửa đổi"
-                          id="change__img__textarea"
+                          id="change__textarea"
+                          style="height: 25vh"
                         ></textarea>
-                        <label for="change__img__textarea">Lí do</label>
+                        <label for="change__textarea">Nhập nội dung...</label>
                       </div>
                     </form>
                   </div>
                   <div class="modal-footer">
+                    <input type="hidden" name="id_confirm" id="id__confirm" value="0">
                     <button
                       type="button"
                       class="btn btn-secondary"
@@ -192,7 +309,7 @@
                       type="button"
                       class="btn btn-primary"
                       data-bs-dismiss="modal"
-                      onclick="showToast('send__success__toast')"
+                      onclick="sendLicenseChangeRequest(document.getElementById('id__confirm').value, document.getElementById('change__textarea').value)"
                       id="send__changes__btn"
                     >
                       Gửi yêu cầu
@@ -204,17 +321,17 @@
 
             <div
               class="modal fade"
-              id="deny__confirm__modal"
+              id="accept__confirm__modal"
               tabindex="-1"
-              aria-labelledby="deny__modal__label"
+              aria-labelledby="accept__modal__label"
               aria-hidden="true"
             >
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h3
                       class="modal-title fw-bold fs-5"
-                      id="deny__modal__label"
+                      id="accept__modal__label"
                     >
                       Xác nhận
                     </h3>
@@ -226,9 +343,59 @@
                     ></button>
                   </div>
                   <div class="modal-body">
-                    Bạn có chắc chắn muốn xoá điểm quảng cáo này không?
+                    Bạn có chắc chắn muốn cấp phép cho yêu cầu này không?
                   </div>
                   <div class="modal-footer">
+                    <input type="hidden" name="id_confirm" id="id__confirm" value="0">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Huỷ
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-success"
+                      data-bs-dismiss="modal"
+                      onclick="approveLicense(document.getElementById('id__confirm').value)"
+                      id="accept__confirm__btn"
+                    >
+                      Cấp phép
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="decline__confirm__modal"
+              tabindex="-1"
+              aria-labelledby="decline__modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3
+                      class="modal-title fw-bold fs-5"
+                      id="decline__modal__label"
+                    >
+                      Xác nhận
+                    </h3>
+                    <button
+                      class="btn-close"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Bạn có chắc chắn muốn từ chối yêu cầu cấp phép này không?
+                  </div>
+                  <div class="modal-footer">
+                    <input type="hidden" name="id_confirm" id="id__confirm" value="0">
                     <button
                       type="button"
                       class="btn btn-secondary"
@@ -240,8 +407,8 @@
                       type="button"
                       class="btn btn-danger"
                       data-bs-dismiss="modal"
-                      onclick="showToast('deny__success__toast')"
-                      id="deny__btn"
+                      onclick="declineLicense(document.getElementById('id__confirm').value)"
+                      id="decline__btn"
                     >
                       Từ chối
                     </button>
@@ -296,7 +463,7 @@
               </div>
               <div
                 class="toast align-items-center text-bg-success border-0"
-                id="deny__success__toast"
+                id="decline__success__toast"
                 role="alert"
                 aria-live="assertive"
                 aria-atomic="true"
@@ -446,8 +613,6 @@
 	`;
         return new_card;
       }
-
-      loadBillboards();
     </script>
     <!-- Bootstrap JavaScript Libraries -->
     <script

@@ -1,1 +1,1 @@
-let is_offical = 2;
+const is_offical = 2;

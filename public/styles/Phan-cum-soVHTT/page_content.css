@@ -128,3 +128,22 @@ main {
   width: 45%;
   height: fit-content;
 }
+
+#change__textarea{
+  font-size: 1rem !important;
+}
+
+.modal button{
+  font-size: 0.8rem !important;
+}
+.buttons__container button{
+  font-size: 0.8rem !important;
+}
+
+.modal *{
+  font-size: 0.8rem !important;
+}
+
+#Modal__label{
+  font-size: 1.3rem !important;
+}

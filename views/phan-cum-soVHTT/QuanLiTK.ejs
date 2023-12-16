@@ -30,16 +30,30 @@
     />
 
     <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="stylesheet" href="/styles/navbar.css" />
-    <link rel="stylesheet" href="/styles/navbar.css" />
+
+    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/navbar.css" />
     <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
 
-    <script src="/scripts/phan-cum-soVHTT/billboard_list.js"></script>
     <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/account_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/page_functions.js"></script>
   </head>
 
   <body>
     <script src="/scripts/navbar.js" defer></script>
+    <style>
+      #full__info__list {
+        justify-content: space-between;
+      }
+      .list__flex :not(.list__col4) {
+        flex-grow: 1;
+        flex-basis: 20%;
+      }
+      .list__flex .list__col1,  .list__flex .list__col3{
+        flex-grow: 2;
+        flex-basis: 22%;
+      }
+    </style>
     <div class="wrapper">
       <%- include('../includes/header.ejs')%>
       <main>
@@ -50,7 +64,7 @@
             class="btn btn-success nowrap"
             id="create__account__btn"
             data-bs-toggle="modal"
-            data-bs-target="#Create__account__modal"
+            data-bs-target="#Create__modal"
           >
             +&ensp;Tạo tài khoản
           </button>
@@ -80,8 +94,8 @@
             <div id="info__desc">
               <div class="list__title__container mt-3">
                 <ul class="list__flex fw-bold">
-                  <li class="list__col1">Mã nhân viên</li>
-                  <li class="list__col2">Họ tên</li>
+                  <li class="list__col1">Tên nhân viên</li>
+                  <li class="list__col2">Cấp trực thuộc</li>
                   <li class="list__col3">Khu vực trực thuộc</li>
                   <li class="list__col4">
                     <button class="btn btn-link ps-4" disabled></button>
@@ -89,22 +103,31 @@
                 </ul>
               </div>
             </div>
-            <div class="card shadow-sm" id="list__item1">
-              <div class="card-header" id="brief__info1">
+            <% for (let i = 0; i < locals.users.length; i++) { %>
+              <% const user = locals.users[i]; %>
+              <% const id = user._id; %>
+              <% let level = ""%>
+              <% let location = ""%>
+              <%if(user.ward == "" || user.ward == null){ %>
+                <%if(user.district == "" || user.district == null){level = "Sở"; location = "Sở VHTT TP.HCM"%>
+                <%}else{level = "Quận/Huyện"; location = user.district}%>
+              <%}else{level = "Phường/Xã"; location = user.ward + ", " +user.district}%>
+            <div class="card shadow-sm" id="list__item<%=id%>">
+              <div class="card-header" id="brief__info<%=id%>">
                 <ul class="list__flex">
-                  <li class="list__col1">******</li>
-                  <li class="list__col2">Nguyễn Văn A</li>
-                  <li class="list__col3">Quận X, Phường Y</li>
+                  <li class="list__col1"><%=user.name%></li>
+                  <li class="list__col2"><%=level%></li>
+                  <li class="list__col3"><%=location%></li>
                   <li class="list__col4">
                     <button
                       class="btn collapsed"
-                      id="collapse__btn1"
+                      id="collapse__btn<%=id%>"
                       type="button"
-                      onclick="toggleCollapseButton('collapse__btn1')"
+                      onclick="toggleCollapseButton('collapse__btn<%=id%>')"
                       data-bs-toggle="collapse"
-                      data-bs-target="#full__info1"
+                      data-bs-target="#full__info<%=id%>"
                       aria-expanded="false"
-                      aria-controls="full__info1"
+                      aria-controls="full__info<%=id%>"
                     >
                       <i class="bi bi-chevron-down"></i>
                     </button>
@@ -112,16 +135,16 @@
                 </ul>
               </div>
               <div
-                id="full__info1"
+                id="full__info<%=id%>"
                 class="collapse"
-                aria-labelledby="brief__info1"
-                data-bs-parent="#billboards__list"
+                aria-labelledby="brief__info<%=id%>"
               >
                 <div class="card-body">
                   <ul id="full__info__list">
                     <li>
-                      <p><strong>Email:</strong> ***@***.***</p>
-                      <p><strong>SĐT:</strong> ********</p>
+                      <p><strong>Ngày sinh:</strong> <%=user.birth%></p>
+                      <p><strong>Email:</strong> <%=user.email%></p>
+                      <p><strong>SĐT:</strong> <%=user.phone%></p>
                     </li>
                     <li>
                       <ul class="buttons__container">
@@ -130,8 +153,18 @@
                             class="btn btn-primary me-3"
                             data-bs-toggle="modal"
                             data-bs-target="#Modify__modal"
+                            data-account-id="<%=id%>"
+                            data-account-name="<%=user.name%>"
+                            data-account-email="<%=user.email%>"
+                            data-account-phone="<%=user.phone%>"
+                            data-account-birth="<%=user.birth%>"
+                            data-account-level="<%=level%>"
+                            data-account-district="<%=user.district%>"
+                            data-account-ward="<%=user.ward%>"
+                            onclick="passToEditModal(this)"
+                            
                           >
-                            <i class="bi bi-pencil"></i>Chỉnh sửa
+                            <i class="bi bi-pencil"></i> Chỉnh sửa
                           </button>
                         </li>
                         <li>
@@ -139,8 +172,10 @@
                             class="btn btn-danger"
                             data-bs-toggle="modal"
                             data-bs-target="#delete__confirm__modal"
+                            onclick="passToDeleteModal(this)"
+                            data-account-id="<%=id%>"
                           >
-                            <i class="bi bi-trash"></i>Xoá TK
+                            <i class="bi bi-trash"></i> Xoá tài khoản
                           </button>
                         </li>
                       </ul>
@@ -149,128 +184,7 @@
                 </div>
               </div>
             </div>
-
-            <div class="card shadow-sm" id="list__item2">
-              <div class="card-header" id="brief__info2">
-                <ul class="list__flex">
-                  <li class="list__col1">******</li>
-                  <li class="list__col2">Nguyễn Văn B</li>
-                  <li class="list__col3">Quận X, Phường Y</li>
-                  <li class="list__col4">
-                    <button
-                      class="btn collapsed"
-                      id="collapse__btn2"
-                      type="button"
-                      onclick="toggleCollapseButton('collapse__btn2')"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#full__info2"
-                      aria-expanded="false"
-                      aria-controls="full__info2"
-                    >
-                      <i class="bi bi-chevron-down"></i>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div
-                id="full__info2"
-                class="collapse"
-                aria-labelledby="brief__info2"
-                data-bs-parent="#billboards__list"
-              >
-                <div class="card-body">
-                  <ul id="full__info__list">
-                    <li>
-                      <p><strong>Email:</strong> ***@***.***</p>
-                      <p><strong>SĐT:</strong> ********</p>
-                    </li>
-                    <li>
-                      <ul class="buttons__container">
-                        <li>
-                          <button
-                            class="btn btn-primary me-3"
-                            data-bs-toggle="modal"
-                            data-bs-target="#Modify__modal"
-                          >
-                            <i class="bi bi-pencil"></i>Chỉnh sửa
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            class="btn btn-danger"
-                            data-bs-toggle="modal"
-                            data-bs-target="#delete__confirm__modal"
-                          >
-                            <i class="bi bi-trash"></i>Xoá TK
-                          </button>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="card shadow-sm" id="list__item3">
-              <div class="card-header" id="brief__info3">
-                <ul class="list__flex">
-                  <li class="list__col1">******</li>
-                  <li class="list__col2">Nguyễn Văn C</li>
-                  <li class="list__col3">Quận X, Phường Y</li>
-                  <li class="list__col4">
-                    <button
-                      class="btn collapsed"
-                      id="collapse__btn3"
-                      type="button"
-                      onclick="toggleCollapseButton('collapse__btn3')"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#full__info3"
-                      aria-expanded="false"
-                      aria-controls="full__info3"
-                    >
-                      <i class="bi bi-chevron-down"></i>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div
-                id="full__info3"
-                class="collapse"
-                aria-labelledby="brief__info3"
-                data-bs-parent="#billboards__list"
-              >
-                <div class="card-body">
-                  <ul id="full__info__list">
-                    <li>
-                      <p><strong>Email:</strong> ***@***.***</p>
-                      <p><strong>SĐT:</strong> ********</p>
-                    </li>
-                    <li>
-                      <ul class="buttons__container">
-                        <li>
-                          <button
-                            class="btn btn-primary me-3"
-                            data-bs-toggle="modal"
-                            data-bs-target="#Modify__modal"
-                          >
-                            <i class="bi bi-pencil"></i>Chỉnh sửa
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            class="btn btn-danger"
-                            data-bs-toggle="modal"
-                            data-bs-target="#delete__confirm__modal"
-                          >
-                            <i class="bi bi-trash"></i>Xoá TK
-                          </button>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <%}%>
 
             <div
               class="modal fade"
@@ -280,220 +194,258 @@
               aria-hidden="true"
             >
               <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h3 class="modal-title fw-bold fs-5" id="Modal__label">
-                      Chỉnh sửa thông tin
-                    </h3>
-                    <button
-                      class="btn-close"
-                      type="button"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="">
-                      <label for="Employee-Name" class="fw-bold">Họ tên:</label>
-                      <input
-                        type="text"
-                        name="e-Name"
-                        class="form-control mb-3"
-                        id="Employee-name"
-                      />
+                <form action="" id="edit__account__form" onsubmit="editAccount(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Chỉnh sửa thông tin
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                        <label for="name__edit" class="fw-bold">Tên nhân viên</label>
+                        <input
+                          type="text"
+                          name="name_edit"
+                          class="form-control mb-3"
+                          id="name__edit"
+                          required
+                        />
 
-                      <label for="Employee-ID" class="fw-bold"
-                        >Mã nhân viên</label
+                        <label for="email__edit" class="fw-bold">Email</label>
+                        <input
+                          type="email"
+                          name="email_edit"
+                          class="form-control mb-3"
+                          id="email__edit"
+                          required
+                        />
+
+                        <label for="phone__edit" class="fw-bold"
+                          >Số điện thoại</label
+                        >
+                        <input
+                          type="text"
+                          name="phone_edit"
+                          class="form-control mb-3"
+                          id="phone__edit"
+                          required
+                        />
+
+                        <label for="birth__edit" class="fw-bold"
+                          >Ngày sinh</label
+                        >
+                        <input
+                          type="text"
+                          name="birth_edit"
+                          class="form-control mb-3"
+                          id="birth__edit"
+                        />
+
+
+                        <label for="level__selector__edit" class="fw-bold"
+                          >Cấp trực thuộc</label
+                        >
+                        <select
+                              class="form-select mb-3"
+                              id="level__selector__edit"
+                              name="type_user_edit"
+                              aria-label="level selector"
+                              onchange="changeLevelSelectorsEdit(this)"
+                              required
+                            >
+                              <option value="" selected disabled>Chọn...</option>
+                              <option value="1">Sở</option>
+                              <option value="2">Quận/Huyện</option>
+                              <option value="3">Phường/Xã</option>
+                            </select>
+
+
+                        <label for="district__selector__edit" class="fw-bold" id="district__selector__edit__label"
+                          hidden>Quận/Huyện trực thuộc</label
+                        >
+                        <select
+                              class="form-select mb-3"
+                              id="district__selector__edit"
+                              name="district_edit"
+                              aria-label="district selector"
+                              onchange="changeWardOptionsEdit(this)"
+                              hidden disabled required
+                            >
+                              <option value="" selected disabled>Chọn...</option>
+                              <%for (let i = 0; i < locals.areas.length; i++){%>
+                                <%let area = locals.areas[i]%>
+                                <option value="<%=i%>"><%=area.district%></option>
+                              <%}%>
+                            </select>
+
+
+                        <label for="ward__selector__edit" class="fw-bold" id="ward__selector__edit__label"
+                          hidden>Phường/Xã trực thuộc</label
+                        >
+                        <select
+                              class="form-select mb-3"
+                              id="ward__selector__edit"
+                              name="ward_edit"
+                              aria-label="ward selector"
+                              hidden disabled required
+                            >
+                  
+                            </select>
+                        
+                      
+                    </div>
+                    <div class="modal-footer">
+                      <input type="hidden" name="id_edit" id="id__edit" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
                       >
-                      <input
-                        type="text"
-                        name="e-Id"
-                        class="form-control mb-3"
-                        id="Employee-ID"
-                      />
-
-                      <label for="Employee-Email" class="fw-bold">Email</label>
-                      <input
-                        type="email"
-                        name="e-Email"
-                        class="form-control mb-3"
-                        id="Employee-Email"
-                      />
-
-                      <label for="Employee-Number" class="fw-bold"
-                        >Số điện thoại</label
-                      >
-                      <input
-                        type="text"
-                        name="e-Number"
-                        class="form-control mb-3"
-                        id="Employee-Number"
-                      />
-
-                      <label for="Area" class="fw-bold"
-                        >Khu vực trực thuộc</label
-                      >
-                      <ul class="sub__list__flex">
-                        <li class="list__col1">
-                          <select
-                            class="form-select mb-3"
-                            id="district__number"
-                            aria-label="district number selector"
-                          >
-                            <option selected>Quận...</option>
-                            <option value="1">Quận 1</option>
-                            <option value="2">Quận 2</option>
-                            <option value="3">Quận 3</option>
-                          </select>
-                        </li>
-                        <li class="list__col2">
-                          <select
-                            class="form-select mb-3"
-                            id="ward__number"
-                            aria-label="ward number selector"
-                          >
-                            <option selected>Phường...</option>
-                            <option value="1">Phường 1</option>
-                            <option value="2">Phường 2</option>
-                            <option value="3">Phường 3</option>
-                          </select>
-                        </li>
-                      </ul>
-                    </form>
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-primary" id="save__changes__btn">Lưu thay đổi</button>
+                    </div>
                   </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Huỷ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-primary"
-                      data-bs-dismiss="modal"
-                      onclick="showToast('save__success__toast')"
-                      id="save__changes__btn"
-                    >
-                      Lưu thay đổi
-                    </button>
-                  </div>
-                </div>
+                </form>
               </div>
             </div>
 
             <div
               class="modal fade"
-              id="Create__account__modal"
+              id="Create__modal"
               tabindex="-1"
-              aria-labelledby="Create__account__label"
+              aria-labelledby="Modal__label"
               aria-hidden="true"
             >
               <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h3
-                      class="modal-title fw-bold fs-5"
-                      id="Create__account__label"
-                    >
-                      Tạo tài khoản mới
-                    </h3>
-                    <button
-                      class="btn-close"
-                      type="button"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="">
-                      <label for="Employee-Name" class="fw-bold">Họ tên:</label>
-                      <input
-                        type="text"
-                        name="e-Name"
-                        class="form-control mb-3"
-                        id="Employee-name"
-                      />
+                <form action="" id="create__account__form" onsubmit="createAccount(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Tạo tài khoản mới
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                        <label for="name__create" class="fw-bold" >Tên nhân viên</label>
+                        <input
+                          type="text"
+                          name="name_create"
+                          class="form-control mb-3"
+                          id="name__create"
+                          required
+                        />
 
-                      <label for="Employee-ID" class="fw-bold"
-                        >Mã nhân viên</label
+                        <label for="email__create" class="fw-bold">Email</label>
+                        <input
+                          type="email"
+                          name="email_create"
+                          class="form-control mb-3"
+                          id="email__create"
+                          required
+                        />
+
+                        <label for="phone__create" class="fw-bold"
+                          >Số điện thoại</label
+                        >
+                        <input
+                          type="text"
+                          name="phone_create"
+                          class="form-control mb-3"
+                          id="phone__create"
+                          required
+                        />
+
+                        <label for="birth__create" class="fw-bold"
+                          >Ngày sinh</label
+                        >
+                        <input
+                          type="text"
+                          name="birth_create"
+                          class="form-control mb-3"
+                          id="birth__create"
+                        />
+
+
+                        <label for="level__selector__create" class="fw-bold" id="level__selector__create__label"
+                          >Cấp trực thuộc</label
+                        >
+                        <select
+                              class="form-select mb-3"
+                              id="level__selector__create"
+                              name="type_user_create"
+                              aria-label="level selector"
+                              onchange="changeLevelSelectorsCreate(this)"
+                              required
+                              
+                            >
+                              <option value="" selected disabled>Chọn...</option>
+                              <option value="1">Sở</option>
+                              <option value="2">Quận/Huyện</option>
+                              <option value="3">Phường/Xã</option>
+                            </select>
+
+
+                        <label for="district__selector__create" class="fw-bold" id="district__selector__create__label"
+                          hidden>Quận/Huyện trực thuộc</label
+                        >
+                        <select
+                              class="form-select mb-3"
+                              id="district__selector__create"
+                              name="district_create"
+                              aria-label="district selector"
+                              onchange="changeWardOptionsCreate(this)"
+                              hidden disabled required
+                            >
+                              <option value="" selected disabled>Chọn...</option>
+                              <%for (let i = 0; i < locals.areas.length; i++){%>
+                                <%let area = locals.areas[i]%>
+                                <option value="<%=i%>"><%=area.district%></option>
+                              <%}%>
+                            </select>
+
+
+                        <label for="ward__selector__create" class="fw-bold" id="ward__selector__create__label"
+                          hidden>Phường/Xã trực thuộc</label
+                        >
+                        <select
+                              class="form-select mb-3"
+                              id="ward__selector__create"
+                              name="ward_create"
+                              aria-label="ward selector"
+                              hidden disabled required
+                            >
+                  
+                            </select>
+                        <p class="text-primary text-center">Mật khẩu mặc định là <strong>"acc123"</strong></p>
+                      
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
                       >
-                      <input
-                        type="text"
-                        name="e-Id"
-                        class="form-control mb-3"
-                        id="Employee-ID"
-                      />
-
-                      <label for="Employee-Email" class="fw-bold">Email</label>
-                      <input
-                        type="email"
-                        name="e-Email"
-                        class="form-control mb-3"
-                        id="Employee-Email"
-                      />
-
-                      <label for="Employee-Number" class="fw-bold"
-                        >Số điện thoại</label
-                      >
-                      <input
-                        type="text"
-                        name="e-Number"
-                        class="form-control mb-3"
-                        id="Employee-Number"
-                      />
-
-                      <label for="Area" class="fw-bold"
-                        >Khu vực trực thuộc</label
-                      >
-                      <ul class="sub__list__flex">
-                        <li class="list__col1">
-                          <select
-                            class="form-select mb-3"
-                            id="district__number"
-                            aria-label="district number selector"
-                          >
-                            <option selected>Quận...</option>
-                            <option value="1">Quận 1</option>
-                            <option value="2">Quận 2</option>
-                            <option value="3">Quận 3</option>
-                          </select>
-                        </li>
-                        <li class="list__col2">
-                          <select
-                            class="form-select mb-3"
-                            id="ward__number"
-                            aria-label="ward number selector"
-                          >
-                            <option selected>Phường...</option>
-                            <option value="1">Phường 1</option>
-                            <option value="2">Phường 2</option>
-                            <option value="3">Phường 3</option>
-                          </select>
-                        </li>
-                      </ul>
-                    </form>
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-success" id="save__changes__btn">Tạo tài khoản</button>
+                    </div>
+                    </div>
                   </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Huỷ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-success"
-                      data-bs-dismiss="modal"
-                      onclick="showToast('create__success__toast')"
-                      id="save__changes__btn"
-                    >
-                      Tạo tài khoản
-                    </button>
-                  </div>
-                </div>
+                </form>
               </div>
             </div>
 
@@ -524,22 +476,17 @@
                     Bạn có chắc chắn muốn xoá tài khoản này không?
                   </div>
                   <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Huỷ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-danger"
-                      data-bs-dismiss="modal"
-                      onclick="showToast('delete__success__toast')"
-                      id="delete__btn"
-                    >
-                      Xoá
-                    </button>
+                    <form form action="" id="delete__account__form" onsubmit="deleteAccount(event)">
+                      <input type="hidden" name="id_delete" id="id__delete" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-danger" id="delete__btn">Xoá</button>
+                      </form>
                   </div>
                 </div>
               </div>
@@ -615,7 +562,39 @@
       </footer>
     </div>
     <script>
-      document.addEventListener("DOMContentLoaded");
+      function changeWardOptionsEdit(select){
+        const val = select.value;
+        let areas = '<%-JSON.stringify(locals.areas)%>';
+        areas = JSON.parse(areas)
+        let wards = areas[val].wards;
+        wards.sort((a, b) => a.ward.localeCompare(b.ward))
+        let opt_list = document.getElementById("ward__selector__edit");
+        opt_list.innerHTML = `<option value="" selected disabled>Chọn...</option>`
+        for (let i = 0; i < wards.length; i++) {
+            const ward = wards[i];
+            
+            let opt = document.createElement("option");
+            opt.value = i;
+            opt.appendChild(document.createTextNode(ward.ward));
+            opt_list.appendChild(opt);
+        }}
+
+      function changeWardOptionsCreate(select){
+        const val = select.value;
+        let areas = '<%-JSON.stringify(locals.areas)%>';
+        areas = JSON.parse(areas)
+        let wards = areas[val].wards;
+        wards.sort((a, b) => a.ward.localeCompare(b.ward))
+        let opt_list = document.getElementById("ward__selector__create");
+        opt_list.innerHTML = `<option value="" selected disabled>Chọn...</option>`
+        for (let i = 0; i < wards.length; i++) {
+            const ward = wards[i];
+            
+            let opt = document.createElement("option");
+            opt.value = i;
+            opt.appendChild(document.createTextNode(ward.ward));
+            opt_list.appendChild(opt);
+        }}
     </script>
     <!-- Bootstrap JavaScript Libraries -->
     <script

@@ -282,23 +282,27 @@ function create_edit_request(billboard = null) {
     }>
      Cổ động chính trị
     </option>
-    <option value="2"
-	<option value="1" ${
+    <option value="2" ${
+      billboard?.properties.type_advertise === "Quảng cáo thương mại"
+        ? "selected"
+        : ""
+    }>Quảng cáo thương mại</option>
+	<option value="3" ${
     billboard?.properties.type_advertise === "An toàn giao thông"
       ? "selected"
       : ""
   }>An toàn giao thông</option>
-    <option value="3"
+    <option value="4"
 	${
     billboard?.properties.type_advertise === "Mỹ phẩm" ? "selected" : ""
   }>Mỹ phẩm</option>
-    <option value="4" ${
+    <option value="5" ${
       billboard?.properties.type_advertise === "Đồ ăn" ? "selected" : ""
     }>Đồ ăn</option>
-    <option value="5" ${
+    <option value="6" ${
       billboard?.properties.type_advertise === "Điện ảnh" ? "selected" : ""
     }>Điện ảnh</option>
-    <option value="6" ${
+    <option value="7" ${
       billboard?.properties.type_advertise === "Dịch vụ" ? "selected" : ""
     }>Dịch vụ</option>
   </select>
@@ -307,7 +311,7 @@ function create_edit_request(billboard = null) {
   <div class="form-section">
   <label for="form">Loại quảng cáo:</label>
   <select class="form-select mb-3"
-  id="billboard__type__edit"
+  id="billboard__type"
   name="billboard_type_selector_edit"
   aria-label="billboard type selector"
   required>
@@ -371,9 +375,18 @@ function create_edit_request(billboard = null) {
   </div>
   <div class="form-section">
 	<label for="state">Trạng thái:</label>
-	<input
-	  type="text" name="state" id="state" value="" placeholder="Chọn..."
-	/>
+	<select
+	class="form-select mb-3"
+	id="billboard__status" name ="billboard__status"
+	aria-label="Billboard status selector">
+	<option selected>Chọn...</option>
+	<option value="1" class="link-primary">
+	  Đã quy hoạch
+	</option>
+	<option value="2" class="link-danger">
+	  Chưa quy hoạch
+	</option>
+  </select>
 	</div>
 	<div class="form-section">
 	<label for="name">Thông tin công ty:</label>

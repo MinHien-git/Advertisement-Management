@@ -53,14 +53,6 @@
           </form>
         </li>
         <% }else if(locals.type_user === 2){%>
-        <li id="profile">
-          <i
-            class="bi bi-person-circle vertical__center"
-            id="nav__item__icon"
-            style="font-size: 1.5rem"
-          ></i>
-          <span>user name</span>
-        </li>
         <li id="manage__billboards" class="current" onclick="navigate(this.id)">
           <i class="bi bi-clipboard2-check" id="nav__item__icon" style="font-size: 1.5rem"></i>
           <span>Quản lí điểm QC</span>
@@ -80,6 +72,14 @@
             style="font-size: 1.5rem"
           ></i>
           <span>Quản lí tài khoản CB</span>
+        </li>
+        <li id="profile">
+          <i
+            class="bi bi-person-circle vertical__center"
+            id="nav__item__icon"
+            style="font-size: 1.5rem"
+          ></i>
+          <span>user name</span>
         </li>
         <li id="logout__li">
           <form id="logout" method="post" action="/logout">

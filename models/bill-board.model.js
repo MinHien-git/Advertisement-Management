@@ -17,7 +17,7 @@ module.exports = class Billboard {
     }
 
     async _get_billboard() {
-        await getDb.collection("billboards").findOne({
+        await getDb.collection("billboard").findOne({
             $or: [
                 { position: this.position },
                 { "geometry.coordinates": this.geometry },
@@ -26,11 +26,22 @@ module.exports = class Billboard {
     }
 
     async _update_billboard(id) {
-        await getDb()
+        console.log(id);
+        let billboard = await getDb()
             .collection("billboard")
             .updateOne(
                 { _id: new ObjectId(id) },
                 { $set: { properties: { ...this.properties } } }
+            );
+        console.log(billboard);
+        return billboard;
+    }
+    async _update_license_state(id) {
+        await getDb()
+            .collection("billboard")
+            .updateOne(
+                { _id: new ObjectId(id) },
+                { $set: { license: { ...this.license } } }
             );
     }
 };
