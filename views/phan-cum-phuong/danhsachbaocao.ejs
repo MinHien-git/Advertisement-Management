@@ -32,8 +32,8 @@
     <link rel="stylesheet" href="/styles/phan-cum-phuong/report.css" />
     <link rel="stylesheet" href="/styles/editor.css" />
     <link rel="stylesheet" href="/styles/phan-cum-phuong/danhsach.css" />
-    <link rel="stylesheet" href="/styles/phan-cum-phuong/quanlyquangcao.css" />
     <link rel="stylesheet" href="/styles/phan-cum-phuong/page_content.css" />
+    <link rel="stylesheet" href="/styles/phan-cum-phuong/danhsachbaocao.css">
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -68,13 +68,32 @@
               id="search__btn">
               Tìm kiếm
             </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-arrow-down-up"></i>
-              Sắp xếp
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-funnel"></i> &nbsp;Lọc
-            </button>
+            <div class="dropdown">
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-arrow-down-up"></i>
+                Sắp xếp
+              </button>
+              <div class="dropdown-content">
+                <label><input type="radio" name="sort" value="0">A-Z</label>
+                <label><input type="radio" name="sort" value="1">Z-A</label>
+              </div>
+            </div>
+            <div class="dropdown">
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-funnel"></i> 
+                &nbsp;Lọc</button>
+              <div class="dropdown-content">
+                <p>Tình trạng báo cáo</p>
+                <label><input type="radio" name="report" value="1"> Đã duyệt</label>
+                <label><input type="radio" name="report" value="0"> Chưa duyệt</label>
+                <hr>
+                <p>Loại báo cáo</p>
+                <label><input type="checkbox" name="report_type1" value="0"> Tố giác sai phạm</label>
+                <label><input type="checkbox" name="report_type2" value="1"> Đăng ký nội dung</label>
+                <label><input type="checkbox" name="report_type3" value="2"> Đóng góp ý kiến</label>
+                <label><input type="checkbox" name="report_type4" value="3"> Giải đáp thắc mắc</label>
+              </div>
+            </div>
           </form>
 
           <div id="main__list">
@@ -98,15 +117,15 @@
                   <li class="list__col1" style="color: #699bf7">
                     Đăng ký nội dung
                   </li>
-                  <% } %> <% if (report.type === 2) { %>
+                  <% } else if (report.type === 2) { %>
                   <li class="list__col1" style="color: #00a41a">
                     Đóng góp ý kiến
                   </li>
-                  <% } %> <% if (report.type === 3) { %>
+                  <% } else if (report.type === 3) { %>
                   <li class="list__col1" style="color: #ffc701">
                     Giải đáp thắc mắc
                   </li>
-                  <% } else{ %>
+                  <% } else { %>
                   <li class="list__col1" style="color: #ff7b7b">
                     Tố giác sai phạm
                   </li>

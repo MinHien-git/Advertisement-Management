@@ -31,6 +31,6 @@ module.exports = class License {
   }
 
   static async cancel_request(id) {
-    await db.getDb().collection("billboard").updateOne( { _id: new ObjectId(id) }, { $unset: 'license' } )
+    await db.getDb().collection("billboard").updateOne( { _id: new ObjectId(id) }, { $unset: {license: ""} } )
   }
 }

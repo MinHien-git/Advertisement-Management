@@ -11,7 +11,7 @@ main {
 }
 
 /* ||SEARCH FORM AND BUTTONS */
-.search__form button {
+.search__form div {
   margin-right: 0.5%;
 }
 
@@ -65,13 +65,13 @@ main {
   width: 10rem;
 }
 .list__flex .list__col2 {
-  width: calc(100% - 24rem);
+  width: calc(100% - 20rem);
 }
 .list__flex .list__col3 {
-  width: 10rem;
+  width: 7rem;
 }
 .list__flex .list__col4 {
-  width: 4rem;
+  width: 3rem;
 }
 /*\\LIST CARDS*/
 .card {
@@ -149,6 +149,7 @@ main {
 #main__list {
   margin-top: 2vh;
   max-height: 70vh;
+  padding-right: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -160,10 +161,8 @@ main {
 .card-body span {
   font-size: 0.825rem !important;
 }
+
 .dropbtn {
-  background-color: #4caf50;
-  color: white;
-  padding: 16px;
   font-size: 16px;
   border: none;
   cursor: pointer;
@@ -179,31 +178,37 @@ main {
 .dropdown-content {
   display: none;
   position: absolute;
+  right: 0px;
   background-color: #f9f9f9;
-  min-width: 160px;
+  min-width: 12rem;
+  width: auto;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border: 2px solid black;
   z-index: 1;
 }
 
 /* Links inside the dropdown */
-.dropdown-content a {
+.dropdown-content > label {
   color: black;
   padding: 12px 16px;
   text-decoration: none;
-  display: block;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #f1f1f1;
+.dropdown-content > hr {
+  color: black;
+  width: 90%;
+  margin: 1rem 5% 0rem;
+  text-decoration: none;
+}
+
+.dropdown-content > p {
+  color: black;
+  margin: 1rem;
+  text-decoration: none;
 }
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
-  display: block;
-}
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {
-  background-color: #3e8e41;
+  display: flex;
+  flex-direction: column;
 }

@@ -1,3 +1,15 @@
+function cancel_request(id) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      location.reload();
+    }
+  };
+  xhr.open("POST", "/dashboard/request/cancel", true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify({ id: id }));
+}
+
 function assignButton(item_id) {
   const status_num = item_id % 4;
   let button_container = new String("	");
@@ -137,6 +149,7 @@ document.getElementById("map__btn").addEventListener("onclick", () => {
   window.location.href = "/Phan-cum-phuong-quan/trangchu.html";
 });
 
+/* 
 $.getJSON("../data/billboard.json", function (data) {
   advertisements = data;
 })
@@ -167,12 +180,7 @@ $.getJSON("../data/billboard.json", function (data) {
       table.appendChild(createCard(billboard));
     });
   })
-  .fail(function () {
-    console.log("error");
-  })
-  .always(function () {
-    console.log("complete");
-  });
+*/
 
 function create_edit_request(billboard) {
   if (edit_node) {

@@ -3,16 +3,14 @@
     border-radius: 5px;
 }
 
-#content>#table>ul > li> ul> li:nth-child(1){
+.list__flex .list__col1 {
     width: 8rem;
 }
 
-#content>#table>ul> li> ul> li:nth-child(2){
-    width: calc(100% - 14rem);
-    text-overflow: clip;
+.list__flex .list__col2 {
+    width: calc(100% - 11rem);
 }
 
-#content>#table>ul> li>ul>label:nth-child(3){
-    padding: auto;
-    margin: 0 auto;
+.list__flex .list__col3 {
+    width: 3rem;
 }

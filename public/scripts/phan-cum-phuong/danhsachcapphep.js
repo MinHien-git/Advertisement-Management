@@ -1,44 +1,12 @@
 const table = document.querySelector("#main__list");
-let advertisements = [];
-$.getJSON("../data/billboard.json", function (data) {
-  advertisements = data;
-})
-  .done(function () {
-    console.log(advertisements);
-    console.log("second success");
-
-    start_day = new Date(2023, 10, 23);
-    end_day = new Date(2025, 10, 23);
-
-    advertisements.forEach((ad) => {
-      let billboard = new Billboard(ad.geometry, ad.properties, false, {
-        name: "ABC Company",
-        contact: "ABCCompany@email.com",
-        start_day:
-          start_day.getUTCDate() +
-          "/" +
-          start_day.getUTCMonth() +
-          "/" +
-          start_day.getUTCFullYear(),
-        end_day:
-          end_day.getUTCDate() +
-          "/" +
-          end_day.getUTCMonth() +
-          "/" +
-          end_day.getUTCFullYear(),
-      });
-      table.appendChild(createCard(billboard));
-    });
-  })
-  .fail(function () {
-    console.log("error");
-  })
-  .always(function () {
-    console.log("complete");
-  });
 
 function cancel_license(id) {
   var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      location.reload();
+    }
+  };
   xhr.open("POST", "/dashboard/license/cancel", true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(JSON.stringify({ id: id }));

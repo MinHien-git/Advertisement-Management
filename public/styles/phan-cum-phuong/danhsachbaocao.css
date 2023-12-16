@@ -1,17 +1,17 @@
-#content>#table>ul > li> ul> li:nth-child(1){
+.list__flex .list__col1 {
     width: 10rem;
 }
 
-#content>#table>ul> li> ul> li:nth-child(2){
+.list__flex .list__col2 {
     width: calc(100% - 22rem);
     text-overflow: clip;
 }
 
-#content>#table>ul> li>ul>li:nth-child(3){
+.list__flex .list__col3 {
     width: 6rem;
 }
 
-#content>#table>ul> li>ul>label:nth-child(4){
+.list__flex .list__col4 {
     margin: 0 auto;
     width: 6rem;
 }

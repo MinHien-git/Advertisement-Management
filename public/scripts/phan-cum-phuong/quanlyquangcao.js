@@ -74,7 +74,7 @@ function assignButton(item_id, advertisement) {
 }
 
 const table = document.querySelector("#main__list");
-let advertisements = [];
+
 // $.getJSON("../data/billboard.json", function (data) {
 //   advertisements = data;
 // })
