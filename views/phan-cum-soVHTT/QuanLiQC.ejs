@@ -36,6 +36,7 @@
 
     <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
     <script src="/scripts/phan-cum-soVHTT/billboard_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/page_functions.js"></script>
   </head>
 
   <body>
@@ -95,7 +96,7 @@
               <% const advertisement = locals.billboards[i]; %>
               <% const id = advertisement._id; %>
             <div id=<%='"list__item' + id + '"'%>
-              " class="card shadow-sm">
+              class="card shadow-sm">
               <div class="card-header" id="brief__info<%= id %>">
                 <ul class="list__flex">
                   <li class="list__col1">
@@ -243,7 +244,7 @@
               aria-labelledby="Modal__label"
               aria-hidden="true"
             >
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-dialog-centered">
                 <form action="" class="needs-validation" id="edit__billboard__form" onsubmit="editBillboard(event)">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -269,7 +270,7 @@
                             aria-label="Billboard type selector"
                             required
                           />
-                            <option value="">Chọn...</option>
+                            <option value="" selected disabled>Chọn...</option>
                             <option value="1">Trụ/Cụm pano</option>
                             <option value="2">Trụ bảng hiflex</option>
                             <option value="3">Trụ màn hình điện tử LED</option>
@@ -304,7 +305,7 @@
                             aria-label="advertisement type selector"
                             required
                           />
-                            <option value="">Chọn...</option>
+                            <option value="" selected disabled>Chọn...</option>
                             <option value="1">Cổ động chính trị</option>
                             <option value="2">Quảng cáo thương mại</option>
                             <option value="3">Xã hội hoá</option>
@@ -318,7 +319,7 @@
                             aria-label="Land type selector"
                             required
                           />
-                            <option value="">Chọn...</option>
+                            <option value="" selected disabled>Chọn...</option>
                             <option value="1">
                               Đất công/Công viên/Hành lang an toàn giao thông
                             </option>
@@ -380,7 +381,7 @@
                             aria-label="Billboard status selector"
                             required
                           />
-                            <option value="">Chọn...</option>
+                            <option value="" selected disabled>Chọn...</option>
                             <option value="1" class="link-primary">
                               Đã quy hoạch
                             </option>
@@ -413,7 +414,7 @@
               aria-labelledby="delete__modal__label"
               aria-hidden="true"
             >
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h3

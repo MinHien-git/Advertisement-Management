@@ -24,109 +24,112 @@ var geojsonMarkerOptions = {
 };
 
 function setInfoBoard() {
-  if (current_feature) {
-    infoboards.innerHTML = "";
-    infoboards.innerHTML = `<div class="info_container">
+    if (current_feature) {
+        infoboards.innerHTML = "";
+        infoboards.innerHTML = `<div class="info_container">
         <div class="info-close"><img src = "/images/close.png"></div>
         <div class="info_container-image1"><img class="ad-image" src = "${
-          current_feature.properties.image
+            current_feature.properties.image
         }" alt = "image-1"></div>
         <div class="info_container-image2"><img class="ad-image" src = "${
-          current_feature.properties.image
+            current_feature.properties.image
         }" alt = "image-2"></div>
         <div class="info-container-info">
           <h2>${current_feature.properties.type}</h2>
           <p>${current_feature.properties.place}</p>
           <p>Kích thước: <span class="bold">${
-            current_feature.properties.size
+              current_feature.properties.size
           }</span></p>
           <p>Số lượng: <span class="bold">${
-            current_feature.properties.amount
+              current_feature.properties.amount
           }</span></p>
           <p>Hình thức: <span class="bold">${
-            current_feature.properties.type_advertise
+              current_feature.properties.type_advertise
           }</span></p>
           <p>Phân Loại: <span class="bold">${
-            current_feature.properties.place_type
+              current_feature.properties.place_type
           }</span></p>
         </div>
         <div class="info-container-info">
-        <h3>Thông tin công ty</h3>
-        <p>Thông tin công ty: <span class="bold">ABC Company</span></p>
-        <p>Liên lạc: <span class="bold">ABCCompany@email.com</span></p>
-        <p>Ngày bắt đầu: <span class="bold">dd/mm/yyyy</span></p>
-        <p>Ngày kết thúc đầu: <span class="bold">dd/mm/yyyy</span></p>
+          <h3>Thông tin công ty</h3>
+          <p>Thông tin công ty: <span class="bold">ABC Company</span></p>
+          <p>Liên lạc: <span class="bold">ABCCompany@email.com</span></p>
+          <p>Ngày bắt đầu: <span class="bold">dd/mm/yyyy</span></p>
+          <p>Ngày kết thúc đầu: <span class="bold">dd/mm/yyyy</span></p>
         ${
-          is_offical != 0
-            ? `
+            is_offical != 0
+                ? `
           <p>Trạng thái: <span class="bold status ${
-            current_feature.properties.status ? "complete" : ""
+              current_feature.properties.status ? "complete" : ""
           }">${
-                current_feature.properties.status ? "Đã duyệt" : "Chưa duyệt"
-              }</span></p>
+                      current_feature.properties.status
+                          ? "Đã duyệt"
+                          : "Chưa duyệt"
+                  }</span></p>
           ${
-            is_offical == 1
-              ? !current_feature.properties.status
-                ? `<div class="flex button-container"><button class="request"><img src="/images/information.png" alt="report">Cấp phép</button><button class="report"><img src="/images/red-edit.png" alt="report">Huỷ yêu cầu</button></div>`
-                : ""
-              : is_offical == 2
-              ? `<div class="flex button-container"><button class="request"><img src="/images/information.png" alt="report">Cấp phép</button><button class="request-edit"><img src="/images/information.png" alt="report">Y/C chỉnh</button><button class="report"><img src="/images/red-edit.png" alt="report">Từ chối</button></div>`
-              : ""
+              is_offical == 1
+                  ? !current_feature.properties.status
+                      ? `<div class="flex button-container"><button class="request"><img src="/images/information.png" alt="report">Cấp phép</button><button class="report"><img src="/images/red-edit.png" alt="report">Huỷ yêu cầu</button></div>`
+                      : ""
+                  : is_offical == 2
+                  ? `<div class="flex button-container"><button class="request"><img src="/images/information.png" alt="report">Cấp phép</button><button class="request-edit"><img src="/images/information.png" alt="report">Y/C chỉnh</button><button class="report"><img src="/images/red-edit.png" alt="report">Từ chối</button></div>`
+                  : ""
           }
           
         </div>`
-            : ""
+                : ""
         }
       </div>`;
 
-    $(".info-close").on("click", () => {
-      console.log("click");
-      infoboards.classList.remove("active");
-    });
-    let request_btn = $("#info .request");
-    if (request_btn) {
-      request_btn.on("click", () => {
-        console.log("click");
-        get_resquest(current_feature.properties.place);
-      });
+        $(".info-close").on("click", () => {
+            console.log("click");
+            infoboards.classList.remove("active");
+        });
+        let request_btn = $("#info .request");
+        if (request_btn) {
+            request_btn.on("click", () => {
+                console.log("click");
+                get_resquest(current_feature.properties.place);
+            });
+        }
     }
-  }
 }
 
 function onMapClick(e) {
-  let data;
-  fetch(
-    `https://api.geoapify.com/v1/geocode/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
-    requestOptions
-  )
-    .then((response) => response.json())
-    .then((result) => {
-      data = result;
-      console.log(result);
-      popup
-        .setLatLng(e.latlng)
-        .setContent(
-          `<h3>${data.features[0].properties.address_line1}</h3>
+    let data;
+    fetch(
+        `https://api.geoapify.com/v1/geocode/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
+        requestOptions
+    )
+        .then((response) => response.json())
+        .then((result) => {
+            data = result;
+            console.log(result);
+            popup
+                .setLatLng(e.latlng)
+                .setContent(
+                    `<h3>${data.features[0].properties.address_line1}</h3>
           <p>${data.features[0].properties.address_line2}</p>
           <div class="infomation">
           <h4>Thông tin</h4>
           <p>Chưa có thông tin</p>
           </div>
           ${
-            is_offical != 0
-              ? '<button class="edit"><img src="/images/edit-yellow.png" alt="report">Chỉnh sửa</button>'
-              : '<button class="report"><img src="/images/report-fill.png" alt="report">Báo cáo</button>'
+              is_offical != 0
+                  ? '<button class="edit"><img src="/images/edit-yellow.png" alt="report">Chỉnh sửa</button>'
+                  : '<button class="report"><img src="/images/report-fill.png" alt="report">Báo cáo</button>'
           }`
-        )
-        .openOn(map);
+                )
+                .openOn(map);
 
-      let btn = is_offical == 0 ? $(".report") : $(".edit");
-      btn.on("click", () => {
-        current_feature = data.features[0];
-        get_report(data.features[0].properties.address_line2);
-      });
-    })
-    .catch((error) => console.log("error", error));
+            let btn = is_offical == 0 ? $(".report") : $(".edit");
+            // if(is_official == 2){btn = $(".create")};
+            btn.on("click", () => {
+                current_feature = data.features[0];
+                get_report(data.features[0].properties.address_line2);
+            });
+        })
+        .catch((error) => console.log("error", error));
 }
 
 window.onload = function () {
