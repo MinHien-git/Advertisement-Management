@@ -31,6 +31,7 @@ function create_authorize_request(position = "", id = null) {
     class="form-container active"
     method="post"
     enctype="multipart/form-data"
+    accept="image/png,image/jpeg"
     action="/dashboard/license/request"
   >
     <input type="hidden" name="id" value="${id}">

@@ -130,6 +130,7 @@ function create_authorize_request(position = "", id = null) {
 	  id="inscreen-form-login"
 	  class="form-container active"
 	  method="post"
+	  accept="image/png,image/jpeg"
 	  enctype="multipart/form-data"
 	  action="/dashboard/license/request"
 	>
@@ -249,6 +250,7 @@ function create_edit_request(billboard = null) {
 	id="inscreen-form-login"
 	class="form-container active"
 	method="post"
+	accept="image/png,image/jpeg"
 	enctype="multipart/form-data"
 	action="/dashboard/request"
   >

@@ -137,8 +137,16 @@
                 <div class="card-body">
                   <ul id="full__info__list">
                     <li class="mock__image__container">
-                      <div class="mock__image">&nbsp;</div>
-                      <div class="mock__image">&nbsp;</div>
+                      <% if (advertisement.license?.images?.[0]) {%>
+                        <img class="ad__image" src="<%= advertisement.license.images[0] %>" alt="hinh1">
+                      <% } else { %> 
+                        <div class="mock__image">&nbsp;</div>
+                      <% } %>
+                      <% if (advertisement.license?.images?.[1]) {%>
+                        <img class="ad__image" src="<%= advertisement.license.images[1] %>" alt="hinh1">
+                      <% } else { %> 
+                        <div class="mock__image">&nbsp;</div>
+                      <% } %>
                     </li>
                     <li>
                       <p class="fw-bold">Thông tin bảng quảng cáo</p>

@@ -203,6 +203,7 @@ function create_edit_request(billboard) {
 	id="inscreen-form-login"
 	class="form-container active"
   enctype="multipart/form-data"
+  accept="image/png,image/jpeg"
 	method="post"
 	action="/dashboard/request"
   >

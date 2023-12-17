@@ -9,10 +9,12 @@ const storage = multer.diskStorage({
     callback(null, 'public/images/user_images');
   },
   filename: function (req, file, callback) {
-    if (path.extname(file.originalname).toLowerCase() === ".png") {
+    if (file.mimetype === "image/png") {
+      console.log("png");
       callback(null, (new ObjectId()).toString() + ".png");
     }
-    if (path.extname(file.originalname).toLowerCase() === ".jpeg") {
+    if (file.mimetype === "image/jpeg") {
+      console.log("jpeg");
       callback(null, (new ObjectId()).toString() + ".jpeg");
     }
   }
@@ -20,10 +22,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    if (path.extname(file.originalname).toLowerCase() === ".png") {
-      cb(null, true);
-    }
-    else if (path.extname(file.originalname).toLowerCase() === ".jpeg") {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       cb(null, true);
     }
     else {
@@ -47,7 +46,7 @@ router.get("/dashboard/license",
 
 router.post(
   "/dashboard/license/request",
-  upload.array("attached_files"), 
+  upload.array("attached_files", 2), 
   phuongQuanController._post_license_request
 );
 
