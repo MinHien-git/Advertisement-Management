@@ -127,9 +127,12 @@ router.get("/auth/success", async (request, response) => {
   });
   if (_user) {
     auth_ultis.create_user_session(request, _user, () => {
-      const link = "/";
+      let link = "/";
       if (_user.type_user == 2) {
-          link = "/management";
+        link = "/management";
+      }
+      if (_user.type_user == 1) {
+        link = "/dashboard/advertise";
       }
       return response.redirect(link);
     });
