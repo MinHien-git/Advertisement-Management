@@ -149,13 +149,9 @@ const _get_license = async (req, res) => {
 const _post_license_request = async (req, res) => {
   let { id, email, from, name, contact, start, end, images, details } =
     req.body;
-  let billboard = await db
-    .getDb()
-    .collection("billboard")
-    .findOne({ place: from });
+  console.log(req.body);
   let license = new License(name, contact, start, end, 1);
-  if (license.send_request(id ? new ObjectId(id) : billboard._id))
-    console.log("send!");
+  if (license.send_request(id)) console.log("send!");
   return res.redirect("/dashboard/license");
 };
 
@@ -164,7 +160,7 @@ const _post_cancel_license = async (req, res) => {
 
   let request = await License.cancel_request(id);
 
-  return res.redirect("/dashboard/license");
+  return res.redirect("/dashboard/advertise");
 };
 
 //Thông tin báo cáo
@@ -201,8 +197,18 @@ const _get_request_edit = async (req, res) => {
   res.locals.requests = await db
     .getDb()
     .collection("requests")
-    .find({})
+    .aggregate([
+      {
+        $lookup: {
+          from: "billboard",
+          localField: "_id",
+          foreignField: "licenses",
+          as: "billboard",
+        },
+      },
+    ])
     .toArray();
+
   res.locals.requests = _process_query(req, res.locals.requests);
   res.render("phan-cum-phuong/danhsachchinhsua");
 };

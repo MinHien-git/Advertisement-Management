@@ -109,7 +109,7 @@
             </div>
 
             <% for (let i = 0; i < locals.requests.length; i++) { %>
-              <% const advertisement = locals.requests[i].billboard; %>
+              <% const advertisement = locals.requests[i] %>
               <% const id = advertisement._id; %>
             <div id=<%='"list__item' + id + '"'%>
               " class="card shadow-sm">

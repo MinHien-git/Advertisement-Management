@@ -62,7 +62,7 @@ function assignButton(item_id, advertisement) {
 		<li>
 			<button
 				class="btn btn-success me-3"
-				onclick="create_authorize_request('${advertisement.address}')">
+				onclick="create_authorize_request(${advertisement})">
 				<i class="bi bi-clipboard2-check"></i> Tạo yêu cầu
 			</button>
 		</li>
@@ -112,10 +112,11 @@ const table = document.querySelector("#main__list");
 //     console.log("complete");
 //   });
 
-function create_authorize_request(position = "", id = null) {
+function create_authorize_request(advertisement) {
   if (request_node) {
     body.removeChild(request_node);
   }
+  console.log(advertisement._id);
   let report = `
 	<section class="active" id="request-popup">
 	<div id="report-section-form-container">
@@ -132,11 +133,11 @@ function create_authorize_request(position = "", id = null) {
 	  method="post"
 	  action="/dashboard/license/request"
 	>
-	  <input type="hidden" name="id" value="${id}">
+	  <input type="hidden" name="id" value="${advertisement._id}">
 	  <h2>Cấp phép Quảng cáo</h2>
 	  <div class="form-section">
 		<label for="street">Địa chỉ yêu cầu:</label>
-		<textarea id="street">${position}</textarea>
+		<textarea id="street">${advertisement.properties.place}</textarea>
 	  </div>
 	  <div class="form-section">
 		<label for="type-billboard">Bảng quảng cáo:</label>
@@ -144,7 +145,7 @@ function create_authorize_request(position = "", id = null) {
 		  type="text"
 		  name="type-billboard"
 		  id="type-billboard"
-		  value=""
+		  value="${advertisement.properties.type}"
 		  placeholder="Chọn..."
 		/>
 	  </div>
