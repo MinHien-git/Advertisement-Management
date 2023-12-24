@@ -235,6 +235,8 @@ function create_edit_request(billboard = null) {
   if (edit_node) {
     body.removeChild(edit_node);
   }
+  const a = billboard?.licenses.filter((i) => i.state === 2);
+
   let report = `
   <section class="active popup" id="report-popup">
   <div id="report-section-form-container">
@@ -381,31 +383,32 @@ function create_edit_request(billboard = null) {
 	id="billboard__status" name ="billboard__status"
 	aria-label="Billboard status selector">
 	<option selected>Chọn...</option>
-	<option value="1" class="link-primary">
+	<option value="1" class="link-primary" ${
+    billboard?.properties.zonning ? "selected" : ""
+  }>
 	  Đã quy hoạch
 	</option>
-	<option value="2" class="link-danger">
+	<option value="2" class="link-danger" ${
+    !billboard?.properties.zonning ? "selected" : ""
+  }>
 	  Chưa quy hoạch
 	</option>
   </select>
 	</div>
+	${
+    a.length > 0
+      ? `
 	<div class="form-section">
 	<label for="name">Thông tin công ty:</label>
 	<input type="text" name="name" id="name"
-	  value="${
-      billboard?.license?.company_name ? billboard?.license?.company_name : ""
-    }"
+	  value="${a[0].company_name}"
 	  placeholder="tên công ty"
 	/>
 	</div>
 	<div class="form-section">
 	<label for="contact">Thông tin liên lạc:</label>
 	<input type="text" name="contact" id="contact"
-	  value="${
-      billboard?.license?.company_contact
-        ? billboard?.license?.company_contact
-        : ""
-    }"
+	  value="${a[0].company_contact}"
 	  placeholder="Email công ty"
 	/>
 	</div>
@@ -413,18 +416,21 @@ function create_edit_request(billboard = null) {
   <div class="form-section">
 	<label for="start">Ngày bđ:</label>
 	<input type="date" name="start" id="start"
-	value="${billboard?.license?.start_date}"
+	value="${a[0].start_date}"
 	placeholder="XY"
 	/>
   </div>
   <div class="form-section">
   <label for="end">Ngày kt:</label>
   <input
-	type="date" name="end" id="end" value="${billboard?.license?.end_date}"
+	type="date" name="end" id="end" value="${a[0].end_date}"
 	placeholder="XY"
   />
   </div>
   </div>
+  `
+      : ""
+  }
   <div class="form-section file-section">
 	<p>Thông tin đính kèm:</p>
 	<div class="file-button">

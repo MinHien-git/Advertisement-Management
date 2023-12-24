@@ -25,10 +25,10 @@ module.exports = class License {
     );
   }
 
-  async send_request(id) {
+  async send_licences_request(id) {
     let request = await db
       .getDb()
-      .collection("requests")
+      .collection("licenses")
       .insertOne({ ...this });
     if (request) {
       await db
@@ -44,14 +44,14 @@ module.exports = class License {
   async update_request(license_id, id) {
     let request = await db
       .getDb()
-      .collection("requests")
+      .collection("licenses")
       .findOneAndUpdate({ _id: new ObjectId(license_id) }, { ...this });
   }
 
   static async cancel_request(license_id) {
     let request = await db
       .getDb()
-      .collection("requests")
+      .collection("licenses")
       .findOneAndUpdate(
         { _id: new ObjectId(license_id) },
         { $set: { state: 2 } }

@@ -128,21 +128,39 @@ const _get_advertisement = async (req, res) => {
   res.locals.billboards = await db
     .getDb()
     .collection("billboard")
-    .find({})
+    .aggregate([
+      {
+        $lookup: {
+          from: "licenses",
+          localField: "licenses",
+          foreignField: "_id",
+          as: "licenses",
+        },
+      },
+    ])
     .toArray();
-  res.locals.billboards = _process_query(req, res.locals.billboards);
+  console.log(res.locals.billboards);
+  //res.locals.billboards = _process_query(req, res.locals.billboards);
 
   res.render("phan-cum-phuong/quanlyquangcao");
 };
 
 //Yêu cầu cấp phép biển quáng cáo
 const _get_license = async (req, res) => {
-  res.locals.billboards = await db
+  res.locals.licenses = await db
     .getDb()
-    .collection("billboard")
-    .find({})
+    .collection("licenses")
+    .aggregate([
+      {
+        $lookup: {
+          from: "billboard",
+          localField: "_id",
+          foreignField: "licenses",
+          as: "billboard",
+        },
+      },
+    ])
     .toArray();
-  res.locals.billboards = _process_query(req, res.locals.billboards);
   res.render("phan-cum-phuong/danhsachcapphep");
 };
 
@@ -151,7 +169,7 @@ const _post_license_request = async (req, res) => {
     req.body;
   console.log(req.body);
   let license = new License(name, contact, start, end, 1);
-  if (license.send_request(id)) console.log("send!");
+  if (license.send_licences_request(id)) console.log("send!");
   return res.redirect("/dashboard/license");
 };
 
@@ -202,7 +220,7 @@ const _get_request_edit = async (req, res) => {
         $lookup: {
           from: "billboard",
           localField: "_id",
-          foreignField: "licenses",
+          foreignField: "_id",
           as: "billboard",
         },
       },
