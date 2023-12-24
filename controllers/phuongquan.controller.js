@@ -139,7 +139,6 @@ const _get_advertisement = async (req, res) => {
       },
     ])
     .toArray();
-  console.log(res.locals.billboards);
   //res.locals.billboards = _process_query(req, res.locals.billboards);
 
   res.render("phan-cum-phuong/quanlyquangcao");
@@ -219,20 +218,106 @@ const _get_request_edit = async (req, res) => {
       {
         $lookup: {
           from: "billboard",
-          localField: "_id",
+          localField: "billboard",
           foreignField: "_id",
           as: "billboard",
         },
       },
     ])
     .toArray();
-
+  console.log(res.locals.requests);
   res.locals.requests = _process_query(req, res.locals.requests);
-  res.render("phan-cum-phuong/danhsachchinhsua");
+  //res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
 const _post_request_edit = async (req, res) => {
-  let { _id, email, from, images, details } = req.body;
+  let { _id, images, details, type, status, type_advertise, place_type } =
+    req.body;
+  let billboard_type;
+  let land_type;
+  let ad_type;
+
+  switch (type) {
+    case "1":
+      billboard_type = "Trụ/Cụm pano";
+      break;
+    case "2":
+      billboard_type = "Trụ bảng hiflex";
+      break;
+    case "3":
+      billboard_type = "Trụ màn hình điện tử LED";
+      break;
+    case "4":
+      billboard_type = "Trụ hộp đèn";
+      break;
+    case "5":
+      billboard_type = "Bảng hiflex ốp tường";
+      break;
+    case "6":
+      billboard_type = "Màn hình điện tử ốp tường";
+      break;
+    case "7":
+      billboard_type = "Trụ treo băng rôn dọc";
+      break;
+    case "8":
+      billboard_type = "Trụ treo băng rôn ngang";
+      break;
+    case "9":
+      billboard_type = "Cổng chào";
+      break;
+    case "10":
+      billboard_type = "Trung tâm thương mại";
+      break;
+  }
+
+  switch (type_advertise) {
+    case "1":
+      ad_type = "Cổ động chính trị";
+      break;
+    case "2":
+      ad_type = "Quảng cáo thương mại";
+      break;
+    case "3":
+      ad_type = "An toàn giao thông";
+      break;
+    case "4":
+      ad_type = "Xã hội hoá";
+      break;
+    case "5":
+      ad_type = "Mỹ phẩm";
+      break;
+    case "6":
+      ad_type = "Đồ ăn";
+      break;
+    case "7":
+      ad_type = "Điện ảnh";
+      break;
+  }
+
+  switch (place_type) {
+    case "1":
+      land_type = "Đất công/Công viên/Hành lang an toàn giao thông";
+      break;
+    case "2":
+      land_type = "Đất tư nhân/Nhà ở riêng lẻ";
+      break;
+    case "3":
+      land_type = "Trung tâm thương mại";
+      break;
+    case "4":
+      land_type = "Chợ";
+      break;
+    case "5":
+      land_type = "Cây xăng";
+      break;
+    case "6":
+      land_type = "Nhà chờ xe buýt";
+      break;
+    case "7":
+      land_type = "Trường Học";
+      break;
+  }
+
   let change = new Billboard(
     req.body.type_billboard,
     null,
@@ -240,17 +325,30 @@ const _post_request_edit = async (req, res) => {
       amount: "1 trụ/bảng",
       place: req.body.place,
       size: "2.5mx10m",
-      place_type: req.body.place_type,
-      type: req.body.type,
-      type_advertise: req.body.type_advertise,
+      place_type: land_type,
+      type: billboard_type,
+      type_advertise: ad_type,
+      zoning: status == 1 ? true : false,
     },
-    new License(req.body.name, req.body.contact, req.body.start, req.body.end)
+    req.body.name
+      ? new License(
+          req.body.name,
+          req.body.contact,
+          req.body.start,
+          req.body.end
+        )
+      : null
   );
-  const billboard = await db
-    .getDb()
-    .collection("billboard")
-    .findOne({ _id: new ObjectId(_id) });
-  let request = new Request(email, from, billboard, change, images, details, 0);
+
+  let request = new Request(
+    new ObjectId(res.locals.uid),
+    new ObjectId(_id),
+    change.properties,
+    images,
+    details,
+    0,
+    change.license
+  );
   if (await request.send_request()) console.log("send!");
   return res.redirect("/dashboard/license");
 };

@@ -257,10 +257,6 @@ function create_edit_request(billboard = null) {
 	<div class="form-section">
 	<input type="hidden" name="_id" value="${billboard?._id}">
 	<label for="type">Loại quảng cáo:</label>
-	<input type="text" name="type" id="type"
-	  value="${billboard?.properties.type}"
-	  placeholder="Chọn..."
-	/>
 	</div>
 	<div class="form-section">
 	<label for="street">Địa điểm:</label>
@@ -273,7 +269,7 @@ function create_edit_request(billboard = null) {
 	<select
     class="form-select mb-3"
     id="ad__type__edit"
-    name="ad_type_selector_edit"
+    name="type_advertise"
     aria-label="ad type selector"
     required
   />
@@ -310,12 +306,51 @@ function create_edit_request(billboard = null) {
     }>Dịch vụ</option>
   </select>
   </div>
- 
+  <div class="form-section">
+      <label for="form">Phân loại:</label>
+      <select
+    class="form-select mb-3"
+    id="land__type__edit"
+    name="place_type"
+    aria-label="Land type selector"
+    required
+  />
+  <option value="">Chọn...</option>
+  <option value="1" ${
+    billboard.properties.place_type ===
+    "Đất công/Công viên/Hành lang an toàn giao thông"
+      ? "selected"
+      : ""
+  }>
+    Đất công/Công viên/Hành lang an toàn giao thông
+  </option>
+  <option value="2" ${
+    billboard.properties.place_type === "Đất tư nhân/Nhà ở riêng lẻ"
+      ? "selected"
+      : ""
+  }>Đất tư nhân/Nhà ở riêng lẻ</option>
+  <option value="3" ${
+    billboard.properties.place_type === "Trung tâm thương mại" ? "selected" : ""
+  }>Trung tâm thương mại</option>
+  <option value="4" ${
+    billboard.properties.place_type === "Chợ" ? "selected" : ""
+  }>Chợ</option>
+  <option value="5" ${
+    billboard.properties.place_type === "Cây xăng" ? "selected" : ""
+  }>Cây xăng</option>
+  <option value="6" ${
+    billboard.properties.place_type === "Nhà chờ xe buýt" ? "selected" : ""
+  }>Nhà chờ xe buýt</option>
+  <option value="7" ${
+    billboard?.properties.type_advertise === "Trường Học" ? "selected" : ""
+  }>Trường học</option>
+  </select>
+    </div>
   <div class="form-section">
   <label for="form">Loại quảng cáo:</label>
   <select class="form-select mb-3"
   id="billboard__type"
-  name="billboard_type_selector_edit"
+  name="type"
   aria-label="billboard type selector"
   required>
   <option value="">Chọn...</option>
@@ -380,7 +415,7 @@ function create_edit_request(billboard = null) {
 	<label for="state">Trạng thái:</label>
 	<select
 	class="form-select mb-3"
-	id="billboard__status" name ="billboard__status"
+	id="billboard__status" name ="status"
 	aria-label="Billboard status selector">
 	<option selected>Chọn...</option>
 	<option value="1" class="link-primary" ${
@@ -441,7 +476,12 @@ function create_edit_request(billboard = null) {
 	  id="attached_files"
 	  />
 	</div>
+	
 	</div>
+	<div class="form-section">
+		<label for="tel">Thông tin chỉnh sửa:</label>
+		<div id="editor"></div>
+	  </div>
 	<div class ="px-4 d-flex justify-content-evenly w-100 btn-container">
 		<div class="form-section">
 			<button class="delete">Xoá</button>
@@ -468,6 +508,17 @@ function create_edit_request(billboard = null) {
 
   var quill = new Quill("#editor", {
     theme: "snow",
+  });
+
+  $(document).ready(function () {
+    $("#inscreen-form-login").on("submit", function () {
+      var hvalue = $(".ql-editor").html();
+      $(this).append(
+        "<textarea name='details' style='display:none'>" +
+          hvalue +
+          "</textarea>"
+      );
+    });
   });
 }
 let request_node;
