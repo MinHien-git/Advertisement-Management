@@ -230,20 +230,18 @@
                       <ul class="buttons__container">
                         <% if (!advertisement.license) { %>
                         <li>
-                          <button class="btn btn-primary" onclick='create_authorize_request("<%= advertisement.properties.place %>", "<%= advertisement._id %>")'>
+                          <button class="btn btn-primary" onclick='create_authorize_request(<%- JSON.stringify(advertisement) %>)'>
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C cấp phép
                           </button>
                         </li>
-                        <% } %>
-                        <% if (!advertisement.change_request) { %>
+                        <% } %>        
                         <li>
                           <button class="btn btn-primary" onclick='create_edit_request(<%- JSON.stringify(advertisement) %>)'>
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C chỉnh sửa
                           </button>
                         </li>
-                        <% } %>
                       </ul>
                     </li>
                   </ul>

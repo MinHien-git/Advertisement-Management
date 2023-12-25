@@ -2,17 +2,17 @@ const table = document.querySelector("#main__list");
 
 function cancel_license(id) {
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       location.reload();
     }
   };
   xhr.open("POST", "/dashboard/license/cancel", true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(JSON.stringify({ id: id }));
 }
 
-function create_authorize_request(position = "", id = null) {
+function create_authorize_request(advertisement) {
   if (request_node) {
     body.removeChild(request_node);
   }
@@ -38,7 +38,7 @@ function create_authorize_request(position = "", id = null) {
     <h2>Cấp phép Quảng cáo</h2>
     <div class="form-section">
       <label for="street">Địa chỉ yêu cầu:</label>
-      <textarea id="street">${position}</textarea>
+      <textarea id="street">${advertisement.position}</textarea>
     </div>
     <div class="form-section">
       <label for="type-billboard">Bảng quảng cáo:</label>
@@ -46,7 +46,7 @@ function create_authorize_request(position = "", id = null) {
         type="text"
         name="type-billboard"
         id="type-billboard"
-        value=""
+        value="${advertisement.type}"
         placeholder="Chọn..."
       />
     </div>

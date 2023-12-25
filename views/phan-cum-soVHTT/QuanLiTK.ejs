@@ -111,7 +111,7 @@
               <%if(user.ward == "" || user.ward == null){ %>
                 <%if(user.district == "" || user.district == null){level = "Sở"; location = "Sở VHTT TP.HCM"%>
                 <%}else{level = "Quận/Huyện"; location = user.district}%>
-              <%}else{level = "Phường/Xã"; location = user.ward + ", " +user.district}%>
+              <%}else{level = "Phường/Xã"; location = user.ward + ", " +user.district }%>
             <div class="card shadow-sm" id="list__item<%=id%>">
               <div class="card-header" id="brief__info<%=id%>">
                 <ul class="list__flex">
