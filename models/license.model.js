@@ -3,7 +3,7 @@ const { REQUEST_STATE_TYPE } = require("../constants/report.type");
 const { ObjectId } = require("mongodb");
 
 module.exports = class License {
-  constructor(company_name, company_contact, start_date, end_date, state) {
+  constructor(company_name, company_contact, start_date, end_date, state, images) {
     this.company_name = company_name;
     this.company_contact = company_contact;
     this.start_date = start_date;
@@ -42,7 +42,7 @@ module.exports = class License {
     }
   }
 
-  async update_request(license_id, id) {
+  async update_request(license_id) {
     let request = await db
       .getDb()
       .collection("licenses")

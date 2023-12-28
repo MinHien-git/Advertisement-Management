@@ -113,28 +113,30 @@
               </div>
             </div>
 
-            <% for (let i=0; i < locals.licenses.length; i++) { %> <% const
-            advertisement=locals.licenses[i].billboard[0]; %> <% const
-            license=locals.licenses[i]; %>
+            <% for (let i=0; i < locals.billboards.length; i++) { %> 
+              <% const advertisement = locals.billboards[i]; %> 
+              <% const license = locals.billboards[i].licenses[0]; %>
             <div id="<%='list__item' + license._id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= license._id  %>">
                 <ul class="list__flex">
-                  <li class="list__col1"><%= license.company_name %></li>
+                  <li class="list__col1">
+                    <%= license.company_name %>
+                  </li>
                   <li class="list__col2">
-                    <%= advertisement.properties?.place %>
+                    <%= advertisement.properties.place %>
                   </li>
                   <% if (license) { %> <% if (license.state===0) {%>
-                  <li class="list__col3 fw-semibold" style="color: #329a44">
-                    Đã duyệt
-                  </li>
+                    <li class="list__col3 fw-semibold" style="color: #329a44">
+                      Đã duyệt
+                    </li>
                   <% } else { %>
-                  <li class="list__col3 fw-semibold" style="color: #e7b400">
-                    Chưa duyệt
-                  </li>
+                    <li class="list__col3 fw-semibold" style="color: #e7b400">
+                      Chưa duyệt
+                    </li>
                   <% } %> <% } else { %>
-                  <li class="list__col3 fw-semibold" style="color: #e7b400">
-                    Chưa cấp phép
-                  </li>
+                    <li class="list__col3 fw-semibold" style="color: #e7b400">
+                      Chưa cấp phép
+                    </li>
                   <% } %>
                   <li class="list__col4">
                     <button

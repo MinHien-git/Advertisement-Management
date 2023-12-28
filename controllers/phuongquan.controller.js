@@ -176,23 +176,24 @@ const _get_advertisement = async (req, res) => {
       },
     ])
     .toArray();
-  //res.locals.billboards = _process_query(req, res.locals.billboards);
+  console.log(res.locals.billboards);
+  res.locals.billboards = _process_query(req, res.locals.billboards);
 
   res.render("phan-cum-phuong/quanlyquangcao");
 };
 
 //Yêu cầu cấp phép biển quáng cáo
 const _get_license = async (req, res) => {
-  res.locals.licenses = await db
+  res.locals.billboards = await db
     .getDb()
-    .collection("licenses")
+    .collection("billboard")
     .aggregate([
       {
         $lookup: {
-          from: "billboard",
+          from: "licenses",
           localField: "_id",
-          foreignField: "licenses",
-          as: "billboard",
+          foreignField: "_id",
+          as: "licenses",
         },
       },
     ])
@@ -249,20 +250,10 @@ const _get_request_edit = async (req, res) => {
   res.locals.requests = await db
     .getDb()
     .collection("requests")
-    .aggregate([
-      {
-        $lookup: {
-          from: "billboard",
-          localField: "billboard",
-          foreignField: "_id",
-          as: "billboard",
-        },
-      },
-    ])
+    .find()
     .toArray();
-  console.log(res.locals.requests);
   res.locals.requests = _process_query(req, res.locals.requests);
-  //res.render("phan-cum-phuong/danhsachchinhsua");
+  res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
 const _post_request_edit = async (req, res) => {
