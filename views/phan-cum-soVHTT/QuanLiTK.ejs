@@ -59,36 +59,7 @@
       <main>
         <div class="container" id="main__container">
           <h1 class="fw-bold h2 mb-0" id="page__title">Quản lí tài khoản</h1>
-          <button
-            type="submit"
-            class="btn btn-success nowrap"
-            id="create__account__btn"
-            data-bs-toggle="modal"
-            data-bs-target="#Create__modal"
-          >
-            +&ensp;Tạo tài khoản
-          </button>
-          <form action="" class="d-flex search__form">
-            <input
-              type="text"
-              class="form-control me-2"
-              placeholder="Nhập thông tin"
-            />
-            <button
-              type="submit"
-              class="btn btn-primary nowrap"
-              id="search__btn"
-            >
-              Tìm kiếm
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-arrow-down-up"></i>
-              Sắp xếp
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-funnel"></i> &nbsp;Lọc
-            </button>
-          </form>
+          <%- include('../includes/list_control.ejs')%>
 
           <div id="main__list">
             <div id="info__desc">
@@ -103,88 +74,90 @@
                 </ul>
               </div>
             </div>
-            <% for (let i = 0; i < locals.users.length; i++) { %>
-              <% const user = locals.users[i]; %>
-              <% const id = user._id; %>
-              <% let level = ""%>
-              <% let location = ""%>
-              <%if(user.ward == "" || user.ward == null){ %>
-                <%if(user.district == "" || user.district == null){level = "Sở"; location = "Sở VHTT TP.HCM"%>
-                <%}else{level = "Quận/Huyện"; location = user.district}%>
-              <%}else{level = "Phường/Xã"; location = user.ward + ", " +user.district}%>
-            <div class="card shadow-sm" id="list__item<%=id%>">
-              <div class="card-header" id="brief__info<%=id%>">
-                <ul class="list__flex">
-                  <li class="list__col1"><%=user.name%></li>
-                  <li class="list__col2"><%=level%></li>
-                  <li class="list__col3"><%=location%></li>
-                  <li class="list__col4">
-                    <button
-                      class="btn collapsed"
-                      id="collapse__btn<%=id%>"
-                      type="button"
-                      onclick="toggleCollapseButton('collapse__btn<%=id%>')"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#full__info<%=id%>"
-                      aria-expanded="false"
-                      aria-controls="full__info<%=id%>"
-                    >
-                      <i class="bi bi-chevron-down"></i>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div
-                id="full__info<%=id%>"
-                class="collapse"
-                aria-labelledby="brief__info<%=id%>"
-              >
-                <div class="card-body">
-                  <ul id="full__info__list">
-                    <li>
-                      <p><strong>Ngày sinh:</strong> <%=user.birth%></p>
-                      <p><strong>Email:</strong> <%=user.email%></p>
-                      <p><strong>SĐT:</strong> <%=user.phone%></p>
-                    </li>
-                    <li>
-                      <ul class="buttons__container">
-                        <li>
-                          <button
-                            class="btn btn-primary me-3"
-                            data-bs-toggle="modal"
-                            data-bs-target="#Modify__modal"
-                            data-account-id="<%=id%>"
-                            data-account-name="<%=user.name%>"
-                            data-account-email="<%=user.email%>"
-                            data-account-phone="<%=user.phone%>"
-                            data-account-birth="<%=user.birth%>"
-                            data-account-level="<%=level%>"
-                            data-account-district="<%=user.district%>"
-                            data-account-ward="<%=user.ward%>"
-                            onclick="passToEditModal(this)"
-                            
-                          >
-                            <i class="bi bi-pencil"></i> Chỉnh sửa
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            class="btn btn-danger"
-                            data-bs-toggle="modal"
-                            data-bs-target="#delete__confirm__modal"
-                            onclick="passToDeleteModal(this)"
-                            data-account-id="<%=id%>"
-                          >
-                            <i class="bi bi-trash"></i> Xoá tài khoản
-                          </button>
-                        </li>
-                      </ul>
+            <div id="cards__container" class="overflow-auto">
+                <% for (let i = 0; i < locals.users.length; i++) { %>
+                <% const user = locals.users[i]; %>
+                <% const id = user._id; %>
+                <% let level = ""%>
+                <% let location = ""%>
+                <%if(user.ward == "" || user.ward == null){ %>
+                  <%if(user.district == "" || user.district == null){level = "Sở"; location = "Sở VHTT TP.HCM"%>
+                  <%}else{level = "Quận/Huyện"; location = user.district}%>
+                <%}else{level = "Phường/Xã"; location = user.ward + ", " +user.district}%>
+              <div class="card shadow-sm" id="<%=id%>">
+                <div class="card-header" id="brief__info<%=id%>">
+                  <ul class="list__flex">
+                    <li class="list__col1"><%=user.name%></li>
+                    <li class="list__col2"><%=level%></li>
+                    <li class="list__col3"><%=location%></li>
+                    <li class="list__col4">
+                      <button
+                        class="btn collapsed"
+                        id="collapse__btn<%=id%>"
+                        type="button"
+                        onclick="toggleCollapseButton('collapse__btn<%=id%>')"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#full__info<%=id%>"
+                        aria-expanded="false"
+                        aria-controls="full__info<%=id%>"
+                      >
+                        <i class="bi bi-chevron-down"></i>
+                      </button>
                     </li>
                   </ul>
                 </div>
+                <div
+                  id="full__info<%=id%>"
+                  class="collapse"
+                  aria-labelledby="brief__info<%=id%>"
+                >
+                  <div class="card-body">
+                    <ul id="full__info__list">
+                      <li>
+                        <p><strong>Ngày sinh:</strong> <%=user.birth%></p>
+                        <p><strong>Email:</strong> <%=user.email%></p>
+                        <p><strong>SĐT:</strong> <%=user.phone%></p>
+                      </li>
+                      <li>
+                        <ul class="buttons__container">
+                          <li>
+                            <button
+                              class="btn btn-primary me-3"
+                              data-bs-toggle="modal"
+                              data-bs-target="#Modify__modal"
+                              data-account-id="<%=id%>"
+                              data-account-name="<%=user.name%>"
+                              data-account-email="<%=user.email%>"
+                              data-account-phone="<%=user.phone%>"
+                              data-account-birth="<%=user.birth%>"
+                              data-account-level="<%=level%>"
+                              data-account-district="<%=user.district%>"
+                              data-account-ward="<%=user.ward%>"
+                              onclick="passToEditModal(this)"
+                              
+                            >
+                              <i class="bi bi-pencil"></i> Chỉnh sửa
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              class="btn btn-danger"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete__confirm__modal"
+                              onclick="passToDeleteModal(this)"
+                              data-account-id="<%=id%>"
+                            >
+                              <i class="bi bi-trash"></i> Xoá tài khoản
+                            </button>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
+              <%}%>
             </div>
-            <%}%>
 
             <div
               class="modal fade"

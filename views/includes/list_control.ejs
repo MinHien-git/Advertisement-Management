@@ -1,0 +1,227 @@
+            <div id="list__control">
+                <button
+                    type="button"
+                    class="btn btn-primary nowrap invisible"
+                    id="map__btn"
+                    onclick="navigate(this.id)"
+                    tabindex="-1"
+                >
+                    <i class="bi bi-map"></i> Xem trên bản đồ
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-success nowrap hidden"
+                    id="create__account__btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#Create__modal"
+                >
+                    +&ensp;Tạo tài khoản
+                </button>
+                <form class="d-flex search__form" onsubmit="searchItems(event)">
+                    <input
+                        type="text"
+                        class="form-control me-2"
+                        id="search__input"
+                        name="search_input"
+                        placeholder="Nhập thông tin"
+                    />
+                    <button
+                        type="submit"
+                        class="btn btn-primary nowrap"
+                        id="search__btn"
+                    >
+                        <i class="bi bi-search"></i>
+                        Tìm kiếm
+                    </button>
+                    <button type="button" class="btn btn-dark nowrap" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#filter__modal"
+                        >
+                        <i class="bi bi-funnel"></i> 
+                        Lọc
+                    </button>
+                    <div class="dropdown" id="sort__dropdown">
+                        <button
+                            type="button"
+                            class="btn btn-dark nowrap dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            <i class="bi bi-arrow-down-up"></i>
+                            Sắp xếp
+                        </button>
+                        <ul
+                            class="dropdown-menu p-0"
+                            id="sort__opts"
+                            aria-labelledby="sort__dropdown"
+                        >
+                            <li class="border dropdown__li" id="newest">
+                                <button
+                                    type="button"
+                                    class="btn btn-light nowrap"
+                                >
+                                    Mới nhất
+                                </button>
+                            </li>
+                            <li class="border dropdown__li" id="oldest">
+                                <button
+                                    type="button"
+                                    class="btn btn-light nowrap"
+                                >
+                                    Cũ nhất
+                                </button>
+                            </li>
+                            <li class="border dropdown__li" id="address_asc">
+                                <button
+                                    type="button"
+                                    class="btn btn-light nowrap"
+                                >
+                                    Địa chỉ A-Z
+                                </button>
+                            </li>
+                            <li class="border dropdown__li" id="address_desc">
+                                <button
+                                    type="button"
+                                    class="btn btn-light nowrap"
+                                >
+                                    Địa chỉ Z-A
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+                <div
+                    class="modal fade "
+                    id="filter__modal"
+                    tabindex="-1"
+                    aria-labelledby="filter__modal__label"
+                    aria-hidden="true"
+                >
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3
+                                    class="modal-title fw-bold fs-5"
+                                    id="filter__modal__label"
+                                >
+                                    Lọc danh sách
+                                </h3>
+                                <button
+                                    class="btn-close"
+                                    type="button"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                ></button>
+                            </div>
+                            <div class="modal-body" id="filter__modal">
+                                <div id="district__filter__container">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="district__toggle" onchange="toggleFilter(this.id, 'district-info')">
+                                        <label class="form-check-label" for="district__toggle">Quận/Huyện</label>
+                                    </div>
+                                    <div class="border filter__info__container hidden" id="district-info">
+                                        <%for (let i = 0; i < locals.list_districts.length; i++){%>
+                                            <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="<%=locals.list_districts[i]%>">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                <%=locals.list_districts[i]%>
+                                            </label>
+                                        </div>
+                                        <%}%>
+                                    </div>
+                                </div>
+                                <div id="type__filter__container">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="type__toggle" onchange="toggleFilter(this.id, 'type-info')">
+                                        <label class="form-check-label" for="type__toggle">Phân loại</label>
+                                    </div>
+                                    <div class="border filter__info__container hidden" id="type-info">
+                                        
+                                        <%for (let i = 0; i < locals.list_types.length; i++){%>
+                                            <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="<%=locals.list_types[i]%>">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                <%=locals.list_types[i]%>
+                                            </label>
+                                        </div>
+                                        <%}%>
+                                    </div>
+                                </div>
+                                <%if("ad_types" in locals){%>
+                                        <div id="ad__type__filter__container">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="ad__type__toggle" onchange="toggleFilter(this.id, 'ad-type-info')">
+                                            <label class="form-check-label" for="ad__type__toggle">Hình thức quảng cáo</label>
+                                        </div>
+                                        <div class="border filter__info__container hidden" id="ad-type-info">
+                                            
+                                            <%for (let i = 0; i < locals.ad_types.length; i++){%>
+                                                <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" id="<%=locals.ad_types[i]%>">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    <%=locals.ad_types[i]%>
+                                                </label>
+                                            </div>
+                                            <%}%>
+                                        </div>
+                                    </div>
+                                <%}%>
+                                <%if("land_types" in locals){%>
+                                    <div id="land__type__filter__container">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="land__type__toggle" onchange="toggleFilter(this.id, 'land-type-info')">
+                                                <label class="form-check-label" for="land__type__toggle">Phân loại đất</label>
+                                            </div>
+                                            <div class="border filter__info__container hidden" id="land-type-info">
+                                                
+                                                <%for (let i = 0; i < locals.land_types.length; i++){%>
+                                                    <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="<%=locals.land_types[i]%>">
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                        <%=locals.land_types[i]%>
+                                                    </label>
+                                                </div>
+                                                <%}%>
+                                            </div>
+                                        </div>
+                                <%}%>
+                                <div id="status__filter__container">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="status__toggle" onchange="toggleFilter(this.id, 'status-info')">
+                                        <label class="form-check-label" for="status__toggle">Trạng thái</label>
+                                    </div>
+                                    <div class="border filter__info__container hidden" id="status-info">
+                                        
+                                        <%for (let i = 0; i < locals.list_statuses.length; i++){%>
+                                            <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="<%=locals.list_statuses[i]%>">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                <%=locals.list_statuses[i]%>
+                                            </label>
+                                        </div>
+                                        <%}%>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                    type="button"
+                                    class="btn btn-danger"
+                                    id="remove_filters"
+                                    onclick="removeFilters()"
+                                >
+                                    Bỏ lọc
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    id="add_filters"
+                                    onclick="filterItems()"
+                                >
+                                    Xác nhận
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

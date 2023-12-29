@@ -40,7 +40,7 @@
           <i class="bi bi-signpost-2 nav__item__icon"></i>
           <span>Danh sách quảng cáo</span>
         </li>
-        <li>
+        <li onclick="document.getElementById('logout').submit()">
           <form id="logout" method="post" action="/logout">
             <button type="submit">
               <i
@@ -53,7 +53,7 @@
           </form>
         </li>
         <% }else if(locals.type_user === 2){%>
-        <li id="manage__billboards" class="current" onclick="navigate(this.id)">
+        <li id="manage__billboards" onclick="navigate(this.id)">
           <i class="bi bi-clipboard2-check" id="nav__item__icon" style="font-size: 1.5rem"></i>
           <span>Quản lí điểm QC</span>
         </li>
@@ -81,7 +81,7 @@
           ></i>
           <span>user name</span>
         </li>
-        <li id="logout__li">
+        <li id="logout__li" onclick="document.getElementById('logout').submit()">
           <form id="logout" method="post" action="/logout">
             <button type="submit">
               <i

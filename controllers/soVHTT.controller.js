@@ -6,29 +6,545 @@ const { ObjectId } = require("mongodb");
 const { v4 } = require("uuid");
 const SoVHTT_Request = require("../models/soVHTT-req.model");
 
+//số item mỗi trang
+const ITEMS_PER_PAGE = 20
+
+//lấy số item tổng cộng và số trang
+async function getItemAmount(collection_id, query = {}){
+    return await db.getDb().collection(collection_id).countDocuments(query);
+}
+
+function pageAmount(item_amount){
+    return Math.ceil(item_amount / ITEMS_PER_PAGE)
+}
+
+// //req query -> mongodb query
+// async function createPaginationInfo(req, res, collection_name, queries){
+//     let current_page = parseInt(req.query.page) || 1;
+//     let skip_val = (current_page - 1) * ITEMS_PER_PAGE;
+    
+//     res.locals.item_amount = await getItemAmount(collection_name, queries);
+//     res.locals.page_amount = pageAmount(res.locals.item_amount);
+//     res.locals.current_page = current_page;
+//     res.locals.items_per_page = ITEMS_PER_PAGE;
+
+//     return skip_val;
+// }
+
+async function getPageContent(req, res, item_list){
+    let current_page = parseInt(req.query.page) || 1;
+    let start_index = (current_page - 1) * ITEMS_PER_PAGE;
+    let end_index = current_page * ITEMS_PER_PAGE;
+
+    res.locals.item_amount = item_list.length;
+    res.locals.page_amount = pageAmount(res.locals.item_amount);
+    res.locals.current_page = current_page;
+    res.locals.items_per_page = ITEMS_PER_PAGE;    
+
+    let page_item_list = item_list.slice(start_index, end_index);
+
+    return page_item_list;
+}
+
+function createSearchQuery(search_val){
+    let search_query =
+        search_val != null && search_val != "" ? {
+                "properties.place": { $regex: search_val, $options: "i" },
+            }
+            : {};
+    
+    return search_query;
+}
+
+
+async function sortList(item_list, sort_val, type){
+
+    if (sort_val != null && sort_val != ""){
+        if (sort_val == "newest") {
+            item_list.sort((a, b) => {
+                a._id = a._id.toString();
+                b._id = b._id.toString();
+                return b._id.localeCompare(a._id);
+            });
+        } else if (sort_val == "oldest") {
+            item_list.sort((a, b) => {
+                a._id = a._id.toString();
+                b._id = b._id.toString();
+                return a._id.localeCompare(b._id);
+            });
+        } else if (sort_val == "address_asc") {
+            if(type != "users"){
+                item_list.sort(
+                    (a, b) =>{
+                        if(a.district == null || a.ward == null){
+                            a.district = "";
+                            a.ward = "";
+                        }
+                        if(b.district == null || b.ward == null){
+                            b.district = "";
+                            b.ward = "";
+                        }
+                        a.district.localeCompare(b.district, undefined, {
+                            numeric: true,
+                            sensitivity: "base",
+                        }) ||
+                            a.ward.localeCompare(b.ward, undefined, {
+                                numeric: true,
+                                sensitivity: "base",
+                            }) ||
+                            a.street.localeCompare(b.street, undefined, {
+                                numeric: true,
+                                sensitivity: "base",
+                            });
+                    }
+                );
+            } else{
+                item_list.sort((a, b) => {
+                    if (a.district == null || a.ward == null) {
+                        a.district = "";
+                        a.ward = "";
+                    }
+                    if (b.district == null || b.ward == null) {
+                        b.district = "";
+                        b.ward = "";
+                    }
+                    return a.type_user - b.type_user ||
+                    a.district.localeCompare(b.district, undefined, {
+                        numeric: true,
+                        sensitivity: "base",
+                    }) ||
+                    a.ward.localeCompare(b.ward, undefined, {
+                        numeric: true,
+                        sensitivity: "base",
+                    })
+                });
+            }
+            // else{
+            //     item_list.sort(
+            //         (a, b) =>{
+            //             if (a.type_user == 2){
+            //                 return 1;
+            //             } else if(a.type_user == 1 && (a.district != "" || a.district != null) && (a.ward == "" || a.ward == null)){
+            //                 return 1;
+            //             } else return -1;
+            //         }
+            //     )
+            // }
+        } else if (sort_val == "address_desc") {
+            if(type != "users"){
+                item_list.sort(
+                    (a, b) =>
+                        b.district.localeCompare(a.district, undefined, {
+                            numeric: true,
+                            sensitivity: "base",
+                        }) ||
+                        b.ward.localeCompare(a.ward, undefined, {
+                            numeric: true,
+                            sensitivity: "base",
+                        }) ||
+                        b.street.localeCompare(a.street, undefined, {
+                            numeric: true,
+                            sensitivity: "base",
+                        })
+                );
+            } else{
+                item_list.sort((a, b) => {
+                    if (a.district == null || a.ward == null) {
+                        a.district = "";
+                        a.ward = "";
+                    }
+                    if (b.district == null || b.ward == null) {
+                        b.district = "";
+                        b.ward = "";
+                    }
+                    return (
+                        b.type_user - a.type_user ||
+                        b.district.localeCompare(a.district, undefined, {
+                            numeric: true,
+                            sensitivity: "base",
+                        }) ||
+                        b.ward.localeCompare(a.ward, undefined, {
+                            numeric: true,
+                            sensitivity: "base",
+                        })
+                    );
+                });
+            }
+        } else {
+            //sắp xếp mới nhất nếu query khác
+            item_list.sort((a, b) => {
+                a._id = a._id.toString();
+                b._id = b._id.toString();
+                return b._id.localeCompare(a._id);
+            });
+        }
+    } else{ //mặc định sắp xếp mới nhất
+        item_list.sort((a, b) => {
+            a._id = a._id.toString();
+            b._id = b._id.toString();
+            return b._id.localeCompare(a._id);
+        });
+    }
+
+    return item_list;
+}
+
+//filter
+async function filterItems(item_list, query, path){
+
+    let district_arr = [];
+    let type_arr = [];
+    let ad_type_arr = [];
+    let land_type_arr = [];
+    let status_arr = [];
+
+
+    if("district" in query){
+        district_arr = query.district.split(",");
+        item_list = item_list.filter((item)=>{
+
+            for(let i = 0; i < district_arr.length; i++){
+                if (district_arr[i] != "Quận 1" && item.district  == "1"){
+                    continue;
+                }
+                if (district_arr[i].includes(item.district)) {
+                    return true;
+                }
+                
+            }
+        })
+    }
+
+    if ("item-type" in query) {
+        type_arr = query["item-type"].split(",");
+
+        item_list = item_list.filter((item) => {
+            if (
+                path.includes("billboards") ||
+                path.includes("licenses")
+            ) {
+                for (let i = 0; i < type_arr.length; i++) {
+                    if (type_arr[i].includes(item.properties.type)) {
+                        return true;
+                    }
+                }
+            } else if (path.includes("reports")) {
+                for (let i = 0; i < type_arr.length; i++) {
+                    if (type_arr[i].includes(item.type)) {
+                        return true;
+                    }
+                }
+            } else if (path.includes("users")) {
+                for (let i = 0; i < type_arr.length; i++) {
+                    if (type_arr[i].includes(item.level)) {
+                        return true;
+                    }
+                }
+            }
+        });
+    }
+
+    if ("ad-type" in query) {
+        ad_type_arr = query["ad-type"].split(",");
+
+        item_list = item_list.filter((item) => {
+            for (let i = 0; i < ad_type_arr.length; i++) {
+                if (ad_type_arr[i].includes(item.properties.type_advertise)) {
+                    return true;
+                }
+            }
+        });
+    }
+
+    if ("land-type" in query) {
+        land_type_arr = query["land-type"].split(",");
+
+        item_list = item_list.filter((item) => {
+            for (let i = 0; i < land_type_arr.length; i++) {
+                if (land_type_arr[i].includes(item.properties.place_type)) {
+                    return true;
+                }
+            }
+        });
+    }
+
+    if ("status" in query) {
+        status_arr = query.status.split(",");
+        item_list = item_list.filter((item) => {
+            for (let i = 0; i < status_arr.length; i++) {
+                if (path.includes("billboards") || path.includes("licenses")) {
+                    for (let i = 0; i < status_arr.length; i++) {
+                        if (status_arr[i].includes(item.properties.status)) {
+                            return true;
+                        }
+                    }
+                } else if (path.includes("reports")) {
+                    for (let i = 0; i < status_arr.length; i++) {
+                        if (status_arr[i].includes(item.state)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    return item_list;
+}
+
+async function processList(collection, search_queries){
+    //const filter_query = createFilterQuery(filterVal);
+    //const sort_query = createSortQuery(sortVal);
+
+    let item_list = await db
+        .getDb()
+        .collection(collection)
+        .find(search_queries)
+        .toArray(); 
+
+    for (let i = 0; i < item_list.length; i++) {
+        let place = "";
+        if(collection == "users") return item_list;
+        if(collection == "billboard"){
+            place = item_list[i].properties.place;
+        } else if (collection == "reports"){
+            place = item_list[i].place;
+        }
+        if(place.includes("Đ. ") == true){
+            place = place.replace(
+                "Đ. ",
+                ""
+            );
+        }
+        let address = place.split(", ");
+        let street = address[0];
+        let ward = address[1];
+        let district = address[2];
+
+        ward = ward.replace("Phường ", "");
+        ward = ward.replace("Xã ", "");
+        district = district.replace("Quận ", "");
+        district = district.replace("Huyện ", "");
+
+
+        item_list[i].street = street;
+        item_list[i].ward = ward;
+        item_list[i].district = district;
+
+    }
+    // item_list.sort((a, b) =>
+    //     a.properties.district.localeCompare(b.properties.district, undefined, { numeric: true, sensitivity: "base" })
+    //     || a.properties.ward.localeCompare(b.properties.ward, undefined, { numeric: true, sensitivity: "base" })
+    // );
+
+
+    return item_list;
+}
+
+async function getUniqueDistrictsWards(item_list){
+    let unique_districts = [];
+
+    for(let i = 0; i < item_list.length; i++){
+        if(unique_districts.includes(item_list[i].district) == false){
+            unique_districts.push(item_list[i].district);
+        }
+    }
+
+    unique_districts.sort((a, b) =>
+        a.localeCompare(b, undefined, {
+            numeric: true,
+            sensitivity: "base",
+        })
+    );
+    //very hard to read loop for adding district prefix
+    const district_db = await db.getDb().collection("district-ward").find().toArray();
+    for(let uni_dist_index = 0; uni_dist_index < unique_districts.length; uni_dist_index++){
+        for(let dist_db_index = 0; dist_db_index < district_db.length; dist_db_index++){
+            if(district_db[dist_db_index].district.includes(unique_districts[uni_dist_index]) == true){
+                unique_districts[uni_dist_index] = district_db[dist_db_index].district;
+                break;                
+            }
+        }
+    }
+    return unique_districts;
+}
+
+async function getUniqueTypesAndStatuses(item_list, item_type){
+    let unique_types = [];
+    let unique_statuses = [];
+
+    if(item_type == "billboards"){
+        for (let i = 0; i < item_list.length; i++) {
+            if (
+                unique_types.includes(item_list[i].properties.type) ==
+                false
+            ) {
+                unique_types.push(item_list[i].properties.type);
+            }
+            if (
+                unique_statuses.includes(item_list[i].properties.status) ==
+                false
+            ) {
+                unique_statuses.push(item_list[i].properties.status);
+            }
+        }
+    } else if(item_type == "reports"){
+        for (let i = 0; i < item_list.length; i++) {
+            if (unique_types.includes(item_list[i].type) == false) {
+                unique_types.push(item_list[i].type);
+            }
+            if (unique_statuses.includes(item_list[i].state) == false) {
+                unique_statuses.push(item_list[i].state);
+            }
+        }
+    } else if(item_type == "users"){
+        for (let i = 0; i < item_list.length; i++) {
+            if (unique_types.includes(item_list[i].level) == false) {
+                unique_types.push(item_list[i].level);
+            }
+        }
+    }
+    unique_types.sort((a, b) =>{
+        if (!isNaN(a) && !isNaN(b)) {
+            a = a.toString();
+            b = toString();
+        } 
+        a.localeCompare(b, undefined, {
+            numeric: true,
+            sensitivity: "base",
+        });
+    }
+        
+    );
+
+    unique_statuses.sort((a, b) => a - b);
+
+    return {unique_types, unique_statuses};
+}
+
+
+
+async function getUniqueAdInfo(item_list){
+    let unique_ad_types = [];
+    let unique_land_types = [];
+
+
+    for (let i = 0; i < item_list.length; i++) {
+        if (
+            unique_ad_types.includes(item_list[i].properties.type_advertise) ==
+            false
+        ) {
+            unique_ad_types.push(item_list[i].properties.type_advertise);
+        }
+
+        if (unique_land_types.includes(item_list[i].properties.place_type) == false) {
+            unique_land_types.push(item_list[i].properties.place_type);
+        }
+    }
+
+    unique_ad_types.sort((a, b) =>
+        a.localeCompare(b, undefined, {
+            numeric: true,
+            sensitivity: "base",
+        })
+    );
+
+    unique_land_types.sort((a, b) =>
+        a.localeCompare(b, undefined, {
+            numeric: true,
+            sensitivity: "base",
+        })
+    );
+
+    return {unique_ad_types, unique_land_types};
+}
+
+
 //Quản lí bảng quảng cáo
 const _get_billboards = async (req, res) => {
+    let search_val = req.query.search;
+    let sort_val = req.query.sort;
+
+    let search_query = createSearchQuery(search_val);
+    
     res.locals.type_user = 2;
     res.locals.isAuth = true;
-    res.locals.billboards = await db
-        .getDb()
-        .collection("billboard")
-        .find({})
-        .toArray();
+    // res.locals.billboards = await db
+    //     .getDb()
+    //     .collection("billboard")
+    //     .find(
+    //         search_query
+    //     )
+    //     .skip(skip_val)
+    //     .sort(sort_val)
+    //     .collation({locale: 'en', numericOrdering: true})
+    //     .limit(ITEMS_PER_PAGE)
+    //     .toArray();
+
+    let item_list = await processList("billboard", search_query);
+
+    res.locals.list_districts = await getUniqueDistrictsWards(item_list);
+
+    let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(item_list, "billboards");
+    let { unique_ad_types, unique_land_types } = await getUniqueAdInfo(item_list);
+
+    res.locals.list_types = unique_types;
+    res.locals.list_statuses = unique_statuses;
+    res.locals.ad_types = unique_ad_types;
+    res.locals.land_types = unique_land_types;
+
+    item_list = await filterItems(item_list, req.query, req.path);
+    item_list = await sortList(item_list, sort_val, "billboards");
+    let pageItems = await getPageContent(req, res, item_list);
+
+    res.locals.billboards = pageItems;
 
     res.locals.billboards.forEach((billboard) => {
         billboard.properties.place =
             billboard.properties.place.split(", Thành phố")[0];
-        billboard.license = new License(
-            "Công ty ABC",
-            "ctytABC@ABC.com",
-            "22/12/2022",
-            "22/12/2023"
-        );
     });
+
+
     res.render("phan-cum-soVHTT/QuanLiQC");
 };
-const _post_edit_billboard = async (req, res) => {
+
+const _edit_billboard = async (req, res) => {
+    const {
+        id,
+        type,
+        place,
+        type_advertise,
+        place_type,
+        size,
+        amount,
+        status,
+    } = req.body;
+    const billboard = await db
+        .getDb()
+        .collection("billboard")
+        .findOne({ _id: new ObjectId(id) });
+    const globalid = billboard.properties.globalid;
+    const updateInfo = new Billboard(null, null, {
+        globalid,
+        type,
+        place,
+        type_advertise,
+        place_type,
+        size,
+        amount,
+        status,
+    });
+    try {
+        updateInfo._update_billboard(billboard._id);
+        console.log("billboard " + id + " updated!");
+        res.locals.status = "billboard " + id + " updated!";
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+
+const _edit_billboard_on_map = async (req, res) => {
     let {
         _id,
         id,
@@ -38,14 +554,8 @@ const _post_edit_billboard = async (req, res) => {
         land__type,
         width,
         height,
-        stand,
-        panel,
+        amount,
         billboard__status,
-        name,
-        contact,
-        start,
-        end,
-        attached_files,
     } = req.body;
 
     let land_type;
@@ -135,7 +645,7 @@ const _post_edit_billboard = async (req, res) => {
 
     let properties = {
         globalid: id,
-        amount: Number(stand) / Number(panel) + " trụ/bảng",
+        amount: Number(amount) + " trụ/bảng",
         place: position,
         size: width + "mx" + height + "m",
         place_type: land_type,
@@ -149,7 +659,7 @@ const _post_edit_billboard = async (req, res) => {
     try {
         updateInfo._update_billboard(_id);
         console.log("billboard " + id + " updated!");
-        return res.redirect("/management/billboards/map");
+        res.locals.status = "billboard " + id + " updated!";
     } catch (err) {
         res.send(err);
         console.error(err);
@@ -158,13 +668,12 @@ const _post_edit_billboard = async (req, res) => {
 
 const _delete_billboard = async (req, res) => {
     const { id } = req.body;
-    console.log(id);
     try {
         db.getDb()
             .collection("billboard")
             .deleteOne({ _id: new ObjectId(id) });
         console.log("billboard " + id + " deleted!");
-        return res.redirect("/management/billboards");
+        res.locals.status = "billboard " + id + " deleted!";
     } catch (err) {
         res.send(err);
         console.error(err);
@@ -180,16 +689,9 @@ const _create_billboard = async (req, res) => {
         land__type,
         width,
         height,
-        stand,
-        panel,
+        amount,
         billboard__status,
-        name,
-        contact,
-        start,
-        end,
-        attached_files,
     } = req.body;
-    console.log(req.body);
     let land_type;
     let ad_type;
     let billboard_type;
@@ -281,12 +783,13 @@ const _create_billboard = async (req, res) => {
 
     let properties = {
         globalid: v4(),
-        amount: Number(stand) / Number(panel) + " trụ/bảng",
+        amount: Number(amount) + " trụ/bảng",
         place: position,
         size: width + "mx" + height + "m",
         place_type: land_type,
         type_advertise: ad_type,
         type: billboard_type,
+
         zoning: billboard__status === "1" ? true : false,
         image: [],
     };
@@ -296,26 +799,53 @@ const _create_billboard = async (req, res) => {
             .getDb()
             .collection("billboard")
             .insertOne({ geometry, type: "Feature", properties });
-        return res.redirect("/management/billboards/map");
+        res.locals.status = "billboard " + id + " created!";
     } catch (err) {
         res.send(err);
         console.error(err);
     }
-    console.log(req.body);
 };
 
 //Cấp phép quảng cáo dựa trên yêu cầu cấp phép của phường
 const _get_licenses = async (req, res) => {
-    res.locals.billboards = await db
-        .getDb()
-        .collection("billboard")
-        .find({ license: { $exists: true } })
-        .toArray();
+    let search_val = req.query.search;
+    let sort_val = req.query.sort;
+
+    let search_query = createSearchQuery(search_val);
+
+    res.locals.isAuth = true;
+    res.locals.type_user = 2;
+
+    let item_list = await processList("billboard", {
+        $and: [search_query, { license: { $exists: true } }],
+    });
+
+    res.locals.list_districts = await getUniqueDistrictsWards(item_list);
+
+    let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
+        item_list,
+        "billboards"
+    );
+    let { unique_ad_types, unique_land_types } = await getUniqueAdInfo(
+        item_list
+    );
+
+    res.locals.list_types = unique_types;
+    res.locals.list_statuses = unique_statuses;
+    res.locals.ad_types = unique_ad_types;
+    res.locals.land_types = unique_land_types;
+
+    item_list = await filterItems(item_list, req.query, req.path);
+    item_list = await sortList(item_list, sort_val, "licenses");
+    let pageItems = await getPageContent(req, res, item_list);
+
+    res.locals.billboards = pageItems;
 
     res.locals.billboards.forEach((billboard) => {
         billboard.properties.place =
             billboard.properties.place.split(", Thành phố")[0];
     });
+
     res.render("phan-cum-soVHTT/DuyetYCCapPhep");
 };
 const _approve_license = async (req, res) => {
@@ -378,13 +908,33 @@ const _post_license_edit_request = async (req, res) => {
 };
 
 //Duyệt yêu cầu chỉnh sửa của phường
-const _get_report = async (req, res) => {
-    res.locals.reports = await db
-        .getDb()
-        .collection("reports")
-        .find({})
-        .toArray();
+const _get_reports = async (req, res) => {
+    let search_val = req.query.search;
+    let sort_val = req.query.sort;
 
+    let search_query = createSearchQuery(search_val);
+
+    res.locals.type_user = 2;
+    res.locals.isAuth = true;
+    
+    let item_list = await processList("reports", search_query);
+
+    res.locals.list_districts = await getUniqueDistrictsWards(item_list);
+    
+    let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
+        item_list,
+        "reports"
+    );
+    
+    res.locals.list_types = unique_types;
+    res.locals.list_statuses = unique_statuses;
+    
+    item_list = await filterItems(item_list, req.query, req.path);
+    item_list = await sortList(item_list, sort_val, "reports");
+    let pageItems = await getPageContent(req, res, item_list);
+    
+    res.locals.reports = pageItems;
+    
     res.locals.reports.forEach((report) => {
         report.place = report.place.split(", Thành phố")[0];
     });
@@ -398,7 +948,10 @@ const _change_report_status = async (req, res) => {
         await db
             .getDb()
             .collection("reports")
-            .findOneAndUpdate({ _id: id }, { $set: { state: state } });
+            .findOneAndUpdate(
+                { _id: ObjectId(id) },
+                { $set: { state: state } }
+            );
         console.log("Report " + id + " approved!");
         return res.redirect("/management/reports");
     } catch (err) {
@@ -421,12 +974,38 @@ const _post_report_change_request = async (req, res) => {
 
 //Quản lí tài khoản
 const _get_accounts = async (req, res) => {
-    res.locals.users = await db
-        .getDb()
-        .collection("users")
-        .find({})
-        .project({ password: 0 })
-        .toArray();
+    let search_val = req.query.search;
+    let sort_val = req.query.sort;
+
+    let search_query = createSearchQuery(search_val);
+
+    res.locals.type_user = 2;
+    res.locals.isAuth = true;
+
+    let item_list = await processList("users", search_query);
+
+    res.locals.list_districts = await getUniqueDistrictsWards(item_list);
+
+    let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
+        item_list,
+        "users"
+    );
+
+
+    res.locals.list_types = unique_types;
+    res.locals.list_statuses = unique_statuses;
+
+    item_list = await filterItems(item_list, req.query, req.path);
+    item_list = await sortList(item_list, sort_val, "users");
+    let pageItems = await getPageContent(req, res, item_list);
+    
+    res.locals.users = pageItems;
+    // res.locals.users = await db
+    //     .getDb()
+    //     .collection("users")
+    //     .find({})
+    //     .project({ password: 0 })
+    //     .toArray();
     res.locals.areas = await db
         .getDb()
         .collection("district-ward")
@@ -459,7 +1038,6 @@ const _edit_account = (req, res) => {
 };
 const _delete_account = (req, res) => {
     const { id } = req.body;
-    console.log(id);
     try {
         db.getDb()
             .collection("users")
@@ -499,13 +1077,14 @@ module.exports = {
     _delete_account,
     _edit_account,
     _approve_license,
-    _post_edit_billboard,
+    _edit_billboard,
+    _edit_billboard_on_map,
     _delete_billboard,
     _create_billboard,
     _get_billboards,
     _post_license_edit_request,
     _decline_license,
-    _get_report,
+    _get_reports,
     _post_report_change_request,
     _get_licenses,
     _change_report_status,

@@ -28,10 +28,7 @@ const _get_map = async (request, response) => {
       billboards: billboards,
     });
   } else if (response.locals.type_user == 2) {
-    return response.render("phan-cum-soVHTT/map", {
-      action: false,
-      billboards: billboards,
-    });
+    return response.redirect("/management/billboards");
   }
 };
 
