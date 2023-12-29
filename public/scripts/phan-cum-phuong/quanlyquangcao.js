@@ -62,7 +62,7 @@ function assignButton(item_id, advertisement) {
 		<li>
 			<button
 				class="btn btn-success me-3"
-				onclick="create_authorize_request('${advertisement.address}')">
+				onclick="create_authorize_request(${advertisement})">
 				<i class="bi bi-clipboard2-check"></i> Tạo yêu cầu
 			</button>
 		</li>
@@ -112,10 +112,11 @@ const table = document.querySelector("#main__list");
 //     console.log("complete");
 //   });
 
-function create_authorize_request(position = "", id = null) {
+function create_authorize_request(advertisement) {
   if (request_node) {
     body.removeChild(request_node);
   }
+  console.log(advertisement._id);
   let report = `
 	<section class="active" id="request-popup">
 	<div id="report-section-form-container">
@@ -132,11 +133,11 @@ function create_authorize_request(position = "", id = null) {
 	  method="post"
 	  action="/dashboard/license/request"
 	>
-	  <input type="hidden" name="id" value="${id}">
+	  <input type="hidden" name="id" value="${advertisement._id}">
 	  <h2>Cấp phép Quảng cáo</h2>
 	  <div class="form-section">
 		<label for="street">Địa chỉ yêu cầu:</label>
-		<textarea id="street">${position}</textarea>
+		<textarea id="street">${advertisement.properties.place}</textarea>
 	  </div>
 	  <div class="form-section">
 		<label for="type-billboard">Bảng quảng cáo:</label>
@@ -144,7 +145,7 @@ function create_authorize_request(position = "", id = null) {
 		  type="text"
 		  name="type-billboard"
 		  id="type-billboard"
-		  value=""
+		  value="${advertisement.properties.type}"
 		  placeholder="Chọn..."
 		/>
 	  </div>
@@ -234,6 +235,8 @@ function create_edit_request(billboard = null) {
   if (edit_node) {
     body.removeChild(edit_node);
   }
+  const a = billboard?.licenses.filter((i) => i.state === 2);
+
   let report = `
   <section class="active popup" id="report-popup">
   <div id="report-section-form-container">
@@ -254,10 +257,6 @@ function create_edit_request(billboard = null) {
 	<div class="form-section">
 	<input type="hidden" name="_id" value="${billboard?._id}">
 	<label for="type">Loại quảng cáo:</label>
-	<input type="text" name="type" id="type"
-	  value="${billboard?.properties.type}"
-	  placeholder="Chọn..."
-	/>
 	</div>
 	<div class="form-section">
 	<label for="street">Địa điểm:</label>
@@ -270,7 +269,7 @@ function create_edit_request(billboard = null) {
 	<select
     class="form-select mb-3"
     id="ad__type__edit"
-    name="ad_type_selector_edit"
+    name="type_advertise"
     aria-label="ad type selector"
     required
   />
@@ -307,12 +306,51 @@ function create_edit_request(billboard = null) {
     }>Dịch vụ</option>
   </select>
   </div>
- 
+  <div class="form-section">
+      <label for="form">Phân loại:</label>
+      <select
+    class="form-select mb-3"
+    id="land__type__edit"
+    name="place_type"
+    aria-label="Land type selector"
+    required
+  />
+  <option value="">Chọn...</option>
+  <option value="1" ${
+    billboard.properties.place_type ===
+    "Đất công/Công viên/Hành lang an toàn giao thông"
+      ? "selected"
+      : ""
+  }>
+    Đất công/Công viên/Hành lang an toàn giao thông
+  </option>
+  <option value="2" ${
+    billboard.properties.place_type === "Đất tư nhân/Nhà ở riêng lẻ"
+      ? "selected"
+      : ""
+  }>Đất tư nhân/Nhà ở riêng lẻ</option>
+  <option value="3" ${
+    billboard.properties.place_type === "Trung tâm thương mại" ? "selected" : ""
+  }>Trung tâm thương mại</option>
+  <option value="4" ${
+    billboard.properties.place_type === "Chợ" ? "selected" : ""
+  }>Chợ</option>
+  <option value="5" ${
+    billboard.properties.place_type === "Cây xăng" ? "selected" : ""
+  }>Cây xăng</option>
+  <option value="6" ${
+    billboard.properties.place_type === "Nhà chờ xe buýt" ? "selected" : ""
+  }>Nhà chờ xe buýt</option>
+  <option value="7" ${
+    billboard?.properties.type_advertise === "Trường Học" ? "selected" : ""
+  }>Trường học</option>
+  </select>
+    </div>
   <div class="form-section">
   <label for="form">Loại quảng cáo:</label>
   <select class="form-select mb-3"
   id="billboard__type"
-  name="billboard_type_selector_edit"
+  name="type"
   aria-label="billboard type selector"
   required>
   <option value="">Chọn...</option>
@@ -377,34 +415,35 @@ function create_edit_request(billboard = null) {
 	<label for="state">Trạng thái:</label>
 	<select
 	class="form-select mb-3"
-	id="billboard__status" name ="billboard__status"
+	id="billboard__status" name ="status"
 	aria-label="Billboard status selector">
 	<option selected>Chọn...</option>
-	<option value="1" class="link-primary">
+	<option value="1" class="link-primary" ${
+    billboard?.properties.zonning ? "selected" : ""
+  }>
 	  Đã quy hoạch
 	</option>
-	<option value="2" class="link-danger">
+	<option value="2" class="link-danger" ${
+    !billboard?.properties.zonning ? "selected" : ""
+  }>
 	  Chưa quy hoạch
 	</option>
   </select>
 	</div>
+	${
+    a.length > 0
+      ? `
 	<div class="form-section">
 	<label for="name">Thông tin công ty:</label>
 	<input type="text" name="name" id="name"
-	  value="${
-      billboard?.license?.company_name ? billboard?.license?.company_name : ""
-    }"
+	  value="${a[0].company_name}"
 	  placeholder="tên công ty"
 	/>
 	</div>
 	<div class="form-section">
 	<label for="contact">Thông tin liên lạc:</label>
 	<input type="text" name="contact" id="contact"
-	  value="${
-      billboard?.license?.company_contact
-        ? billboard?.license?.company_contact
-        : ""
-    }"
+	  value="${a[0].company_contact}"
 	  placeholder="Email công ty"
 	/>
 	</div>
@@ -412,18 +451,21 @@ function create_edit_request(billboard = null) {
   <div class="form-section">
 	<label for="start">Ngày bđ:</label>
 	<input type="date" name="start" id="start"
-	value="${billboard?.license?.start_date}"
+	value="${a[0].start_date}"
 	placeholder="XY"
 	/>
   </div>
   <div class="form-section">
   <label for="end">Ngày kt:</label>
   <input
-	type="date" name="end" id="end" value="${billboard?.license?.end_date}"
+	type="date" name="end" id="end" value="${a[0].end_date}"
 	placeholder="XY"
   />
   </div>
   </div>
+  `
+      : ""
+  }
   <div class="form-section file-section">
 	<p>Thông tin đính kèm:</p>
 	<div class="file-button">
@@ -434,7 +476,12 @@ function create_edit_request(billboard = null) {
 	  id="attached_files"
 	  />
 	</div>
+	
 	</div>
+	<div class="form-section">
+		<label for="tel">Thông tin chỉnh sửa:</label>
+		<div id="editor"></div>
+	  </div>
 	<div class ="px-4 d-flex justify-content-evenly w-100 btn-container">
 		<div class="form-section">
 			<button class="delete">Xoá</button>
@@ -461,6 +508,17 @@ function create_edit_request(billboard = null) {
 
   var quill = new Quill("#editor", {
     theme: "snow",
+  });
+
+  $(document).ready(function () {
+    $("#inscreen-form-login").on("submit", function () {
+      var hvalue = $(".ql-editor").html();
+      $(this).append(
+        "<textarea name='details' style='display:none'>" +
+          hvalue +
+          "</textarea>"
+      );
+    });
   });
 }
 let request_node;

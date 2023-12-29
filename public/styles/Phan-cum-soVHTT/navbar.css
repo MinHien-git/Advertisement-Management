@@ -17,20 +17,12 @@ header * {
   width: 100%;
 }
 
-#nav__item__icon{
-  color:hsla(219, 100%, 50%, 0.8);
+#nav__item__icon {
+  color: hsla(219, 100%, 50%, 0.8);
 }
-.current #nav__item__icon{
-  color:white;
+.current #nav__item__icon {
+  color: white;
 }
-
-#profile{
-  margin-top: auto;
-}
-
-  .official #primary-items-list li:last-child {
-    margin-top: 0;
-  }
 
 #primary-items-list #logout__li:hover {
   background-color: rgba(255, 0, 0, 0.192);

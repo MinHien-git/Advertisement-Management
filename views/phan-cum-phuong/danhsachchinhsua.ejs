@@ -98,7 +98,7 @@
             <div id="info__desc">
               <div class="list__title__container mt-3">
                 <ul class="list__flex fw-bold">
-                  <li class="list__col1">Bảng quảng cáo</li>
+                  <li class="list__col1">Tên cán bộ</li>
                   <li class="list__col2">Địa điểm</li>
                   <li class="list__col3">Trạng thái</li>
                   <li class="list__col4">
@@ -109,7 +109,7 @@
             </div>
 
             <% for (let i = 0; i < locals.requests.length; i++) { %>
-              <% const advertisement = locals.requests[i].billboard; %>
+              <% const advertisement = locals.requests[i] %>
               <% const id = advertisement._id; %>
             <div id=<%='"list__item' + id + '"'%>
               " class="card shadow-sm">
