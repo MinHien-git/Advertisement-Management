@@ -1,113 +1,107 @@
 <%if (locals.type_user === 0 || !locals.type_user) { %>
 <header id="primary-header" class="flex">
-    <%} else if(locals.type_user === 1 || locals.type_user === 2){%>
-    <header id="primary-header" class="flex official">
-        <%}%>
-        <div id="burger"></div>
-        <nav id="primary-navigation-bar">
-            <ul id="primary-items-list" class="my-3">
-                <%if (!locals.isAuth) { %>
-                <li id="profile">
-                    <i
-                        class="bi bi-person-circle vertical__center nav__item__icon"></i>
-                </li>
-                <%}else{%> <% if(locals.type_user === 0){%>
-                <li>
-                    <form id="logout" method="post" action="/logout">
-                        <button type="submit">
-                            <i
-                                class="bi bi-box-arrow-left"
-                                style="font-size: 1.5rem"></i>
-                            <!-- <span>Đăng xuất</span> -->
-                        </button>
-                    </form>
-                </li>
-                <%}else if(locals.type_user === 1){ %>
-                <li id="profile">
-                    <i
-                        class="bi bi-person-circle vertical__center nav__item__icon"></i>
-                    <span><%= locals.name%></span>
-                </li>
-                <li id="report-list">
-                    <i class="bi bi-clipboard2-check nav__item__icon"></i>
-                    <span>Danh sách báo cáo</span>
-                </li>
-                <li id="license-list">
-                    <i class="bi bi-check-circle nav__item__icon"></i>
-                    <span>Yêu cầu cấp phép</span>
-                </li>
-                <li id="edit-list">
-                    <i class="bi bi-pencil nav__item__icon"></i>
-                    <span>Yêu cầu chỉnh sửa</span>
-                </li>
-                <li id="billboard-list">
-                    <i class="bi bi-signpost-2 nav__item__icon"></i>
-                    <span>Danh sách quảng cáo</span>
-                </li>
-                <li onclick="document.getElementById('logout').submit()">
-                    <form id="logout" method="post" action="/logout">
-                        <button type="submit">
-                            <i
-                                class="bi bi-box-arrow-left"
-                                id="logout"
-                                style="font-size: 1.5rem"></i>
-                            <span>Đăng xuất</span>
-                        </button>
-                    </form>
-                </li>
-                <% }else if(locals.type_user === 2){%>
-                <li id="profile">
-                    <i
-                        class="bi bi-person-circle vertical__center"
-                        id="nav__item__icon"
-                        style="font-size: 1.5rem"></i>
-                    <span><%= locals.name%></span>
-                </li>
-                <li
-                    id="manage__billboards"
-                    onclick="navigate(this.id)">
-                    <i
-                        class="bi bi-clipboard2-check"
-                        id="nav__item__icon"
-                        style="font-size: 1.5rem"></i>
-                    <span>Quản lí điểm QC</span>
-                </li>
-                <li id="check__requests" onclick="navigate(this.id)">
-                    <i
-                        class="bi bi-check-circle"
-                        id="nav__item__icon"
-                        style="font-size: 1.5rem"></i>
-                    <span>Duyệt YC cấp phép</span>
-                </li>
-                <li id="list__reports" onclick="navigate(this.id)">
-                    <i
-                        class="bi bi-file-earmark-text"
-                        id="nav__item__icon"
-                        style="font-size: 1.5rem"></i>
-                    <span>Thống kê báo cáo</span>
-                </li>
-                <li id="manage__accounts" onclick="navigate(this.id)">
-                    <i
-                        class="bi bi-person-gear"
-                        id="nav__item__icon"
-                        style="font-size: 1.5rem"></i>
-                    <span>Quản lí tài khoản CB</span>
-                </li>
-                <li
-                    id="logout__li"
-                    onclick="document.getElementById('logout').submit()">
-                    <form id="logout" method="post" action="/logout">
-                        <button type="submit">
-                            <i
-                                class="bi bi-box-arrow-left"
-                                id="logout"
-                                style="font-size: 1.5rem"></i>
-                            <span>Đăng xuất</span>
-                        </button>
-                    </form>
-                </li>
-                <%}}%>
-            </ul>
-        </nav>
-    </header>
+  <%} else if(locals.type_user === 1 || locals.type_user === 2){%>
+  <header id="primary-header" class="flex official">
+    <%}%>
+    <div id="burger"></div>
+    <nav id="primary-navigation-bar">
+      <ul id="primary-items-list" class="my-3">
+        <%if (!locals.isAuth) { %>
+        <li id="profile">
+          <i class="bi bi-person-circle vertical__center nav__item__icon"></i>
+        </li>
+        <%}else{%> <% if(locals.type_user === 0){%>
+        <li>
+          <form id="logout" method="post" action="/logout">
+            <button type="submit">
+              <i class="bi bi-box-arrow-left" style="font-size: 1.5rem"></i>
+              <!-- <span>Đăng xuất</span> -->
+            </button>
+          </form>
+        </li>
+        <%}else if(locals.type_user === 1){ %>
+        <li id="profile" onclick="navigate(this.id, '<%=locals.uid%>')">
+          <i class="bi bi-person-circle vertical__center nav__item__icon"></i>
+          <span><%= locals.name%></span>
+        </li>
+        <li id="report-list">
+          <i class="bi bi-clipboard2-check nav__item__icon"></i>
+          <span>Danh sách báo cáo</span>
+        </li>
+        <li id="license-list">
+          <i class="bi bi-check-circle nav__item__icon"></i>
+          <span>Yêu cầu cấp phép</span>
+        </li>
+        <li id="edit-list">
+          <i class="bi bi-pencil nav__item__icon"></i>
+          <span>Yêu cầu chỉnh sửa</span>
+        </li>
+        <li id="billboard-list">
+          <i class="bi bi-signpost-2 nav__item__icon"></i>
+          <span>Danh sách quảng cáo</span>
+        </li>
+        <li onclick="document.getElementById('logout').submit()">
+          <form id="logout" method="post" action="/logout">
+            <button type="submit">
+              <i
+                class="bi bi-box-arrow-left"
+                id="logout"
+                style="font-size: 1.5rem"></i>
+              <span>Đăng xuất</span>
+            </button>
+          </form>
+        </li>
+        <% }else if(locals.type_user === 2){%>
+        <li id="profile">
+          <i
+            class="bi bi-person-circle vertical__center"
+            id="nav__item__icon"
+            style="font-size: 1.5rem"></i>
+          <span><%= locals.name%></span>
+        </li>
+        <li id="manage__billboards" onclick="navigate(this.id)">
+          <i
+            class="bi bi-clipboard2-check"
+            id="nav__item__icon"
+            style="font-size: 1.5rem"></i>
+          <span>Quản lí điểm QC</span>
+        </li>
+        <li id="check__requests" onclick="navigate(this.id)">
+          <i
+            class="bi bi-check-circle"
+            id="nav__item__icon"
+            style="font-size: 1.5rem"></i>
+          <span>Duyệt YC cấp phép</span>
+        </li>
+        <li id="list__reports" onclick="navigate(this.id)">
+          <i
+            class="bi bi-file-earmark-text"
+            id="nav__item__icon"
+            style="font-size: 1.5rem"></i>
+          <span>Thống kê báo cáo</span>
+        </li>
+        <li id="manage__accounts" onclick="navigate(this.id)">
+          <i
+            class="bi bi-person-gear"
+            id="nav__item__icon"
+            style="font-size: 1.5rem"></i>
+          <span>Quản lí tài khoản CB</span>
+        </li>
+        <li
+          id="logout__li"
+          onclick="document.getElementById('logout').submit()">
+          <form id="logout" method="post" action="/logout">
+            <button type="submit">
+              <i
+                class="bi bi-box-arrow-left"
+                id="logout"
+                style="font-size: 1.5rem"></i>
+              <span>Đăng xuất</span>
+            </button>
+          </form>
+        </li>
+        <%}}%>
+      </ul>
+    </nav>
+  </header>
 </header>
