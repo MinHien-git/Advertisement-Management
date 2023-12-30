@@ -1,81 +1,4 @@
-function assignButton(item_id, advertisement) {
-  const status_num = item_id % 4;
-  let button_container = new String("	");
-  switch (+status_num) {
-    case 1: {
-      button_container = `<ul class="buttons__container">
-	  <li>
-	  <button
-		  class="btn btn-primary me-3"
-		  data-bs-toggle="modal"
-		  data-bs-target="#Modify__modal" onclick="">
-		  <i class="bi bi-info-circle"></i> Thông tin
-	  </button>
-	</li>
-	<li>
-		<button
-			class="btn btn-warning me-3"
-			onclick="create_edit_request('${advertisement.address}')">
-			<i class="bi bi-pencil"></i> Chỉnh sửa
-		</button>
-	</li>
-	</ul>`;
-      break;
-    }
-    case 2: {
-      button_container = `<ul class="buttons__container">
-		<li>
-			<button
-				class="btn btn-primary me-3"
-				data-bs-toggle="modal"
-				data-bs-target="#Modify__modal" onclick="">
-				<i class="bi bi-info-circle"></i> Thông tin
-			</button>
-		</li>
-		<li>
-			<button
-				class="btn btn-danger"
-				onclick="">
-				<i class="bi bi-trash"></i> Hủy yêu cầu
-			</button>
-		</li>
-		</ul>`;
-      break;
-    }
-    default: {
-      button_container = `<ul class="buttons__container">
-		<li>
-			<button
-				class="btn btn-primary me-3"
-				data-bs-toggle="modal"
-				data-bs-target="#Modify__modal" onclick="">
-				<i class="bi bi-info-circle"></i> Thông tin
-			</button>
-		</li>
-		<li>
-			<button
-				class="btn btn-warning me-3"
-				onclick="create_edit_request('${advertisement.address}')">
-				<i class="bi bi-pencil"></i> Chỉnh sửa
-			</button>
-		</li>
-		<li>
-			<button
-				class="btn btn-success me-3"
-				onclick="create_authorize_request(${advertisement})">
-				<i class="bi bi-clipboard2-check"></i> Tạo yêu cầu
-			</button>
-		</li>
-		</ul>`;
-      break;
-    }
-  }
-  return button_container;
-}
-
 const table = document.querySelector("#main__list");
-
-// $.getJSON("../data/billboard.json", function (data) {
 //   advertisements = data;
 // })
 //   .done(function () {
@@ -177,7 +100,7 @@ function create_authorize_request(advertisement) {
 	  <label for="start-date">Ngày bắt đầu:</label>
 	  <input
 		type="date"
-		name="start-date"
+		name="start"
 		id="start"
 		value=""
 		placeholder="Email công ty"
@@ -259,7 +182,7 @@ function create_edit_request(billboard = null) {
   >
 	<h2>Chỉnh sửa Bảng QC</h2>
 	<div class="form-section">
-	<input type="hidden" name="_id" value="${billboard?._id}">
+	<input type="hidden" name="id" value="${billboard?._id}">
 	<label for="type">Loại quảng cáo:</label>
 	</div>
 	<div class="form-section">
@@ -380,13 +303,13 @@ function create_edit_request(billboard = null) {
     billboard?.properties.type === "Trụ treo băng rôn dọc" ? "selected" : ""
   }>Trụ treo băng rôn dọc</option>
   <option value="8" ${
-    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+    billboard?.properties.type === "Trụ treo băng rôn ngang" ? "selected" : ""
   }>Trụ treo băng rôn ngang</option>
   <option value="9" ${
-    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+    billboard?.properties.type === "Cổng chào" ? "selected" : ""
   }>Cổng chào</option>
   <option value="10" ${
-    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+    billboard?.properties.type === "Trung tâm thương mại" ? "selected" : ""
   }>Trung tâm thương mại</option>
 </select>
   </div>

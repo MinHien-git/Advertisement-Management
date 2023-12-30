@@ -83,18 +83,9 @@
               </button>
               <div class="dropdown-content">
                 <p>Tình trạng cấp phép</p>
-                <label
-                  ><input type="checkbox" name="license1" value="1" /> Đã
-                  duyệt</label
-                >
-                <label
-                  ><input type="checkbox" name="license2" value="1" /> Chưa
-                  duyệt</label
-                >
-                <label
-                  ><input type="checkbox" name="license3" value="1" /> Chưa cấp
-                  phép</label
-                >
+                <label><input type="checkbox" name="license1" value="Đã duyệt" /> Đã duyệt</label>
+                <label><input type="checkbox" name="license2" value="Chưa duyệt" /> Chưa duyệt</label>
+                <label><input type="checkbox" name="license3" value="Chưa cấp phép" /> Chưa cấp phép</label>
               </div>
             </div>
           </form>
@@ -113,27 +104,29 @@
               </div>
             </div>
 
-            <% for (let i=0; i < locals.billboards.length; i++) { %> 
-              <% const advertisement = locals.billboards[i]; %> 
-              <% const license = locals.billboards[i].licenses[0]; %>
+            <% for (let i=0; i < locals.licenses.length; i++) { %>
+            <% const advertisement = licenses[i].billboard[0] %>
+            <% const license = licenses[i] %>
             <div id="<%='list__item' + license._id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= license._id  %>">
                 <ul class="list__flex">
                   <li class="list__col1">
-                    <%= license.company_name %>
+                    <%= license?.company_name %>
                   </li>
                   <li class="list__col2">
                     <%= advertisement.properties.place %>
                   </li>
-                  <% if (license) { %> <% if (license.state===0) {%>
+                  <% if (license) { %> 
+                    <% if (license.state===0) {%>
                     <li class="list__col3 fw-semibold" style="color: #329a44">
                       Đã duyệt
                     </li>
-                  <% } else { %>
+                    <% } else { %>
                     <li class="list__col3 fw-semibold" style="color: #e7b400">
                       Chưa duyệt
                     </li>
-                  <% } %> <% } else { %>
+                    <% } %> 
+                  <% } else { %>
                     <li class="list__col3 fw-semibold" style="color: #e7b400">
                       Chưa cấp phép
                     </li>
@@ -161,12 +154,12 @@
                 <div class="card-body">
                   <ul id="full__info__list">
                     <li class="mock__image__container">
-                      <% if (advertisement.license?.images?.[0]) {%>
+                      <% if (license.images?.[0]) { %>
                         <img class="ad__image" src="<%= advertisement.license.images[0] %>" alt="hinh1">
                       <% } else { %> 
                         <div class="mock__image">&nbsp;</div>
                       <% } %>
-                      <% if (advertisement.license?.images?.[1]) {%>
+                      <% if (license.images?.[1]) { %>
                         <img class="ad__image" src="<%= advertisement.license.images[1] %>" alt="hinh1">
                       <% } else { %> 
                         <div class="mock__image">&nbsp;</div>
@@ -207,40 +200,26 @@
                       <ul>
                         <li>
                           Tên công ty:
-                          <span class="fw-bold">
-                            <%= license.company_name %>
-                          </span>
+                          <span class="fw-bold"><%= license.company_name %></span>
                         </li>
                         <li>
                           Email liên hệ:
-                          <span class="fw-bold">
-                            <%= license.company_contact %>
-                          </span>
+                          <span class="fw-bold"><%= license.company_contact %></span>
                         </li>
                         <li>
                           Ngày bắt đầu:
-                          <span class="fw-bold">
-                            <%= license.start_date %>
-                          </span>
+                          <span class="fw-bold"><%= license.start_date %></span>
                         </li>
                         <li>
                           Ngày kết thúc:
-                          <span class="fw-bold"> <%= license.end_date %> </span>
+                          <span class="fw-bold"><%= license.end_date %> </span>
                         </li>
                       </ul>
                     </li>
 
                     <li>
                       <ul class="buttons__container">
-                        <% if (!advertisement.license) { %>
-                        <li>
-                          <button
-                            class="btn btn-success"
-                            onclick="create_authorize_request('<%= advertisement.properties?.place %>', '<%= advertisement?._id %>')">
-                            <i class="bi bi-check-circle"></i> Tạo thêm yêu cầu
-                          </button>
-                        </li>
-                        <% } else if (advertisement.license.state===1) { %>
+                        <% if (license.state===1) { %>
                         <li>
                           <button
                             onclick="cancel_license('<%= license._id %>')"

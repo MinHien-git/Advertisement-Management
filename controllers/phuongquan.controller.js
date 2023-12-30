@@ -8,6 +8,20 @@ const db = require("../database/database");
 
 const { ObjectId } = require("mongodb");
 
+
+const getAddress = (req, obj) => {
+  if (req.path === "/dashboard/advertise" || req.path === "/dashboard/license") {
+    return obj.properties.place;
+  }
+  if (req.path === "/dashboard/report") {
+    return obj.place;
+  }
+  if (req.path === "/dashboard/request/edit") {
+    return obj.billboard[0].properties.place;
+  }
+}
+
+
 const compareLocation = (req, address) => {
   if (req.session.district) {
     if (
@@ -26,42 +40,21 @@ const compareLocation = (req, address) => {
   return true;
 };
 
+
+const processFilterQuery = (req, values, type_amount) => {
+
+}
+
+
 const _process_query = (req, arr) => {
-  if (req.path === "/dashboard/advertise" || req.path === "/dashboard/license") {
-    arr = arr.filter((e) => {
-      return compareLocation(req, e.properties.place);
-    });
-  }
-  if (req.path === "/dashboard/report") {
-    arr = arr.filter((e) => {
-      return compareLocation(req, e.place);
-    });
-  }
-  if (req.path === "/dashboard/request/edit") {
-    arr = arr.filter((e) => {
-      return compareLocation(req, e.billboard.properties.place);
-    });
-  }
+  arr = arr.filter((e) => {
+    return compareLocation(req, getAddress(req, e));
+  });
 
   if (req.query.search) {
-    if (
-      req.path == "/dashboard/advertise" ||
-      req.path == "/dashboard/license"
-    ) {
-      arr = arr.filter((e) => {
-        return e.properties.place.indexOf(req.query.search) >= 0;
-      });
-    }
-    if (req.path == "/dashboard/report") {
-      arr = arr.filter((e) => {
-        return e.place.indexOf(req.query.search) >= 0;
-      });
-    }
-    if (req.path == "/dashboard/request/edit") {
-      arr = arr.filter((e) => {
-        return e.billboard.properties.place.indexOf(req.query.search) >= 0;
-      });
-    }
+    arr = arr.filter((e) => {
+      return getAddress(req, e).indexOf(req.query.search) >= 0;
+    });
   }
 
   if (req.query.license1 || req.query.license2 || req.query.license3) {
@@ -110,43 +103,15 @@ const _process_query = (req, arr) => {
   }
 
   if (req.query.sort) {
-    if (req.path == "/dashboard/advertise") {
       if (req.query.sort == 0) {
         arr.sort((a, b) => {
-          a.properties.place.localeCompare(b.properties.place);
+          return getAddress(req, a).localeCompare(getAddress(req, b));
         });
       } else {
         arr.sort((a, b) => {
-          b.properties.place.localeCompare(a.properties.place);
+          return getAddress(req, b).localeCompare(getAddress(req, a));
         });
       }
-    }
-    if (req.path == "/dashboard/report") {
-      if (req.query.sort == 0) {
-        arr.sort((a, b) => {
-          a.place.localeCompare(b.place);
-        });
-      } else {
-        arr.sort((a, b) => {
-          b.place.localeCompare(a.place);
-        });
-      }
-    }
-    if (req.path == "/dashboard/request/edit") {
-      if (req.query.sort == 0) {
-        arr.sort((a, b) => {
-          a.billboard.properties.place.localeCompare(
-            b.billboard.properties.place
-          );
-        });
-      } else {
-        arr.sort((a, b) => {
-          b.billboard.properties.place.localeCompare(
-            a.billboard.properties.place
-          );
-        });
-      }
-    }
   }
   return arr;
 };
@@ -176,7 +141,6 @@ const _get_advertisement = async (req, res) => {
       },
     ])
     .toArray();
-  console.log(res.locals.billboards);
   res.locals.billboards = _process_query(req, res.locals.billboards);
 
   res.render("phan-cum-phuong/quanlyquangcao");
@@ -184,16 +148,16 @@ const _get_advertisement = async (req, res) => {
 
 //Yêu cầu cấp phép biển quáng cáo
 const _get_license = async (req, res) => {
-  res.locals.billboards = await db
+  res.locals.licenses = await db
     .getDb()
-    .collection("billboard")
+    .collection("licenses")
     .aggregate([
       {
         $lookup: {
-          from: "licenses",
-          localField: "_id",
+          from: "billboard",
+          localField: "billboard",
           foreignField: "_id",
-          as: "licenses",
+          as: "billboard",
         },
       },
     ])
@@ -202,11 +166,14 @@ const _get_license = async (req, res) => {
 };
 
 const _post_license_request = async (req, res) => {
-  let { id, email, from, name, contact, start, end, images, details } =
-    req.body;
-  console.log(req.body);
-  let license = new License(name, contact, start, end, 1);
-  if (license.send_licences_request(id)) console.log("send!");
+  let { id, email, from, name, contact, start, end, details } = req.body;
+  
+  let images = req.files.map((v) => {
+    return (v.destination + "/" + v.filename).substring(6);
+  });
+
+  let license = new License(new ObjectId(id), name, contact, start, end, 1, images);
+  if (license.send_licences_request()) console.log("send!");
   return res.redirect("/dashboard/license");
 };
 
@@ -250,14 +217,23 @@ const _get_request_edit = async (req, res) => {
   res.locals.requests = await db
     .getDb()
     .collection("requests")
-    .find()
+    .aggregate([
+      {
+        $lookup: {
+          from: "billboard",
+          localField: "billboard",
+          foreignField: "_id",
+          as: "billboard",
+        },
+      },
+    ])
     .toArray();
   res.locals.requests = _process_query(req, res.locals.requests);
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
 const _post_request_edit = async (req, res) => {
-  let { _id, images, details, type, status, type_advertise, place_type } =
+  let { id, details, type, status, type_advertise, place_type } =
     req.body;
   let billboard_type;
   let land_type;
@@ -344,6 +320,10 @@ const _post_request_edit = async (req, res) => {
       break;
   }
 
+  let images = req.files.map((v) => {
+    return (v.destination + "/" + v.filename).substring(6);
+  });
+
   let change = new Billboard(
     req.body.type_billboard,
     null,
@@ -368,13 +348,14 @@ const _post_request_edit = async (req, res) => {
 
   let request = new Request(
     new ObjectId(res.locals.uid),
-    new ObjectId(_id),
+    new ObjectId(id),
     change.properties,
     images,
     details,
     0,
     change.license
   );
+  
   if (await request.send_request()) console.log("send!");
   return res.redirect("/dashboard/license");
 };

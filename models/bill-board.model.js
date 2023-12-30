@@ -6,13 +6,12 @@ module.exports = class Billboard {
         type_billboard,
         geometry,
         properties,
-        license = null,
         change_request = null
     ) {
         this.type_billboard = type_billboard;
         this.geometry = geometry;
         this.properties = properties;
-        this.license = license;
+        this.licenses = [];
         this.change_request = change_request;
     }
 
@@ -26,22 +25,12 @@ module.exports = class Billboard {
     }
 
     async _update_billboard(id) {
-        console.log(id);
         let billboard = await getDb()
             .collection("billboard")
             .updateOne(
                 { _id: new ObjectId(id) },
                 { $set: { properties: { ...this.properties } } }
             );
-        console.log(billboard);
         return billboard;
-    }
-    async _update_license_state(id) {
-        await getDb()
-            .collection("billboard")
-            .updateOne(
-                { _id: new ObjectId(id) },
-                { $set: { license: { ...this.license } } }
-            );
     }
 };

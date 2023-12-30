@@ -76,7 +76,7 @@ function create_authorize_request(advertisement) {
     <label for="start-date">Ngày bắt đầu:</label>
     <input
       type="date"
-      name="start-date"
+      name="start"
       id="start"
       value=""
       placeholder="Email công ty"

@@ -117,6 +117,7 @@
 
             <% for (let i = 0; i < locals.billboards.length; i++) { %>
               <% const advertisement = locals.billboards[i]; %>
+              <% const license = advertisement.licenses[0]; %>
               <% const id = advertisement._id; %>
             <div id=<%='"list__item' + id + '"'%>
               " class="card shadow-sm">
@@ -151,13 +152,13 @@
                 <div class="card-body">
                   <ul id="full__info__list">
                     <li class="mock__image__container">
-                      <% if (advertisement.license?.images?.[0]) {%>
-                        <img class="ad__image" src="<%= advertisement.license.images[0] %>" alt="hinh1">
+                      <% if (license?.images?.[0]) {%>
+                        <img class="ad__image" src="<%= license.images[0] %>" alt="hinh1">
                       <% } else { %> 
                         <div class="mock__image">&nbsp;</div>
                       <% } %>
-                      <% if (advertisement.license?.images?.[1]) {%>
-                        <img class="ad__image" src="<%= advertisement.license.images[1] %>" alt="hinh1">
+                      <% if (license?.images?.[1]) {%>
+                        <img class="ad__image" src="<%= license.images[1] %>" alt="hinh1">
                       <% } else { %> 
                         <div class="mock__image">&nbsp;</div>
                       <% } %>
@@ -191,32 +192,32 @@
                         </li>
                       </ul>
                     </li>
-                    <% if (advertisement.license) { %>
+                    <% if (license) { %>
                     <li>
                       <p class="fw-bold">Thông tin công ty</p>
                       <ul>
                         <li>
                           Tên công ty:
                           <span class="fw-bold"
-                            ><%= advertisement.license.company_name ?advertisement.license.company_name  : ""  %></span
+                            ><%= license.company_name ? license.company_name  : ""  %></span
                           >
                         </li>
                         <li>
                           Email liên hệ:
                           <span class="fw-bold"
-                            ><%= advertisement.license.company_contact %></span
+                            ><%= license.company_contact %></span
                           >
                         </li>
                         <li>
                           Ngày bắt đầu:
                           <span class="fw-bold"
-                            ><%= advertisement.license.start_date %></span
+                            ><%= license.start_date %></span
                           >
                         </li>
                         <li>
                           Ngày kết thúc:
                           <span class="fw-bold"
-                            ><%= advertisement.license.end_date %></span
+                            ><%= license.end_date %></span
                           >
                         </li>
                       </ul>
@@ -228,7 +229,7 @@
                     <% } %>
                     <li>
                       <ul class="buttons__container">
-                        <% if (!advertisement.license) { %>
+                        <% if (!license) { %>
                         <li>
                           <button class="btn btn-primary" onclick='create_authorize_request(<%- JSON.stringify(advertisement) %>)'>
                             <i class="bi bi-card-list"></i>

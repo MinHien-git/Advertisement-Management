@@ -61,7 +61,7 @@ function get_resquest(position) {
       <label for="start-date">Ngày bắt đầu:</label>
       <input
         type="date"
-        name="start-date"
+        name="start"
         id="start-date"
         value=""
         placeholder="Email công ty"

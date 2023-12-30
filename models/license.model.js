@@ -3,7 +3,8 @@ const { REQUEST_STATE_TYPE } = require("../constants/report.type");
 const { ObjectId } = require("mongodb");
 
 module.exports = class License {
-  constructor(company_name, company_contact, start_date, end_date, state, images) {
+  constructor(billboard, company_name, company_contact, start_date, end_date, state, images) {
+    this.billboard = billboard;
     this.company_name = company_name;
     this.company_contact = company_contact;
     this.start_date = start_date;
@@ -26,7 +27,7 @@ module.exports = class License {
     );
   }
 
-  async send_licences_request(id) {
+  async send_licences_request() {
     let request = await db
       .getDb()
       .collection("licenses")
@@ -36,7 +37,7 @@ module.exports = class License {
         .getDb()
         .collection("billboard")
         .updateOne(
-          { _id: new ObjectId(id) },
+          { _id: this.billboard },
           { $push: { licenses: request.insertedId } }
         );
     }
