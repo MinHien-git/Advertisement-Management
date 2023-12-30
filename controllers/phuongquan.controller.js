@@ -57,50 +57,50 @@ const _process_query = (req, arr) => {
     });
   }
 
-  if (req.query.license1 || req.query.license2 || req.query.license3) {
-    arr = arr.filter((e) => {
-      return (
-        (e.license?.state === 0 && req.query.license1) ||
-        (e.license?.state === 1 && req.query.license2) ||
-        (!e.license && req.query.license3)
-      );
-    });
-  }
+    if (req.query.license1 || req.query.license2 || req.query.license3) {
+        arr = arr.filter((e) => {
+            return (
+                (e.license?.state === 0 && req.query.license1) ||
+                (e.license?.state === 1 && req.query.license2) ||
+                (!e.license && req.query.license3)
+            );
+        });
+    }
 
-  if (req.query.report) {
-    arr = arr.filter((e) => {
-      if (req.query.report == 0) {
-        return e.state === 0;
-      } else {
-        return !(e.state === 0);
-      }
-    });
-  }
+    if (req.query.report) {
+        arr = arr.filter((e) => {
+            if (req.query.report == 0) {
+                return e.state === 0;
+            } else {
+                return !(e.state === 0);
+            }
+        });
+    }
 
-  if (
-    req.query.report_type1 ||
-    req.query.report_type2 ||
-    req.query.report_type3 ||
-    req.query.report_type4
-  ) {
-    arr = arr.filter((e) => {
-      return (
-        (e.type === 0 && req.query.report_type1) ||
-        (e.type === 1 && req.query.report_type2) ||
-        (e.type === 2 && req.query.report_type3) ||
-        (e.type === 3 && req.query.report_type4)
-      );
-    });
-  }
+    if (
+        req.query.report_type1 ||
+        req.query.report_type2 ||
+        req.query.report_type3 ||
+        req.query.report_type4
+    ) {
+        arr = arr.filter((e) => {
+            return (
+                (e.type === 0 && req.query.report_type1) ||
+                (e.type === 1 && req.query.report_type2) ||
+                (e.type === 2 && req.query.report_type3) ||
+                (e.type === 3 && req.query.report_type4)
+            );
+        });
+    }
 
-  if (req.query.request1 || req.query.request2) {
-    arr = arr.filter((e) => {
-      return (
-        (e.state === 1 && req.query.request1) ||
-        (e.state === 0 && req.query.request2)
-      );
-    });
-  }
+    if (req.query.request1 || req.query.request2) {
+        arr = arr.filter((e) => {
+            return (
+                (e.state === 1 && req.query.request1) ||
+                (e.state === 0 && req.query.request2)
+            );
+        });
+    }
 
   if (req.query.sort) {
       if (req.query.sort == 0) {
@@ -117,12 +117,12 @@ const _process_query = (req, arr) => {
 };
 
 const _get_map = async (req, res) => {
-  res.locals.billboards = await db
-    .getDb()
-    .collection("billboard")
-    .find({})
-    .toArray();
-  res.render("phan-cum-phuong/trangchu");
+    res.locals.billboards = await db
+        .getDb()
+        .collection("billboard")
+        .find({})
+        .toArray();
+    res.render("phan-cum-phuong/trangchu");
 };
 
 //Danh sách bảng quảng cáo
@@ -143,7 +143,7 @@ const _get_advertisement = async (req, res) => {
     .toArray();
   res.locals.billboards = _process_query(req, res.locals.billboards);
 
-  res.render("phan-cum-phuong/quanlyquangcao");
+    res.render("phan-cum-phuong/quanlyquangcao");
 };
 
 //Yêu cầu cấp phép biển quáng cáo
@@ -185,32 +185,32 @@ const _post_cancel_license = async (req, res) => {
 
 //Thông tin báo cáo
 const _get_report = async (req, res) => {
-  res.locals.reports = await db
-    .getDb()
-    .collection("reports")
-    .find({})
-    .toArray();
-  res.locals.reports = _process_query(req, res.locals.reports);
-  res.render("phan-cum-phuong/danhsachbaocao");
+    res.locals.reports = await db
+        .getDb()
+        .collection("reports")
+        .find({})
+        .toArray();
+    res.locals.reports = _process_query(req, res.locals.reports);
+    res.render("phan-cum-phuong/danhsachbaocao");
 };
 
 const _get_report_information = async (req, res) => {
-  res.locals.report = await db
-    .getDb()
-    .collection("reports")
-    .findOne({ _id: new ObjectId(req.params.id) });
-  res.render("phan-cum-phuong/chitietbaocao");
+    res.locals.report = await db
+        .getDb()
+        .collection("reports")
+        .findOne({ _id: new ObjectId(req.params.id) });
+    res.render("phan-cum-phuong/chitietbaocao");
 };
 
 //Giải quyết quảng cáo
 const _post_report_edit = (req, res) => {
-  let { handling_method, state } = req.body;
-  let id = req.params;
+    let { handling_method, state } = req.body;
+    let id = req.params;
 
-  if (Report._update_report_state(id, state, handling_method)) {
+    if (Report._update_report_state(id, state, handling_method)) {
+        return res.redirect("/dashboard/report");
+    }
     return res.redirect("/dashboard/report");
-  }
-  return res.redirect("/dashboard/report");
 };
 
 const _get_request_edit = async (req, res) => {
@@ -239,62 +239,62 @@ const _post_request_edit = async (req, res) => {
   let land_type;
   let ad_type;
 
-  switch (type) {
-    case "1":
-      billboard_type = "Trụ/Cụm pano";
-      break;
-    case "2":
-      billboard_type = "Trụ bảng hiflex";
-      break;
-    case "3":
-      billboard_type = "Trụ màn hình điện tử LED";
-      break;
-    case "4":
-      billboard_type = "Trụ hộp đèn";
-      break;
-    case "5":
-      billboard_type = "Bảng hiflex ốp tường";
-      break;
-    case "6":
-      billboard_type = "Màn hình điện tử ốp tường";
-      break;
-    case "7":
-      billboard_type = "Trụ treo băng rôn dọc";
-      break;
-    case "8":
-      billboard_type = "Trụ treo băng rôn ngang";
-      break;
-    case "9":
-      billboard_type = "Cổng chào";
-      break;
-    case "10":
-      billboard_type = "Trung tâm thương mại";
-      break;
-  }
+    switch (type) {
+        case "1":
+            billboard_type = "Trụ/Cụm pano";
+            break;
+        case "2":
+            billboard_type = "Trụ bảng hiflex";
+            break;
+        case "3":
+            billboard_type = "Trụ màn hình điện tử LED";
+            break;
+        case "4":
+            billboard_type = "Trụ hộp đèn";
+            break;
+        case "5":
+            billboard_type = "Bảng hiflex ốp tường";
+            break;
+        case "6":
+            billboard_type = "Màn hình điện tử ốp tường";
+            break;
+        case "7":
+            billboard_type = "Trụ treo băng rôn dọc";
+            break;
+        case "8":
+            billboard_type = "Trụ treo băng rôn ngang";
+            break;
+        case "9":
+            billboard_type = "Cổng chào";
+            break;
+        case "10":
+            billboard_type = "Trung tâm thương mại";
+            break;
+    }
 
-  switch (type_advertise) {
-    case "1":
-      ad_type = "Cổ động chính trị";
-      break;
-    case "2":
-      ad_type = "Quảng cáo thương mại";
-      break;
-    case "3":
-      ad_type = "An toàn giao thông";
-      break;
-    case "4":
-      ad_type = "Xã hội hoá";
-      break;
-    case "5":
-      ad_type = "Mỹ phẩm";
-      break;
-    case "6":
-      ad_type = "Đồ ăn";
-      break;
-    case "7":
-      ad_type = "Điện ảnh";
-      break;
-  }
+    switch (type_advertise) {
+        case "1":
+            ad_type = "Cổ động chính trị";
+            break;
+        case "2":
+            ad_type = "Quảng cáo thương mại";
+            break;
+        case "3":
+            ad_type = "An toàn giao thông";
+            break;
+        case "4":
+            ad_type = "Xã hội hoá";
+            break;
+        case "5":
+            ad_type = "Mỹ phẩm";
+            break;
+        case "6":
+            ad_type = "Đồ ăn";
+            break;
+        case "7":
+            ad_type = "Điện ảnh";
+            break;
+    }
 
   switch (place_type) {
     case "1":
@@ -324,27 +324,27 @@ const _post_request_edit = async (req, res) => {
     return (v.destination + "/" + v.filename).substring(6);
   });
 
-  let change = new Billboard(
-    req.body.type_billboard,
-    null,
-    {
-      amount: "1 trụ/bảng",
-      place: req.body.place,
-      size: "2.5mx10m",
-      place_type: land_type,
-      type: billboard_type,
-      type_advertise: ad_type,
-      zoning: status == 1 ? true : false,
-    },
-    req.body.name
-      ? new License(
-          req.body.name,
-          req.body.contact,
-          req.body.start,
-          req.body.end
-        )
-      : null
-  );
+    let change = new Billboard(
+        req.body.type_billboard,
+        null,
+        {
+            amount: "1 trụ/bảng",
+            place: req.body.place,
+            size: "2.5mx10m",
+            place_type: land_type,
+            type: billboard_type,
+            type_advertise: ad_type,
+            zoning: status == 1 ? true : false,
+        },
+        req.body.name
+            ? new License(
+                  req.body.name,
+                  req.body.contact,
+                  req.body.start,
+                  req.body.end
+              )
+            : null
+    );
 
   let request = new Request(
     new ObjectId(res.locals.uid),
@@ -361,14 +361,14 @@ const _post_request_edit = async (req, res) => {
 };
 
 module.exports = {
-  _get_map,
-  _get_advertisement,
-  _get_license,
-  _post_cancel_license,
-  _post_license_request,
-  _get_report,
-  _get_report_information,
-  _post_report_edit,
-  _get_request_edit,
-  _post_request_edit,
+    _get_map,
+    _get_advertisement,
+    _get_license,
+    _post_cancel_license,
+    _post_license_request,
+    _get_report,
+    _get_report_information,
+    _post_report_edit,
+    _get_request_edit,
+    _post_request_edit,
 };

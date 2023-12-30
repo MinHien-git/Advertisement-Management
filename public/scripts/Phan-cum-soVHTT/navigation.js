@@ -9,3 +9,26 @@ function navigate(item_id) {
 
 	window.location.href = link
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const path = window.location.pathname;
+    let active_id = "";
+
+    if (
+        path.includes("/management/billboards") ||
+        path.includes("/management/billboards/map")
+    ) {
+        active_id = "manage__billboards";
+    } else if (path.includes("/management/licenses")) {
+        active_id = "check__requests";
+    } else if (path.includes("/management/reports")) {
+        active_id = "list__reports";
+    } else if (path.includes("/management/accounts")) {
+        active_id = "manage__accounts";
+    }
+
+    let active_el = document.getElementById(active_id);
+    console.log(active_el);
+    active_el.classList.add("current");
+});

@@ -78,28 +78,8 @@
       <%- include('../includes/header.ejs')%>
       <main>
         <div class="container" id="main__container">
-          <h1 class="fw-bold h2" id="page__title">Thống kê báo cáo</h1>
-          <form action="" class="d-flex search__form">
-            <input
-              type="text"
-              class="form-control me-2"
-              placeholder="Nhập thông tin"
-            />
-            <button
-              type="submit"
-              class="btn btn-primary nowrap"
-              id="search__btn"
-            >
-              Tìm kiếm
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-arrow-down-up"></i>
-              Sắp xếp
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-funnel"></i> &nbsp;Lọc
-            </button>
-          </form>
+          <h1 class="fw-bold h2 mb-0" id="page__title">Thống kê báo cáo</h1>
+          <%- include('../includes/list_control.ejs')%>
 
           <div id="main__list">
             <div id="info__desc">
@@ -115,9 +95,10 @@
                 </ul>
               </div>
             </div>
-            <% for (let i = 0; i < locals.reports.length; i++) { %> <% const
+            <div id="cards__container" class="overflow-auto">
+              <% for (let i = 0; i < locals.reports.length; i++) { %> <% const
             report = locals.reports[i]; %>
-            <div class="card shadow-sm report" id="list__item<%= report._id %>">
+            <div class="card shadow-sm report" id="<%= report._id %>">
               <div class="card-header" id="brief__info<%= report._id %>">
                 <ul class="list__flex">
                   <% if (report.type === 0) { %>
@@ -139,9 +120,9 @@
                   <% } %>
                   <li class="list__col2"><%= report.place %></li>
                   <li class="list__col3"><%= report.send_day %></li>
-                  <% if (report.state === 1) {%>
+                  <% if (report.state === 0) {%>
                     <li class="list__col4 fw-bold text-warning">Đang xử lý</li>
-                    <% } else if (report.state === 0){ %>
+                    <% } else if (report.state === 1){ %>
                       <li class="list__col4 fw-bold text-success">Đã cấp phép</li>
                     <% } else if (report.state === 2){ %>
                       <li class="list__col4 fw-bold text-danger">Đã bác bỏ</li>
@@ -172,6 +153,7 @@
               </div>
             </div>
             <% } %>
+            </div>
             <!--modal-->
             <div
               class="modal fade"

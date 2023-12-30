@@ -56,28 +56,8 @@
       <%- include('../includes/header.ejs')%>
       <main>
         <div class="container" id="main__container">
-          <h1 class="fw-bold h2" id="page__title">Duyệt yêu cầu cấp phép</h1>
-          <form action="" class="d-flex search__form">
-            <input
-              type="text"
-              class="form-control me-2"
-              placeholder="Nhập thông tin"
-            />
-            <button
-              type="submit"
-              class="btn btn-primary nowrap"
-              id="search__btn"
-            >
-              Tìm kiếm
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-arrow-down-up"></i>
-              Sắp xếp
-            </button>
-            <button type="submit" class="btn btn-dark nowrap">
-              <i class="bi bi-funnel"></i> &nbsp;Lọc
-            </button>
-          </form>
+          <h1 class="fw-bold h2 mb-0" id="page__title">Duyệt yêu cầu cấp phép</h1>
+          <%- include('../includes/list_control.ejs')%>
 
           <div id="main__list">
             <div id="info__desc">
@@ -90,10 +70,14 @@
                     <button class="btn btn-link ps-4" disabled></button>
                   </li>
                 </ul>
-                <% for (let i=0; i < locals.billboards.length; i++) { %> <%
+              </div>
+            </div>
+
+            <div id="cards__container" class="overflow-auto">
+              <% for (let i=0; i < locals.billboards.length; i++) { %> <%
                 const advertisement=locals.billboards[i]; %> <% const
                 id=advertisement._id; %>
-                <div id="<%='list__item' + id %>" class="card shadow-sm">
+                <div id="<%=id%>" class="card shadow-sm">
                   <div class="card-header" id="brief__info<%= id %>">
                     <ul class="list__flex">
                       <li class="list__col1">
@@ -254,9 +238,8 @@
                   </div>
                 </div>
                 <% } %>
-              </div>
             </div>
-
+            <%- include('../includes/pagination.ejs')%>
             <div
               class="modal fade"
               id="require__changes__modal"
@@ -532,7 +515,7 @@
         let new_card = document.createElement("div");
         const id = advertisement.globalid;
         new_card.className = "card shadow-sm";
-        new_card.id = "list__item" + id;
+        new_card.id = id;
         new_card.innerHTML = `
 							<div class="card-header" id="brief__info${id}">
 								<ul class="list__flex">

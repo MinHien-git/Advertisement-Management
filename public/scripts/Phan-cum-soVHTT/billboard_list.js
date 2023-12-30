@@ -52,9 +52,9 @@ async function editBillboard(e) {
             ].text,
         })
     );
-    console.log(xhr.responseText);
+    xhr.onload = () => [console.log(`${xhr.response}`)];
     $("#Modify__modal").modal("hide");
-    showToast("save__success__toast");
+    // showToast('save__success__toast')
 }
 
 async function deleteBillboard(e) {

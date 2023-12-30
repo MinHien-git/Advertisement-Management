@@ -1,0 +1,70 @@
+    <%const items_per_page = locals.items_per_page%>
+    <%const first_index = 1 + (items_per_page * (locals.current_page - 1))%>
+    <%const last_index = locals.current_page == locals.page_amount ? locals.item_amount : items_per_page + (items_per_page * (locals.current_page - 1))%>
+        <div id="pagination__container">
+        <%if(locals.item_amount != 0){%>
+        <p id="pagination__info"><%=first_index%>-<%=last_index%> / <%=locals.item_amount%> dữ liệu.</p>
+        <%} else{%>
+            <p id="pagination__info">Không tìm thấy dữ liệu!</p>
+            <%}%>
+        <%if(locals.page_amount > 1){%>
+                <ul class="pagination" id="pagination__list">
+            <%if (current_page == 1){%>
+                <li class="page-item disabled" id="prev__page">
+                <button class="btn btn-link disabled"><i class="bi bi-arrow-left"></i></button>
+                </li>
+            <%} else{%>
+                    <li class="page-item" id="prev__page" onclick="changePage(<%=locals.current_page - 1%>)">
+                        <button class="btn btn-link"><i class="bi bi-arrow-left"></i></button>
+                        </li>
+                            <%}%>
+                <%let i = locals.current_page > 3 ? locals.current_page - 2 : 1%>
+                <%if (i > 1){%>
+                    <li class="page-item" id="page_1" onclick="changePage(1)"><button class="btn btn-link">1</button></li>
+                    <%}%>
+                <%if (i == 3){%>
+                    <li class="page-item" id="page_2" onclick="changePage(2)"><button class="btn btn-link">2</button></li>
+                    <%}%>
+                <%if (i > 3){%>
+                    <li class="page-item disabled" id="three__dots__pagination"><a class="page-link" href="">...</a></li>
+                    <%}%>
+                <%for (; i <= locals.current_page + 2 && i <= locals.page_amount; ++i){%>
+                    <li class="page-item" id="page_<%=i%>" onclick="changePage(<%=i%>)"><button class="btn btn-link"><%=i%></button></li>
+                    <%}%>
+
+                <%if (i < locals.page_amount - 1){%>
+                    <li class="page-item disabled" id="three__dots__pagination"><a class="page-link" href="">...</a></li>
+                    <%}%>
+                <%if (i == locals.page_amount - 1){%>
+                    <li class="page-item" id="page_<%=locals.page_amount - 1%>" onclick="changePage(<%=locals.page_amount - 1%>)">
+                        <button class="btn btn-link"><%=locals.page_amount - 1%></button>
+                    </li>
+                    <%}%>
+                <%if (i <= locals.page_amount){%>
+                    <li class="page-item" id="page_<%=locals.page_amount%>" onclick="changePage(<%=locals.page_amount%>)">
+                        <button class="btn btn-link"><%=locals.page_amount%></button>
+                    </li>
+                    <%}%>
+                    <%if (current_page == page_amount){%>
+                    <li class="page-item disabled" id="next__page">
+                <button class="btn btn-link disabled"><i class="bi bi-arrow-right"></i></button>
+                </li>
+                    <%} else{%>
+                        <li class="page-item" id="next__page" onclick="changePage(<%=locals.current_page + 1%>)">
+                        <button class="btn btn-link"><i class="bi bi-arrow-right"></i></button>
+                        </li>
+                        <%}%>
+                    </ul>
+            <script>
+                document.addEventListener("DOMContentLoaded", ()=>{
+                    const active_page = document.getElementById("page_" + <%-locals.current_page%>)
+                    active_page.classList.add("active")
+                    active_page.style = "pointer-events: none"
+                    active_page.querySelector("button").classList.remove("btn-link")
+                    active_page.querySelector("button").classList.add("btn-primary")
+
+                    })
+            </script>
+        <%}%>
+
+    </div>

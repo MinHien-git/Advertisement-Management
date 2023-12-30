@@ -8,14 +8,17 @@ router.get("/management/billboards", SOVHTTcontroller._get_billboards);
 
 router.get("/management/billboards/map", mapController._manage_map);
 
+router.put("/management/billboards/", SOVHTTcontroller._edit_billboard);
+
+//thao tác trên map
 router.post(
-    "/management/billboards/create",
+    "/management/billboards/map/create",
     SOVHTTcontroller._create_billboard
 );
 
 router.post(
-    "/management/billboards/edit",
-    SOVHTTcontroller._post_edit_billboard
+    "/management/billboards/map/edit",
+    SOVHTTcontroller._edit_billboard_on_map
 );
 
 router.delete("/management/billboards", SOVHTTcontroller._delete_billboard);
@@ -34,7 +37,7 @@ router.post(
 router.put("/management/licenses/decline", SOVHTTcontroller._decline_license);
 
 //Duyệt yêu cầu cấp phép/chỉnh sửa nội dung QC
-router.get("/management/reports", SOVHTTcontroller._get_report);
+router.get("/management/reports", SOVHTTcontroller._get_reports);
 router.put("/management/reports", SOVHTTcontroller._change_report_status);
 router.post(
     "/management/reports",

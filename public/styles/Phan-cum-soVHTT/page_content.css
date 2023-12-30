@@ -6,14 +6,20 @@ main {
   background-color: white;
 }
 
-#main__container :not(h1) {
-  font-size: 0.9rem;
+#main__container button {
+  font-size: 0.75rem !important;
 }
 
 /* ||SEARCH FORM AND BUTTONS */
 .search__form button {
   margin-right: 0.5%;
 }
+
+.search__form input{
+  font-size: 0.8rem !important;
+}
+
+/**/
 
 #page__title {
   margin: 2rem 0 3rem 0;
@@ -22,8 +28,7 @@ main {
 #map__btn {
   float: right;
   margin: 0 0.4rem 1rem 0;
-  padding: 0.4rem;
-  width: 12.5rem;
+  width: 12.4rem;
 }
 
 #create__account__btn {
@@ -40,6 +45,31 @@ main {
 .search__form {
   clear: both;
 }
+
+.dropdown-menu{
+  border-radius: 5%;
+}
+
+.dropdown-menu *{
+  font-size: 0.85rem !important;
+}
+
+.dropdown-menu button{
+  width: 100%;
+  border-radius: 5%;
+}
+.dropdown-menu button :not(.active){
+
+  background-color: white !important;
+}
+
+
+.filter__info__container{
+  overflow: auto;
+  max-height: 15vh;
+  margin-left: 1rem;
+}
+
 
 /* ||LIST */
 .list__title__container {
@@ -113,6 +143,9 @@ main {
   margin-bottom: 0.5rem;
   height: fit-content;
 }
+#main__list * {
+  font-size: 0.9rem !important;
+}
 
 .multi__input__field {
   display: flex;
@@ -127,6 +160,56 @@ main {
 .small__input {
   width: 45%;
   height: fit-content;
+}
+
+#cards__container{
+  height: 60vh;
+}
+
+/* #load__more{
+  display: flex;
+  justify-content: center;
+  min-width: 100%;
+}
+
+#load__more .load__button{
+  text-decoration: none;
+  font-size: 0.8rem !important;
+  margin: 0 2rem;
+} */
+
+#pagination__container{
+  width: 100%;
+  margin: 0.5rem auto;
+  display: flex;
+  justify-content: end;
+  align-items: baseline;
+}
+
+#pagination__container .pagination li button{
+  border: none;
+  border-radius: 20%;
+  font-size: 0.8rem !important;
+  text-decoration: none;
+}
+#pagination__info{
+  margin-right: 1.5rem;
+  font-size: 0.85rem !important;
+  color: gray;
+}
+
+#three__dots__pagination a{
+  padding: 0;
+  padding-top: 0.5rem;
+  border: none;
+  border-radius: 20%;
+  font-size: 0.7rem !important;
+  letter-spacing: -2px;
+  text-align: end;
+}
+
+.card-header{
+  padding-right: 0;
 }
 
 #change__textarea{
