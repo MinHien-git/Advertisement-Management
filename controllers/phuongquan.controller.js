@@ -10,13 +10,13 @@ const { ObjectId } = require("mongodb");
 
 
 const getAddress = (req, obj) => {
-  if (req.path === "/dashboard/advertise" || req.path === "/dashboard/license") {
+  if (req.path === "/dashboard/advertise") {
     return obj.properties.place;
   }
   if (req.path === "/dashboard/report") {
     return obj.place;
   }
-  if (req.path === "/dashboard/request/edit") {
+  if (req.path === "/dashboard/request/edit" || req.path === "/dashboard/license") {
     return obj.billboard[0].properties.place;
   }
 }
@@ -41,12 +41,23 @@ const compareLocation = (req, address) => {
 };
 
 
-const processFilterQuery = (req, values, type_amount) => {
-
+const processFilterQuery = (req, mapping, values, query_name) => {
+  return (e) => {
+    let have_query = false;
+    for (let i = 0; i < values.length; i += 1) {
+      if (req.query[query_name + (i + 1).toString()]) {
+        if (mapping(e) == values[i]) {
+          return true;
+        }
+        have_query = true;
+      }
+    }
+    return !have_query;
+  };
 }
 
 
-const _process_query = (req, arr) => {
+const processQuery = (req, arr) => {
   arr = arr.filter((e) => {
     return compareLocation(req, getAddress(req, e));
   });
@@ -57,50 +68,25 @@ const _process_query = (req, arr) => {
     });
   }
 
-    if (req.query.license1 || req.query.license2 || req.query.license3) {
-        arr = arr.filter((e) => {
-            return (
-                (e.license?.state === 0 && req.query.license1) ||
-                (e.license?.state === 1 && req.query.license2) ||
-                (!e.license && req.query.license3)
-            );
-        });
-    }
+  if (req.query.report) {
+    arr = arr.filter((e) => { 
+      if (e.state == 0) {
+        return req.query.report == 0;
+      }
+      else {
+        return !(req.query.report == 0);
+      }
+    });
+  }
 
-    if (req.query.report) {
-        arr = arr.filter((e) => {
-            if (req.query.report == 0) {
-                return e.state === 0;
-            } else {
-                return !(e.state === 0);
-            }
-        });
-    }
-
-    if (
-        req.query.report_type1 ||
-        req.query.report_type2 ||
-        req.query.report_type3 ||
-        req.query.report_type4
-    ) {
-        arr = arr.filter((e) => {
-            return (
-                (e.type === 0 && req.query.report_type1) ||
-                (e.type === 1 && req.query.report_type2) ||
-                (e.type === 2 && req.query.report_type3) ||
-                (e.type === 3 && req.query.report_type4)
-            );
-        });
-    }
-
-    if (req.query.request1 || req.query.request2) {
-        arr = arr.filter((e) => {
-            return (
-                (e.state === 1 && req.query.request1) ||
-                (e.state === 0 && req.query.request2)
-            );
-        });
-    }
+  if (req.path === "/dashboard/license") {
+    arr = arr.filter(processFilterQuery(req, (e) => { return e.state }, [0, 1], "license"));
+  }
+  else if (req.path === "/dashboard/advertise") {
+    arr = arr.filter(processFilterQuery(req, (e) => { return e.licenses[0]?.state }, [0, 1, undefined], "license"));
+  }
+  arr = arr.filter(processFilterQuery(req, (e) => { return e.type }, [0, 1, 2, 3], "report_type"));
+  arr = arr.filter(processFilterQuery(req, (e) => { return e.state }, [1, 0], "request"));
 
   if (req.query.sort) {
       if (req.query.sort == 0) {
@@ -113,6 +99,7 @@ const _process_query = (req, arr) => {
         });
       }
   }
+
   return arr;
 };
 
@@ -141,7 +128,7 @@ const _get_advertisement = async (req, res) => {
       },
     ])
     .toArray();
-  res.locals.billboards = _process_query(req, res.locals.billboards);
+  res.locals.billboards = processQuery(req, res.locals.billboards);
 
     res.render("phan-cum-phuong/quanlyquangcao");
 };
@@ -162,6 +149,7 @@ const _get_license = async (req, res) => {
       },
     ])
     .toArray();
+  res.locals.licenses = processQuery(req, res.locals.licenses);
   res.render("phan-cum-phuong/danhsachcapphep");
 };
 
@@ -190,7 +178,7 @@ const _get_report = async (req, res) => {
         .collection("reports")
         .find({})
         .toArray();
-    res.locals.reports = _process_query(req, res.locals.reports);
+    res.locals.reports = processQuery(req, res.locals.reports);
     res.render("phan-cum-phuong/danhsachbaocao");
 };
 
@@ -228,7 +216,7 @@ const _get_request_edit = async (req, res) => {
       },
     ])
     .toArray();
-  res.locals.requests = _process_query(req, res.locals.requests);
+  res.locals.requests = processQuery(req, res.locals.requests);
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
