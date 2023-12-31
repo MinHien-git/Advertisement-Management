@@ -66,6 +66,19 @@
               id="search__btn">
               Tìm kiếm
             </button>
+            <% if (locals.ward_list) { %>
+            <div class="dropdown">
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-arrow-down-up"></i>
+                Lọc phường
+              </button>
+              <div class="dropdown-content">
+                <% for (let i = 0; i < locals.ward_list.length; i++) { %>
+                <label><input type="checkbox" name="ward<%= i + 1 %>" value="<%= i %>" /> <%= locals.ward_list[i].ward %></label>
+                <% } %>
+              </div>
+            </div>
+            <% } %>
             <div class="dropdown">
               <button class="dropbtn btn btn-dark nowrap">
                 <i class="bi bi-arrow-down-up"></i>
@@ -83,9 +96,8 @@
               </button>
               <div class="dropdown-content">
                 <p>Tình trạng cấp phép</p>
-                <label><input type="checkbox" name="license1" value="Đã duyệt" /> Đã duyệt</label>
-                <label><input type="checkbox" name="license2" value="Chưa duyệt" /> Chưa duyệt</label>
-                <label><input type="checkbox" name="license3" value="Chưa cấp phép" /> Chưa cấp phép</label>
+                <label><input type="checkbox" name="license1" value="0" /> Đã duyệt</label>
+                <label><input type="checkbox" name="license2" value="1" /> Chưa duyệt</label>
               </div>
             </div>
           </form>

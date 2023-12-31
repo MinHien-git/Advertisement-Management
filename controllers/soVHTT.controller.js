@@ -131,6 +131,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
 
 //số item mỗi trang
 const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 20;
 
 //lấy số item tổng cộng và số trang
 async function getItemAmount(collection_id, query = {}) {
@@ -980,9 +981,6 @@ const _get_licenses = async (req, res) => {
 
     let search_query = createSearchQuery(search_val);
 
-    res.locals.isAuth = true;
-    res.locals.type_user = 2;
-
     let item_list = await processList("licenses", search_query);
 
     res.locals.list_districts = await getUniqueDistrictsWards(item_list);
@@ -1190,9 +1188,6 @@ const _get_accounts = async (req, res) => {
     let sort_val = req.query.sort;
 
     let search_query = createSearchQuery(search_val);
-
-    res.locals.type_user = 2;
-    res.locals.isAuth = true;
 
     let item_list = await processList("users", search_query);
 
