@@ -108,6 +108,18 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
     for (let i = 0; i < expired_licenses.length; i++) {
         await db
             .getDb()
+            .collection("billboard")
+            .findOneAndUpdate(
+                { license: expired_licenses[i] },
+                { $unset: { license: "" } }
+            );
+        console.log(
+            "removed license " +
+                expired_licenses[i].toString() +
+                " from billboard."
+        );
+        await db
+            .getDb()
             .collection("licenses")
             .findOneAndUpdate(
                 { _id: expired_licenses[i] },
