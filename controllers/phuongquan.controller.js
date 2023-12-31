@@ -20,11 +20,13 @@ const getAddress = (req, obj) => {
   if (req.path === "/dashboard/report") {
     return obj.place;
   }
-  if (req.path === "/dashboard/request/edit" || req.path === "/dashboard/license") {
+  if (
+    req.path === "/dashboard/request/edit" ||
+    req.path === "/dashboard/license"
+  ) {
     return obj.billboard[0].properties.place;
   }
-}
-
+};
 
 const compareLocation = (req, address) => {
   if (req.session.district) {
@@ -73,8 +75,7 @@ const processFilterQuery = (req, mapping, values, query_name) => {
     }
     return !have_query;
   };
-}
-
+};
 
 const processQuery = (req, arr) => {
   arr = arr.filter((e) => {
@@ -88,11 +89,10 @@ const processQuery = (req, arr) => {
   }
 
   if (req.query.report) {
-    arr = arr.filter((e) => { 
+    arr = arr.filter((e) => {
       if (e.state == 0) {
         return req.query.report == 0;
-      }
-      else {
+      } else {
         return !(req.query.report == 0);
       }
     });
@@ -103,37 +103,64 @@ const processQuery = (req, arr) => {
     arr = arr.filter(processFilterQuery(req, (e) => { return getAddress(req, e).split(", ")[1] }, wards, "ward"));
   }
   if (req.path === "/dashboard/license") {
-    arr = arr.filter(processFilterQuery(req, (e) => { return e.state }, [0, 1], "license"));
-  }
-  else if (req.path === "/dashboard/advertise") {
-    arr = arr.filter(processFilterQuery(req, (e) => { return e.licenses[0]?.state }, [0, 1, undefined], "license"));
+    arr = arr.filter(
+      processFilterQuery(
+        req,
+        (e) => {
+          return e.state;
+        },
+        [0, 1],
+        "license"
+      )
+    );
+  } else if (req.path === "/dashboard/advertise") {
+    arr = arr.filter(
+      processFilterQuery(
+        req,
+        (e) => {
+          return e.licenses[0]?.state;
+        },
+        [0, 1, undefined],
+        "license"
+      )
+    );
   }
   arr = arr.filter(processFilterQuery(req, (e) => { return e.type }, [0, 1, 2, 3], "report_type"));
   arr = arr.filter(processFilterQuery(req, (e) => { return e.state }, [1, 0], "request"));
   
 
   if (req.query.sort) {
-      if (req.query.sort == 0) {
-        arr.sort((a, b) => {
-          return getAddress(req, a).localeCompare(getAddress(req, b));
-        });
-      } else {
-        arr.sort((a, b) => {
-          return getAddress(req, b).localeCompare(getAddress(req, a));
-        });
-      }
+    if (req.query.sort == 0) {
+      arr.sort((a, b) => {
+        return getAddress(req, a).localeCompare(getAddress(req, b));
+      });
+    } else {
+      arr.sort((a, b) => {
+        return getAddress(req, b).localeCompare(getAddress(req, a));
+      });
+    }
   }
 
   return arr;
 };
 
+const _profile = async (req, res) => {
+  let { id } = req.params;
+  res.locals.profile = await db
+    .getDb()
+    .collection("users")
+    .findOne({ _id: new ObjectId(id) });
+
+  res.render("phan-cum-phuong/profilecanbo");
+};
+
 const _get_map = async (req, res) => {
-    res.locals.billboards = await db
-        .getDb()
-        .collection("billboard")
-        .find({})
-        .toArray();
-    res.render("phan-cum-phuong/trangchu");
+  res.locals.billboards = await db
+    .getDb()
+    .collection("billboard")
+    .find({})
+    .toArray();
+  res.render("phan-cum-phuong/trangchu");
 };
 
 //Danh sách bảng quảng cáo
@@ -180,12 +207,20 @@ const _get_license = async (req, res) => {
 
 const _post_license_request = async (req, res) => {
   let { id, email, from, name, contact, start, end, details } = req.body;
-  
+
   let images = req.files.map((v) => {
     return (v.destination + "/" + v.filename).substring(6);
   });
 
-  let license = new License(new ObjectId(id), name, contact, start, end, 1, images);
+  let license = new License(
+    new ObjectId(id),
+    name,
+    contact,
+    start,
+    end,
+    1,
+    images
+  );
   if (license.send_licences_request()) console.log("send!");
   return res.redirect("/dashboard/license");
 };
@@ -209,22 +244,22 @@ const _get_report = async (req, res) => {
 };
 
 const _get_report_information = async (req, res) => {
-    res.locals.report = await db
-        .getDb()
-        .collection("reports")
-        .findOne({ _id: new ObjectId(req.params.id) });
-    res.render("phan-cum-phuong/chitietbaocao");
+  res.locals.report = await db
+    .getDb()
+    .collection("reports")
+    .findOne({ _id: new ObjectId(req.params.id) });
+  res.render("phan-cum-phuong/chitietbaocao");
 };
 
 //Giải quyết quảng cáo
 const _post_report_edit = (req, res) => {
-    let { handling_method, state } = req.body;
-    let id = req.params;
+  let { handling_method, state } = req.body;
+  let id = req.params;
 
-    if (Report._update_report_state(id, state, handling_method)) {
-        return res.redirect("/dashboard/report");
-    }
+  if (Report._update_report_state(id, state, handling_method)) {
     return res.redirect("/dashboard/report");
+  }
+  return res.redirect("/dashboard/report");
 };
 
 const _get_request_edit = async (req, res) => {
@@ -248,68 +283,67 @@ const _get_request_edit = async (req, res) => {
 };
 
 const _post_request_edit = async (req, res) => {
-  let { id, details, type, status, type_advertise, place_type } =
-    req.body;
+  let { id, details, type, status, type_advertise, place_type } = req.body;
   let billboard_type;
   let land_type;
   let ad_type;
 
-    switch (type) {
-        case "1":
-            billboard_type = "Trụ/Cụm pano";
-            break;
-        case "2":
-            billboard_type = "Trụ bảng hiflex";
-            break;
-        case "3":
-            billboard_type = "Trụ màn hình điện tử LED";
-            break;
-        case "4":
-            billboard_type = "Trụ hộp đèn";
-            break;
-        case "5":
-            billboard_type = "Bảng hiflex ốp tường";
-            break;
-        case "6":
-            billboard_type = "Màn hình điện tử ốp tường";
-            break;
-        case "7":
-            billboard_type = "Trụ treo băng rôn dọc";
-            break;
-        case "8":
-            billboard_type = "Trụ treo băng rôn ngang";
-            break;
-        case "9":
-            billboard_type = "Cổng chào";
-            break;
-        case "10":
-            billboard_type = "Trung tâm thương mại";
-            break;
-    }
+  switch (type) {
+    case "1":
+      billboard_type = "Trụ/Cụm pano";
+      break;
+    case "2":
+      billboard_type = "Trụ bảng hiflex";
+      break;
+    case "3":
+      billboard_type = "Trụ màn hình điện tử LED";
+      break;
+    case "4":
+      billboard_type = "Trụ hộp đèn";
+      break;
+    case "5":
+      billboard_type = "Bảng hiflex ốp tường";
+      break;
+    case "6":
+      billboard_type = "Màn hình điện tử ốp tường";
+      break;
+    case "7":
+      billboard_type = "Trụ treo băng rôn dọc";
+      break;
+    case "8":
+      billboard_type = "Trụ treo băng rôn ngang";
+      break;
+    case "9":
+      billboard_type = "Cổng chào";
+      break;
+    case "10":
+      billboard_type = "Trung tâm thương mại";
+      break;
+  }
 
-    switch (type_advertise) {
-        case "1":
-            ad_type = "Cổ động chính trị";
-            break;
-        case "2":
-            ad_type = "Quảng cáo thương mại";
-            break;
-        case "3":
-            ad_type = "An toàn giao thông";
-            break;
-        case "4":
-            ad_type = "Xã hội hoá";
-            break;
-        case "5":
-            ad_type = "Mỹ phẩm";
-            break;
-        case "6":
-            ad_type = "Đồ ăn";
-            break;
-        case "7":
-            ad_type = "Điện ảnh";
-            break;
-    }
+  switch (type_advertise) {
+    case "1":
+      ad_type = "Cổ động chính trị";
+      break;
+    case "2":
+      ad_type = "Quảng cáo thương mại";
+      break;
+    case "3":
+      ad_type = "An toàn giao thông";
+      break;
+    case "4":
+      ad_type = "Xã hội hoá";
+      break;
+    case "5":
+      ad_type = "Mỹ phẩm";
+      break;
+    case "6":
+      ad_type = "Đồ ăn";
+      break;
+    case "7":
+      ad_type = "Điện ảnh";
+      break;
+  }
 
   switch (place_type) {
     case "1":
@@ -339,27 +373,27 @@ const _post_request_edit = async (req, res) => {
     return (v.destination + "/" + v.filename).substring(6);
   });
 
-    let change = new Billboard(
-        req.body.type_billboard,
-        null,
-        {
-            amount: "1 trụ/bảng",
-            place: req.body.place,
-            size: "2.5mx10m",
-            place_type: land_type,
-            type: billboard_type,
-            type_advertise: ad_type,
-            zoning: status == 1 ? true : false,
-        },
-        req.body.name
-            ? new License(
-                  req.body.name,
-                  req.body.contact,
-                  req.body.start,
-                  req.body.end
-              )
-            : null
-    );
+  let change = new Billboard(
+    req.body.type_billboard,
+    null,
+    {
+      amount: "1 trụ/bảng",
+      place: req.body.place,
+      size: "2.5mx10m",
+      place_type: land_type,
+      type: billboard_type,
+      type_advertise: ad_type,
+      zoning: status == 1 ? true : false,
+    },
+    req.body.name
+      ? new License(
+          req.body.name,
+          req.body.contact,
+          req.body.start,
+          req.body.end
+        )
+      : null
+  );
 
   let request = new Request(
     new ObjectId(res.locals.uid),
@@ -370,20 +404,21 @@ const _post_request_edit = async (req, res) => {
     0,
     change.license
   );
-  
+
   if (await request.send_request()) console.log("send!");
   return res.redirect("/dashboard/license");
 };
 
 module.exports = {
-    _get_map,
-    _get_advertisement,
-    _get_license,
-    _post_cancel_license,
-    _post_license_request,
-    _get_report,
-    _get_report_information,
-    _post_report_edit,
-    _get_request_edit,
-    _post_request_edit,
+  _get_map,
+  _get_advertisement,
+  _get_license,
+  _post_cancel_license,
+  _post_license_request,
+  _get_report,
+  _get_report_information,
+  _post_report_edit,
+  _get_request_edit,
+  _post_request_edit,
+  _profile,
 };
