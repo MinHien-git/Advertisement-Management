@@ -587,6 +587,11 @@ function toggleCollapseButton(btn_id) {
     }
 }
 
+//change date format
+function changeDateFormat(date){
+    return date.toLocaleDateString("vi-VN")
+}
+
 //toggle filter
 function toggleFilter(radio_id, list_id) {
     let radio = document.getElementById(radio_id);

@@ -75,7 +75,7 @@
                       <%= advertisement.properties.type %>
                     </li>
                     <li class="list__col2"><%= advertisement.properties.place %></li>
-                    <% if (advertisement.properties.status == "Đã quy hoạch") { %>
+                    <% if (advertisement.properties.status == true) { %>
                     <li class="list__col3 fw-semibold text-primary" id=" ">
                       Đã quy hoạch
                     </li>
@@ -108,11 +108,8 @@
                 >
                   <div class="card-body">
                     <ul id="full__info__list">
-                      <li class="mock__image__container">
-                        <div class="mock__image">&nbsp;</div>
-                        <div class="mock__image">&nbsp;</div>
-                      </li>
-                      <li>
+                      
+                      <li id="info__item">
                         <p class="fw-bold">Thông tin bảng quảng cáo</p>
                         <ul>
                           <li>
@@ -142,7 +139,7 @@
                         </ul>
                       </li>
                       <% if (advertisement.license) { %>
-                      <li>
+                      <li id="info__item">
                         <p class="fw-bold">Thông tin công ty</p>
                         <ul>
                           <li>
@@ -172,11 +169,14 @@
                         </ul>
                       </li>
                       <% } else { %>
-                        <li>
+                        <li id="info__item">
                           <p class="fw-bold">Chưa có giấy phép</p>
                         </li>
                       <% } %>
-
+                      <li id="info__item" class="mock__image__container">
+                        <div class="mock__image">&nbsp;</div>
+                        <div class="mock__image">&nbsp;</div>
+                      </li>
                       <li>
                         <ul class="buttons__container">
                           <li>
@@ -370,7 +370,7 @@
                             <option value="1" class="link-primary">
                               Đã quy hoạch
                             </option>
-                            <option value="2" class="link-danger">
+                            <option value="0" class="link-danger">
                               Chưa quy hoạch
                             </option>
                           </select>
@@ -449,7 +449,7 @@
                 <div class="d-flex">
                   <div class="toast-body">
                     <i class="bi bi-check-lg"></i>
-                    <%=locals.message%>
+                    Đã lưu thay đổi!
                   </div>
                   <button
                     type="button"
