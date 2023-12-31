@@ -130,7 +130,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
 });
 
 //số item mỗi trang
-const ITEMS_PER_PAGE = 20;
+
 const ITEMS_PER_PAGE = 20;
 
 //lấy số item tổng cộng và số trang
