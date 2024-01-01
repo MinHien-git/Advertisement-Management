@@ -8,7 +8,6 @@ const fs = require("fs");
 const db = require("../database/database");
 
 const { ObjectId } = require("mongodb");
-const { log } = require("console");
 
 const district_list = JSON.parse(fs.readFileSync(__dirname + "/../district-ward-list.json"));
 
@@ -100,33 +99,21 @@ const processQuery = (req, arr) => {
 
   if (!req.session.ward) {
     const wards = getWardList(req).map(e => e.ward);
-    arr = arr.filter(processFilterQuery(req, (e) => { return getAddress(req, e).split(", ")[1] }, wards, "ward"));
+    arr = arr.filter(
+      processFilterQuery(req, e => getAddress(req, e).split(", ")[1], wards, "ward")
+    );
   }
   if (req.path === "/dashboard/license") {
     arr = arr.filter(
-      processFilterQuery(
-        req,
-        (e) => {
-          return e.state;
-        },
-        [0, 1],
-        "license"
-      )
+      processFilterQuery(req, e => e.state, [0, 1], "license")
     );
   } else if (req.path === "/dashboard/advertise") {
     arr = arr.filter(
-      processFilterQuery(
-        req,
-        (e) => {
-          return e.licenses[0]?.state;
-        },
-        [0, 1, undefined],
-        "license"
-      )
+      processFilterQuery(req, e => e.licenses[0]?.state, [0, 1, undefined], "license")
     );
   }
-  arr = arr.filter(processFilterQuery(req, (e) => { return e.type }, [0, 1, 2, 3], "report_type"));
-  arr = arr.filter(processFilterQuery(req, (e) => { return e.state }, [1, 0], "request"));
+  arr = arr.filter(processFilterQuery(req, e => e.type, [0, 1, 2, 3], "report_type"));
+  arr = arr.filter(processFilterQuery(req, e => e.state, [1, 0], "request"));
   
 
   if (req.query.sort) {
