@@ -13,7 +13,12 @@ function passToDetailsModal(btn) {
         "<strong>Địa điểm:</strong> " + btn.dataset.reportPlace;
     document.querySelector("#report__details").innerHTML =
         "<strong>Mô tả:</strong> " + btn.dataset.reportDetails;
-    if (document.querySelector("#report__state").value === "1") {
+
+    if (btn.dataset.reportResolve) {
+        document.querySelector("#report__resolve").innerHTML =
+            "<strong>Cách thức xử lý:</strong> " + btn.dataset.reportResolve;
+    }
+    if (document.querySelector("#report__state").value == 0) {
         document.querySelector(".b__container").innerHTML = `
                     <button
                     type="button"
@@ -41,10 +46,25 @@ function passToDetailsModal(btn) {
                     >
                     Bác bỏ
                     </button>`;
+    } else if (document.querySelector("#report__state").value == 1) {
+        document.querySelector(
+            ".b__container"
+        ).innerHTML = `<p class="text-success"><strong>Đã cấp phép xử lý</strong></p>`;
+    } else if (document.querySelector("#report__state").value == 2) {
+        document.querySelector(
+            ".b__container"
+        ).innerHTML = `<p class="text-danger"><strong>Đã bác bỏ báo cáo</strong></p>`;
+    } else if (document.querySelector("#report__state").value == 3) {
+        document.querySelector("#report__edit__request").innerHTML =
+            "<strong>Yêu cầu sửa đổi từ Sở:</strong> " +
+            btn.dataset.reportEditRequest;
+        document.querySelector(
+            ".b__container"
+        ).innerHTML = `<p class="text-primary"><strong>Đã gửi yêu cầu sửa đổi</strong></p>`;
     }
 
     document.querySelector("#approve__btn").addEventListener("click", () => {
-        respondResolve(document.querySelector("#report__id").value, 0);
+        respondResolve(document.querySelector("#report__id").value, 1);
     });
 }
 
@@ -59,21 +79,22 @@ async function respondResolve(report_id, state) {
         })
     );
     console.log(xhr.responseText);
-    if (state === 0) {
+    if (state == 1) {
         showToast("accept__success__toast");
-    } else if (state === 2) {
+    } else if (state == 2) {
         showToast("deny__success__toast");
     }
 }
 
-async function sendReportChangeRequest(report_id, details) {
+async function sendReportChangeRequest(report_id, edit_request) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "/management/reports", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(
         JSON.stringify({
             id: report_id,
-            details: details,
+            state: 3,
+            edit_request: edit_request,
         })
     );
     console.log(xhr.responseText);

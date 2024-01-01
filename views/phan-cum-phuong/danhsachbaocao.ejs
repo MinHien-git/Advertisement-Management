@@ -68,6 +68,19 @@
               id="search__btn">
               Tìm kiếm
             </button>
+            <% if (locals.ward_list) { %>
+              <div class="dropdown">
+                <button class="dropbtn btn btn-dark nowrap">
+                  <i class="bi bi-arrow-down-up"></i>
+                  Lọc phường
+                </button>
+                <div class="dropdown-content">
+                  <% for (let i = 0; i < locals.ward_list.length; i++) { %>
+                  <label><input type="checkbox" name="ward<%= i + 1 %>" value="<%= i %>" /> <%= locals.ward_list[i].ward %></label>
+                  <% } %>
+                </div>
+              </div>
+              <% } %>
             <div class="dropdown">
               <button class="dropbtn btn btn-dark nowrap">
                 <i class="bi bi-arrow-down-up"></i>

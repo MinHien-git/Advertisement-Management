@@ -63,7 +63,7 @@
             <div id="info__desc">
               <div class="list__title__container mt-3">
                 <ul class="list__flex fw-bold">
-                  <li class="list__col1">Bảng quảng cáo</li>
+                  <li class="list__col1">Tên công ty</li>
                   <li class="list__col2">Địa điểm</li>
                   <li class="list__col3">Trạng thái</li>
                   <li class="list__col4">
@@ -74,32 +74,39 @@
             </div>
 
             <div id="cards__container" class="overflow-auto">
-              <% for (let i=0; i < locals.billboards.length; i++) { %> <%
-                const advertisement=locals.billboards[i]; %> <% const
-                id=advertisement._id; %>
+              <% for (let i=0; i < locals.licenses.length; i++) { %> <%
+                const license = locals.licenses[i]; %> <% const
+                id=license._id; %>
                 <div id="<%=id%>" class="card shadow-sm">
                   <div class="card-header" id="brief__info<%= id %>">
                     <ul class="list__flex">
                       <li class="list__col1">
-                        <%= advertisement.properties.type %>
+                        <%= license.company_name %>
                       </li>
                       <li class="list__col2">
-                        <%= advertisement.properties.place %>
+                        <%= license.billboard[0].properties.place %>
                       </li>
-                      <% if (advertisement.license) { %> <% if
-                      (advertisement.license.state === 0) {%>
-                      <li class="list__col3 fw-semibold text-success">
-                        Đã cấp phép
-                      </li>
-                      <% } else if (advertisement.license.state === 1){ %>
-                      <li class="list__col3 fw-semibold text-warning">
-                        Chưa cấp phép
-                      </li>
-                      <% } else if (advertisement.license.state === 2){ %>
-                      <li class="list__col3 fw-semibold text-danger">
-                        Đã từ chối
-                      </li>
-                      <% } %> <% } %>
+                      <% if (license.state == 1) {%>
+                        <li class="list__col3 fw-semibold text-success">
+                          Đã cấp phép
+                        </li>
+                        <% } else if (license.state == 0){ %>
+                        <li class="list__col3 fw-semibold text-warning">
+                          Chờ cấp phép
+                        </li>
+                        <% } else if (license.state == 2){ %>
+                        <li class="list__col3 fw-semibold text-danger">
+                          Đã từ chối
+                        </li>
+                        <% } else if (license.state == 3){ %>
+                        <li class="list__col3 fw-semibold text-primary">
+                          Đã gửi YC sửa đổi
+                        </li>
+                        <% } else if (license.state == 4){ %>
+                        <li class="list__col3 fw-semibold" style="color: #ADADAD;">
+                          Đã hết hạn
+                        </li>
+                        <% } %> 
                       <li class="list__col4">
                         <button
                           class="btn collapsed"
@@ -122,78 +129,78 @@
                     aria-labelledby="brief__info<%= id %>">
                     <div class="card-body">
                       <ul id="full__info__list">
-                        <li class="mock__image__container">
-                          <div class="mock__image">&nbsp;</div>
-                          <div class="mock__image">&nbsp;</div>
-                        </li>
-                        <li>
-                          <p class="fw-bold">Thông tin bảng quảng cáo</p>
+                        <li id="info__item">
+                          <p class="fw-bold">Thông tin yêu cầu</p>
                           <ul>
                             <li>
-                              Kích thước:
+                              Thông tin liên hệ:
                               <span class="fw-bold">
-                                <%= advertisement.properties.size %>
-                              </span>
-                            </li>
-                            <li>
-                              Số lượng:
-                              <span class="fw-bold">
-                                <%= advertisement.properties.amount %>
-                              </span>
-                            </li>
-                            <li>
-                              Hình thức:
-                              <span class="fw-bold">
-                                <%= advertisement.properties.type_advertise %>
-                              </span>
-                            </li>
-                            <li>
-                              Phân loại:
-                              <span class="fw-bold">
-                                <%= advertisement.properties.place_type %>
-                              </span>
-                            </li>
-                          </ul>
-                        </li>
-                        <% if (advertisement.license) { %>
-                        <li>
-                          <p class="fw-bold">Thông tin công ty</p>
-                          <ul>
-                            <li>
-                              Tên công ty:
-                              <span class="fw-bold">
-                                <%= advertisement.license.company_name %>
-                              </span>
-                            </li>
-                            <li>
-                              Email liên hệ:
-                              <span class="fw-bold">
-                                <%= advertisement.license.company_contact %>
+                                <%= license.company_contact %>
                               </span>
                             </li>
                             <li>
                               Ngày bắt đầu:
                               <span class="fw-bold">
-                                <%= advertisement.license.start_date %>
+                                <%=license.start_date%>
                               </span>
                             </li>
                             <li>
                               Ngày kết thúc:
                               <span class="fw-bold">
-                                <%= advertisement.license.end_date %>
+                                <%=license.end_date%>
+                              </span>
+                            </li>
+                          </ul>
+                        </li>
+                        <% if (license.billboard[0]) { %>
+                        <li id="info__item">
+                          <p class="fw-bold">Thông tin bảng quảng cáo</p>
+                          <ul>
+                            <li>
+                              Loại bảng:
+                              <span class="fw-bold">
+                                <%= license.billboard[0].properties.type %>
+                              </span>
+                            </li>
+                            <li>
+                              Kích thước:
+                              <span class="fw-bold">
+                                <%= license.billboard[0].properties.size %>
+                              </span>
+                            </li>
+                            <li>
+                              Số lượng:
+                              <span class="fw-bold">
+                                <%= license.billboard[0].properties.amount + " trụ/bảng"%>
+                              </span>
+                            </li>
+                            <li>
+                              Hình thức:
+                              <span class="fw-bold">
+                                <%= license.billboard[0].properties.type_advertise %>
+                              </span>
+                            </li>
+                            <li>
+                              Phân loại:
+                              <span class="fw-bold text-wrap">
+                                <%= license.billboard[0].properties.place_type %>
                               </span>
                             </li>
                           </ul>
                         </li>
                         <% } %>
+                        <li class="mock__image__container"  id="info__item">
+                          <div class="mock__image">&nbsp;</div>
+                          <div class="mock__image">&nbsp;</div>
+                        </li>
                         <li>
                           <ul class="buttons__container">
-                            <% if (advertisement.license.state === 1) { %>
+                            <% if (license.state == 0) { %>
                             <li>
 													<button class="btn btn-success mb-2 nowrap"  data-bs-toggle="modal"
 														data-bs-target="#accept__confirm__modal"
                             onclick="passToConfirmModal(this)"
-                            data-billboard-id="<%=id%>">
+                            data-license-id="<%=id%>">
 														<i class="bi bi-check-circle"></i> Cấp phép
 													</button>
 												</li>
@@ -202,9 +209,9 @@
 														class="btn btn-outline-warning mb-2 nowrap"
 														data-bs-toggle="modal"
 														data-bs-target="#require__changes__modal"
-                            data-billboard-id="<%=id%>"
+                            data-license-id="<%=id%>"
                             onclick="passToConfirmModal(this)">
-														<i class="bi bi-pencil"></i> YC chỉnh
+														<i class="bi bi-pencil"></i> YC sửa đổi
 													</button>
 												</li>
 												<li>
@@ -213,22 +220,32 @@
 														data-bs-toggle="modal"
 														data-bs-target="#decline__confirm__modal"
                             onclick="passToConfirmModal(this)"
-                            data-billboard-id="<%=id%>">
+                            data-license-id="<%=id%>">
 														<i class="bi bi-x-lg"></i> Từ chối
 													</button>
 												</li>
-                            <% } else if (advertisement.license.state === 0) { %>
+                            <% } else if (license.state == 1) { %>
 												<li>
 													<button
 														class="btn btn-outline-warning mb-2 nowrap"
 														data-bs-toggle="modal"
-														data-bs-target="#require__changes__modal">
-														<i class="bi bi-pencil"></i> YC chỉnh
+														data-bs-target="#require__changes__modal"
+                            onclick="passToConfirmModal(this)"
+                            data-license-id="<%=id%>">
+														<i class="bi bi-pencil"></i> YC sửa đổi
 													</button>
 												</li>
-                            <% } else if (advertisement.license.state === 2) { %>
-                        <li>
-													
+                            <% } else if (license.state == 2) { %>
+                        <li class="text-danger fw-bold">
+													Đã từ chối
+												</li>
+                            <% } else if (license.state == 3) { %>
+                        <li class="text-primary fw-bold">
+													Đã gửi YC sửa đổi: <%=license.edit_request ? license.edit_request : ""%>
+												</li>
+                            <% } else if (license.state == 4) { %>
+                        <li class="fw-bold" style="color: #ADADAD;">
+													Đã hết hạn
 												</li>
                             <% } %>
                           </ul>
@@ -254,7 +271,7 @@
                       class="modal-title fw-bold fs-5"
                       id="require__changes__label"
                     >
-                      Yêu cầu chỉnh sửa nội dung
+                      Yêu cầu sửa đổi nội dung
                     </h3>
                     <button
                       class="btn-close"
@@ -434,7 +451,7 @@
                 <div class="d-flex">
                   <div class="toast-body">
                     <i class="bi bi-envelope-check"></i>
-                    Đã gửi yêu cầu chỉnh sửa!
+                    Đã gửi yêu cầu sửa đổi!
                   </div>
                   <button
                     type="button"
@@ -472,131 +489,7 @@
         <!-- place footer here -->
       </footer>
     </div>
-    <script>
-      function assignStatus(item_id) {
-        const status_num = item_id % 4;
-        let status = new String("	");
-        switch (+status_num) {
-          case 1: {
-            status = `<li class="list__col3 fw-semibold" style="color: #e7b400">
-										Chờ cấp phép
-									</li>`;
-            break;
-          }
-          case 2: {
-            status = `<li class="list__col3 fw-semibold" style="color: #e7b400">
-										Chờ cấp phép
-									</li>`;
-            break;
-          }
-          case 3: {
-            status = `<li class="list__col3 fw-semibold" style="color: #329a44">
-										Đã cấp phép
-									</li>`;
-            break;
-          }
-          case 0: {
-            status = `<li class="list__col3 fw-semibold" style="color: #db3232">
-										Đã từ chối
-									</li>`;
-            break;
-          }
-          default: {
-            status = `<li class="list__col3 fw-semibold" style="color: #db3232">
-										Chưa quy hoạch
-									</li>`;
-            break;
-          }
-        }
-        return status;
-      }
-
-      function createListItem(advertisement) {
-        let new_card = document.createElement("div");
-        const id = advertisement.globalid;
-        new_card.className = "card shadow-sm";
-        new_card.id = id;
-        new_card.innerHTML = `
-							<div class="card-header" id="brief__info${id}">
-								<ul class="list__flex">
-									<li class="list__col1">${advertisement.type_billboard}</li>
-									<li class="list__col2">${advertisement.address}</li>
-									${assignStatus(id)}
-									<li class="list__col4">
-										<button
-											class="btn collapsed"
-											id="collapse__btn${id}"
-											type="button"
-											onclick="toggleCollapseButton('collapse__btn${id}')"
-											data-bs-toggle="collapse"
-											data-bs-target="#full__info${id}"
-											aria-expanded="false"
-											aria-controls="full__info${id}">
-											<i class="bi bi-chevron-down"></i>
-										</button>
-									</li>
-								</ul>
-							</div>
-							<div
-								id="full__info${id}"
-								class="collapse"
-								aria-labelledby="brief__info${id}">
-								<div class="card-body">
-									<ul id="full__info__list">
-										<li class="mock__image__container">
-											<div class="mock__image">&nbsp;</div>
-											<div class="mock__image">&nbsp;</div>
-										</li>
-										<li>
-											<p class="fw-bold">Thông tin bảng quảng cáo</p>
-											<ul>
-												<li>
-													Kích thước: <span class="fw-bold">${advertisement.properties.size}</span>
-												</li>
-												<li>
-													Số lượng:
-													<span class="fw-bold">${advertisement.properties.amount}</span>
-												</li>
-												<li>
-													Hình thức:
-													<span class="fw-bold">${advertisement.properties.type_advertise}</span>
-												</li>
-												<li>
-													Phân loại: <span class="fw-bold">${advertisement.properties.place_type}</span>
-												</li>
-											</ul>
-										</li>
-										<li>
-											<p class="fw-bold">Thông tin công ty</p>
-											<ul>
-												<li>
-													Tên công ty:
-													<span class="fw-bold">${advertisement.company_info.name}</span>
-												</li>
-												<li>
-													Email liên hệ:
-													<span class="fw-bold">${advertisement.company_info.contact}</span>
-												</li>
-												<li>
-													Ngày bắt đầu:
-													<span class="fw-bold">${advertisement.company_info.start_date}</span>
-												</li>
-												<li>
-													Ngày kết thúc:
-													<span class="fw-bold">${advertisement.company_info.end_date}</span>
-												</li>
-											</ul>
-										</li>
-										<li>
-											${assignButtonStates(id)}
-										</li>
-									</ul>
-								</div>
-							</div>
-	`;
-        return new_card;
-      }
-    </script>
+      
     <!-- Bootstrap JavaScript Libraries -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

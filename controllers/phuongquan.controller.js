@@ -4,9 +4,15 @@ const Report = require("../models/report.model");
 const License = require("../models/license.model");
 const Request = require("../models/request.model");
 
+const fs = require("fs");
 const db = require("../database/database");
 
 const { ObjectId } = require("mongodb");
+const { log } = require("console");
+
+const district_list = JSON.parse(
+  fs.readFileSync(__dirname + "/../district-ward-list.json")
+);
 
 const getAddress = (req, obj) => {
   if (req.path === "/dashboard/advertise") {
@@ -39,6 +45,20 @@ const compareLocation = (req, address) => {
     );
   }
   return true;
+};
+
+const getWardList = (req) => {
+  if (!req.session.ward) {
+    const district = district_list.filter((e) => {
+      return e.district == req.session.district;
+    });
+    district[0].wards.forEach((e) => {
+      e.ward = e.ward.replace("Phường ", "");
+      e.ward = e.ward.replace("Xã ", "");
+    });
+    return district[0].wards;
+  }
+  return null;
 };
 
 const processFilterQuery = (req, mapping, values, query_name) => {
@@ -77,6 +97,19 @@ const processQuery = (req, arr) => {
     });
   }
 
+  if (!req.session.ward) {
+    const wards = getWardList(req).map((e) => e.ward);
+    arr = arr.filter(
+      processFilterQuery(
+        req,
+        (e) => {
+          return getAddress(req, e).split(", ")[1];
+        },
+        wards,
+        "ward"
+      )
+    );
+  }
   if (req.path === "/dashboard/license") {
     arr = arr.filter(
       processFilterQuery(
@@ -207,7 +240,7 @@ const _get_advertisement = async (req, res) => {
     ])
     .toArray();
   res.locals.billboards = processQuery(req, res.locals.billboards);
-
+  res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/quanlyquangcao");
 };
 
@@ -229,6 +262,8 @@ const _get_license = async (req, res) => {
     .toArray();
   //res.locals.licenses = processQuery(req, res.locals.licenses);
   console.log(res.locals.licenses);
+  res.locals.licenses = processQuery(req, res.locals.licenses);
+  res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachcapphep");
 };
 
@@ -266,6 +301,7 @@ const _get_report = async (req, res) => {
     .find({})
     .toArray();
   res.locals.reports = processQuery(req, res.locals.reports);
+  res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachbaocao");
 };
 
@@ -304,6 +340,7 @@ const _get_request_edit = async (req, res) => {
     ])
     .toArray();
   res.locals.requests = processQuery(req, res.locals.requests);
+  res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
