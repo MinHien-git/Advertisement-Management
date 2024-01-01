@@ -1,5 +1,10 @@
+const { ObjectId } = require("mongodb");
+const { getDb } = require("../database/database");
 const User = require("../models/users.model");
+const { request, response } = require("../routes/phuongquan.route");
 const auth_ultis = require("../utils/authentication");
+const bcrypt = require("bcrypt");
+
 const _get_login = (request, response) => {
   response.render("users/authentication/login");
 };
@@ -59,8 +64,23 @@ const _update_password = async (request, response) => {
   }
 };
 
-const _forgot_password = async (request, response) => {
-  let { email } = request.body;
+const _reset_password = async (request, response) => {
+  let { password, repassword, id } = request.body;
+  console.log(id);
+  if (password === repassword) {
+    let pw = await bcrypt.hash(password, 12);
+    let user = await getDb()
+      .collection("users")
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { password: pw } },
+        { returnDocument: "after" }
+      );
+    if (user) {
+      response.redirect("/");
+    }
+  }
+  response.render("updatepassword");
 };
 
 module.exports = {
@@ -71,4 +91,5 @@ module.exports = {
   _logout,
   _update_infomation,
   _update_password,
+  _reset_password,
 };

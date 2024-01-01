@@ -26,7 +26,7 @@ function navigate(item_id) {
 }
 
 function navigate(item_id, id) {
-  if (item_id == "profile") link = "/management/profile/" + id;
+  if (item_id == "profile") link = "/dashboard/profile/" + id;
   console.log(link);
   window.location.href = link;
 }

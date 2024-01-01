@@ -18,7 +18,7 @@ let authent_popup = `
                 <input type="password" name="password" id="Lpassword" value="" placeholder ="password">
             </div>
             <div class="form-section">
-                <p><span class="under-line">Forgot password?</span></p>
+                <a href ="/resetpassword" class = "reset-password"><span class="under-line">Forgot password?</span></a>
             </div>
             <div class="form-section">
                 <button class="submit-button submit">login</button>

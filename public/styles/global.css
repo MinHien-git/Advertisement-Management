@@ -134,3 +134,26 @@ textarea {
   display: flex;
   align-content: stretch;
 }
+.profile-wrapper {
+  width: 100%;
+}
+.profile-form {
+  margin-top: 2rem;
+  width: 50%;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.profile-form .btn {
+  margin-inline: 0 !important;
+  padding: 1rem 2rem !important;
+}
+.reset-password {
+  text-align: center;
+}
+.reset-password * {
+  text-align: center;
+  font-size: 0.625rem !important;
+}

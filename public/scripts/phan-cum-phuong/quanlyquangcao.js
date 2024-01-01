@@ -181,10 +181,10 @@ function create_edit_request(billboard = null) {
 	action="/dashboard/request"
   >
 	<h2>Chỉnh sửa Bảng QC</h2>
-	<div class="form-section">
+
 	<input type="hidden" name="id" value="${billboard?._id}">
-	<label for="type">Loại quảng cáo:</label>
-	</div>
+
+
 	<div class="form-section">
 	<label for="street">Địa điểm:</label>
 	<input type="text" id="street" name="place" value="${
@@ -357,42 +357,7 @@ function create_edit_request(billboard = null) {
 	</option>
   </select>
 	</div>
-	${
-    a.length > 0
-      ? `
-	<div class="form-section">
-	<label for="name">Thông tin công ty:</label>
-	<input type="text" name="name" id="name"
-	  value="${a[0].company_name}"
-	  placeholder="tên công ty"
-	/>
-	</div>
-	<div class="form-section">
-	<label for="contact">Thông tin liên lạc:</label>
-	<input type="text" name="contact" id="contact"
-	  value="${a[0].company_contact}"
-	  placeholder="Email công ty"
-	/>
-	</div>
-	<div class="flex size-information inline">
-  <div class="form-section">
-	<label for="start">Ngày bđ:</label>
-	<input type="date" name="start" id="start"
-	value="${a[0].start_date}"
-	placeholder="XY"
-	/>
-  </div>
-  <div class="form-section">
-  <label for="end">Ngày kt:</label>
-  <input
-	type="date" name="end" id="end" value="${a[0].end_date}"
-	placeholder="XY"
-  />
-  </div>
-  </div>
-  `
-      : ""
-  }
+	
   <div class="form-section file-section">
 	<p>Thông tin đính kèm:</p>
 	<div class="file-button">
