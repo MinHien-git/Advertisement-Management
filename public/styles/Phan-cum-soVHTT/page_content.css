@@ -88,13 +88,14 @@ main {
 
 .list__flex .list__col2 {
   flex-grow: 3;
-  flex-basis: 30%;
+  flex-basis: 30%;  
 }
 
 .list__flex :not(.list__col2, .list__col4) {
   flex-grow: 1;
-  flex-basis: 15%;
+  flex-basis: 18%;
 }
+
 
 /*\\LIST CARDS*/
 .card {
@@ -104,6 +105,10 @@ main {
 #full__info__list {
   display: flex;
   justify-content: space-around;
+}
+
+#info__item {
+  max-width: 25%;
 }
 
 .mock__image__container {

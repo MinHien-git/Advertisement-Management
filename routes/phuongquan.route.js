@@ -31,10 +31,10 @@ const upload = multer({
 });
 
 const phuongQuanController = require("../controllers/phuongquan.controller");
-const { log } = require("console");
 
 //Cập nhật thông tin
 router.get("/dashboard/profile/:id", phuongQuanController._profile);
+router.post("/dashboard/profile/:id", phuongQuanController._post_profile);
 //Bản đồ
 router.get("/dashboard", phuongQuanController._get_map);
 

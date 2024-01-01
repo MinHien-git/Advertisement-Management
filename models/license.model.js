@@ -29,18 +29,9 @@ module.exports = class License {
 
   async send_licences_request() {
     let request = await db
-      .getDb()
-      .collection("licenses")
-      .insertOne({ ...this });
-    if (request) {
-      await db
         .getDb()
-        .collection("billboard")
-        .updateOne(
-          { _id: this.billboard },
-          { $push: { licenses: request.insertedId } }
-        );
-    }
+        .collection("licenses")
+        .insertOne({ ...this });
   }
 
   async update_request(license_id) {

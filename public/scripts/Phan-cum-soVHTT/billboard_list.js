@@ -49,12 +49,12 @@ async function editBillboard(e) {
             amount: e.target.billboard_amount_input_edit.value,
             status: e.target.billboard_status_selector_edit.options[
                 e.target.billboard_status_selector_edit.selectedIndex
-            ].text,
+            ].value,
         })
     );
     xhr.onload = () => [console.log(`${xhr.response}`)];
     $("#Modify__modal").modal("hide");
-    // showToast('save__success__toast')
+    showToast("save__success__toast");
 }
 
 async function deleteBillboard(e) {

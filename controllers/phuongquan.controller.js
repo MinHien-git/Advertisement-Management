@@ -9,8 +9,9 @@ const db = require("../database/database");
 
 const { ObjectId } = require("mongodb");
 
-const district_list = JSON.parse(fs.readFileSync(__dirname + "/../district-ward-list.json"));
-
+const district_list = JSON.parse(
+  fs.readFileSync(__dirname + "/../district-ward-list.json")
+);
 
 const getAddress = (req, obj) => {
   if (req.path === "/dashboard/advertise") {
@@ -23,7 +24,7 @@ const getAddress = (req, obj) => {
     req.path === "/dashboard/request/edit" ||
     req.path === "/dashboard/license"
   ) {
-    return obj.billboard[0].properties.place;
+    return obj?.billboard[0]?.properties?.place;
   }
 };
 
@@ -45,7 +46,6 @@ const compareLocation = (req, address) => {
   return true;
 };
 
-
 const getWardList = (req) => {
   if (!req.session.ward) {
     const district = district_list.filter((e) => {
@@ -55,11 +55,10 @@ const getWardList = (req) => {
       e.ward = e.ward.replace("Phường ", "");
       e.ward = e.ward.replace("Xã ", "");
     });
-    return district[0].wards
+    return district[0].wards;
   }
   return null;
-}
-
+};
 
 const processFilterQuery = (req, mapping, values, query_name) => {
   return (e) => {
@@ -133,12 +132,47 @@ const processQuery = (req, arr) => {
 
 const _profile = async (req, res) => {
   let { id } = req.params;
+  if (id != res.locals.uid) {
+    redirect("/");
+  }
   res.locals.profile = await db
     .getDb()
     .collection("users")
     .findOne({ _id: new ObjectId(id) });
-
+  console.log(res.locals.profile);
   res.render("phan-cum-phuong/profilecanbo");
+};
+
+const _post_profile = async (req, res) => {
+  let { id } = req.params;
+  let { name, password, birth, phone } = req.body;
+  let new_infomation = {};
+
+  if (name !== "") {
+    new_infomation.name = name;
+  }
+  if (password !== "") {
+    new_infomation.password = password;
+  }
+  if (birth !== "") {
+    new_infomation.date = birth;
+  }
+  if (phone !== "") {
+    new_infomation.phone = phone;
+  }
+
+  if (id != res.locals.uid) {
+    redirect("/");
+  }
+  await db
+    .getDb()
+    .collection("users")
+    .findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { ...new_infomation } }
+    );
+  console.log(res.locals.profile);
+  res.redirect("/dashboard/profile/" + id);
 };
 
 const _get_map = async (req, res) => {
@@ -220,14 +254,14 @@ const _post_cancel_license = async (req, res) => {
 
 //Thông tin báo cáo
 const _get_report = async (req, res) => {
-    res.locals.reports = await db
-        .getDb()
-        .collection("reports")
-        .find({})
-        .toArray();
-    res.locals.reports = processQuery(req, res.locals.reports);
-    res.locals.ward_list = getWardList(req);
-    res.render("phan-cum-phuong/danhsachbaocao");
+  res.locals.reports = await db
+    .getDb()
+    .collection("reports")
+    .find({})
+    .toArray();
+  res.locals.reports = processQuery(req, res.locals.reports);
+  res.locals.ward_list = getWardList(req);
+  res.render("phan-cum-phuong/danhsachbaocao");
 };
 
 const _get_report_information = async (req, res) => {
@@ -408,4 +442,5 @@ module.exports = {
   _get_request_edit,
   _post_request_edit,
   _profile,
+  _post_profile,
 };

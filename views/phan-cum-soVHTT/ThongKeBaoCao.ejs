@@ -101,32 +101,34 @@
             <div class="card shadow-sm report" id="<%= report._id %>">
               <div class="card-header" id="brief__info<%= report._id %>">
                 <ul class="list__flex">
-                  <% if (report.type === 0) { %>
-                  <li class="list__col1 text-danger fw-bold">
+                  <% if (report.type == 0) { %>
+                  <li class="list__col1 text-danger">
                     Tố giác sai phạm
                   </li>
-                  <% } %> <% if (report.type === 1) { %>
-                  <li class="list__col1 text-primary fw-bold">
+                  <% } %> <% if (report.type == 1) { %>
+                  <li class="list__col1 text-primary">
                     Đăng ký nội dung
                   </li>
-                  <% } %> <% if (report.type === 2) { %>
-                  <li class="list__col1 text-success fw-bold">
+                  <% } %> <% if (report.type == 2) { %>
+                  <li class="list__col1 text-success">
                     Đóng góp ý kiến
                   </li>
-                  <% } %> <% if (report.type === 3) { %>
-                  <li class="list__col1 text-warning fw-bold">
+                  <% } %> <% if (report.type == 3) { %>
+                  <li class="list__col1 text-warning">
                     Giải đáp thắc mắc
                   </li>
                   <% } %>
                   <li class="list__col2"><%= report.place %></li>
                   <li class="list__col3"><%= report.send_day %></li>
-                  <% if (report.state === 0) {%>
-                    <li class="list__col4 fw-bold text-warning">Đang xử lý</li>
-                    <% } else if (report.state === 1){ %>
-                      <li class="list__col4 fw-bold text-success">Đã cấp phép</li>
-                    <% } else if (report.state === 2){ %>
-                      <li class="list__col4 fw-bold text-danger">Đã bác bỏ</li>
-                    <% } %>
+                  <% if (report.state == 0) {%>
+                    <li class="list__col4 fw-bold text-warning">Chờ xử lý</li>
+                  <% } else if (report.state == 1){ %>
+                    <li class="list__col4 fw-bold text-success">Đã cấp phép</li>
+                  <% } else if (report.state == 2){ %>
+                    <li class="list__col4 fw-bold text-danger">Đã bác bỏ</li>
+                  <% } else if (report.state == 3){ %>
+                    <li class="list__col4 fw-bold text-primary">Đã gửi YC sửa đổi</li>
+                  <% }%>
                   <li class="list__col5">
                                         <button
                                             class="btn flex-grow-0"
@@ -144,6 +146,8 @@
                                             data-report-date="<%=report.send_day%>"
                                             data-report-details="<%=report.details%>"
                                             data-report-state="<%=report.state%>"
+                                            data-report-resolve="<%=report.resolve%>"
+                                            data-report-edit-request="<%=report.edit_request%>"
                                             onclick="passToDetailsModal(this)"
                                             >
                                             <i class="bi bi-three-dots"></i>
@@ -154,6 +158,7 @@
             </div>
             <% } %>
             </div>
+            <%- include('../includes/pagination.ejs')%>
             <!--modal-->
             <div
               class="modal fade"
@@ -188,23 +193,17 @@
                     <br/>
                     <h5 class="fw-bold">NỘI DUNG BÁO CÁO</h5>
                     <p id="report__details">
-                      <strong>Mô tả:</strong>Lorem ipsum dolor sit amet
-                      consectetur, adipisicing elit. Voluptate deleniti dolores
-                      eius quis, praesentium ullam id eligendi repellendus
-                      corrupti dolorem!
+                      <strong>Mô tả:</strong>
                     </p>
                     <p><strong>Hình ảnh</strong></p>
                     <img id="report__image"
                       src="/assets/images/bien-quang-cao-1024x683.jpg"
                       id="img1"
                     />
-                    <p><strong>Cách thức xử lí</strong></p>
-                    <p id="report__resolve">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      At deserunt unde earum rem nobis doloribus ratione vitae
-                      ipsum animi. Illum tempora non exercitationem dicta
-                      ratione.
-                    </p>
+                    <p id="report__resolve"><strong>Cách thức xử lí:</strong> Chưa có</p>
+                    <p id="report__edit__request" class="text-primary"></p>
+
+
                   </div>
                   <div class="modal-footer w-auto">
                     <input type="hidden" name="report_id" id="report__id" value="0">
@@ -218,7 +217,7 @@
             </div>
           </div>
         </div>
-
+          
         <!-- Yêu cầu đổi cách thức box -->
         <div>
           <!-- Modal Body -->

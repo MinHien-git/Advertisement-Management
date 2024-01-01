@@ -52,8 +52,9 @@
           </form>
         </li>
         <% }else if(locals.type_user === 2){%>
-        <li id="profile">
-          <i
+          <i onclick="navigate(this.id, '<%=locals.uid%>')"
+            <li id="profile">
+          <i 
             class="bi bi-person-circle vertical__center"
             id="nav__item__icon"
             style="font-size: 1.5rem"></i>

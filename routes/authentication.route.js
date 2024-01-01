@@ -140,6 +140,9 @@ router.get("/auth/success", async (request, response) => {
     return response.redirect("/?login=failed");
   }
 });
+
+router.get("/updatepassword");
+router.post("/updatepassword", authentication_controller._reset_password);
 //auth/google
 router.get("/register", authentication_controller._get_register);
 router.post("/register", authentication_controller._register);
