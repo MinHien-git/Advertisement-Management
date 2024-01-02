@@ -4,7 +4,6 @@ const Billboard = require("../models/bill-board.model");
 const User = require("../models/users.model");
 const { ObjectId } = require("mongodb");
 const { v4 } = require("uuid");
-const SoVHTT_Request = require("../models/soVHTT-req.model");
 const nodemailer = require("nodemailer");
 
 function runAtSpecificTimeOfDay(hour, minutes, func) {
@@ -52,8 +51,7 @@ console.log(start_hour, start_minutes);
 runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
     console.log("check end date");
     let today = new Date();
-    let today_string =
-        today.getFullYear() + "-" + today.getMonth() + today.getDate();
+
     let licenses = await db
         .getDb()
         .collection("licenses")
@@ -74,16 +72,19 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
     let email_contents = [];
 
     for (let i = 0; i < licenses.length; i++) {
+        let end_date = new Date(licenses[i].end_date);
+        console.log(end_date);
+        console.log(today);
         if (
-            licenses[i].state < 2 &&
-            today_string.localeCompare(licenses[i].end_date) > 0
+            (licenses[i].state < 2 || licenses[i].state == 3) &&
+            today > end_date
         ) {
             console.log(licenses[i].billboard[0].place);
             expired_licenses.push(licenses[i]._id);
             company_emails.push(licenses[i].company_contact);
             let address = licenses[i].billboard[0].properties.place;
-            address = address.split(", Thành");
-            address = address.split("Đ. ");
+            address = address.split(", Thành")[0];
+            address = address.replace("Đ. ", "");
             email_contents.push(
                 createEmailContent(
                     licenses[i].company_name,
@@ -92,53 +93,55 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
             );
         }
     }
-    console.log("expired licenses:");
-    console.log(expired_licenses);
+    if (expired_licenses.length > 0) {
+        console.log("expired licenses:");
+        console.log(expired_licenses);
 
-    const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-            user: "sovhtthcm@gmail.com",
-            pass: "kapkcvmjwslabwdu",
-        },
-    });
-
-    for (let i = 0; i < expired_licenses.length; i++) {
-        await db
-            .getDb()
-            .collection("billboard")
-            .findOneAndUpdate(
-                { license: expired_licenses[i] },
-                { $unset: { license: "" } }
-            );
-        console.log(
-            "removed license " +
-                expired_licenses[i].toString() +
-                " from billboard."
-        );
-        await db
-            .getDb()
-            .collection("licenses")
-            .findOneAndUpdate(
-                { _id: expired_licenses[i] },
-                { $set: { state: 3 } }
-            );
-        console.log(
-            "set state of license " +
-                expired_licenses[i].toString() +
-                " to expired."
-        );
-
-        const info = await transporter.sendMail({
-            from: "Sở VHTT Tp.HCM <sovhtthcm@gmail.com>",
-            to: company_emails[i],
-            subject: "Thông báo hết hạn cấp phép bảng quảng cáo.",
-            html: email_contents[i],
+        const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: "sovhtthcm@gmail.com",
+                pass: "kapkcvmjwslabwdu",
+            },
         });
-        console.log("Email sent: " + info.messageId);
-    }
+
+        for (let i = 0; i < expired_licenses.length; i++) {
+            await db
+                .getDb()
+                .collection("billboard")
+                .findOneAndUpdate(
+                    { license: expired_licenses[i] },
+                    { $unset: { license: "" } }
+                );
+            console.log(
+                "removed license " +
+                    expired_licenses[i].toString() +
+                    " from billboard."
+            );
+            await db
+                .getDb()
+                .collection("licenses")
+                .findOneAndUpdate(
+                    { _id: expired_licenses[i] },
+                    { $set: { state: 4 } }
+                );
+            console.log(
+                "set state of license " +
+                    expired_licenses[i].toString() +
+                    " to expired."
+            );
+
+            // const info = await transporter.sendMail({
+            //     from: "Sở VHTT Tp.HCM <sovhtthcm@gmail.com>",
+            //     to: company_emails[i],
+            //     subject: "Thông báo hết hạn cấp phép bảng quảng cáo.",
+            //     html: email_contents[i],
+            // });
+            // console.log("Email sent: " + info.messageId);
+        }
+    } else console.log("expired licenses: 0");
 });
 
 //số item mỗi trang
