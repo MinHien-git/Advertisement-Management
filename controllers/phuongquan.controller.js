@@ -5,6 +5,7 @@ const License = require("../models/license.model");
 const Request = require("../models/request.model");
 
 const fs = require("fs");
+const nodemailer = require("nodemailer");
 const db = require("../database/database");
 
 const { ObjectId } = require("mongodb");
@@ -12,6 +13,14 @@ const { ObjectId } = require("mongodb");
 const district_list = JSON.parse(
   fs.readFileSync(__dirname + "/../district-ward-list.json")
 );
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "lmhien21@clc.fitus.edu.vn",
+    pass: "LMinhHien16102003",
+  },
+});
 
 const getAddress = (req, obj) => {
   if (req.path === "/dashboard/advertise") {
@@ -273,12 +282,44 @@ const _get_report_information = async (req, res) => {
 };
 
 //Giải quyết quảng cáo
-const _post_report_edit = (req, res) => {
+const _post_report_edit = async (req, res) => {
   let { handling_method, state } = req.body;
   let id = req.params;
 
-  if (Report._update_report_state(id, state, handling_method)) {
-    return res.redirect("/dashboard/report");
+  const report = await db.getDb().collection("reports").findOneAndUpdate(
+    { _id: new ObjectId(req.params.id) },
+    { 
+      $set: {
+        state: state, 
+        handling_method: handling_method 
+      }
+    });
+  
+  if (report) {
+    const mailOptions = {
+      from: "my@gmail.com",
+      to: report.sender_email,
+      subject: "Quản lý quảng cáo - Báo cáo của bạn đã được giải quyết",
+      html: `
+      <p>Báo cáo bạn gửi đã được giải quyết</p>
+
+      <p>Địa điểm báo cáo: ${report.place}</p>
+
+      <p>Cách xử lý: ${handling_method}</p>
+
+      <p>Nội dung báo cáo của bạn: ${report.details} </p>
+  
+      <p>Vui lòng không phản hồi lại email này.</p>`,
+    };
+    
+    console.log(report);
+    console.log(mailOptions);
+    transporter.sendMail(mailOptions, (error, _info) => {
+      if (error) {
+        console.error("Error sending email: ", error);
+        res.status(500).send({ message: "Failed to send email" });
+      }
+    });
   }
   return res.redirect("/dashboard/report");
 };
