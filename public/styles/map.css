@@ -253,3 +253,36 @@
 .popup h2 {
   font-size: 1rem;
 }
+
+.navigate-btn {
+  border: 0;
+  background: transparent;
+  font-size: 2rem !important;
+  height: calc(100% - 3rem);
+  position: absolute;
+}
+
+.navigate-left {
+  left: 1rem;
+}
+
+.navigate-right {
+  right: 1rem;
+}
+
+.info_container .image {
+  background-color: #cfebff;
+  width: 100%;
+  aspect-ratio: 1/1.15;
+  border-radius: 0.5rem;
+}
+.image-container {
+  display: grid;
+  width: 60%;
+  margin-inline: auto;
+  gap: 1rem;
+}
+.place {
+  font-size: 0.625rem;
+  max-width: 43ch;
+}
