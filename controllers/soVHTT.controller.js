@@ -33,8 +33,8 @@ function runAtSpecificTimeOfDay(hour, minutes, func) {
 // nếu quá hạn thì chuyển state thành 3 (đã hết hạn)
 function createEmailContent(company_name, billboard_address) {
     const html = `
-    <h1>Kính gửi ${company_name},</h1>
-    <p style="font-size: 1.1rem;">Thời hạn cấp phép bảng quảng cáo tại địa điểm ${billboard_address} của quý công ty đã hết hạn, xin vui lòng liên hệ cán bộ Phường hoặc Quận lân cận để được trợ giúp.</p>
+    <h2>Kính gửi ${company_name},</h2>
+    <p style="font-size: 1.1rem;">Thời hạn cấp phép bảng quảng cáo tại địa điểm ${billboard_address} của quý công ty đã hết hạn, xin vui lòng liên hệ cán bộ Phường hoặc Quận quản lý để được trợ giúp.</p>
     <p style="font-size: 1.1rem;">Xin cảm ơn quý công ty.</p>
     <br/>
     <p style="font-size: 1rem;"><strong>Sở Văn hoá Và Thông tin Thành phố Hồ Chí Minh.</strong></p>
@@ -68,29 +68,25 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
         .toArray();
 
     let expired_licenses = [];
+    let expired_pending_licenses = [];
     let company_emails = [];
     let email_contents = [];
 
     for (let i = 0; i < licenses.length; i++) {
         let end_date = new Date(licenses[i].end_date);
-        console.log(end_date);
-        console.log(today);
-        if (
-            (licenses[i].state < 2 || licenses[i].state == 3) &&
-            today > end_date
-        ) {
-            console.log(licenses[i].billboard[0].place);
+        if (licenses[i].state == 1 && today >= end_date) {
             expired_licenses.push(licenses[i]._id);
             company_emails.push(licenses[i].company_contact);
             let address = licenses[i].billboard[0].properties.place;
             address = address.split(", Thành")[0];
             address = address.replace("Đ. ", "");
             email_contents.push(
-                createEmailContent(
-                    licenses[i].company_name,
-                    licenses[i].billboard[0].properties.place
-                )
+                createEmailContent(licenses[i].company_name, address)
             );
+            continue;
+        }
+        if (licenses[i].state == 3 && today > end_date) {
+            expired_pending_licenses.push(licenses[i]._id);
         }
     }
     if (expired_licenses.length > 0) {
@@ -133,15 +129,49 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
                     " to expired."
             );
 
-            // const info = await transporter.sendMail({
-            //     from: "Sở VHTT Tp.HCM <sovhtthcm@gmail.com>",
-            //     to: company_emails[i],
-            //     subject: "Thông báo hết hạn cấp phép bảng quảng cáo.",
-            //     html: email_contents[i],
-            // });
-            // console.log("Email sent: " + info.messageId);
+            const info = await transporter.sendMail({
+                from: "Sở VHTT Tp.HCM <sovhtthcm@gmail.com>",
+                to: company_emails[i],
+                subject: "Thông báo hết hạn cấp phép bảng quảng cáo.",
+                html: email_contents[i],
+            });
+            console.log("Email sent: " + info.messageId);
         }
     } else console.log("expired licenses: 0");
+
+    if (expired_pending_licenses > 0) {
+        console.log("expired pending licenses:");
+        console.log(expired_pending_licenses);
+
+        for (let i = 0; i < expired_pending_licenses.length; i++) {
+            await db
+                .getDb()
+                .collection("billboard")
+                .findOneAndUpdate(
+                    { license: expired_pending_licenses[i] },
+                    { $unset: { license: "" } }
+                );
+
+            console.log(
+                "removed license " +
+                    expired_pending_licenses[i].toString() +
+                    " from billboard."
+            );
+            await db
+                .getDb()
+                .collection("licenses")
+                .findOneAndUpdate(
+                    { _id: expired_pending_licenses[i] },
+                    { $set: { state: 4 } }
+                );
+
+            console.log(
+                "set state of pending license " +
+                    expired_pending_licenses[i].toString() +
+                    " to expired."
+            );
+        }
+    }
 });
 
 //số item mỗi trang
@@ -423,37 +453,165 @@ async function processList(collection, search_queries) {
     //const filter_query = createFilterQuery(filterVal);
     //const sort_query = createSortQuery(sortVal);
     let item_list = [];
-    if (collection != "licenses") {
+    if (collection != "licenses" && collection != "requests") {
         item_list = await db
             .getDb()
             .collection(collection)
             .find(search_queries)
             .toArray();
     } else {
+        if (collection == "licenses") {
+            item_list = await db
+                .getDb()
+                .collection(collection)
+                .aggregate([
+                    { $match: search_queries },
+                    {
+                        $lookup: {
+                            from: "billboard",
+                            localField: "billboard.billboard_id",
+                            foreignField: "_id",
+                            as: "billboard_info",
+                        },
+                    },
+                ])
+                .toArray();
+
+            for (let i = 0; i < item_list.length; i++) {
+                if (
+                    item_list[i].billboard_info != null &&
+                    item_list[i].billboard_info.length > 0
+                ) {
+                    const boards_number =
+                        item_list[i].billboard_info[0].properties.boards.length;
+
+                    for (let j = 0; j < boards_number; j++) {
+                        if (
+                            item_list[i].billboard.board_id.toString() ==
+                            item_list[i].billboard_info[0].properties.boards[
+                                j
+                            ]._id.toString()
+                        ) {
+                            item_list[i].billboard_info[0].properties.boards =
+                                item_list[
+                                    i
+                                ].billboard_info[0].properties.boards[j];
+                            break;
+                        }
+                    }
+                }
+            }
+        } else if (collection == "requests") {
+            item_list = await db
+                .getDb()
+                .collection(collection)
+                .aggregate([
+                    { $match: search_queries },
+                    {
+                        $lookup: {
+                            from: "billboard",
+                            localField: "billboard",
+                            foreignField: "_id",
+                            as: "billboard",
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "official_id",
+                            foreignField: "_id",
+                            as: "official",
+                        },
+                    },
+                ])
+                .toArray();
+        }
+    }
+
+    if (collection == "billboard") {
         item_list = await db
             .getDb()
             .collection(collection)
             .aggregate([
-                { $match: search_queries },
+                {
+                    $unwind: "$properties.boards",
+                },
                 {
                     $lookup: {
-                        from: "billboard",
-                        localField: "billboard",
+                        from: "licenses",
+                        localField: "properties.boards.license",
                         foreignField: "_id",
-                        as: "billboard",
+                        as: "properties.boards.license",
+                    },
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        type: 1,
+                        "properties.place": 1,
+                        "properties.place_type": 1,
+                        "properties.type_advertise": 1,
+                        "properties.status": "$properties.status",
+                        "properties.board_amount": 1,
+                        boards: "$properties.boards",
+                        geometry: 1,
+                    },
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        type: {
+                            $first: "$type",
+                        },
+                        properties: {
+                            $first: "$properties",
+                        },
+                        boards: {
+                            $push: "$boards",
+                        },
+                        geometry: {
+                            $first: "$geometry",
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        type: 1,
+                        "properties.place": 1,
+                        "properties.place_type": 1,
+                        "properties.type_advertise": 1,
+                        "properties.status": "$properties.status",
+                        "properties.board_amount": 1,
+                        "properties.boards": "$boards",
+                        geometry: 1,
                     },
                 },
             ])
             .toArray();
+        const full_list = await db
+            .getDb()
+            .collection(collection)
+            .find(search_queries)
+            .toArray();
+        for (let i = 0; i < full_list.length; i++) {
+            if (full_list[i].properties.boards.length == 0) {
+                item_list.push(full_list[i]);
+            }
+        }
     }
-
     for (let i = 0; i < item_list.length; i++) {
         let place = "";
         if (collection == "users") return item_list;
         if (collection == "billboard") {
             place = item_list[i].properties.place;
         } else if (collection == "licenses") {
-            place = item_list[i].billboard[0].properties.place;
+            if (
+                item_list[i].billboard_info != null &&
+                item_list[i].billboard_info.length > 0
+            ) {
+                place = item_list[i].billboard_info[0].properties.place;
+            }
         } else if (collection == "reports") {
             place = item_list[i].place;
         }
@@ -466,10 +624,10 @@ async function processList(collection, search_queries) {
         let ward = address[1];
         let district = address[2];
 
-        ward = ward.replace("Phường ", "");
-        ward = ward.replace("Xã ", "");
-        district = district.replace("Quận ", "");
-        district = district.replace("Huyện ", "");
+        ward = ward?.replace("Phường ", "");
+        ward = ward?.replace("Xã ", "");
+        district = district?.replace("Quận ", "");
+        district = district?.replace("Huyện ", "");
 
         item_list[i].street = street;
         item_list[i].ward = ward;
@@ -485,7 +643,6 @@ async function processList(collection, search_queries) {
 
 async function getUniqueDistrictsWards(item_list) {
     let unique_districts = [];
-
     for (let i = 0; i < item_list.length; i++) {
         if (unique_districts.includes(item_list[i].district) == false) {
             unique_districts.push(item_list[i].district);
@@ -544,7 +701,11 @@ async function getUniqueTypesAndStatuses(item_list, item_type) {
                 unique_statuses.push(item_list[i].properties.status);
             }
         }
-    } else if (item_type == "licenses" || item_type == "reports") {
+    } else if (
+        item_type == "licenses" ||
+        item_type == "reports" ||
+        item_type == "requests"
+    ) {
         for (let i = 0; i < item_list.length; i++) {
             if (unique_types.includes(item_list[i].type) == false) {
                 unique_types.push(item_list[i].type);
@@ -596,6 +757,28 @@ async function getUniqueAdInfo(item_list) {
                 ) == false
             ) {
                 unique_land_types.push(item_list[i].properties.place_type);
+            }
+        }
+    } else if (item_list[0] && "billboard_info" in item_list[0]) {
+        for (let i = 0; i < item_list.length; i++) {
+            if (
+                unique_ad_types.includes(
+                    item_list[i].billboard_info[0].properties.type_advertise
+                ) == false
+            ) {
+                unique_ad_types.push(
+                    item_list[i].billboard_info[0].properties.type_advertise
+                );
+            }
+
+            if (
+                unique_land_types.includes(
+                    item_list[i].billboard_info[0].properties.place_type
+                ) == false
+            ) {
+                unique_land_types.push(
+                    item_list[i].billboard_info[0].properties.place_type
+                );
             }
         }
     } else {
@@ -678,6 +861,7 @@ const _get_billboards = async (req, res) => {
     res.locals.land_types = unique_land_types;
 
     item_list = await filterItems(item_list, req.query, req.path);
+
     item_list = await sortList(item_list, sort_val, "billboards");
     let pageItems = await getPageContent(req, res, item_list);
 
@@ -997,7 +1181,6 @@ const _get_licenses = async (req, res) => {
     let search_query = createSearchQuery(search_val);
 
     let item_list = await processList("licenses", search_query);
-
     res.locals.list_districts = await getUniqueDistrictsWards(item_list);
 
     let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
@@ -1020,8 +1203,8 @@ const _get_licenses = async (req, res) => {
     res.locals.licenses = pageItems;
 
     res.locals.licenses.forEach((license) => {
-        license.billboard[0].properties.place =
-            license.billboard[0].properties.place.split(", Thành phố")[0];
+        license.billboard_info[0].properties.place =
+            license.billboard_info[0].properties.place.split(", Thành phố")[0];
     });
 
     res.render("phan-cum-soVHTT/DuyetYCCapPhep");
@@ -1119,6 +1302,121 @@ const _post_license_edit_request = async (req, res) => {
     } catch (err) {
         res.send(err);
         console.log(err);
+    }
+};
+
+const _get_edit_requests = async (req, res) => {
+    let search_val = req.query.search;
+    let sort_val = req.query.sort;
+
+    let search_query = createSearchQuery(search_val);
+
+    let item_list = await processList("requests", search_query);
+
+    res.locals.list_districts = await getUniqueDistrictsWards(item_list);
+
+    let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
+        item_list,
+        "requests"
+    );
+    let { unique_ad_types, unique_land_types } = await getUniqueAdInfo(
+        item_list
+    );
+
+    res.locals.list_types = unique_types;
+    res.locals.list_statuses = unique_statuses;
+    res.locals.ad_types = unique_ad_types;
+    res.locals.land_types = unique_land_types;
+
+    item_list = await filterItems(item_list, req.query, req.path);
+    item_list = await sortList(item_list, sort_val, "requests");
+    let pageItems = await getPageContent(req, res, item_list);
+
+    res.locals.edit_requests = pageItems;
+
+    res.locals.edit_requests.forEach((edit_req) => {
+        edit_req.billboard[0].properties.place =
+            edit_req.billboard[0].properties.place.split(", Thành phố")[0];
+    });
+
+    res.render("phan-cum-soVHTT/DuyetYCChinhSua");
+};
+const _approve_edit_request = async (req, res) => {
+    const { id, state } = req.body;
+
+    try {
+        const license = await db
+            .getDb()
+            .collection("licenses")
+            .findOne({ _id: new ObjectId(id) });
+        const updateInfo = new License(
+            license.billboard,
+            license.company_name,
+            license.company_contact,
+            license.start_date,
+            license.end_date,
+            state,
+            license.images
+        );
+        await db
+            .getDb()
+            .collection("licenses")
+            .findOneAndUpdate(
+                { _id: new ObjectId(id) },
+                { $set: { ...updateInfo } }
+            );
+
+        await db
+            .getDb()
+            .collection("billboard")
+            .findOneAndUpdate(
+                { _id: new ObjectId(license.billboard) },
+                { $set: { license: license._id } }
+            );
+        console.log("license " + id + " approved!");
+        return res.send("license " + id + " approved!");
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+const _decline_edit_request = async (req, res) => {
+    const { id, state } = req.body;
+
+    try {
+        const license = await db
+            .getDb()
+            .collection("licenses")
+            .findOne({ _id: new ObjectId(id) });
+        const updateInfo = new License(
+            license.billboard,
+            license.company_name,
+            license.company_contact,
+            license.start_date,
+            license.end_date,
+            state,
+            license.images
+        );
+        await db
+            .getDb()
+            .collection("licenses")
+            .findOneAndUpdate(
+                { _id: new ObjectId(id) },
+                { $set: { ...updateInfo } }
+            );
+
+        await db
+            .getDb()
+            .collection("billboard")
+            .findOneAndUpdate(
+                { _id: new ObjectId(license.billboard) },
+                { $set: { license: license._id } }
+            );
+        console.log("license for billboard " + id + " declined.");
+        return res.send("license for billboard " + id + " declined.");
+    } catch (err) {
+        res.send(err);
+        console.error(err);
     }
 };
 
@@ -1292,6 +1590,193 @@ const _create_account = (req, res) => {
     }
 };
 
+const _get_districts_wards = async (req, res) => {
+    let search_val = req.query.search;
+    let sort_val = req.query.sort;
+
+    let search_query = createSearchQuery(search_val);
+
+    let item_list = await processList("districts", search_query);
+
+    item_list = await filterItems(item_list, req.query, req.path);
+    item_list = await sortList(item_list, sort_val, "districts");
+    let pageItems = await getPageContent(req, res, item_list);
+
+    res.locals.districts = pageItems;
+
+    res.locals.districts = await db
+        .getDb()
+        .collection("district-ward")
+        .find({})
+        .sort({ type: 1, district: 1 })
+        .collation({ locale: "en_US", numericOrdering: true })
+        .toArray();
+    res.render("phan-cum-soVHTT/QuanLiQuanPhuong");
+};
+
+const _create_district = async (req, res) => {
+    const { code, name, type } = req.body;
+    try {
+        const existing_dist = await db
+            .getDb()
+            .collection("district-ward")
+            .findOne({ $or: [{ code: code }, { district: name }] });
+        if (existing_dist == null) {
+            await db.getDb().collection("district-ward").insertOne({
+                district: name,
+                code: code,
+                type: type,
+                wards: [],
+            });
+
+            console.log("District added!");
+            return res.send("District added!");
+        } else {
+            console.log("District already exists!");
+            return res.send("District already exists!");
+        }
+    } catch (err) {
+        res.send(err);
+        console.log(err);
+    }
+};
+const _create_ward = async (req, res) => {
+    const { district_id, code, name } = req.body;
+    try {
+        const district = await db
+            .getDb()
+            .collection("district-ward")
+            .findOne({ _id: new ObjectId(district_id) });
+        const existing_ward = district.wards.filter((ward) => {
+            ward.code == code || ward.ward == name;
+        });
+        if (existing_ward != null) {
+            const new_ward = { code: code, ward: name };
+            await db
+                .getDb()
+                .collection("district-ward")
+                .updateOne(
+                    { _id: new ObjectId(district_id) },
+                    { $push: { wards: new_ward } }
+                );
+
+            console.log("Ward added!");
+            return res.send("Ward added!");
+        } else {
+            console.log("Ward already exists!");
+            return res.send("Ward already exists!");
+        }
+    } catch (err) {
+        res.send(err);
+        console.log(err);
+    }
+};
+
+const _edit_district = async (req, res) => {
+    const { district_id, code, name, type } = req.body;
+    try {
+        const existing_district = await db
+            .getDb()
+            .collection("district-ward")
+            .findOne({ _id: new ObjectId(district_id) });
+        console.log(district_id);
+        if (existing_district != null) {
+            await db
+                .getDb()
+                .collection("district-ward")
+                .findOneAndUpdate(
+                    { _id: new ObjectId(district_id) },
+                    {
+                        $set: {
+                            code: code,
+                            name: name,
+                            type: type,
+                            wards: existing_district.wards,
+                        },
+                    }
+                );
+            console.log("District " + district_id + " updated!");
+            return res.send("District " + district_id + " updated!");
+        } else {
+            console.log("District not found!");
+            return res.send("District not found!");
+        }
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+const _edit_ward = async (req, res) => {
+    const { district_id, old_ward_code, new_ward_code, new_ward_name } =
+        req.body;
+    try {
+        const existing_district = await db
+            .getDb()
+            .collection("district-ward")
+            .findOne({
+                _id: new ObjectId(district_id),
+                "wards.code": old_ward_code,
+            });
+        if (existing_district != null) {
+            await db
+                .getDb()
+                .collection("district-ward")
+                .findOneAndUpdate(
+                    {
+                        _id: new ObjectId(district_id),
+                        "wards.code": old_ward_code,
+                    },
+
+                    {
+                        $set: {
+                            "wards.$.code": new_ward_code,
+                            "wards.$.ward": new_ward_name,
+                        },
+                    }
+                );
+            console.log("Ward " + old_ward_code + " updated!");
+            return res.send("Ward " + old_ward_code + " updated!");
+        } else {
+            console.log("District/ward not found!");
+            return res.send("District/ward not found!");
+        }
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+const _delete_district = (req, res) => {
+    const { district_id } = req.body;
+    try {
+        db.getDb()
+            .collection("district-ward")
+            .deleteOne({ _id: new ObjectId(district_id) });
+        console.log("District " + district_id + " deleted!");
+        return res.send("District " + district_id + " deleted!");
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+const _delete_ward = async (req, res) => {
+    const { district_id, ward_code } = req.body;
+    try {
+        await db
+            .getDb()
+            .collection("district-ward")
+            .updateOne(
+                { _id: new ObjectId(district_id) },
+                { $pull: { wards: { code: ward_code } } }
+            );
+
+        console.log("ward " + ward_code + " deleted!");
+        return res.send("Ward " + ward_code + " deleted!");
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+
 module.exports = {
     _create_account,
     _get_accounts,
@@ -1309,4 +1794,14 @@ module.exports = {
     _post_report_change_request,
     _get_licenses,
     _change_report_status,
+    _get_edit_requests,
+    _approve_edit_request,
+    _decline_edit_request,
+    _get_districts_wards,
+    _create_district,
+    _create_ward,
+    _edit_district,
+    _edit_ward,
+    _delete_district,
+    _delete_ward,
 };
