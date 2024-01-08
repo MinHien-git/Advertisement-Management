@@ -131,7 +131,7 @@ window.onload = function () {
   // init map
   map = L.map("map", {
     attributionControl: false,
-  }).setView(defaultCoord, 20);
+  }).setView(defaultCoord, 15);
 
   L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
     attribution:
@@ -162,6 +162,7 @@ window.onload = function () {
     .addTo(map);
   map.addControl(address_search_controller);
   map.on("click", onMapClick);
+
   let geojsonLayer = L.geoJSON(billboards, {
     pointToLayer: function (feature, latlng) {
       const attributionDiv = document.createElement("div");
@@ -235,5 +236,94 @@ window.onload = function () {
         };
       }
     },
-  }).addTo(map);
+  });
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    const {
+      coords: { latitude, longitude },
+    } = position;
+    var marker = new L.marker([latitude, longitude], {
+      draggable: true,
+      autoPan: true,
+    }).addTo(map);
+    map.setView([latitude, longitude], 15);
+    console.log(marker);
+  });
+  var markers = L.markerClusterGroup();
+  markers.addLayer(geojsonLayer);
+  map.addLayer(markers);
+  // let reportLayer = L.geoJSON(reports, {
+  //   pointToLayer: function (feature, latlng) {
+  //     const attributionDiv = document.createElement("div");
+  //     const button_container = document.createElement("div");
+  //     const report_button = document.createElement("button");
+  //     const info_button = document.createElement("button");
+
+  //     attributionDiv.setAttribute("id", "content" + feature._id);
+  //     button_container.classList.add("button_container");
+  //     info_button.classList.add("info");
+  //     info_button.setAttribute("id", "info-" + feature._id);
+  //     report_button.classList.add(is_offical != 0 ? "edit" : "report");
+  //     report_button.setAttribute("id", "report-" + feature._id);
+
+  //     attributionDiv.innerHTML = `
+  //         <p>${feature.properties.place}</p>
+  //         <p>Số lượng bảng QC: <span class="bold">${
+  //           feature.properties.boards.length
+  //         }</span></p>
+  //         <p>Hình thức: <span class="bold">${
+  //           feature.properties.type_advertise
+  //         }</span></p>
+  //         <p>Phân Loại: <span class="bold">${
+  //           feature.properties.place_type
+  //         }</span></p>
+  //         <p>Quy Hoạch: <span class="bold">${
+  //           feature.properties.status === 1 ? "Đã Quy Hoạch" : "Chưa Quy Hoạch"
+  //         }</span></p>
+  //         `;
+  //     info_button.innerHTML = `<img src="/images/information.png" alt="information">Thông tin`;
+  //     report_button.innerHTML =
+  //       is_offical != 0
+  //         ? `<img src="/images/edit-yellow.png" alt="edit">Chỉnh sửa`
+  //         : `<img src="/images/report-fill.png" alt="report">Báo cáo`;
+
+  //     button_container.appendChild(info_button);
+  //     button_container.appendChild(report_button);
+
+  //     report_button.addEventListener("click", (e) => {
+  //       current_feature = feature;
+  //       if (is_offical != 2) {
+  //         get_report(feature);
+  //       } else {
+  //         get_edit(feature.properties.place, feature);
+  //       }
+  //     });
+
+  //     info_button.addEventListener("click", (e) => {
+  //       console.log("check-info :" + feature._id, feature);
+  //       current_feature = feature;
+  //       setInfoBoard();
+  //       if (!infoboards.classList.contains("active"))
+  //         infoboards.classList.add("active");
+  //     });
+  //     attributionDiv.appendChild(button_container);
+
+  //     return L.circleMarker(latlng, geojsonMarkerOptions).bindPopup(
+  //       attributionDiv
+  //     );
+  //   },
+  //   style: function (feature) {
+  //     if (feature.properties.status === 0) {
+  //       return {
+  //         color: "#ff0000",
+  //         fillColor: "#ff0000",
+  //       };
+  //     } else {
+  //       return {
+  //         color: "#0000ff",
+  //         fillColor: "#0000ff",
+  //       };
+  //     }
+  //   },
+  // }).addTo(map);
 };
