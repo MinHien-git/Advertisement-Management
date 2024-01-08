@@ -1,9 +1,15 @@
 let report_node;
-
-function get_report(position) {
+var hvalue = "";
+function get_report(current_feature) {
   if (report_node) {
     body.removeChild(report_node);
   }
+  let option = "";
+
+  for (let i = 0; i < current_feature?.properties?.boards.length; ++i) {
+    option += `<option value="${i}">${current_feature?.properties?.boards[i].board_type}</option> `;
+  }
+  console.log(option);
   let report = `
           <div id="report-section-form-container" class ="popup">
           <div id="report-close-button" class="authentication-close-button">
@@ -20,11 +26,21 @@ function get_report(position) {
             method="post"
             action="/report"
           >
-           
-            <div class="form-section">
-              <label for="place">Địa chỉ báo cáo:</label>
-              <textarea id="place" readonly name="place">${position}</textarea>
-            </div>
+            <input id="geometry" readonly name="geometry" type="hidden" value=${JSON.stringify(
+              current_feature.geometry
+            )}>
+
+            <input id="place" readonly name="place" type="hidden" value="${
+              current_feature.properties.place
+                ? current_feature.properties.place
+                : current_feature.properties.address_line2
+            }"/>
+            <p class="place">${
+              current_feature.properties.place
+                ? current_feature.properties.place
+                : current_feature.properties.address_line2
+            }</p>
+
             <div class="form-section">
               <label for="sender_name">Họ Tên:</label>
               <input
@@ -58,9 +74,9 @@ function get_report(position) {
             <div class="form-section">
             <label for="billboard__type__edit" class="fw-bold">Loại báo cáo</label>
   <select
-    class="form-select mb-3"
+    class="form-select"
     id="report__type"
-    name="type"
+    name="report__type"
     aria-label="report type selector"
     required
   />
@@ -70,8 +86,25 @@ function get_report(position) {
     <option value="2">Đóng góp ý kiến</option>
     <option value="3">Giải đáp thắc mắc</option>
     </select></div>
+
+    ${
+      current_feature?.properties?.boards.length > 0
+        ? `<div class="form-section">
+            <label for="billboard__type__edit" class="fw-bold">Loại bảng quảng cáo</label>
+            <select
+              class="form-select"
+              id="report__board"
+              name="board"
+              aria-label="report type selector"
+              required
+            />
+              <option value="">Chọn...</option>
+              ${option}
+              </select></div>`
+        : ""
+    }
             <div class="form-section file-section">
-              <p>Thông tin đính kèm:</p>
+              <p class="mb-0">Thông tin đính kèm:</p>
               <div class="file-button">
                 <label for="attached_files">Chọn</label>
                 <input
@@ -91,6 +124,7 @@ function get_report(position) {
             </div>
           </form>
         </div>`;
+
   report_node = document.createElement("section");
   report_node.setAttribute("id", "report-popup");
   report_node.classList.add("active");
@@ -107,15 +141,86 @@ function get_report(position) {
   var quill = new Quill("#editor", {
     theme: "snow",
   });
+  function runCapcha() {
+    grecaptcha.ready(function () {
+      grecaptcha
+        .execute("6LdBr0kpAAAAAEfm-auy663qwRYlcSVaA8NlxLUO", {
+          action: "report",
+        })
+        .then(function (token) {
+          let files = $("#attached_files").val();
+          let type = $("#report__type").val();
+          let board = $("#report__board").val();
+          let name = $("#sender_name").val();
+          let email = $("#sender_email").val();
+          let geometry = $("#geometry").val();
+          let place = $("#place").val();
 
+          let number = $("#sender_number").val();
+          console.log(geometry);
+          sendData(
+            files,
+            place,
+            number,
+            email,
+            name,
+            geometry,
+            board,
+            type,
+            token
+          );
+        });
+    });
+  }
+  function sendData(
+    files,
+    place,
+    number,
+    email,
+    name,
+    geometry,
+    board,
+    type,
+    token
+  ) {
+    let data = JSON.stringify({
+      attached_files: files,
+      place: place,
+      details: hvalue,
+      sender_number: number,
+      sender_email: email,
+      sender_name: name,
+      geometry: geometry,
+      type: type,
+      board: board,
+      captcha: token,
+    });
+    fetch("http://localhost:5000/report", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          alert("Gửi báo cáo thành công");
+        } else {
+          alert("Gửi báo cáo thành công thất bại!");
+        }
+      });
+  }
   $(document).ready(function () {
-    $("#inscreen-form-report").on("submit", function () {
-      var hvalue = $(".ql-editor").html();
+    $("#inscreen-form-report").on("submit", function (e) {
+      e.preventDefault();
+      hvalue = $(".ql-editor").html();
       $(this).append(
         "<textarea name='details' style='display:none'>" +
           hvalue +
           "</textarea>"
       );
+      runCapcha();
     });
   });
 }

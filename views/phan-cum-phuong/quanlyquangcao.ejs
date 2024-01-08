@@ -130,26 +130,28 @@
 
             <% for (let i = 0; i < locals.billboards.length; i++) { %>
               <% const advertisement = locals.billboards[i]; %>
-              <% const license = advertisement.licenses[0]; %>
+              
               <% const id = advertisement._id; %>
+              <% const boards = advertisement.properties.boards; %>
+              <% for (let j = 0; j < boards.length; j++) { %>
             <div id=<%='"list__item' + id + '"'%>
               " class="card shadow-sm">
               <div class="card-header" id="brief__info<%= id %>">
                 <ul class="list__flex">
                   <li class="list__col1">
-                    <%= advertisement.properties.type %>
+                    <%= boards[j].board_type %>
                   </li>
                   <li class="list__col2"><%= advertisement.properties.place %></li>
                   <li class="list__col3">
                     <button
                       class="btn collapsed"
-                      id="collapse__btn<%= id %>"
+                      id="collapse__btn<%= id %>_<%= j %>"
                       type="button"
-                      onclick="toggleCollapseButton('collapse__btn<%= id %>')"
+                      onclick="toggleCollapseButton('collapse__btn<%= id %>_<%= j %>')"
                       data-bs-toggle="collapse"
-                      data-bs-target="#full__info<%= id %>"
+                      data-bs-target="#full__info<%= id %>_<%= j %>"
                       aria-expanded="false"
-                      aria-controls="full__info<%= id %>"
+                      aria-controls="full__info<%= id %>_<%= j %>"
                     >
                       <i class="bi bi-chevron-down"></i>
                     </button>
@@ -158,23 +160,14 @@
               </div>
 
               <div
-                id="full__info<%= id %>"
+                id="full__info<%= id %>_<%= j %>"
                 class="collapse"
-                aria-labelledby="brief__info<%= id %>"
+                aria-labelledby="brief__info<%= id %>_<%= j %>"
               >
                 <div class="card-body">
                   <ul id="full__info__list">
                     <li class="mock__image__container">
-                      <% if (license?.images?.[0]) {%>
-                        <img class="ad__image" src="<%= license.images[0] %>" alt="hinh1">
-                      <% } else { %> 
-                        <div class="mock__image">&nbsp;</div>
-                      <% } %>
-                      <% if (license?.images?.[1]) {%>
-                        <img class="ad__image" src="<%= license.images[1] %>" alt="hinh1">
-                      <% } else { %> 
-                        <div class="mock__image">&nbsp;</div>
-                      <% } %>
+                      
                     </li>
                     <li>
                       <p class="fw-bold">Thông tin bảng quảng cáo</p>
@@ -182,15 +175,10 @@
                         <li>
                           Kích thước:
                           <span class="fw-bold"
-                            ><%= advertisement.properties.size %></span
+                            ><%= boards[j].size %></span
                           >
                         </li>
-                        <li>
-                          Số lượng:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.amount %></span
-                          >
-                        </li>
+                      
                         <li>
                           Hình thức:
                           <span class="fw-bold"
@@ -205,51 +193,19 @@
                         </li>
                       </ul>
                     </li>
-                    <% if (license) { %>
-                    <li>
-                      <p class="fw-bold">Thông tin công ty</p>
-                      <ul>
-                        <li>
-                          Tên công ty:
-                          <span class="fw-bold"
-                            ><%= license.company_name ? license.company_name  : ""  %></span
-                          >
-                        </li>
-                        <li>
-                          Email liên hệ:
-                          <span class="fw-bold"
-                            ><%= license.company_contact %></span
-                          >
-                        </li>
-                        <li>
-                          Ngày bắt đầu:
-                          <span class="fw-bold"
-                            ><%= license.start_date %></span
-                          >
-                        </li>
-                        <li>
-                          Ngày kết thúc:
-                          <span class="fw-bold"
-                            ><%= license.end_date %></span
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                    <% } else { %>
-                      <li>
-                        <p class="fw-bold">Chưa có giấy phép</p>
-                      </li>
-                    <% } %>
+                    
+                    
+                   
                     <li>
                       <ul class="buttons__container">
-                        <% if (!license) { %>
+                        
                         <li>
                           <button class="btn btn-primary" onclick='create_authorize_request(<%- JSON.stringify(advertisement) %>)'>
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C cấp phép
                           </button>
                         </li>
-                        <% } %>        
+        
                         <li>
                           <button class="btn btn-primary" onclick='create_edit_request(<%- JSON.stringify(advertisement) %>)'>
                             <i class="bi bi-card-list"></i>
@@ -262,7 +218,7 @@
                 </div>
               </div>
             </div>
-            <% } %>
+            <% }} %>
 
             <div
               class="modal fade"
