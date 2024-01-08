@@ -56,15 +56,15 @@ const compareLocation = (req, address) => {
 };
 
 const getWardList = (req) => {
-  if (!req.session.ward) {
+  if (!req.session?.ward) {
     const district = district_list.filter((e) => {
       return e.district == req.session.district;
     });
-    district[0].wards.forEach((e) => {
+    district[0]?.wards.forEach((e) => {
       e.ward = e.ward.replace("Phường ", "");
       e.ward = e.ward.replace("Xã ", "");
     });
-    return district[0].wards;
+    return district[0]?.wards;
   }
   return null;
 };
@@ -106,23 +106,34 @@ const processQuery = (req, arr) => {
   }
 
   if (!req.session.ward) {
-    const wards = getWardList(req).map(e => e.ward);
+    const wards = getWardList(req).map((e) => e.ward);
     arr = arr.filter(
-      processFilterQuery(req, e => getAddress(req, e).split(", ")[1], wards, "ward")
+      processFilterQuery(
+        req,
+        (e) => getAddress(req, e).split(", ")[1],
+        wards,
+        "ward"
+      )
     );
   }
   if (req.path === "/dashboard/license") {
     arr = arr.filter(
-      processFilterQuery(req, e => e.state, [0, 1], "license")
+      processFilterQuery(req, (e) => e.state, [0, 1], "license")
     );
   } else if (req.path === "/dashboard/advertise") {
     arr = arr.filter(
-      processFilterQuery(req, e => e.licenses[0]?.state, [0, 1, undefined], "license")
+      processFilterQuery(
+        req,
+        (e) => e.licenses[0]?.state,
+        [0, 1, undefined],
+        "license"
+      )
     );
   }
-  arr = arr.filter(processFilterQuery(req, e => e.type, [0, 1, 2, 3], "report_type"));
-  arr = arr.filter(processFilterQuery(req, e => e.state, [1, 0], "request"));
-  
+  arr = arr.filter(
+    processFilterQuery(req, (e) => e.type, [0, 1, 2, 3], "report_type")
+  );
+  arr = arr.filter(processFilterQuery(req, (e) => e.state, [1, 0], "request"));
 
   if (req.query.sort) {
     if (req.query.sort == 0) {
@@ -195,22 +206,69 @@ const _get_map = async (req, res) => {
 
 //Danh sách bảng quảng cáo
 const _get_advertisement = async (req, res) => {
-  res.locals.billboards = await db
+  res.locals.billboards = await await db
     .getDb()
     .collection("billboards-manage")
     .aggregate([
+      {
+        $unwind: "$properties.boards",
+      },
       {
         $lookup: {
           from: "licenses",
           localField: "properties.boards.license",
           foreignField: "_id",
-          as: "licenses",
+          as: "properties.boards.license",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          boards: "$properties.boards",
+          geometry: 1,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          type: {
+            $first: "$type",
+          },
+          properties: {
+            $first: "$properties",
+          },
+          boards: {
+            $push: "$boards",
+          },
+          geometry: {
+            $first: "$geometry",
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          "properties.boards": "$boards",
+          geometry: 1,
         },
       },
     ])
     .toArray();
-  res.locals.billboards = processQuery(req, res.locals.billboards);
-  res.locals.ward_list = getWardList(req);
+  console.log(res.locals.billboards);
+  //res.locals.billboards = processQuery(req, res.locals.billboards);
+  //res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/quanlyquangcao");
 };
 
@@ -286,15 +344,19 @@ const _post_report_edit = async (req, res) => {
   let { handling_method, state } = req.body;
   let id = req.params;
 
-  const report = await db.getDb().collection("reports").findOneAndUpdate(
-    { _id: new ObjectId(req.params.id) },
-    { 
-      $set: {
-        state: state, 
-        handling_method: handling_method 
+  const report = await db
+    .getDb()
+    .collection("reports")
+    .findOneAndUpdate(
+      { _id: new ObjectId(req.params.id) },
+      {
+        $set: {
+          state: state,
+          handling_method: handling_method,
+        },
       }
-    });
-  
+    );
+
   if (report) {
     const mailOptions = {
       from: "my@gmail.com",
@@ -311,7 +373,7 @@ const _post_report_edit = async (req, res) => {
   
       <p>Vui lòng không phản hồi lại email này.</p>`,
     };
-    
+
     console.log(report);
     console.log(mailOptions);
     transporter.sendMail(mailOptions, (error, _info) => {
