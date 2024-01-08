@@ -59,6 +59,8 @@
     <script
       type="text/javascript"
       src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfLNUkpAAAAAADfW80VPLIJ1zytzaXpyclE3zE9"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LdBr0kpAAAAAEfm-auy663qwRYlcSVaA8NlxLUO"></script>
   </head>
   <body>
     <script src="/scripts/navbar.js" defer></script>
@@ -69,6 +71,7 @@
     </main>
     <script>
       let billboards = <%- JSON.stringify(billboards) %>;
+      let reports = <%- JSON.stringify(reports) %>;
     </script>
     <script src="/scripts/popup.js"></script>
     <script src="/scripts/phan-cum-nguoi-dan/authentication.js"></script>

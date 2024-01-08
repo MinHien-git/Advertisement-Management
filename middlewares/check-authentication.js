@@ -3,11 +3,13 @@ const check_authentication_status = (request, response, next) => {
   const ward = request.session.ward;
   const district = request.session.district;
   const name = request.session.name;
+  const email = request.session.email;
   if (!uid) {
     return next();
   }
 
   response.locals.uid = uid;
+  response.locals.email = email;
   response.locals.isAuth = true;
   response.locals.type_user = request.session.type_user;
   response.locals.name = name;

@@ -20,11 +20,34 @@ const _get_map = async (request, response) => {
       return i;
     }
   });
+
   if (response.locals.type_user == 0 || !response.locals.type_user) {
-    return response.render("phan-cum-nguoi-dan/trangchu", {
-      action: false,
-      billboards: billboards,
-    });
+    let reports = [];
+    reports = await getDb()
+      .collection("reports")
+      .find({
+        "properties.sender_email": { $eq: response.locals.email },
+      })
+      .toArray();
+    console.log(reports);
+    if (
+      (billboards = billboards.filter((i) => {
+        if (ward == "" && district == "") return i;
+        let address = i?.properties?.place.split(", ");
+
+        if (
+          (address.find((a) => a == ward) || !ward) &&
+          (address.find((a) => a == district) || !district)
+        ) {
+          return i;
+        }
+      }))
+    )
+      return response.render("phan-cum-nguoi-dan/trangchu", {
+        action: false,
+        billboards: billboards,
+        reports: reports,
+      });
   } else if (response.locals.type_user == 1) {
     return response.render("phan-cum-phuong/trangchu", {
       action: false,

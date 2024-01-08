@@ -11,14 +11,21 @@ let current_marker = null;
 let requestOptions = {
   method: "GET",
 };
-
+let showBillBoard = true;
+let showBillReport = true;
+console.log(reports);
 var geojsonMarkerOptions = {
   radius: 8,
   weight: 1,
   opacity: 1,
   fillOpacity: 0.8,
 };
-
+var geojsonReportMarkerOptions = {
+  radius: 7,
+  weight: 1,
+  opacity: 0.5,
+  fillOpacity: 0.8,
+};
 function setInfoBoard() {
   if (current_feature) {
     currentBoard = current_feature.properties.boards;
@@ -160,6 +167,7 @@ window.onload = function () {
       keepCurrentZoomLevel: true,
     })
     .addTo(map);
+
   map.addControl(address_search_controller);
   map.on("click", onMapClick);
 
@@ -252,78 +260,86 @@ window.onload = function () {
   var markers = L.markerClusterGroup();
   markers.addLayer(geojsonLayer);
   map.addLayer(markers);
-  // let reportLayer = L.geoJSON(reports, {
-  //   pointToLayer: function (feature, latlng) {
-  //     const attributionDiv = document.createElement("div");
-  //     const button_container = document.createElement("div");
-  //     const report_button = document.createElement("button");
-  //     const info_button = document.createElement("button");
 
-  //     attributionDiv.setAttribute("id", "content" + feature._id);
-  //     button_container.classList.add("button_container");
-  //     info_button.classList.add("info");
-  //     info_button.setAttribute("id", "info-" + feature._id);
-  //     report_button.classList.add(is_offical != 0 ? "edit" : "report");
-  //     report_button.setAttribute("id", "report-" + feature._id);
+  let reportLayer = L.geoJSON(reports, {
+    pointToLayer: function (feature, latlng) {
+      const attributionDiv = document.createElement("div");
 
-  //     attributionDiv.innerHTML = `
-  //         <p>${feature.properties.place}</p>
-  //         <p>Số lượng bảng QC: <span class="bold">${
-  //           feature.properties.boards.length
-  //         }</span></p>
-  //         <p>Hình thức: <span class="bold">${
-  //           feature.properties.type_advertise
-  //         }</span></p>
-  //         <p>Phân Loại: <span class="bold">${
-  //           feature.properties.place_type
-  //         }</span></p>
-  //         <p>Quy Hoạch: <span class="bold">${
-  //           feature.properties.status === 1 ? "Đã Quy Hoạch" : "Chưa Quy Hoạch"
-  //         }</span></p>
-  //         `;
-  //     info_button.innerHTML = `<img src="/images/information.png" alt="information">Thông tin`;
-  //     report_button.innerHTML =
-  //       is_offical != 0
-  //         ? `<img src="/images/edit-yellow.png" alt="edit">Chỉnh sửa`
-  //         : `<img src="/images/report-fill.png" alt="report">Báo cáo`;
+      attributionDiv.setAttribute("id", "content" + feature._id);
+      attributionDiv.innerHTML = `<p>${feature.properties.place}</p>
+      <p><span class="bold">Trạng thái:</span>${
+        feature.properties?.state === 0 ? "Đã xử lí" : "Chưa xử lí"
+      } </p>
+      <p><span class="bold">Nội dung báo cáo:</span></p> 
+      ${feature.properties.details}`;
+      return L.circleMarker(latlng, geojsonReportMarkerOptions).bindPopup(
+        attributionDiv
+      );
+    },
+    style: function (feature) {
+      if (feature.properties.state === 0) {
+        return {
+          color: "#0FFF50",
+          fillColor: "#0FFF50",
+        };
+      } else {
+        return {
+          color: "#FFC300",
+          fillColor: "#FFC300",
+        };
+      }
+    },
+  }).addTo(map);
 
-  //     button_container.appendChild(info_button);
-  //     button_container.appendChild(report_button);
+  L.Control.Button = L.Control.extend({
+    options: {
+      position: "topright",
+    },
+    onAdd: function (map) {
+      var container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+      var button = L.DomUtil.create("a", "leaflet-control-button", container);
+      L.DomEvent.disableClickPropagation(button);
+      L.DomEvent.on(button, "click", function () {
+        showBillBoard = !showBillBoard;
+        if (showBillBoard) {
+          map.addLayer(geojsonLayer);
+        } else {
+          map.removeLayer(geojsonLayer);
+        }
+      });
 
-  //     report_button.addEventListener("click", (e) => {
-  //       current_feature = feature;
-  //       if (is_offical != 2) {
-  //         get_report(feature);
-  //       } else {
-  //         get_edit(feature.properties.place, feature);
-  //       }
-  //     });
+      container.title = "Title";
 
-  //     info_button.addEventListener("click", (e) => {
-  //       console.log("check-info :" + feature._id, feature);
-  //       current_feature = feature;
-  //       setInfoBoard();
-  //       if (!infoboards.classList.contains("active"))
-  //         infoboards.classList.add("active");
-  //     });
-  //     attributionDiv.appendChild(button_container);
+      return container;
+    },
+    onRemove: function (map) {},
+  });
+  var control = new L.Control.Button();
+  control.addTo(map);
 
-  //     return L.circleMarker(latlng, geojsonMarkerOptions).bindPopup(
-  //       attributionDiv
-  //     );
-  //   },
-  //   style: function (feature) {
-  //     if (feature.properties.status === 0) {
-  //       return {
-  //         color: "#ff0000",
-  //         fillColor: "#ff0000",
-  //       };
-  //     } else {
-  //       return {
-  //         color: "#0000ff",
-  //         fillColor: "#0000ff",
-  //       };
-  //     }
-  //   },
-  // }).addTo(map);
+  L.Control.Button = L.Control.extend({
+    options: {
+      position: "topright",
+    },
+    onAdd: function (map) {
+      var container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+      var button = L.DomUtil.create("a", "leaflet-control-button", container);
+      L.DomEvent.disableClickPropagation(button);
+      L.DomEvent.on(button, "click", function () {
+        showBillReport = !showBillReport;
+        if (showBillReport) {
+          map.addLayer(reportLayer);
+        } else {
+          map.removeLayer(reportLayer);
+        }
+      });
+
+      container.title = "Title";
+
+      return container;
+    },
+    onRemove: function (map) {},
+  });
+  var billboard = new L.Control.Button();
+  billboard.addTo(map);
 };
