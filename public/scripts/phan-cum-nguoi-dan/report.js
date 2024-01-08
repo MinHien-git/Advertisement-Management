@@ -122,6 +122,7 @@ function get_report(current_feature) {
             </div>
           </form>
         </div>`;
+
   report_node = document.createElement("section");
   report_node.setAttribute("id", "report-popup");
   report_node.classList.add("active");
