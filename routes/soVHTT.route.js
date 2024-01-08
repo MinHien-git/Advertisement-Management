@@ -36,7 +36,15 @@ router.post(
 //bác bỏ
 router.put("/management/licenses/decline", SOVHTTcontroller._decline_license);
 
-//Duyệt yêu cầu cấp phép/chỉnh sửa nội dung QC
+//Duyệt YC chỉnh sửa bảng QC
+//Xem DS yêu cầu
+router.get("/management/edit_requests", SOVHTTcontroller._get_edit_requests);
+//duyệt
+router.put("/management/edit_requests", SOVHTTcontroller._approve_edit_request);
+//bác bỏ
+router.put("/management/edit_requests/decline", SOVHTTcontroller._decline_edit_request);
+
+//Duyệt danh sách báo cáo
 router.get("/management/reports", SOVHTTcontroller._get_reports);
 router.put("/management/reports", SOVHTTcontroller._change_report_status);
 router.post(
@@ -50,3 +58,13 @@ router.put("/management/accounts", SOVHTTcontroller._edit_account);
 router.delete("/management/accounts", SOVHTTcontroller._delete_account);
 router.post("/management/accounts", SOVHTTcontroller._create_account);
 module.exports = router;
+
+
+//Quản lí Quận, Phường
+router.get("/management/general/districts_wards", SOVHTTcontroller._get_districts_wards);
+router.post("/management/general/districts_wards/district", SOVHTTcontroller._create_district);
+router.post("/management/general/districts_wards/ward", SOVHTTcontroller._create_ward);
+router.put("/management/general/districts_wards/district", SOVHTTcontroller._edit_district);
+router.put("/management/general/districts_wards/ward", SOVHTTcontroller._edit_ward);
+router.delete("/management/general/districts_wards/district", SOVHTTcontroller._delete_district);
+router.delete("/management/general/districts_wards/ward", SOVHTTcontroller._delete_ward);

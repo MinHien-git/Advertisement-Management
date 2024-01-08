@@ -104,7 +104,7 @@ function setInfoBoard() {
 function onMapClick(e) {
     let data;
     fetch(
-        `https://api.geoapify.com/v1/geocode/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
+        `https://api.geoapify.com/v1/geocode/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&lang=vi&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
         requestOptions
     )
         .then((response) => response.json())
@@ -115,7 +115,9 @@ function onMapClick(e) {
                 .setLatLng(e.latlng)
                 .setContent(
                     `<h3>${data.features[0].properties.address_line1}</h3>
-          <p>${data.features[0].properties.address_line2}</p>
+          <p>${
+              data.features[0].properties.address_line2.split(", Thành")[0]
+          }</p>
           <div class="infomation">
           <h4>Thông tin</h4>
           <p>Chưa có thông tin</p>
