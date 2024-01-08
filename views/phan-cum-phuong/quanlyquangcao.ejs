@@ -6,32 +6,27 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
-      crossorigin="anonymous"
-    />
+      crossorigin="anonymous" />
 
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-    />
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
     <link
       href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
-      rel="stylesheet"
-    />
+      rel="stylesheet" />
     <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
       integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
       crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+      referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="/styles/phan-cum-phuong/trangchu.css" />
     <link rel="stylesheet" href="/styles/navbar.css" />
     <link rel="stylesheet" href="/styles/global.css" />
@@ -40,19 +35,18 @@
     <link rel="stylesheet" href="/styles/phan-cum-phuong/danhsach.css" />
     <link rel="stylesheet" href="/styles/phan-cum-phuong/page_content.css" />
     <link rel="stylesheet" href="/styles/phan-cum-phuong/quanlyquangcao.css" />
-    
+
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
+      crossorigin="" />
   </head>
   <body>
     <script src="/scripts/navbar.js" defer></script>
     <div class="wrapper">
       <%- include('../includes/header.ejs')%>
-      
+
       <main>
         <div class="container" id="main__container">
           <h1 class="fw-bold h2 mb-0" id="page__title">
@@ -62,8 +56,7 @@
             type="submit"
             class="btn btn-primary nowrap"
             id="map__btn"
-            onclick="navigate(this.id)"
-          >
+            onclick="navigate(this.id)">
             Xem trên bản đồ
           </button>
           <form action="" class="d-flex search__form">
@@ -71,47 +64,61 @@
               type="text"
               name="search"
               class="form-control me-2"
-              placeholder="Nhập thông tin"
-            />
+              placeholder="Nhập thông tin" />
             <button
               type="submit"
               class="btn btn-primary nowrap"
-              id="search__btn"
-            >
+              id="search__btn">
               Tìm kiếm
             </button>
             <% if (locals.ward_list) { %>
-              <div class="dropdown">
-                <button class="dropbtn btn btn-dark nowrap">
-                  <i class="bi bi-arrow-down-up"></i>
-                  Lọc phường
-                </button>
-                <div class="dropdown-content">
-                  <% for (let i = 0; i < locals.ward_list.length; i++) { %>
-                  <label><input type="checkbox" name="ward<%= i + 1 %>" value="<%= i %>" /> <%= locals.ward_list[i].ward %></label>
-                  <% } %>
-                </div>
+            <div class="dropdown">
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-arrow-down-up"></i>
+                Lọc phường
+              </button>
+              <div class="dropdown-content">
+                <% for (let i = 0; i < locals.ward_list.length; i++) { %>
+                <label
+                  ><input
+                    type="checkbox"
+                    name="ward<%= i + 1 %>"
+                    value="<%= i %>" />
+                  <%= locals.ward_list[i].ward %></label
+                >
+                <% } %>
               </div>
-              <% } %>
+            </div>
+            <% } %>
             <div class="dropdown">
               <button class="dropbtn btn btn-dark nowrap">
                 <i class="bi bi-arrow-down-up"></i>
                 Sắp xếp
               </button>
               <div class="dropdown-content">
-                <label><input type="radio" name="sort" value="0"> A-Z</label>
-                <label><input type="radio" name="sort" value="1"> Z-A</label>
+                <label><input type="radio" name="sort" value="0" /> A-Z</label>
+                <label><input type="radio" name="sort" value="1" /> Z-A</label>
               </div>
             </div>
             <div class="dropdown">
               <button class="dropbtn btn btn-dark nowrap">
-                <i class="bi bi-funnel"></i> 
-                &nbsp;Lọc</button>
+                <i class="bi bi-funnel"></i>
+                &nbsp;Lọc
+              </button>
               <div class="dropdown-content">
                 <p>Tình trạng cấp phép</p>
-                <label><input type="checkbox" name="license1" value="1"> Đã duyệt</label>
-                <label><input type="checkbox" name="license2" value="1"> Chưa duyệt</label>
-                <label><input type="checkbox" name="license3" value="1"> Chưa cấp phép</label>
+                <label
+                  ><input type="checkbox" name="license1" value="1" /> Đã
+                  duyệt</label
+                >
+                <label
+                  ><input type="checkbox" name="license2" value="1" /> Chưa
+                  duyệt</label
+                >
+                <label
+                  ><input type="checkbox" name="license3" value="1" /> Chưa cấp
+                  phép</label
+                >
               </div>
             </div>
           </form>
@@ -122,24 +129,23 @@
                 <ul class="list__flex fw-bold">
                   <li class="list__col1">Bảng quảng cáo</li>
                   <li class="list__col2">Địa điểm</li>
-                    <button class="btn btn-link ps-4" disabled></button>
-                  </li>
+                  <li><button class="btn btn-link ps-4" disabled></button></li>
                 </ul>
               </div>
             </div>
 
-            <% for (let i = 0; i < locals.billboards.length; i++) { %>
-              <% const advertisement = locals.billboards[i]; %>
-              <% const license = advertisement.licenses[0]; %>
-              <% const id = advertisement._id; %>
-            <div id=<%='"list__item' + id + '"'%>
-              " class="card shadow-sm">
+            <% for (let i = 0; i < locals.billboards.length; i++) { %> 
+            <% const advertisement = locals.billboards[i]; %>
+            <% const id = advertisement._id; %>
+            <div id="list__item<%= id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= id %>">
                 <ul class="list__flex">
                   <li class="list__col1">
                     <%= advertisement.properties.type %>
                   </li>
-                  <li class="list__col2"><%= advertisement.properties.place %></li>
+                  <li class="list__col2">
+                    <%= advertisement.properties.place %>
+                  </li>
                   <li class="list__col3">
                     <button
                       class="btn collapsed"
@@ -149,8 +155,7 @@
                       data-bs-toggle="collapse"
                       data-bs-target="#full__info<%= id %>"
                       aria-expanded="false"
-                      aria-controls="full__info<%= id %>"
-                    >
+                      aria-controls="full__info<%= id %>">
                       <i class="bi bi-chevron-down"></i>
                     </button>
                   </li>
@@ -160,20 +165,35 @@
               <div
                 id="full__info<%= id %>"
                 class="collapse"
-                aria-labelledby="brief__info<%= id %>"
-              >
+                aria-labelledby="brief__info<%= id %>">
+                <% if (advertisement.properties.boards.length === 0) { %>
+                <div class="card-body">
+                  Không có bảng quảng cáo
+                </div>
+                <% } %>
+                <%
+                    const boards = advertisement.properties.boards;
+                    for (let i = 0; i < boards.length; i++) {
+                      const board = boards[i];
+                      const license = board.license;
+                  %>
                 <div class="card-body">
                   <ul id="full__info__list">
                     <li class="mock__image__container">
                       <% if (license?.images?.[0]) {%>
-                        <img class="ad__image" src="<%= license.images[0] %>" alt="hinh1">
-                      <% } else { %> 
-                        <div class="mock__image">&nbsp;</div>
-                      <% } %>
-                      <% if (license?.images?.[1]) {%>
-                        <img class="ad__image" src="<%= license.images[1] %>" alt="hinh1">
-                      <% } else { %> 
-                        <div class="mock__image">&nbsp;</div>
+                      <img
+                        class="ad__image"
+                        src="<%= license.images[0] %>"
+                        alt="hinh1" />
+                      <% } else { %>
+                      <div class="mock__image">&nbsp;</div>
+                      <% } %> <% if (license?.images?.[1]) {%>
+                      <img
+                        class="ad__image"
+                        src="<%= license.images[1] %>"
+                        alt="hinh1" />
+                      <% } else { %>
+                      <div class="mock__image">&nbsp;</div>
                       <% } %>
                     </li>
                     <li>
@@ -182,26 +202,14 @@
                         <li>
                           Kích thước:
                           <span class="fw-bold"
-                            ><%= advertisement.properties.size %></span
-                          >
-                        </li>
-                        <li>
-                          Số lượng:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.amount %></span
+                            ><%= board.size %></span
                           >
                         </li>
                         <li>
                           Hình thức:
                           <span class="fw-bold"
-                            ><%= advertisement.properties.type_advertise %></span
-                          >
-                        </li>
-                        <li>
-                          Phân loại:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.place_type %></span
-                          >
+                            ><%= board.board_type %>
+                          </span>
                         </li>
                       </ul>
                     </li>
@@ -212,7 +220,7 @@
                         <li>
                           Tên công ty:
                           <span class="fw-bold"
-                            ><%= license.company_name ? license.company_name  : ""  %></span
+                            ><%= license.company_name %></span
                           >
                         </li>
                         <li>
@@ -223,35 +231,35 @@
                         </li>
                         <li>
                           Ngày bắt đầu:
-                          <span class="fw-bold"
-                            ><%= license.start_date %></span
-                          >
+                          <span class="fw-bold"><%= license.start_date %></span>
                         </li>
                         <li>
                           Ngày kết thúc:
-                          <span class="fw-bold"
-                            ><%= license.end_date %></span
-                          >
+                          <span class="fw-bold"><%= license.end_date %></span>
                         </li>
                       </ul>
                     </li>
                     <% } else { %>
-                      <li>
-                        <p class="fw-bold">Chưa có giấy phép</p>
-                      </li>
+                    <li>
+                      <p class="fw-bold">Chưa có giấy phép</p>
+                    </li>
                     <% } %>
                     <li>
                       <ul class="buttons__container">
                         <% if (!license) { %>
                         <li>
-                          <button class="btn btn-primary" onclick='create_authorize_request(<%- JSON.stringify(advertisement) %>)'>
+                          <button
+                            class="btn btn-primary"
+                            onclick="create_authorize_request(<%- JSON.stringify(advertisement) %>)">
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C cấp phép
                           </button>
                         </li>
-                        <% } %>        
+                        <% } %>
                         <li>
-                          <button class="btn btn-primary" onclick='create_edit_request(<%- JSON.stringify(advertisement) %>)'>
+                          <button
+                            class="btn btn-primary"
+                            onclick="create_edit_request(<%- JSON.stringify(advertisement) %>)">
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C chỉnh sửa
                           </button>
@@ -260,6 +268,7 @@
                     </li>
                   </ul>
                 </div>
+                <% } %>
               </div>
             </div>
             <% } %>
@@ -269,8 +278,7 @@
               id="Modify__modal"
               tabindex="-1"
               aria-labelledby="Modal__label"
-              aria-hidden="true"
-            >
+              aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -281,8 +289,7 @@
                       class="btn-close"
                       type="button"
                       data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
+                      aria-label="Close"></button>
                   </div>
                 </div>
               </div>
@@ -290,16 +297,6 @@
           </div>
         </div>
       </main>
-      <div id="to__list__btn" class="d-grid gap-2">
-        <button class="btn btn-primary" onclick="create_authorize_request()">
-          <i class="bi bi-card-list"></i>
-          Tạo Y/C cấp phép
-        </button>
-        <button class="btn btn-primary" onclick="create_edit_request()">
-          <i class="bi bi-card-list"></i>
-          Tạo Y/C chỉnh sửa
-        </button>
-      </div>
     </div>
 
     <script src="/scripts/popup.js"></script>
@@ -310,14 +307,11 @@
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
       integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
-      crossorigin="anonymous"
-    ></script>
-    
+      crossorigin="anonymous"></script>
   </body>
 </html>

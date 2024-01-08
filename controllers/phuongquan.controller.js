@@ -197,12 +197,12 @@ const _get_map = async (req, res) => {
 const _get_advertisement = async (req, res) => {
   res.locals.billboards = await db
     .getDb()
-    .collection("billboard")
+    .collection("billboards-manage")
     .aggregate([
       {
         $lookup: {
           from: "licenses",
-          localField: "licenses",
+          localField: "properties.boards.license",
           foreignField: "_id",
           as: "licenses",
         },
@@ -218,14 +218,14 @@ const _get_advertisement = async (req, res) => {
 const _get_license = async (req, res) => {
   res.locals.licenses = await db
     .getDb()
-    .collection("licenses")
+    .collection("billboards-manage")
     .aggregate([
       {
         $lookup: {
-          from: "billboard",
-          localField: "billboard",
+          from: "licenses",
+          localField: "properties.boards.license",
           foreignField: "_id",
-          as: "billboard",
+          as: "license",
         },
       },
     ])
