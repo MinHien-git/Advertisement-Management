@@ -116,22 +116,31 @@
               </div>
             </div>
 
-            <% for (let i=0; i < locals.licenses.length; i++) { %>
-            <% const advertisement = licenses[i].billboard[0] %>
+            <%
+              for (let i = 0; i < locals.billboards.length; i++) {
+                const advertisement = locals.billboards[i];
+                for (let j = 0; j < advertisement.properties.boards.length; j++) {
+                  const board = advertisement.properties.boards[j];
+                  const license = board.license[0];
+            %>
             <div id="<%='list__item' + license._id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= license._id  %>">
                 <ul class="list__flex">
                   <li class="list__col1">
-                    <%= license?.company_name %>
+                    <%= license.company_name %>
                   </li>
                   <li class="list__col2">
                     <%= advertisement.properties.place %>
                   </li>
                   <% if (license) { %> 
-                    <% if (license.state===0) {%>
+                    <% if (license.state===0) { %>
                     <li class="list__col3 fw-semibold" style="color: #329a44">
                       Đã duyệt
                     </li>
+                    <% } else if (license.state===4) { %>
+                      <li class="list__col3 fw-semibold" style="color: #ff7b7b">
+                        Hết hạn
+                      </li>
                     <% } else { %>
                     <li class="list__col3 fw-semibold" style="color: #e7b400">
                       Chưa duyệt
@@ -163,21 +172,15 @@
                 class="collapse"
                 aria-labelledby="brief__info<%= license._id %>">
                 <div class="card-body">
-                  Phân loại: <span class="fw-bold"><%= advertisement.properties?.place_type %></span>
-                  <% 
-                    const boards = advertisement.properties.boards;
-                    for (let i = 0; i < boards.length; i++) {
-                      const board = boards[i];
-                  %>
                   <ul id="full__info__list">
                     <li class="mock__image__container">
-                      <% if (board.license?.images?.[0]) { %>
-                        <img class="ad__image" src="<%= advertisement.license.images[0] %>" alt="hinh1">
+                      <% if (license?.images?.[0]) { %>
+                        <img class="ad__image" src="<%= license.images[0] %>" alt="hinh1">
                       <% } else { %> 
                         <div class="mock__image">&nbsp;</div>
                       <% } %>
-                      <% if (board.license?.images?.[1]) { %>
-                        <img class="ad__image" src="<%= advertisement.license.images[1] %>" alt="hinh2">
+                      <% if (license?.images?.[1]) { %>
+                        <img class="ad__image" src="<%= license.images[1] %>" alt="hinh2">
                       <% } else { %> 
                         <div class="mock__image">&nbsp;</div>
                       <% } %>
@@ -187,15 +190,19 @@
                       <ul>
                         <li>
                           Kích thước:
-                          <span class="fw-bold">
-                            <%= board.size %>
-                          </span>
+                          <span class="fw-bold"> <%= board.size %></span>
                         </li>
                         <li>
                           Hình thức:
-                          <span class="fw-bold">
-                            <%= board.type_advertise %>
-                          </span>
+                          <span class="fw-bold"> <%= advertisement.properties.type_advertise %></span>
+                        </li>
+                        <li>
+                          Phân loại:
+                          <span class="fw-bold"> <%= advertisement.properties.place_type %></span>
+                        </li>
+                        <li>
+                          Loại bảng:
+                          <span class="fw-bold"> <%= board.board_type %></span>
                         </li>
                       </ul>
                     </li>
@@ -222,7 +229,7 @@
                     </li>
                     <li>
                       <ul class="buttons__container">
-                        <% if (board.license?.state===1) { %>
+                        <% if (license.state===1) { %>
                         <li>
                           <button
                             onclick="cancel_license('<%= license._id %>')"
@@ -236,11 +243,10 @@
                       </ul>
                     </li>
                   </ul>
-                  <% } %>
                 </div>
               </div>
             </div>
-            <% } %>
+            <% console.log(license); } } %>
 
             <div
               class="modal fade"

@@ -10,11 +10,9 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, callback) {
     if (file.mimetype === "image/png") {
-      console.log("png");
       callback(null, new ObjectId().toString() + ".png");
     }
     if (file.mimetype === "image/jpeg") {
-      console.log("jpeg");
       callback(null, new ObjectId().toString() + ".jpeg");
     }
   },
@@ -58,19 +56,21 @@ router.post(
 
 //Danh sách báo cáo
 router.get("/dashboard/report", phuongQuanController._get_report);
+
 //Thông tin báo cáo
 router.get(
   "/dashboard/report/:id",
   phuongQuanController._get_report_information
 );
-
 router.post("/dashboard/report/:id", phuongQuanController._post_report_edit);
 
 //Yêu cầu chỉnh sửa
 router.get("/dashboard/request/edit", phuongQuanController._get_request_edit);
+
 router.post(
   "/dashboard/request",
   upload.array("attached_files", 2),
   phuongQuanController._post_request_edit
 );
+
 module.exports = router;

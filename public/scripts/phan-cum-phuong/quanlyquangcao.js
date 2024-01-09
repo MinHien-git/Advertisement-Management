@@ -59,6 +59,7 @@ function create_authorize_request(advertisement) {
 	  action="/dashboard/license/request"
 	>
 	  <input type="hidden" name="id" value="${advertisement._id}">
+    <input type="hidden" name="board_id" value="${advertisement.board._id}">
 	  <h2>Cấp phép Quảng cáo</h2>
 	  <div class="form-section">
 		<label for="street">Địa chỉ yêu cầu:</label>
@@ -70,7 +71,7 @@ function create_authorize_request(advertisement) {
 		  type="text"
 		  name="type-billboard"
 		  id="type-billboard"
-		  value="${advertisement.properties.type}"
+		  value="${advertisement.board.board_type}"
 		  placeholder="Chọn..."
 		/>
 	  </div>
@@ -160,7 +161,7 @@ function create_edit_request(billboard = null) {
   if (edit_node) {
     body.removeChild(edit_node);
   }
-  const a = billboard?.licenses.filter((i) => i.state === 2);
+  const a = billboard?.board.license.filter((i) => i.state === 2);
 
   let report = `
   <section class="active popup" id="report-popup">
@@ -183,7 +184,7 @@ function create_edit_request(billboard = null) {
 	<h2>Chỉnh sửa Bảng QC</h2>
 
 	<input type="hidden" name="id" value="${billboard?._id}">
-
+  <input type="hidden" name="board_id" value="${billboard?.board._id}">
 
 	<div class="form-section">
 	<label for="street">Địa điểm:</label>
@@ -269,7 +270,7 @@ function create_edit_request(billboard = null) {
     billboard.properties.place_type === "Nhà chờ xe buýt" ? "selected" : ""
   }>Nhà chờ xe buýt</option>
   <option value="7" ${
-    billboard?.properties.type_advertise === "Trường Học" ? "selected" : ""
+    billboard?.properties.place_type === "Trường Học" ? "selected" : ""
   }>Trường học</option>
   </select>
     </div>
@@ -282,34 +283,34 @@ function create_edit_request(billboard = null) {
   required>
   <option value="">Chọn...</option>
   <option value="1" ${
-    billboard?.properties.type === "Trụ/Cụm pano" ? "selected" : ""
+    billboard?.board.board_type === "Trụ/Cụm pano" ? "selected" : ""
   }>Trụ/Cụm pano</option>
   <option value="2" ${
-    billboard?.properties.type === "Trụ bảng hiflex" ? "selected" : ""
+    billboard?.board.board_type === "Trụ bảng hiflex" ? "selected" : ""
   }>Trụ bảng hiflex</option>
   <option value="3" ${
-    billboard?.properties.type === "Trụ màn hình điện tử LED" ? "selected" : ""
+    billboard?.board.board_type === "Trụ màn hình điện tử LED" ? "selected" : ""
   }>Trụ màn hình điện tử LED</option>
   <option value="4" ${
-    billboard?.properties.type === "Trụ hộp đèn" ? "selected" : ""
+    billboard?.board.board_type === "Trụ hộp đèn" ? "selected" : ""
   }>Trụ hộp đèn</option>
   <option value="5" ${
-    billboard?.properties.type === "Bảng hiflex ốp tường" ? "selected" : ""
+    billboard?.board.board_type === "Bảng hiflex ốp tường" ? "selected" : ""
   }>Bảng hiflex ốp tường</option>
   <option value="6" ${
-    billboard?.properties.type === "Màn hình điện tử ốp tường" ? "selected" : ""
+    billboard?.board.board_type === "Màn hình điện tử ốp tường" ? "selected" : ""
   }>Màn hình điện tử ốp tường</option>
   <option value="7" ${
-    billboard?.properties.type === "Trụ treo băng rôn dọc" ? "selected" : ""
+    billboard?.board.board_type === "Trụ treo băng rôn dọc" ? "selected" : ""
   }>Trụ treo băng rôn dọc</option>
   <option value="8" ${
-    billboard?.properties.type === "Trụ treo băng rôn ngang" ? "selected" : ""
+    billboard?.board.board_type === "Trụ treo băng rôn ngang" ? "selected" : ""
   }>Trụ treo băng rôn ngang</option>
   <option value="9" ${
-    billboard?.properties.type === "Cổng chào" ? "selected" : ""
+    billboard?.board.board_type === "Cổng chào" ? "selected" : ""
   }>Cổng chào</option>
   <option value="10" ${
-    billboard?.properties.type === "Trung tâm thương mại" ? "selected" : ""
+    billboard?.board.board_type === "Trung tâm thương mại" ? "selected" : ""
   }>Trung tâm thương mại</option>
 </select>
   </div>
@@ -317,14 +318,14 @@ function create_edit_request(billboard = null) {
   <div class="form-section">
 	<label for="width">Dài:</label>
 	<input type="number" name="width" id="width"
-	value="${billboard?.properties.size.split(",")[0]}"
+	value="${billboard?.board.size.split(",")[0]}"
 	placeholder="XY"
 	/>
   </div>
   <div class="form-section">
   <label for="height">Rộng</label>
   <input type="number" name="height" id="height"
-	value="${billboard?.properties.size.split(",")[1]}"
+	value="${billboard?.board.size.split(",")[1]}"
 	placeholder="XY"/>
   </div>
   </div>

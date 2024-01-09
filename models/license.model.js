@@ -32,6 +32,15 @@ module.exports = class License {
         .getDb()
         .collection("licenses")
         .insertOne({ ...this });
+    let billboard = await db
+        .getDb()
+        .collection("billboard")
+        .updateOne({ 
+          _id : new ObjectId(this.billboard.billboard_id),
+          "properties.boards._id" : new ObjectId(this.billboard.board_id),
+        }, {
+          $push: { "properties.boards.$.license" : request.insertedId }
+        });
   }
 
   async update_request(license_id) {
