@@ -618,24 +618,52 @@ document.addEventListener("DOMContentLoaded", () => {
         toast.addEventListener("hidden.bs.toast", () => {
             location.reload();
         });
+    
+    let function_btn_container = document.getElementById(
+        "function__btn__container"
+    );
+    //show map button if on billboards page
+    if (window.location.pathname.includes("billboards")) {
+        function_btn_container.innerHTML = `
+            <button
+                    type="button"
+                    class="btn btn-primary nowrap"
+                    id="map__btn"
+                    onclick="navigate(this.id)"
+                >
+                    <i class="bi bi-map"></i> Xem trên bản đồ
+                </button>
+                `;
+    }
 
-        //show map button if on billboards page
-        if (window.location.pathname.includes("billboards")) {
-            let map_btn = document.getElementById("map__btn");
-            map_btn.classList.remove("invisible");
-            map_btn.tabIndex = 0;
-        }
-        //show create account button and hide map button if on accounts page
-        if (window.location.pathname.includes("accounts")) {
-            let map_btn = document.getElementById("map__btn");
-            map_btn.classList.add("hidden");
-            map_btn.tabIndex = 0;
-
-            let create_account_btn = document.getElementById(
-                "create__account__btn"
-            );
-            create_account_btn.classList.remove("hidden");
-        }
+    //show create district
+    else if (window.location.pathname.includes("districts_wards")) {
+        function_btn_container.innerHTML = `
+        <button
+                    type="button"
+                    class="btn btn-success nowrap"
+                    id="create__account__btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#create__district__modal"
+                >
+                    +&ensp;Thêm Quận/Huyện
+                </button>
+        `;
+    }
+    //show create account button and hide map button if on accounts page
+    else if (window.location.pathname.includes("accounts")) {
+        function_btn_container.innerHTML = `
+                <button
+                    type="button"
+                    class="btn btn-success nowrap"
+                    id="create__account__btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#Create__modal"
+                >
+                    +&ensp;Tạo tài khoản
+                </button>
+        `;
+    }
     });
 
     // let ratio = 0.35;

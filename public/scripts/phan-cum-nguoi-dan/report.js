@@ -1,5 +1,5 @@
 let report_node;
-
+var hvalue = "";
 function get_report(current_feature) {
   if (report_node) {
     body.removeChild(report_node);
@@ -7,7 +7,7 @@ function get_report(current_feature) {
   let option = "";
 
   for (let i = 0; i < current_feature?.properties?.boards.length; ++i) {
-    option += `<option value="${current_feature?.properties?.boards[i].board_type}">${current_feature?.properties?.boards[i].board_type}</option> `;
+    option += `<option value="${i}">${current_feature?.properties?.boards[i].board_type}</option> `;
   }
   console.log(option);
   let report = `
@@ -26,7 +26,9 @@ function get_report(current_feature) {
             method="post"
             action="/report"
           >
-           
+            <input id="geometry" readonly name="geometry" type="hidden" value=${JSON.stringify(
+              current_feature.geometry
+            )}>
 
             <input id="place" readonly name="place" type="hidden" value="${
               current_feature.properties.place
@@ -74,7 +76,7 @@ function get_report(current_feature) {
   <select
     class="form-select"
     id="report__type"
-    name="type"
+    name="report__type"
     aria-label="report type selector"
     required
   />
@@ -91,8 +93,8 @@ function get_report(current_feature) {
             <label for="billboard__type__edit" class="fw-bold">Loại bảng quảng cáo</label>
             <select
               class="form-select"
-              id="report__type"
-              name="type"
+              id="report__board"
+              name="board"
               aria-label="report type selector"
               required
             />
@@ -139,15 +141,86 @@ function get_report(current_feature) {
   var quill = new Quill("#editor", {
     theme: "snow",
   });
+  function runCapcha() {
+    grecaptcha.ready(function () {
+      grecaptcha
+        .execute("6LdBr0kpAAAAAEfm-auy663qwRYlcSVaA8NlxLUO", {
+          action: "report",
+        })
+        .then(function (token) {
+          let files = $("#attached_files").val();
+          let type = $("#report__type").val();
+          let board = $("#report__board").val();
+          let name = $("#sender_name").val();
+          let email = $("#sender_email").val();
+          let geometry = $("#geometry").val();
+          let place = $("#place").val();
 
+          let number = $("#sender_number").val();
+          console.log(geometry);
+          sendData(
+            files,
+            place,
+            number,
+            email,
+            name,
+            geometry,
+            board,
+            type,
+            token
+          );
+        });
+    });
+  }
+  function sendData(
+    files,
+    place,
+    number,
+    email,
+    name,
+    geometry,
+    board,
+    type,
+    token
+  ) {
+    let data = JSON.stringify({
+      attached_files: files,
+      place: place,
+      details: hvalue,
+      sender_number: number,
+      sender_email: email,
+      sender_name: name,
+      geometry: geometry,
+      type: type,
+      board: board,
+      captcha: token,
+    });
+    fetch("http://localhost:5000/report", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          alert("Gửi báo cáo thành công");
+        } else {
+          alert("Gửi báo cáo thành công thất bại!");
+        }
+      });
+  }
   $(document).ready(function () {
-    $("#inscreen-form-report").on("submit", function () {
-      var hvalue = $(".ql-editor").html();
+    $("#inscreen-form-report").on("submit", function (e) {
+      e.preventDefault();
+      hvalue = $(".ql-editor").html();
       $(this).append(
         "<textarea name='details' style='display:none'>" +
           hvalue +
           "</textarea>"
       );
+      runCapcha();
     });
   });
 }

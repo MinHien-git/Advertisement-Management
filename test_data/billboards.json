@@ -1,0 +1,1929 @@
+[
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d96"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "23 Nguyễn Bỉnh Khiêm, Đa Kao, Quận 1",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c925"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "1mx5m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6878303, 10.8161819],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d97"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "102 Đ. Nguyễn Hữu Cảnh, Phường 22, Bình Thạnh, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7143836, 10.7893791],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d98"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "20 Đ. Lê Thánh Tôn, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c926"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "5mx5m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c927"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "4mx3m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7048256, 10.7811155],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d99"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "56 Hàm Nghi, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c928"
+                    },
+                    "board_type": "Trung tâm thương mại",
+                    "size": "5mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7038702, 10.7711941],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d9a"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "Đ. Trần Hưng Đạo, Nguyễn Cư Trinh, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c929"
+                    },
+                    "board_type": "Màn hình điện tử ốp tường",
+                    "size": "4mx4m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c92a"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "1mx1m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c92b"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "5mx3m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6883101, 10.7600606],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d9b"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "30 Ông Ích Khiêm, Phường 14, Quận 11, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c92c"
+                    },
+                    "board_type": "Trụ/Cụm pano",
+                    "size": "5mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c92d"
+                    },
+                    "board_type": "Màn hình điện tử ốp tường",
+                    "size": "1mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c92e"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "3mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6461238, 10.7657244],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d9c"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "20 Đ Tô Hiến Thành, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c92f"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "2mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c930"
+                    },
+                    "board_type": "Trung tâm thương mại",
+                    "size": "3mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6587753, 10.7713087],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d9d"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "124 Ng Gia Tự, Phường 9, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c931"
+                    },
+                    "board_type": "Màn hình điện tử ốp tường",
+                    "size": "2mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c932"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "5mx5m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c933"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "5mx5m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6728346, 10.7657442],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d9e"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "100 Đ. Nguyễn Du, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 700000, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c934"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "5mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6981492, 10.7773688],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6d9f"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "200 Đ. Nguyễn Thị Minh Khai, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6905687, 10.7755216],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da0"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "16 Trương Định, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6911934, 10.7768161],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da1"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "120 Lý Chính Thắng, Võ Thị Sáu, Quận 3, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c935"
+                    },
+                    "board_type": "Bảng hiflex ốp tường",
+                    "size": "5mx5m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6846259, 10.7886222],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da2"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "320 Đ. Võ Thị Sáu, Phường 7, Quận 3, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6824473, 10.7783482],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da3"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "68 Đ. Mạc Đĩnh Chi, Đa Kao, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c936"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "5mx1m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c937"
+                    },
+                    "board_type": "Bảng hiflex ốp tường",
+                    "size": "3mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.696634, 10.787641],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da4"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "1 Đ. Điện Biên Phủ, Đa Kao, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c938"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "5mx5m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c939"
+                    },
+                    "board_type": "Trung tâm thương mại",
+                    "size": "2mx5m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c93a"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "4mx5m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.699157, 10.7917329],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da5"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "20 Đ. Lê Duẩn, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Cổ động chính trị",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7039225, 10.7865314],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da6"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "100 Hai Bà Trưng, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh 700000, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c93b"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "2mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6985753, 10.7826311],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da7"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "120 Nguyễn Đình Chiểu, Đa Kao, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c93c"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "4mx3m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6961471, 10.7850807],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da8"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "202 Đ. Lê Lai, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c93d"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "2mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c93e"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "3mx4m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c93f"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "2mx3m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6904564, 10.7688591],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6da9"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "202 Đ. Lý Thái Tổ, Phường 1, Quận 3, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Cổ động chính trị",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6776477, 10.7669467],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6daa"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "69 Đ. Cống Quỳnh, Phường Nguyễn Cư Trinh, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c940"
+                    },
+                    "board_type": "Trụ/Cụm pano",
+                    "size": "1mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6904377, 10.7645761],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dab"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "218 Lý Tự Trọng, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c941"
+                    },
+                    "board_type": "Trụ/Cụm pano",
+                    "size": "3mx1m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c942"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "4mx3m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.694821, 10.7727132],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dac"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "102 Đ. Sư Vạn Hạnh, Phường 12, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Cổ động chính trị",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6697096, 10.7714174],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dad"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "296 Hai Bà Trưng, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất tư nhân/Nhà ở riêng lẻ",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6905309, 10.789278],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dae"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "303 Đ. Cách Mạng Tháng 8, Phường 12, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6782734, 10.7795211],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6daf"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "30 Đ. Nguyễn Trãi, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6924922, 10.7709815],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db0"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "120 Đ. Nguyễn Tri Phương, Phường 7, Quận 5, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6696679, 10.7543253],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db1"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "203 Đ. Sư Vạn Hạnh, Phường 9, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c943"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "5mx4m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c944"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "5mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c945"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "5mx5m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6731971, 10.7598181],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db2"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "390 Đ. Cao Thắng, Phường 12, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất tư nhân/Nhà ở riêng lẻ",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6732298, 10.7750868],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db3"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "202 Đ. 3 Tháng 2, Phường 11, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6782195, 10.7743874],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db4"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "20 Lý Thường Kiệt, Phường 7, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6615875, 10.7589285],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db5"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "120 Đ. Hồng Bàng, Phường 12, Quận 5, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c946"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "4mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c947"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "4mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c948"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "1mx3m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6651004, 10.757205],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db6"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "80 Đ. Hùng Vương, Phường 4, Quận 5, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6774635, 10.7626547],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db7"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "3 Nguyễn Bỉnh Khiêm, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c949"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "5mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7066801, 10.7854177],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db8"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "100 Đ. Nguyễn Thị Minh Khai, Phường 6, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất tư nhân/Nhà ở riêng lẻ",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c94a"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "1mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6954496, 10.7803125],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6db9"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "100 Đ. Nguyễn Văn Cừ, Phường Nguyễn Cư Trinh, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.685047, 10.757319],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dba"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "100 Đ. Trần Hưng Đạo, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6933469, 10.7660734],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dbb"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "100 Đ. Cao Lỗ, Phường 4, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c94b"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "4mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6772312, 10.7411779],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dbc"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "400 Phạm Thế Hiển, Phường 3, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c94c"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "4mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c94d"
+                    },
+                    "board_type": "Màn hình điện tử ốp tường",
+                    "size": "1mx1m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c94e"
+                    },
+                    "board_type": "Trung tâm thương mại",
+                    "size": "4mx5m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.680987, 10.748065],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dbd"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "125 Đ. Âu Dương Lân, Phường 2, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c94f"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "1mx5m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6831913, 10.7459166],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dbe"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "1208 Phạm Thế Hiển, Phường 5, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.664057, 10.74251],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dbf"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "527 D. Bá Trạc, Phường 1, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6921575, 10.744346],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc0"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "15 Đ. Tạ Quang Bửu, Phường 5, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c950"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "3mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c951"
+                    },
+                    "board_type": "Màn hình điện tử ốp tường",
+                    "size": "1mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c952"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "3mx3m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6709268, 10.7373351],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc1"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "48 D. Bá Trạc, Phường 2, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c953"
+                    },
+                    "board_type": "Bảng hiflex ốp tường",
+                    "size": "4mx5m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c954"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "1mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c955"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "3mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6879354, 10.7494281],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc2"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "120 Nguyễn Thị Thập, Bình Thuận, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c956"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "4mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c957"
+                    },
+                    "board_type": "Trung tâm thương mại",
+                    "size": "1mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c958"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "5mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7161322, 10.7383738],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc3"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "12 Hoàng Trọng Mậu, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh 700000, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c959"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "1mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6957075, 10.742807],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc4"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "2 Đ. Nguyễn Hữu Thọ, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c95a"
+                    },
+                    "board_type": "Trụ/Cụm pano",
+                    "size": "3mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c95b"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "2mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7014092, 10.7442783],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc5"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "380 Lê Văn Lương, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c95c"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "1mx1m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c95d"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "5mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c95e"
+                    },
+                    "board_type": "Màn hình điện tử ốp tường",
+                    "size": "3mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7033901, 10.7397122],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc6"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "120 Lê Văn Lương, Tân Kiểng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất tư nhân/Nhà ở riêng lẻ",
+            "type_advertise": "Cổ động chính trị",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7047595, 10.7488854],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc7"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "13 Số 69, Khu Phố 2, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c95f"
+                    },
+                    "board_type": "Trụ bảng hiflex",
+                    "size": "5mx1m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c960"
+                    },
+                    "board_type": "Trung tâm thương mại",
+                    "size": "5mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7051246, 10.7442729],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc8"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "25 Đường Số 15, Tân Quy, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.709346, 10.7454277],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dc9"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "30 Mai Văn Vĩnh, Tân Quy, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7136264, 10.7400201],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dca"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "30 Phan Huy Thực, Tân Kiểng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Cây xăng",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7094158, 10.7475359],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dcb"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "402 Huỳnh Tấn Phát, Bình Thuận, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Cổ động chính trị",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7284166, 10.7467806],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dcc"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "402 Đ. Lâm Văn Bền, Tân Quy, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7159052, 10.7404065],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dcd"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "130 Đ. Lâm Văn Bền, Tân Quy, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Cổ động chính trị",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7157339, 10.7438585],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dce"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "56 Đ. Lâm Văn Bền, Tân Thuận Tây, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c961"
+                    },
+                    "board_type": "Trụ hộp đèn",
+                    "size": "4mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c962"
+                    },
+                    "board_type": "Trung tâm thương mại",
+                    "size": "5mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c963"
+                    },
+                    "board_type": "Bảng hiflex ốp tường",
+                    "size": "2mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.715655, 10.7490564],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dcf"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "20 Đ. Số 10, Tân Kiểng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c964"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "2mx2m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c965"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "2mx5m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7099539, 10.7467229],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd0"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "359 Trần Xuân Soạn, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.6980859, 10.7499429],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd1"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "215 Huỳnh Tấn Phát, Tân Thuận Đông, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c966"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "4mx4m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c967"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "4mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c968"
+                    },
+                    "board_type": "Trụ màn hình điện tử LED",
+                    "size": "4mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7260742, 10.7547603],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd2"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "340 Nguyễn Thị Thập, Tân Quy, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Cổ động chính trị",
+            "status": 1,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7123981, 10.7386915],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd3"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "1200 Đ. Nguyễn Văn Linh, Bình Thuận, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.721494, 10.7400197],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd4"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "14 Đường Số 1, Phường 7, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Nhà chờ xe buýt",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c969"
+                    },
+                    "board_type": "Cổng chào",
+                    "size": "4mx3m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c96a"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "2mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.6263793, 10.7093731],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd5"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "303 Nguyễn Thị Thập, Tân Phú, Quận 7, Thành phố Hồ Chí Minh 70000, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 2,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c96b"
+                    },
+                    "board_type": "Bảng hiflex ốp tường",
+                    "size": "1mx1m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c96c"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "2mx2m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.71522, 10.738097],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd6"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "23 Đ. Nguyễn Hữu Thọ, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Chợ",
+            "type_advertise": "Xã hội hoá",
+            "status": 0,
+            "board_amount": 0,
+            "boards": []
+        },
+        "geometry": {
+            "coordinates": [106.7002387, 10.739119],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd7"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "68 Lê Văn Lương, Tân Kiểng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Đất công/Công viên/Hành lang an toàn giao thông",
+            "type_advertise": "Quảng cáo thương mại",
+            "status": 1,
+            "board_amount": 1,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c96d"
+                    },
+                    "board_type": "Trụ treo băng rôn dọc",
+                    "size": "1mx1m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7049986, 10.750315],
+            "type": "Point"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "65307f9eda6ef7bbc2fb6dd8"
+        },
+        "type": "Feature",
+        "properties": {
+            "place": "625 Trần Xuân Soạn, Tân Kiểng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+            "place_type": "Trung tâm thương mại",
+            "type_advertise": "Xã hội hoá",
+            "status": 1,
+            "board_amount": 3,
+            "boards": [
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c96e"
+                    },
+                    "board_type": "Trụ bảng hiflex",
+                    "size": "5mx5m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c96f"
+                    },
+                    "board_type": "Trụ treo băng rôn ngang",
+                    "size": "3mx4m",
+                    "status": 0,
+                    "license": null
+                },
+                {
+                    "_id": {
+                        "$oid": "659a93c2d1efc93ada24c970"
+                    },
+                    "board_type": "Trụ/Cụm pano",
+                    "size": "5mx4m",
+                    "status": 0,
+                    "license": null
+                }
+            ]
+        },
+        "geometry": {
+            "coordinates": [106.7040284, 10.7516677],
+            "type": "Point"
+        }
+    }
+]

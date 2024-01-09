@@ -11,14 +11,21 @@ let current_marker = null;
 let requestOptions = {
   method: "GET",
 };
-
+let showBillBoard = true;
+let showBillReport = true;
+console.log(reports);
 var geojsonMarkerOptions = {
   radius: 8,
   weight: 1,
   opacity: 1,
   fillOpacity: 0.8,
 };
-
+var geojsonReportMarkerOptions = {
+  radius: 7,
+  weight: 1,
+  opacity: 0.5,
+  fillOpacity: 0.8,
+};
 function setInfoBoard() {
   if (current_feature) {
     currentBoard = current_feature.properties.boards;
@@ -88,7 +95,7 @@ function setInfoBoard() {
 function onMapClick(e) {
   let data;
   fetch(
-    `https://api.geoapify.com/v1/geocode/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
+    `https://api.geoapify.com/v1/geocode/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&lang=vi&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
     requestOptions
   )
     .then((response) => response.json())
@@ -99,7 +106,9 @@ function onMapClick(e) {
         .setLatLng(e.latlng)
         .setContent(
           `<h3>${data.features[0].properties.address_line1}</h3>
-          <p>${data.features[0].properties.address_line2}</p>
+          <p>${
+            data.features[0].properties.address_line2.split(", Thành")[0]
+          }</p>
           <div class="infomation">
           <h4>Thông tin</h4>
           <p>Chưa có thông tin</p>
@@ -131,7 +140,7 @@ window.onload = function () {
   // init map
   map = L.map("map", {
     attributionControl: false,
-  }).setView(defaultCoord, 20);
+  }).setView(defaultCoord, 15);
 
   L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
     attribution:
@@ -160,8 +169,10 @@ window.onload = function () {
       keepCurrentZoomLevel: true,
     })
     .addTo(map);
+
   map.addControl(address_search_controller);
   map.on("click", onMapClick);
+
   let geojsonLayer = L.geoJSON(billboards, {
     pointToLayer: function (feature, latlng) {
       const attributionDiv = document.createElement("div");
@@ -235,5 +246,104 @@ window.onload = function () {
         };
       }
     },
+  });
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    const {
+      coords: { latitude, longitude },
+    } = position;
+    var marker = new L.marker([latitude, longitude], {
+      draggable: true,
+      autoPan: true,
+    }).addTo(map);
+    map.setView([latitude, longitude], 15);
+    console.log(marker);
+  });
+  var markers = L.markerClusterGroup();
+  markers.addLayer(geojsonLayer);
+  map.addLayer(markers);
+
+  let reportLayer = L.geoJSON(reports, {
+    pointToLayer: function (feature, latlng) {
+      const attributionDiv = document.createElement("div");
+
+      attributionDiv.setAttribute("id", "content" + feature._id);
+      attributionDiv.innerHTML = `<p>${feature.properties.place}</p>
+      <p><span class="bold">Trạng thái:</span>${
+        feature.properties?.state === 0 ? "Đã xử lí" : "Chưa xử lí"
+      } </p>
+      <p><span class="bold">Nội dung báo cáo:</span></p> 
+      ${feature.properties.details}`;
+      return L.circleMarker(latlng, geojsonReportMarkerOptions).bindPopup(
+        attributionDiv
+      );
+    },
+    style: function (feature) {
+      if (feature.properties.state === 0) {
+        return {
+          color: "#0FFF50",
+          fillColor: "#0FFF50",
+        };
+      } else {
+        return {
+          color: "#FFC300",
+          fillColor: "#FFC300",
+        };
+      }
+    },
   }).addTo(map);
+
+  L.Control.Button = L.Control.extend({
+    options: {
+      position: "topright",
+    },
+    onAdd: function (map) {
+      var container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+      var button = L.DomUtil.create("a", "leaflet-control-button", container);
+      L.DomEvent.disableClickPropagation(button);
+      L.DomEvent.on(button, "click", function () {
+        showBillBoard = !showBillBoard;
+        if (showBillBoard) {
+          map.addLayer(geojsonLayer);
+          map.addLayer(markers);
+        } else {
+          map.removeLayer(geojsonLayer);
+          map.removeLayer(markers);
+        }
+      });
+
+      container.title = "Title";
+
+      return container;
+    },
+    onRemove: function (map) {},
+  });
+  var control = new L.Control.Button();
+  control.addTo(map);
+
+  L.Control.Button = L.Control.extend({
+    options: {
+      position: "topright",
+    },
+    onAdd: function (map) {
+      var container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+      var button = L.DomUtil.create("a", "leaflet-control-button", container);
+      L.DomEvent.disableClickPropagation(button);
+      L.DomEvent.on(button, "click", function () {
+        showBillReport = !showBillReport;
+        if (showBillReport) {
+          map.addLayer(reportLayer);
+        } else {
+          map.removeLayer(reportLayer);
+        }
+      });
+
+      container.title = "Title";
+
+      return container;
+    },
+    onRemove: function (map) {},
+  });
+  var billboard = new L.Control.Button();
+  billboard.addTo(map);
 };

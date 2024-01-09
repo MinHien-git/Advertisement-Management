@@ -30,6 +30,11 @@ main {
   margin: 0 0.4rem 1rem 0;
   width: 12.4rem;
 }
+#billboard__edit__requests__btn {
+  float: right;
+  margin: 0 0.4rem 1rem 0;
+  width: 12.4rem;
+}
 
 #create__account__btn {
   float: right;
@@ -87,15 +92,25 @@ main {
 }
 
 .list__flex .list__col2 {
-  flex-grow: 3;
-  flex-basis: 30%;  
+  flex-grow: 2;
+  flex-basis: 20%;
+  margin-right: 0.3rem; 
+}
+.list__flex .list__col1 {
+  flex-grow: 2;
+  flex-basis: 15%;
+  margin-right  : 0.3rem;
 }
 
-.list__flex :not(.list__col2, .list__col4) {
+.list__flex .list__col3 {
   flex-grow: 1;
-  flex-basis: 18%;
+  flex-basis: 10%;
 }
 
+.small__col{
+  flex-grow: 1;
+  flex-basis: 5% !important;
+}
 
 /*\\LIST CARDS*/
 .card {
@@ -104,7 +119,9 @@ main {
 
 #full__info__list {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem !important;
 }
 
 #info__item {
@@ -119,7 +136,7 @@ main {
 
 .mock__image {
   width: 150px;
-  height: 200px;
+  height: 150px;
   border-radius: 5px;
   background-color: rgba(0, 255, 255, 0.366);
 }
@@ -127,7 +144,7 @@ main {
 .buttons__container {
   height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: start;
   gap: 1rem;
   justify-content: start;
@@ -169,6 +186,8 @@ main {
 
 #cards__container{
   height: 60vh;
+  z-index: 1;
+  position: relative;
 }
 
 /* #load__more{
@@ -234,4 +253,33 @@ main {
 
 #Modal__label{
   font-size: 1.3rem !important;
+}
+
+
+#full__info__table{
+
+  width: 100%;
+}
+
+#district__card__body{
+  display: flex;
+  flex-direction: column;
+}
+
+#districts__buttons__container{
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: end;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

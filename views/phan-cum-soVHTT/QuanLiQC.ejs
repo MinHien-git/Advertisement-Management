@@ -53,9 +53,10 @@
             <div id="info__desc">
               <div class="list__title__container mt-3">
                 <ul class="list__flex fw-bold">
-                  <li class="list__col1">Bảng quảng cáo</li>
                   <li class="list__col2">Địa điểm</li>
-                  <li class="list__col3">Trạng thái</li>
+                  <li class="list__col1">Loại vị trí</li>
+                  <li class="list__col3">Hình thức quảng cáo</li>
+                  <li class="list__col3 small__col">Trạng thái</li>
                   <li class="list__col4">
                     <button class="btn btn-link ps-4" disabled></button>
                   </li>
@@ -67,20 +68,22 @@
                 <% for (let i = 0; i < locals.billboards.length; i++) { %>
                 <% const advertisement = locals.billboards[i]; %>
                 <% const id = advertisement._id; %>
+                <%console.log(id)%>
               <div id="<%= id%>"
                 class="card shadow-sm">
                 <div class="card-header" id="brief__info<%= id %>">
                   <ul class="list__flex">
-                    <li class="list__col1">
-                      <%= advertisement.properties.type %>
+                    <li class="list__col2">
+                      <%= advertisement.properties.place %>
                     </li>
-                    <li class="list__col2"><%= advertisement.properties.place %></li>
-                    <% if (advertisement.properties.status == true) { %>
-                    <li class="list__col3 fw-semibold text-primary" id=" ">
+                    <li class="list__col1"><%= advertisement.properties.place_type %></li>
+                    <li class="list__col3"><%= advertisement.properties.type_advertise %></li>
+                    <% if (advertisement.properties.status == 1) { %>
+                    <li class="list__col3 small__col fw-semibold text-primary" id=" ">
                       Đã quy hoạch
                     </li>
                     <% } else { %>
-                    <li class="list__col3 fw-semibold text-warning">
+                    <li class="list__col3 small__col fw-semibold text-warning">
                       Chưa quy hoạch
                     </li>
                     <% } %>
@@ -107,104 +110,159 @@
                   aria-labelledby="brief__info<%= id %>"
                 >
                   <div class="card-body">
-                    <ul id="full__info__list">
+                    <ul id="collapse__body" class="d-flex" style="flex-direction:column">
+                      <ul class="buttons__container" style="width: 50%; margin-bottom: 1rem; margin-left: auto">
+                                <li>
+                                  <button
+                                    class="btn btn-success me-3"
+                                    onclick="passToEditModal(this)"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#Modify__modal"
+                                    data-billboard-id="<%=id%>"
+                                    data-billboard-address="<%= advertisement.properties.place %>"
+                                    data-billboard-size="<%= advertisement.properties.size %>"
+                                    data-billboard-amount="<%= advertisement.properties.amount %>"
+                                    >
+                                    +&nbsp;Thêm bảng quảng cáo
+                                  </button>
+                                </li>
+                                <li>
+                                  <button
+                                    class="btn btn-outline-primary me-3"
+                                    onclick="passToEditModal(this)"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#Modify__modal"
+                                    data-billboard-id="<%=id%>"
+                                    data-billboard-address="<%= advertisement.properties.place %>"
+                                    data-billboard-size="<%= advertisement.properties.size %>"
+                                    data-billboard-amount="<%= advertisement.properties.amount %>"
+                                    >
+                                    <i class="bi bi-pencil"></i> Chỉnh sửa điểm
+                                  </button>
+                                </li>
+                                <li>
+                                  <button
+                                    class="btn btn-danger"
+                                    onclick="passToDeleteModal(this)"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#delete__confirm__modal"
+                                    data-billboard-id="<%=id%>">
+                                    <i class="bi bi-trash"></i> Xoá điểm
+                                  </button>
+                                </li>
+                              </ul>
+                      <%if(advertisement.properties.status == 1 && advertisement.properties.boards.length > 0){%>
+                        <h4 class="fw-bold">Số lượng bảng quảng cáo: <%=advertisement.properties.boards.length%></h4>
+                        <%for (let i = 0; i < advertisement.properties.boards.length; i++){%>
+                          <%const board = advertisement.properties.boards[i]%>
+                          <ul class="border mt-3 p-1" id="full__info__list">
                       
-                      <li id="info__item">
-                        <p class="fw-bold">Thông tin bảng quảng cáo</p>
-                        <ul>
-                          <li>
-                            Kích thước:
-                            <span class="fw-bold"
-                              ><%= advertisement.properties.size %></span
-                            >
-                          </li>
-                          <li>
-                            Số lượng:
-                            <span class="fw-bold"
-                              ><%= advertisement.properties.amount %> trụ/bảng</span
-                            >
-                          </li>
-                          <li>
-                            Hình thức:
-                            <span class="fw-bold"
-                              ><%= advertisement.properties.type_advertise %></span
-                            >
-                          </li>
-                          <li>
-                            Phân loại:
-                            <span class="fw-bold"
-                              ><%= advertisement.properties.place_type %></span
-                            >
-                          </li>
-                        </ul>
+                          <li id="info__item">
+                            <p class="fw-bold">Thông tin bảng quảng cáo</p>
+                            <ul>
+                              <li>
+                                Kích thước:
+                                <span class="fw-bold"
+                                  ><%= board.size %></span
+                                >
+                              </li>
+                              <li>
+                                Số lượng:
+                                <span class="fw-bold"
+                                  ><%= board.amount %> trụ/bảng</span
+                                >
+                              </li>
+                              <%if(board.status == 1){%>
+                                <li>
+                                Trạng thái:
+                                <span class="fw-bold text-primary"
+                                  > Đã cấp phép</span
+                                >
+                              </li>
+                              <%}else{%>
+                                <li>
+                                Trạng thái:
+                                <span class="fw-bold text-warning"
+                                  > Chờ cấp phép</span
+                                >
+                              </li>
+                              <%}%>
+                          </ul>
                       </li>
-                      <% if (advertisement.license) { %>
-                      <li id="info__item">
-                        <p class="fw-bold">Thông tin công ty</p>
-                        <ul>
-                          <li>
-                            Tên công ty:
-                            <span class="fw-bold"
-                              ><%= advertisement.license.company_name %></span
-                            >
-                          </li>
-                          <li>
-                            Thông tin liên lạc:
-                            <span class="fw-bold"
-                              ><%= advertisement.license.company_contact %></span
-                            >
-                          </li>
-                          <li>
-                            Ngày bắt đầu:
-                            <span class="fw-bold"
-                              ><%= advertisement.license.start_date %></span
-                            >
-                          </li>
-                          <li>
-                            Ngày kết thúc:
-                            <span class="fw-bold"
-                              ><%= advertisement.license.end_date %></span
-                            >
-                          </li>
-                        </ul>
-                      </li>
-                      <% } else { %>
-                        <li id="info__item">
-                          <p class="fw-bold">Chưa có giấy phép</p>
-                        </li>
-                      <% } %>
-                      <li id="info__item" class="mock__image__container">
-                        <div class="mock__image">&nbsp;</div>
-                        <div class="mock__image">&nbsp;</div>
-                      </li>
-                      <li>
-                        <ul class="buttons__container">
-                          <li>
-                            <button
-                              class="btn btn-outline-warning me-3"
-                              onclick="passToEditModal(this)"
-                              data-bs-toggle="modal"
-                              data-bs-target="#Modify__modal"
-                              data-billboard-id="<%=id%>"
-                              data-billboard-address="<%= advertisement.properties.place %>"
-                              data-billboard-size="<%= advertisement.properties.size %>"
-                              data-billboard-amount="<%= advertisement.properties.amount %>"
-                              >
-                              <i class="bi bi-pencil"></i>Chỉnh sửa
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              class="btn btn-danger"
-                              onclick="passToDeleteModal(this)"
-                              data-bs-toggle="modal"
-                              data-bs-target="#delete__confirm__modal"
-                              data-billboard-id="<%=id%>">
-                              <i class="bi bi-trash"></i>Xoá
-                            </button>
-                          </li>
-                        </ul>
-                      </li>
+                            <% if (board.license[0] != null) { %>
+                              <%const license = board.license[0]%>
+                            <li id="info__item">
+                              <p class="fw-bold">Thông tin công ty</p>
+                              <ul>
+                                <li>
+                                  Tên công ty:
+                                  <span class="fw-bold"
+                                    ><%= license.company_name %></span
+                                  >
+                                </li>
+                                <li>
+                                  Thông tin liên lạc:
+                                  <span class="fw-bold"
+                                    ><%= license.company_contact %></span
+                                  >
+                                </li>
+                                <li>
+                                  Ngày bắt đầu:
+                                  <span class="fw-bold"
+                                    ><%= license.start_date %></span
+                                  >
+                                </li>
+                                <li>
+                                  Ngày kết thúc:
+                                  <span class="fw-bold"
+                                    ><%= license.end_date %></span
+                                  >
+                                </li>
+                              </ul>
+                            </li>
+                            <li id="info__item" class="mock__image__container">
+                              <div class="mock__image">&nbsp;</div>
+                              <div class="mock__image">&nbsp;</div>
+                            </li>
+                            <% } else { %>
+                              <li id="info__item">
+                                <p class="fw-bold">Chưa có giấy phép</p>
+                              </li>
+                            <% } %>
+                            
+                            <li>
+                              <ul class="buttons__container">
+                                <li>
+                                  <button
+                                    class="btn btn-link text-primary me-3"
+                                    onclick="passToEditModal(this)"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#Modify__modal"
+                                    data-billboard-id="<%=id%>"
+                                    data-billboard-address="<%= advertisement.properties.place %>"
+                                    data-billboard-size="<%= advertisement.properties.size %>"
+                                    data-billboard-amount="<%= advertisement.properties.amount %>"
+                                    >
+                                    <i class="bi bi-pencil-square"></i>
+                                  </button>
+                                </li>
+                                <li>
+                                  <button
+                                    class="btn btn-link text-danger"
+                                    onclick="passToDeleteModal(this)"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#delete__confirm__modal"
+                                    data-billboard-id="<%=id%>">
+                                    <i class="bi bi-trash"></i>
+                                  </button>
+                                </li>
+                              </ul>
+                            </li>
+                          </ul>
+                        <%}%>
+                      <%} else{%>
+                        <h4 class="fw-bold">Chưa có bảng quảng cáo nào!</h4>
+                      <%}%>
                     </ul>
                   </div>
                 </div>
