@@ -13,7 +13,7 @@ let requestOptions = {
 };
 let showBillBoard = true;
 let showBillReport = true;
-console.log(reports);
+
 var geojsonMarkerOptions = {
   radius: 8,
   weight: 1,
