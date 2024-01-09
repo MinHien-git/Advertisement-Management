@@ -1,5 +1,6 @@
             <div id="list__control">
-                <button
+                <div id="function__btn__container">
+                    <button
                     type="button"
                     class="btn btn-primary nowrap invisible"
                     id="map__btn"
@@ -8,15 +9,7 @@
                 >
                     <i class="bi bi-map"></i> Xem trên bản đồ
                 </button>
-                <button
-                    type="button"
-                    class="btn btn-success nowrap hidden"
-                    id="create__account__btn"
-                    data-bs-toggle="modal"
-                    data-bs-target="#Create__modal"
-                >
-                    +&ensp;Tạo tài khoản
-                </button>
+                </div>
                 <form class="d-flex search__form" onsubmit="searchItems(event)">
                     <input
                         type="text"
@@ -120,13 +113,15 @@
                                         <label class="form-check-label" for="district__toggle">Quận/Huyện</label>
                                     </div>
                                     <div class="border filter__info__container hidden" id="district-info">
-                                        <%for (let i = 0; i < locals.list_districts.length; i++){%>
+                                        <%if (locals.list_districts != null && locals.list_districts.length > 0){%>
+                                            <%for (let i = 0; i < locals.list_districts.length; i++){%>
                                             <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="<%=locals.list_districts[i]%>">
                                             <label class="form-check-label" for="flexCheckDefault">
                                                 <%=locals.list_districts[i]%>
                                             </label>
                                         </div>
+                                        <%}%>
                                         <%}%>
                                     </div>
                                 </div>
@@ -136,8 +131,8 @@
                                         <label class="form-check-label" for="type__toggle">Phân loại</label>
                                     </div>
                                     <div class="border filter__info__container hidden" id="type-info">
-                                        
-                                        <%for (let i = 0; i < locals.list_types.length; i++){%>
+                                        <%if(locals.list_types != null && locals.list_types.length > 0){%>
+                                            <%for (let i = 0; i < locals.list_types.length; i++){%>
                                             <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="<%=locals.list_types[i]%>">
                                             <label class="form-check-label" for="flexCheckDefault">
@@ -145,6 +140,8 @@
                                             </label>
                                         </div>
                                         <%}%>
+                                        <%}%>
+                                        
                                     </div>
                                 </div>
                                 <%if("ad_types" in locals){%>
@@ -191,8 +188,8 @@
                                         <label class="form-check-label" for="status__toggle">Trạng thái</label>
                                     </div>
                                     <div class="border filter__info__container hidden" id="status-info">
-                                        
-                                        <%for (let i = 0; i < locals.list_statuses.length; i++){%>
+                                        <%if("list_statuses" in locals){%>
+                                            <%for (let i = 0; i < locals.list_statuses.length; i++){%>
                                             <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="<%=locals.list_statuses[i]%>">
                                             <label class="form-check-label" for="flexCheckDefault">
@@ -200,6 +197,8 @@
                                             </label>
                                         </div>
                                         <%}%>
+                                        <%}%>
+                                        
                                     </div>
                                 </div>
                             </div>

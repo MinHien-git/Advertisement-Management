@@ -52,55 +52,143 @@
           </form>
         </li>
         <% }else if(locals.type_user === 2){%>
-          <i onclick="navigate(this.id, '<%=locals.uid%>')"
-            <li id="profile">
-          <i 
-            class="bi bi-person-circle vertical__center"
-            id="nav__item__icon"
-            style="font-size: 1.5rem"></i>
-          <span><%= locals.name%></span>
-        </li>
-        <li id="manage__billboards" onclick="navigate(this.id)">
-          <i
-            class="bi bi-clipboard2-check"
-            id="nav__item__icon"
-            style="font-size: 1.5rem"></i>
-          <span>Quản lí điểm QC</span>
-        </li>
-        <li id="check__requests" onclick="navigate(this.id)">
-          <i
-            class="bi bi-check-circle"
-            id="nav__item__icon"
-            style="font-size: 1.5rem"></i>
-          <span>Duyệt YC cấp phép</span>
-        </li>
-        <li id="list__reports" onclick="navigate(this.id)">
-          <i
-            class="bi bi-file-earmark-text"
-            id="nav__item__icon"
-            style="font-size: 1.5rem"></i>
-          <span>Thống kê báo cáo</span>
-        </li>
-        <li id="manage__accounts" onclick="navigate(this.id)">
-          <i
-            class="bi bi-person-gear"
-            id="nav__item__icon"
-            style="font-size: 1.5rem"></i>
-          <span>Quản lí tài khoản CB</span>
-        </li>
-        <li
-          id="logout__li"
-          onclick="document.getElementById('logout').submit()">
-          <form id="logout" method="post" action="/logout">
-            <button type="submit">
-              <i
-                class="bi bi-box-arrow-left"
-                id="logout"
-                style="font-size: 1.5rem"></i>
-              <span>Đăng xuất</span>
+        <li class="nav__item" id="general__info">
+          <div class="btn-group dropend" id="nav__dropend__container">
+            <button type="button" class="btn btn-link d-flex" id="nav__btn" data-bs-toggle="dropdown" aria-expanded="false">
+              <i 
+                      class="bi bi-menu-button vertical__center"
+                      id="nav__item__icon"
+                      style="font-size: 1.5rem !important"></i>
+              <span id="nav__item__label">Quản lý thông tin</span>
+                    
             </button>
-          </form>
+            
+            <ul class="dropdown-menu p-0 no__transition nav__dropdown__menu">
+              <li class="dropdown-item d-flex nav__dropdown__li" id="manage__districts__wards" style="  align-items: center;" onclick="navigate(this.id)">
+                <i
+                class="bi bi-geo-alt"
+                id="dropend__list__icon"
+                style="font-size: 1rem !important;"></i>
+                <span id="dropend__list__label">&nbsp;Quản lý Quận, Phường</span>
+              </li>
+              <li class="dropdown-item d-flex nav__dropdown__li" id="" style="  align-items: center;">
+                <i
+                class="bi bi-view-list"
+                id="dropend__list__icon"
+                style="font-size: 1rem !important;"></i>
+                <span id="dropend__list__label">&nbsp;Quản lý thông tin BQC</span>
+              </li>
+              <li class="dropdown-item d-flex nav__dropdown__li" id="" style="  align-items: center;">
+                <i
+                class="bi bi-card-text"
+                id="dropend__list__icon"
+                style="font-size: 1rem !important;"></i>
+                <span id="dropend__list__label">&nbsp;Quản lý loại báo cáo</span>
+              </li>       
+            </ul>
+          </div>
         </li>
+        <li class="nav__item" id="manage__billboards" onclick="">
+          <div class="btn-group dropend" id="nav__dropend__container">
+            <button type="button" class="btn btn-link d-flex" id="nav__btn" data-bs-toggle="dropdown" aria-expanded="false">
+              <i 
+                      class="bi bi-signpost-2 vertical__center"
+                      id="nav__item__icon"
+                      style="font-size: 1.5rem !important"></i>
+              <span id="nav__item__label">Quản lý quảng cáo</span>
+                    
+            </button>
+            
+            <ul class="dropdown-menu p-0 no__transition nav__dropdown__menu">
+              <li class="dropdown-item d-flex nav__dropdown__li" id="manage__billboards" style="  align-items: center;" onclick="navigate(this.id)">
+                <i
+                class="bi bi-geo-alt"
+                id="dropend__list__icon"
+                style="font-size: 1rem !important;"></i>
+                <span id="dropend__list__label">&nbsp;Quản lý điểm đặt quảng cáo</span>
+              </li>
+              <li class="dropdown-item d-flex nav__dropdown__li" id="manage__licenses" style="  align-items: center;" onclick="navigate(this.id)">
+                <i
+                class="bi bi-card-text"
+                id="dropend__list__icon"
+                style="font-size: 1rem !important;"></i>
+                <span id="dropend__list__label">&nbsp;Quản lý yêu cầu cấp phép BQC</span>
+              </li>
+              <li class="dropdown-item d-flex nav__dropdown__li" id="" style="  align-items: center;">
+                <i
+                class="bi bi-pencil"
+                id="dropend__list__icon"
+                style="font-size: 1rem !important;"></i>
+                <span id="dropend__list__label">&nbsp;Quản lý yêu cầu chỉnh sửa BQC</span>
+              </li>
+              
+            </ul>
+          </div>
+        </li>
+        <li class="nav__item" id="manage__reports" onclick="navigate(this.id)">
+          <div class="btn-group dropend" id="nav__dropend__container">
+            <button type="button" class="btn btn-link d-flex" id="nav__btn">
+              <i 
+                      class="bi bi-file-earmark-text vertical__center"
+                      id="nav__item__icon"
+                      style="font-size: 1.5rem !important"></i>
+              <span id="nav__item__label">Quản lý báo cáo</span>
+                    
+            </button>
+          </div>
+        </li>
+        <li class="nav__item" id="manage__accounts" onclick="navigate(this.id)">
+          <div class="btn-group dropend" id="nav__dropend__container">
+            <button type="button" class="btn btn-link d-flex" id="nav__btn">
+              <i 
+                      class="bi bi-person-gear vertical__center"
+                      id="nav__item__icon"
+                      style="font-size: 1.5rem !important"></i>
+              <span id="nav__item__label">Quản lý TK cán bộ</span>
+                    
+            </button>
+          </div>
+        </li>
+        
+        <li class="nav__item" id="profile">
+          <div class="btn-group dropend" id="nav__dropend__container">
+            <button type="button" class="btn btn-link d-flex" id="nav__btn" data-bs-toggle="dropdown" aria-expanded="false">
+              <i 
+                      class="bi bi-person-circle vertical__center"
+                      id="nav__item__icon"
+                      style="font-size: 1.5rem !important"></i>
+              <div class="">
+                <span id="account__name"><%= locals.name%></span>
+                <span class="text-black-50">Cán bộ Sở VHTT</span>
+              </div>
+                    
+            </button>
+            
+            <ul class="dropdown-menu p-0 no__transition nav__dropdown__menu">
+              <li class="dropdown-item d-flex" id="nav__dropdown__li" style="  align-items: center;">
+                <i
+                class="bi bi-person fa-lg"
+                id="nav__item__icon"
+                style="font-size: 1rem !important;"></i>
+                <span id="dropend__list__label">&nbsp;Thông tin tài khoản</span>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li class="dropdown-item d-flex"
+                id="logout__li"
+                onclick="document.getElementById('logout__form').submit()"
+                style="  align-items: center;">
+                <form id="logout__form" method="post" action="/logout" class="d-flex" style="  align-items: center;">
+                  <i
+                      class="bi bi-box-arrow-left fa-lg"
+                      style="font-size: 1rem !important"></i>
+                    <span id="dropend__list__label">&nbsp;Đăng xuất</span>
+                </form>
+              </li>
+                
+            </ul>
+          </div>
+        </li> 
+        
         <%}}%>
       </ul>
     </nav>

@@ -1,0 +1,62 @@
+[
+    {
+        "_id": { "$oid": "659abbf93f943f1ccff27e9f" },
+        "billboard": { "$oid": "65307f9eda6ef7bbc2fb6d96" },
+        "company_contact": "ctyABC@abc",
+        "company_name": "Công ty ABC",
+        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "images": [],
+        "state": 0
+    },
+    {
+        "_id": { "$oid": "659abbf9e0bd169df685a369" },
+        "billboard": { "$oid": "65307f9eda6ef7bbc2fb6d97" },
+        "company_contact": "ctyBCD@BCD",
+        "company_name": "Công ty BCD",
+        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "images": [],
+        "state": 0
+    },
+    {
+        "_id": { "$oid": "659abbf99ce73b4df7ad49f0" },
+        "billboard": { "$oid": "65307f9eda6ef7bbc2fb6d98" },
+        "company_contact": "ctyDEF@def",
+        "company_name": "Công ty DEF",
+        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "images": [],
+        "state": 0
+    },
+    {
+        "_id": { "$oid": "65307f9eda6ef7bbc2fb6d99" },
+        "billboard": { "$oid": "65307f9eda6ef7bbc2fb6d98" },
+        "company_contact": "ctyDEF@def",
+        "company_name": "Công ty DEF",
+        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "images": [],
+        "state": 0
+    },
+    {
+        "_id": { "$oid": "659abbf9f62e08fb39218656" },
+        "billboard": { "$oid": "65307f9eda6ef7bbc2fb6d99" },
+        "company_contact": "ctyTUV@tuv",
+        "company_name": "Công ty TUV",
+        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "images": [],
+        "state": 0
+    },
+    {
+        "_id": { "$oid": "659abbf98e658ebd632462d2" },
+        "billboard": { "$oid": "65307f9eda6ef7bbc2fb6d9a" },
+        "company_contact": "ctyXYZ@xyz",
+        "company_name": "Công ty XYZ",
+        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
+        "images": [],
+        "state": 0
+    }
+]

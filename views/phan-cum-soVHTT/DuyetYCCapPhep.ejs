@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Sở VHTT - Duyệt yêu cầu cấp phép</title>
+    <title>Duyệt yêu cầu cấp phép quảng cáo - Sở VHTT</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
 
     <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
-    <script src="/scripts/phan-cum-soVHTT/lisence_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/license_list.js"></script>
     <script src="/scripts/phan-cum-soVHTT/page_functions.js"></script>
   </head>
 
@@ -56,7 +56,7 @@
       <%- include('../includes/header.ejs')%>
       <main>
         <div class="container" id="main__container">
-          <h1 class="fw-bold h2 mb-0" id="page__title">Duyệt yêu cầu cấp phép</h1>
+          <h1 class="fw-bold h2 mb-0" id="page__title">Duyệt yêu cầu cấp phép quảng cáo</h1>
           <%- include('../includes/list_control.ejs')%>
 
           <div id="main__list">
@@ -64,7 +64,7 @@
               <div class="list__title__container mt-3">
                 <ul class="list__flex fw-bold">
                   <li class="list__col1">Tên công ty</li>
-                  <li class="list__col2">Địa điểm</li>
+                  <li class="list__col2">Thông tin liên lạc</li>
                   <li class="list__col3">Trạng thái</li>
                   <li class="list__col4">
                     <button class="btn btn-link ps-4" disabled></button>
@@ -84,7 +84,7 @@
                         <%= license.company_name %>
                       </li>
                       <li class="list__col2">
-                        <%= license.billboard[0].properties.place %>
+                        <%= license.company_contact %>
                       </li>
                       <% if (license.state == 1) {%>
                         <li class="list__col3 fw-semibold text-success">
@@ -133,9 +133,9 @@
                           <p class="fw-bold">Thông tin yêu cầu</p>
                           <ul>
                             <li>
-                              Thông tin liên hệ:
+                              Địa điểm bảng:
                               <span class="fw-bold">
-                                <%= license.company_contact %>
+                                <%= license.billboard_info[0].properties.place %>
                               </span>
                             </li>
                             <li>
@@ -152,38 +152,38 @@
                             </li>
                           </ul>
                         </li>
-                        <% if (license.billboard[0]) { %>
+                        <% if (license.billboard_info[0]) { %>
                         <li id="info__item">
                           <p class="fw-bold">Thông tin bảng quảng cáo</p>
                           <ul>
                             <li>
                               Loại bảng:
                               <span class="fw-bold">
-                                <%= license.billboard[0].properties.type %>
+                                <%= license.billboard_info[0].properties.boards.board_type %>
                               </span>
                             </li>
                             <li>
                               Kích thước:
                               <span class="fw-bold">
-                                <%= license.billboard[0].properties.size %>
+                                <%= license.billboard_info[0].properties.boards.size %>
                               </span>
                             </li>
                             <li>
                               Số lượng:
                               <span class="fw-bold">
-                                <%= license.billboard[0].properties.amount + " trụ/bảng"%>
+                                <%= license.billboard_info[0].properties.board_amount + " trụ/bảng"%>
                               </span>
                             </li>
                             <li>
                               Hình thức:
                               <span class="fw-bold">
-                                <%= license.billboard[0].properties.type_advertise %>
+                                <%= license.billboard_info[0].properties.type_advertise %>
                               </span>
                             </li>
                             <li>
                               Phân loại:
                               <span class="fw-bold text-wrap">
-                                <%= license.billboard[0].properties.place_type %>
+                                <%= license.billboard_info[0].properties.place_type %>
                               </span>
                             </li>
                           </ul>
@@ -194,7 +194,7 @@
                           <div class="mock__image">&nbsp;</div>
                         </li>
                         <li>
-                          <ul class="buttons__container">
+                          <ul class="buttons__container" style="flex-direction: column;">
                             <% if (license.state == 0) { %>
                             <li>
 													<button class="btn btn-success mb-2 nowrap"  data-bs-toggle="modal"

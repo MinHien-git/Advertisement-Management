@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Quản lý Quận, Phường - Sở VHTT</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <link rel="stylesheet" href="/styles/global.css" />
+
+    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/navbar.css" />
+    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
+
+    <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/district_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/page_functions.js"></script>
+  </head>
+
+  <body>
+    <script src="/scripts/navbar.js" defer></script>
+    <div class="wrapper">
+      <%- include('../includes/header.ejs')%>
+      <main>
+        <div class="container" id="main__container">
+          <h1 class="fw-bold h2 mb-0" id="page__title">
+            Quản lý Quận, Phường
+          </h1>
+          <%- include('../includes/list_control.ejs')%>
+          <div id="main__list">
+            <div id="info__desc">
+              <div class="list__title__container mt-3">
+                <ul class="list__flex fw-bold">
+                  <li class="list__col1">Tên Quận/Huyện</li>
+                  <li class="list__col2">Mã Quận/Huyện</li>
+                  <li class="list__col3">Số lượng Phường/Xã</li>
+                  <li class="list__col4">
+                    <button class="btn btn-link ps-4" disabled></button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div id="cards__container" class="overflow-auto">
+                <% for (let i = 0; i < locals.districts?.length; i++) { %>
+                <% const district = locals.districts[i]; %>
+                <% const id = district._id; %>
+              <div id="<%= id%>"
+                class="card shadow-sm">
+                <div class="card-header" id="brief__info<%= id %>">
+                  <ul class="list__flex">
+                    <li class="list__col1"> 
+                      <%= district.district %>
+                    </li>
+                    <li class="list__col2"><%= district.code %></li>
+                    <li class="list__col3" id=" ">
+                      <%=district.wards.length%>
+                    </li>
+                    <li class="list__col4">
+                      <button
+                        class="btn collapsed"
+                        id="collapse__btn<%= id %>"
+                        type="button"
+                        onclick="toggleCollapseButton('collapse__btn<%= id %>')"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#full__info<%= id %>"
+                        aria-expanded="false"
+                        aria-controls="full__info<%= id %>"
+                      >
+                        <i class="bi bi-chevron-down"></i>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  id="full__info<%= id %>"
+                  class="collapse"
+                  aria-labelledby="brief__info<%= id %>"
+                >
+                  <div class="card-body">
+                    <ul id="district__card__body" class="">
+                      
+                      <li class="w-100">
+                        <%if(district.wards.length != null ){%>
+                        <table class="table table-responsive table-striped" id="full__info__table">
+                          <thead class="w-100">
+                            <tr>
+                              <th scope="col">Tên Phường/Xã</th>
+                              <th scope="col">Mã Phường/Xã</th>
+                              <th scope="col">Thao tác</th>
+                            </tr>
+                          </thead>
+                          <tbody class="w-100">
+                            <%for(let i = 0; i < district.wards.length; i++){%>
+                              <tr>
+                                <td><%=district.wards[i].ward%></td>
+                              <td><%=district.wards[i].code%></td>
+                              <td>
+                                <button class="btn btn-link text-primary"
+                                data-district-id="<%=id%>"
+                                data-ward-code="<%=district.wards[i].code%>"
+                                data-ward-name="<%=district.wards[i].ward %>"
+                                data-bs-toggle="modal"
+                                data-bs-target="#edit__ward__modal"
+                                onclick="passToEditWardModal(this, 'edit__ward')"
+                                ><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn btn-link text-danger"
+                                data-district-id="<%=id%>"
+                                data-ward-code="<%=district.wards[i].code%>"
+                                data-bs-toggle="modal"
+                                data-bs-target="#delete__ward__modal"
+                                onclick="passToModal(this, 'delete__ward')"
+                                ><i class="bi bi-trash"></i></button>
+                                
+                              </td>
+                              </tr>
+                          <%}%>
+                          </tbody>
+                          </table>
+                        <%}%>
+                      </li>
+                      
+                      <li>
+                        <ul class="buttons__container" id="districts__buttons__container">
+                          <li>
+                            <button
+                              class="btn btn-success me-3"
+                              onclick="passToModal(this, 'create__ward')"
+                              data-bs-toggle="modal"
+                              data-bs-target="#create__ward__modal"
+                              data-district-id="<%=id%>"
+                              >
+                              + Thêm Phường/Xã
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              class="btn btn-outline-primary me-3"
+                              onclick="passToModal(this, 'edit__district')"
+                              data-bs-toggle="modal"
+                              data-bs-target="#edit__district__modal"
+                              data-district-id="<%=id%>"
+                              data-district-code="<%=district.code%>"
+                              data-district-name="<%=district.district%>"
+                              >
+                              <i class="bi bi-pencil"></i> Chỉnh sửa thông tin Quận/Huyện
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              class="btn btn-danger"
+                              onclick="passToModal(this, 'delete__district')"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete__district__modal"
+                              data-district-id="<%=id%>"
+                              >
+                              <i class="bi bi-trash"></i> Xoá Quận/Huyện
+                            </button>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <% } %>
+            </div>
+            <%- include('../includes/pagination.ejs')%>
+            
+
+            <div
+              class="modal fade"
+              id="create__district__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog ">
+                <form action="" id="create__district__form" onsubmit="createDistrict(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Thêm Quận/Huyện
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                        <label for="district__type__selector" class="fw-bold"
+                            >Phân loại</label
+                          >
+                          <select
+                            class="form-select mb-3"
+                            id="district__type__selector"
+                            name="district_type_selector"
+                            aria-label="district type selector"
+                            required
+                          />
+                            <option value="" selected disabled>Chọn...</option>
+                            <option value="1">
+                              Quận
+                            </option>
+                            <option value="2">
+                              Huyện
+                            </option>
+                          </select>
+                        <label for="district__code" class="fw-bold" >Mã Quận/Huyện</label>
+                        <input
+                          type="number"
+                          onKeyPress="if(this.value.length >=3) return false";
+                          name="district_code_input"
+                          class="form-control mb-3"
+                          id="district__code"
+                          required
+                        />
+                        <label for="district__name" class="fw-bold" >Tên Quận/Huyện</label>
+                        <input
+                          type="text"
+                          name="district_name_input"
+                          class="form-control mb-3"
+                          id="district__name"
+                          required
+                        />
+
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-success" id="save__changes__btn">Thêm Quận/Huyện</button>
+                    </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="edit__district__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog ">
+                <form action="" id="edit__district__form" onsubmit="editDistrict(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Chỉnh sửa Quận/Huyện
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                        <label for="district__type__selector" class="fw-bold"
+                            >Phân loại</label
+                          >
+                          <select
+                            class="form-select mb-3"
+                            id="district__type__selector"
+                            name="district_type_selector"
+                            aria-label="district type selector"
+                            required
+                          />
+                            <option value="" selected disabled>Chọn...</option>
+                            <option value="1">
+                              Quận
+                            </option>
+                            <option value="2">
+                              Huyện
+                            </option>
+                          </select>
+                        <label for="district__code" class="fw-bold" >Mã Quận/Huyện</label>
+                        <input
+                          type="number"
+                          onKeyPress="if(this.value.length >=3) return false";
+                          name="district_code_input"
+                          class="form-control mb-3"
+                          id="district__code__edit__district"
+                          required
+                        />
+                        <label for="district__name" class="fw-bold" >Tên Quận/Huyện</label>
+                        <input
+                          type="text"
+                          name="district_name_input"
+                          class="form-control mb-3"
+                          id="district__name__edit__district"
+                          required
+                        />
+
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <input type="hidden" name="district_id" id="district__id__edit__district" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-primary" id="save__changes__btn">Lưu</button>
+                    </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="edit__ward__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog ">
+                <form action="" id="edit__ward__form" onsubmit="editWard(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Chỉnh sửa Phường/Xã
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                        
+                        <label for="ward__code" class="fw-bold" >Mã Phường/Xã</label>
+                        <input
+                          type="number"
+                          onKeyPress="if(this.value.length>=5) return false";
+                          name="new_ward_code"
+                          class="form-control mb-3"
+                          id="ward__code__edit__ward"
+                          required
+                        />
+                        <label for="ward__name" class="fw-bold" >Tên Phường/Xã</label>
+                        <input
+                          type="text"
+                          name="new_ward_name"
+                          class="form-control mb-3"
+                          id="ward__name__edit__ward"
+                          required
+                        />
+
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <input type="hidden" name="district_id" id="district__id__edit__ward" value="0">
+                      <input type="hidden" name="old_ward_code" id="old__ward__code__edit__ward" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-primary" id="save__changes__btn">Lưu</button>
+                    </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="create__ward__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog ">
+                <form action="" id="create__ward__form" onsubmit="createWard(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Thêm Phường/Xã
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                        
+                        <label for="ward__code" class="fw-bold" >Mã Phường/Xã</label>
+                        <input
+                          type="number"
+                          onKeyPress="if(this.value.length>=5) return false";
+                          name="ward_code_input"
+                          class="form-control mb-3"
+                          id="ward__code"
+                          required
+                        />
+                        <label for="ward__name" class="fw-bold" >Tên Phường/Xã</label>
+                        <input
+                          type="text"
+                          name="ward_name_input"
+                          class="form-control mb-3"
+                          id="ward__name"
+                          required
+                        />
+
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <input type="hidden" name="district_id" id="district__id__create__ward" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-success" id="save__changes__btn">Thêm Phường/Xã</button>
+                    </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="delete__district__modal"
+              tabindex="-1"
+              aria-labelledby="delete__modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3
+                      class="modal-title fw-bold fs-5"
+                      id="delete__modal__label"
+                    >
+                      Xác nhận xoá
+                    </h3>
+                    <button
+                      class="btn-close"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Bạn có chắc chắn muốn xoá Quận/Huyện này không?
+                  </div>
+                  <div class="modal-footer">
+                    <form form action="" id="delete__billboard__form" onsubmit="deleteDistrict(event)">
+                      <input type="hidden" name="district_id" id="district__id__delete__district" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-danger" id="delete__btn">Xoá</button>
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="delete__ward__modal"
+              tabindex="-1"
+              aria-labelledby="delete__modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3
+                      class="modal-title fw-bold fs-5"
+                      id="delete__modal__label"
+                    >
+                      Xác nhận xoá
+                    </h3>
+                    <button
+                      class="btn-close"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Bạn có chắc chắn muốn xoá Phường/Xã này không?
+                  </div>
+                  <div class="modal-footer">
+                    <form form action="" id="delete__billboard__form" onsubmit="deleteWard(event)">
+                      <input type="hidden" name="district_id" id="district__id__delete__ward" value="0">
+                      <input type="hidden" name="ward_code" id="ward__code__delete__ward" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-danger" id="delete__btn">Xoá</button>
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="toast-container position-fixed bottom-0 end-0 p-3"
+              style="z-index: 1"
+            >
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="district__create__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-check-lg"></i>
+                    Đã thêm Quận/Huyện!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="ward__create__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-check-lg"></i>
+                    Đã thêm Phường/Xã!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="save__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-check-lg"></i>
+                    Đã lưu thay đổi!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="delete__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-trash"></i>
+                    Đã xoá điểm quảng cáo!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <!-- place footer here -->
+      </footer>
+    </div>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+      integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
