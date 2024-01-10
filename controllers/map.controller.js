@@ -2,10 +2,7 @@ const { request, response } = require("express");
 const { getDb } = require("../database/database");
 
 const _get_map = async (request, response) => {
-  let billboards = await getDb()
-    .collection("billboards-manage")
-    .find({})
-    .toArray();
+  let billboards = await getDb().collection("billboards").find({}).toArray();
   let ward = response.locals.ward ? response.locals.ward : "";
   let district = response.locals.district ? response.locals.district : "";
 
@@ -59,13 +56,11 @@ const _get_map = async (request, response) => {
 };
 
 const _manage_map = async (request, response) => {
-  let billboards = await getDb()
-    .collection("billboards-manage")
-    .find({})
-    .toArray();
-
+  let billboards = await getDb().collection("billboards").find({}).toArray();
+  let reports = await getDb().collection("reports").find({}).toArray();
   return response.render("phan-cum-soVHTT/map", {
     billboards: billboards,
+    reports: reports,
   });
 };
 
