@@ -25,7 +25,8 @@ const transporter = nodemailer.createTransport({
 const getAddress = (req, obj) => {
   if (
     req.path === "/dashboard/advertise" ||
-    req.path === "/dashboard/license"
+    req.path === "/dashboard/license"   ||
+    req.path === "/dashboard"
   ) {
     return obj.properties.place;
   }
@@ -119,8 +120,13 @@ const processQuery = (req, arr) => {
 
   if (req.path === "/dashboard/license") {
     arr.map(e1 => {
-        e1.properties.boards = e1.properties.boards.filter(
-          processFilterQuery(req, e2 => e2.license.state, [0, 1], "license")
+        e1.properties.boards = e1.properties.boards.map(
+          e2 => {
+            if (!e2.license) return e2;
+            e2.license = e2.license.filter(
+              processFilterQuery(req, e3 => e3.state, [0, 1, 4, 2], "license"));
+            return e2;
+          }
         );
         e1.properties.boards = e1.properties.boards.filter(e2 => e2.license.length > 0);
         return e1;
@@ -128,9 +134,20 @@ const processQuery = (req, arr) => {
     arr = arr.filter(e => e.properties.boards.length > 0);
   } else if (req.path === "/dashboard/advertise") {
     arr.map(e1 => {
-      e1.properties.boards = e1.properties.boards.filter(
-        processFilterQuery(req, e => e.license.state, [0, 1, undefined], "license")
+      e1.properties.boards = e1.properties.boards.map(
+        e2 => {
+          e2.license = e2.license.filter(
+            processFilterQuery(req, e3 => e3.state, [0, 1, null, 4, 2], "license"));
+          return e2;
+        }
       );
+      if (req.query.license1 || 
+          req.query.license2 || 
+          req.query.license3 || 
+          req.query.license4 || 
+          req.query.license5) {
+        e1.properties.boards = e1.properties.boards.filter(e2 => e2.license.length > 0);
+      }
       return e1;
     });
   }
@@ -194,7 +211,6 @@ const _post_profile = async (req, res) => {
       { _id: new ObjectId(id) },
       { $set: { ...new_infomation } }
     );
-  console.log(res.locals.profile);
   res.redirect("/dashboard/profile/" + id);
 };
 
@@ -209,6 +225,7 @@ const _get_map = async (req, res) => {
     .collection("reports")
     .find({})
     .toArray();
+  res.locals.billboards = processQuery(req, res.locals.billboards);
   res.render("phan-cum-phuong/trangchu");
 };
 
@@ -349,7 +366,6 @@ const _get_license = async (req, res) => {
 
 const _post_license_request = async (req, res) => {
   let { id, board_id, email, from, name, contact, start, end, details } = req.body;
-
   let images = req.files.map((v) => {
     return (v.destination + "/" + v.filename).substring(6);
   });

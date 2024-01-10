@@ -14,6 +14,7 @@ const _get_report = (request, response) => {
 };
 
 const _post_report = (req, res) => {
+  console.log(req);
   try {
     console.log(req.body);
     let secretKey = "6LdBr0kpAAAAAPCqy5ZCWtLtxGGMG-DzTjAcoNZA";
@@ -29,19 +30,21 @@ const _post_report = (req, res) => {
       sender_email,
       sender_number,
       place,
-      attached_files,
       details,
       board,
     } = req.body;
-    let ward = place.split(",")[1];
-    let district = place.split(",")[2];
+
+    let images = req.files.map((v) => {
+      return (v.destination + "/" + v.filename).substring(6);
+    });
+
     let report = new Report(
       type,
       sender_email,
       sender_number,
       place,
       sender_name,
-      attached_files,
+      images,
       details,
       JSON.parse(geometry),
       board
@@ -61,6 +64,7 @@ const _post_report = (req, res) => {
       success: true,
     });
   } catch (error) {
+    console.log(error.message);
     return res.status(500).json({
       success: false,
       message: error.message,

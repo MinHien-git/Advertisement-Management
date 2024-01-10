@@ -199,7 +199,7 @@
                       <ul class="buttons__container">
                         <%  
                           const active_license = board.license.filter(
-                            e => { return e.state !== 4 && e.state !== 2} );
+                            e => { return e.state === 0 || e.state === 1} );
                           if (active_license.length === 0) {
                         %>
                         <li>

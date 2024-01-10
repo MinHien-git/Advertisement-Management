@@ -24,6 +24,7 @@ function get_report(current_feature) {
             id="inscreen-form-report"
             class="form-container active"
             method="post"
+            enctype="multipart/form-data"
             action="/report"
           >
             <input id="geometry" readonly name="geometry" type="hidden" value=${JSON.stringify(
@@ -111,7 +112,9 @@ function get_report(current_feature) {
                   type="file"
                   name="attached_files"
                   id="attached_files"
-                />
+                  accept="image/png,image/jpeg"
+                  multiple
+                >
               </div>
             </div>
             

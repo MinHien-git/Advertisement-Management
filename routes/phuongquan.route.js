@@ -26,6 +26,7 @@ const upload = multer({
       cb(null, false);
     }
   },
+  limits: { fieldSize: 10 * 1024 * 1024 }
 });
 
 const phuongQuanController = require("../controllers/phuongquan.controller");
