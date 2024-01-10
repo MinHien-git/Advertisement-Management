@@ -10,7 +10,7 @@ function passToModal(btn, mode) {
         district_id.value = btn.dataset.districtId;
     }
     if (ward_id) {
-        ward_code_id.value = btn.dataset.wardId ? btn.dataset.wardId : "";
+        ward_id.value = btn.dataset.wardId ? btn.dataset.wardId : "";
     }
     if (district_code) {
         district_code.value = btn.dataset.districtCode
