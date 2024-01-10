@@ -7,7 +7,7 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
+    <link rel="icon" href="/images/map.png" />
     <!-- Bootstrap CSS v5.2.1 -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="/styles/editor.css" />
     <link rel="stylesheet" href="/styles/phan-cum-phuong/danhsach.css" />
     <link rel="stylesheet" href="/styles/phan-cum-phuong/page_content.css" />
-    <link rel="stylesheet" href="/styles/phan-cum-phuong/danhsachbaocao.css">
+    <link rel="stylesheet" href="/styles/phan-cum-phuong/danhsachbaocao.css" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -69,42 +69,67 @@
               Tìm kiếm
             </button>
             <% if (locals.ward_list) { %>
-              <div class="dropdown">
-                <button class="dropbtn btn btn-dark nowrap">
-                  <i class="bi bi-arrow-down-up"></i>
-                  Lọc phường
-                </button>
-                <div class="dropdown-content">
-                  <% for (let i = 0; i < locals.ward_list.length; i++) { %>
-                  <label><input type="checkbox" name="ward<%= i + 1 %>" value="<%= i %>" /> <%= locals.ward_list[i].ward %></label>
-                  <% } %>
-                </div>
+            <div class="dropdown">
+              <button class="dropbtn btn btn-dark nowrap">
+                <i class="bi bi-arrow-down-up"></i>
+                Lọc phường
+              </button>
+              <div class="dropdown-content">
+                <% for (let i = 0; i < locals.ward_list.length; i++) { %>
+                <label
+                  ><input
+                    type="checkbox"
+                    name="ward<%= i + 1 %>"
+                    value="<%= i %>" />
+                  <%= locals.ward_list[i].ward %></label
+                >
+                <% } %>
               </div>
-              <% } %>
+            </div>
+            <% } %>
             <div class="dropdown">
               <button class="dropbtn btn btn-dark nowrap">
                 <i class="bi bi-arrow-down-up"></i>
                 Sắp xếp
               </button>
               <div class="dropdown-content">
-                <label><input type="radio" name="sort" value="0">A-Z</label>
-                <label><input type="radio" name="sort" value="1">Z-A</label>
+                <label><input type="radio" name="sort" value="0" />A-Z</label>
+                <label><input type="radio" name="sort" value="1" />Z-A</label>
               </div>
             </div>
             <div class="dropdown">
               <button class="dropbtn btn btn-dark nowrap">
-                <i class="bi bi-funnel"></i> 
-                &nbsp;Lọc</button>
+                <i class="bi bi-funnel"></i>
+                &nbsp;Lọc
+              </button>
               <div class="dropdown-content">
                 <p>Tình trạng báo cáo</p>
-                <label><input type="radio" name="report" value="1"> Đã duyệt</label>
-                <label><input type="radio" name="report" value="0"> Chưa duyệt</label>
-                <hr>
+                <label
+                  ><input type="radio" name="report" value="1" /> Đã
+                  duyệt</label
+                >
+                <label
+                  ><input type="radio" name="report" value="0" /> Chưa
+                  duyệt</label
+                >
+                <hr />
                 <p>Loại báo cáo</p>
-                <label><input type="checkbox" name="report_type1" value="0"> Tố giác sai phạm</label>
-                <label><input type="checkbox" name="report_type2" value="1"> Đăng ký nội dung</label>
-                <label><input type="checkbox" name="report_type3" value="2"> Đóng góp ý kiến</label>
-                <label><input type="checkbox" name="report_type4" value="3"> Giải đáp thắc mắc</label>
+                <label
+                  ><input type="checkbox" name="report_type1" value="0" /> Tố
+                  giác sai phạm</label
+                >
+                <label
+                  ><input type="checkbox" name="report_type2" value="1" /> Đăng
+                  ký nội dung</label
+                >
+                <label
+                  ><input type="checkbox" name="report_type3" value="2" /> Đóng
+                  góp ý kiến</label
+                >
+                <label
+                  ><input type="checkbox" name="report_type4" value="3" /> Giải
+                  đáp thắc mắc</label
+                >
               </div>
             </div>
           </form>

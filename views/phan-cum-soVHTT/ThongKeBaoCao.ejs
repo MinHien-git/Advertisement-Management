@@ -6,30 +6,26 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="icon" href="/images/map.png" />
     <!-- Bootstrap CSS v5.2.1 -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
-      crossorigin="anonymous"
-    />
+      crossorigin="anonymous" />
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
       integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
       crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+      referrerpolicy="no-referrer"></script>
 
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-    />
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
-    <link rel="stylesheet" href="/styles/global.css"/>
+    <link rel="stylesheet" href="/styles/global.css" />
 
     <link rel="stylesheet" href="/styles/phan-cum-soVHTT/navbar.css" />
     <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
@@ -58,14 +54,14 @@
         flex-grow: 0;
       }
 
-      .buttons__container{
+      .buttons__container {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-self:stretch;
+        align-self: stretch;
         width: auto;
       }
-      .buttons_containter button{
+      .buttons_containter button {
         align-items: center;
         white-space: nowrap;
         flex-grow: 1;
@@ -97,66 +93,59 @@
             </div>
             <div id="cards__container" class="overflow-auto">
               <% for (let i = 0; i < locals.reports.length; i++) { %> <% const
-            report = locals.reports[i]; %>
-            <div class="card shadow-sm report" id="<%= report._id %>">
-              <div class="card-header" id="brief__info<%= report._id %>">
-                <ul class="list__flex">
-                  <% if (report.type == 0) { %>
-                  <li class="list__col1 text-danger">
-                    Tố giác sai phạm
-                  </li>
-                  <% } %> <% if (report.type == 1) { %>
-                  <li class="list__col1 text-primary">
-                    Đăng ký nội dung
-                  </li>
-                  <% } %> <% if (report.type == 2) { %>
-                  <li class="list__col1 text-success">
-                    Đóng góp ý kiến
-                  </li>
-                  <% } %> <% if (report.type == 3) { %>
-                  <li class="list__col1 text-warning">
-                    Giải đáp thắc mắc
-                  </li>
-                  <% } %>
-                  <li class="list__col2"><%= report.place %></li>
-                  <li class="list__col3"><%= report.send_day %></li>
-                  <% if (report.state == 0) {%>
+              report = locals.reports[i]; %>
+              <div class="card shadow-sm report" id="<%= report._id %>">
+                <div class="card-header" id="brief__info<%= report._id %>">
+                  <ul class="list__flex">
+                    <% if (report.type == 0) { %>
+                    <li class="list__col1 text-danger">Tố giác sai phạm</li>
+                    <% } %> <% if (report.type == 1) { %>
+                    <li class="list__col1 text-primary">Đăng ký nội dung</li>
+                    <% } %> <% if (report.type == 2) { %>
+                    <li class="list__col1 text-success">Đóng góp ý kiến</li>
+                    <% } %> <% if (report.type == 3) { %>
+                    <li class="list__col1 text-warning">Giải đáp thắc mắc</li>
+                    <% } %>
+                    <li class="list__col2"><%= report.place %></li>
+                    <li class="list__col3"><%= report.send_day %></li>
+                    <% if (report.state == 0) {%>
                     <li class="list__col4 fw-bold text-warning">Chờ xử lý</li>
-                  <% } else if (report.state == 1){ %>
+                    <% } else if (report.state == 1){ %>
                     <li class="list__col4 fw-bold text-success">Đã cấp phép</li>
-                  <% } else if (report.state == 2){ %>
+                    <% } else if (report.state == 2){ %>
                     <li class="list__col4 fw-bold text-danger">Đã bác bỏ</li>
-                  <% } else if (report.state == 3){ %>
-                    <li class="list__col4 fw-bold text-primary">Đã gửi YC sửa đổi</li>
-                  <% }%>
-                  <li class="list__col5">
-                                        <button
-                                            class="btn flex-grow-0"
-                                            id="modal-btn"
-                                            type="button"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modal"
-                                            style="width: 1rem"
-                                            data-report-id="<%=report._id%>"
-                                            data-report-type="<%=report.type%>"
-                                            data-sender-name="<%=report.sender_name%>"
-                                            data-sender-email="<%=report.sender_email%>"
-                                            data-sender-number="<%=report.sender_number%>"
-                                            data-report-place="<%=report.place%>"
-                                            data-report-date="<%=report.send_day%>"
-                                            data-report-details="<%=report.details%>"
-                                            data-report-state="<%=report.state%>"
-                                            data-report-resolve="<%=report.resolve%>"
-                                            data-report-edit-request="<%=report.edit_request%>"
-                                            onclick="passToDetailsModal(this)"
-                                            >
-                                            <i class="bi bi-three-dots"></i>
-                                        </button>
-                                    </li>
-                </ul>
+                    <% } else if (report.state == 3){ %>
+                    <li class="list__col4 fw-bold text-primary">
+                      Đã gửi YC sửa đổi
+                    </li>
+                    <% }%>
+                    <li class="list__col5">
+                      <button
+                        class="btn flex-grow-0"
+                        id="modal-btn"
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal"
+                        style="width: 1rem"
+                        data-report-id="<%=report._id%>"
+                        data-report-type="<%=report.type%>"
+                        data-sender-name="<%=report.sender_name%>"
+                        data-sender-email="<%=report.sender_email%>"
+                        data-sender-number="<%=report.sender_number%>"
+                        data-report-place="<%=report.place%>"
+                        data-report-date="<%=report.send_day%>"
+                        data-report-details="<%=report.details%>"
+                        data-report-state="<%=report.state%>"
+                        data-report-resolve="<%=report.resolve%>"
+                        data-report-edit-request="<%=report.edit_request%>"
+                        onclick="passToDetailsModal(this)">
+                        <i class="bi bi-three-dots"></i>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
-            <% } %>
+              <% } %>
             </div>
             <%- include('../includes/pagination.ejs')%>
             <!--modal-->
@@ -165,12 +154,10 @@
               id="modal"
               tabindex="-1"
               aria-labelledby="modalTitle"
-              aria-hidden="true"
-            >
+              aria-hidden="true">
               <div
                 class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg"
-                role="document"
-              >
+                role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h4 class="modal-title fw-bold" id="modalTitle">
@@ -181,43 +168,56 @@
                       class="btn-close"
                       data-bs-dismiss="modal"
                       aria-label="Close"
-                      id="m-btn"
-                    ></button>
+                      id="m-btn"></button>
                   </div>
                   <div class="modal-body">
-                    <p id="sender__name"><strong>Tên người gửi:</strong> Nguyễn Văn A</p>
-                    <p id="sender__email"><strong>Email:</strong> anhA@gmail.com</p>
-                    <p id="sender__number"><strong>Số điện thoại:</strong> 0123456789</p>
-                    <p id="report__place"><strong>Địa điểm quảng cáo:</strong> Đường ABC...</p>
+                    <p id="sender__name">
+                      <strong>Tên người gửi:</strong> Nguyễn Văn A
+                    </p>
+                    <p id="sender__email">
+                      <strong>Email:</strong> anhA@gmail.com
+                    </p>
+                    <p id="sender__number">
+                      <strong>Số điện thoại:</strong> 0123456789
+                    </p>
+                    <p id="report__place">
+                      <strong>Địa điểm quảng cáo:</strong> Đường ABC...
+                    </p>
                     <p id="report__date">Ngày gửi</p>
-                    <br/>
+                    <br />
                     <h5 class="fw-bold">NỘI DUNG BÁO CÁO</h5>
                     <p id="report__details">
                       <strong>Mô tả:</strong>
                     </p>
                     <p><strong>Hình ảnh</strong></p>
-                    <img id="report__image"
+                    <img
+                      id="report__image"
                       src="/assets/images/bien-quang-cao-1024x683.jpg"
-                      id="img1"
-                    />
-                    <p id="report__resolve"><strong>Cách thức xử lí:</strong> Chưa có</p>
+                      id="img1" />
+                    <p id="report__resolve">
+                      <strong>Cách thức xử lí:</strong> Chưa có
+                    </p>
                     <p id="report__edit__request" class="text-primary"></p>
-
-
                   </div>
                   <div class="modal-footer w-auto">
-                    <input type="hidden" name="report_id" id="report__id" value="0">
-                    <input type="hidden" name="report_state" id="report__state" value="1">
-                    <div class="b__container">
-                      
-                    </div>
+                    <input
+                      type="hidden"
+                      name="report_id"
+                      id="report__id"
+                      value="0" />
+                    <input
+                      type="hidden"
+                      name="report_state"
+                      id="report__state"
+                      value="1" />
+                    <div class="b__container"></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-          
+
         <!-- Yêu cầu đổi cách thức box -->
         <div>
           <!-- Modal Body -->
@@ -227,12 +227,10 @@
             id="modalInput"
             tabindex="-1"
             aria-labelledby="modalTitleInput"
-            aria-hidden="true"
-          >
+            aria-hidden="true">
             <div
               class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md"
-              role="document"
-            >
+              role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title fw-bold" id="modalTitleInput">
@@ -245,42 +243,39 @@
                     data-bs-dismiss="modal"
                     data-bs-toggle="modal"
                     data-bs-target="#modal"
-                    id="m-btn"
-                  ></button>
+                    id="m-btn"></button>
                 </div>
                 <div class="modal-body">
                   <form action="">
-                      <div
-                        class="form-floating"
-                        id="change__input"
-                      >
-                        <textarea
-                          class="form-control"
-                          placeholder="Nhập nội dung..."
-                          id="change__textarea"
-                          style="height: 25vh"
-                        ></textarea>
-                        <label for="change__textarea">Nhập nội dung...</label>
-                      </div>
-                    </form>
+                    <div class="form-floating" id="change__input">
+                      <textarea
+                        class="form-control"
+                        placeholder="Nhập nội dung..."
+                        id="change__textarea"
+                        style="height: 25vh"></textarea>
+                      <label for="change__textarea">Nhập nội dung...</label>
+                    </div>
+                  </form>
                 </div>
                 <div class="modal-footer">
-                  <input type="hidden" name="report_id" id="report__id" value="0">
+                  <input
+                    type="hidden"
+                    name="report_id"
+                    id="report__id"
+                    value="0" />
                   <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modal"
-                    >
-                      Huỷ
-                    </button>
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal">
+                    Huỷ
+                  </button>
                   <button
                     type="button"
                     class="btn btn-primary"
                     data-bs-dismiss="modal"
-                    onclick="sendReportChangeRequest(document.getElementById('report__id').value, document.getElementById('change__textarea').value)"
-                  >
+                    onclick="sendReportChangeRequest(document.getElementById('report__id').value, document.getElementById('change__textarea').value)">
                     Yêu cầu
                   </button>
                 </div>
@@ -298,12 +293,10 @@
             id="modalConfirm"
             tabindex="-1"
             aria-labelledby="modalTitleConfirm"
-            aria-hidden="true"
-          >
+            aria-hidden="true">
             <div
               class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
-              role="document"
-            >
+              role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title fw-bold" id="modalTitleConfirm">
@@ -316,29 +309,30 @@
                     data-bs-dismiss="modal"
                     data-bs-toggle="modal"
                     data-bs-target="#modal"
-                    id="m-btn"
-                  ></button>
+                    id="m-btn"></button>
                 </div>
                 <div class="modal-body">
                   <p>Bạn có chắc chắn muốn bác bỏ yêu cầu không?</p>
                 </div>
                 <div class="modal-footer">
-                  <input type="hidden" name="report_id" id="report__id" value="0">
+                  <input
+                    type="hidden"
+                    name="report_id"
+                    id="report__id"
+                    value="0" />
                   <button
                     type="button"
                     class="btn btn-light"
                     data-bs-dismiss="modal"
                     data-bs-toggle="modal"
-                    data-bs-target="#modal"
-                  >
+                    data-bs-target="#modal">
                     Hủy
                   </button>
                   <button
                     type="button"
                     class="btn btn-danger"
                     data-bs-dismiss="modal"
-                    onclick="respondResolve(document.querySelector('#report__id').value, 2);"
-                  >
+                    onclick="respondResolve(document.querySelector('#report__id').value, 2);">
                     Bác bỏ
                   </button>
                 </div>
@@ -350,15 +344,13 @@
         <!-- Ô thông báo thành công -->
         <div
           class="toast-container position-fixed bottom-0 end-0 p-3"
-          style="z-index: 1"
-        >
+          style="z-index: 1">
           <div
             class="toast align-items-center text-bg-success border-0"
             id="accept__success__toast"
             role="alert"
             aria-live="assertive"
-            aria-atomic="true"
-          >
+            aria-atomic="true">
             <div class="d-flex">
               <div class="toast-body">
                 <i class="bi bi-check-lg"></i>
@@ -368,8 +360,7 @@
                 type="button"
                 class="btn-close btn-close-white me-2 m-auto"
                 data-bs-dismiss="toast"
-                aria-label="Close"
-              ></button>
+                aria-label="Close"></button>
             </div>
           </div>
           <div
@@ -377,8 +368,7 @@
             id="send__success__toast"
             role="alert"
             aria-live="assertive"
-            aria-atomic="true"
-          >
+            aria-atomic="true">
             <div class="d-flex">
               <div class="toast-body">
                 <i class="bi bi-envelope-check"></i>
@@ -388,8 +378,7 @@
                 type="button"
                 class="btn-close btn-close-white me-2 m-auto"
                 data-bs-dismiss="toast"
-                aria-label="Close"
-              ></button>
+                aria-label="Close"></button>
             </div>
           </div>
           <div
@@ -397,8 +386,7 @@
             id="deny__success__toast"
             role="alert"
             aria-live="assertive"
-            aria-atomic="true"
-          >
+            aria-atomic="true">
             <div class="d-flex">
               <div class="toast-body">
                 <i class="bi bi-x-lg"></i>
@@ -408,8 +396,7 @@
                 type="button"
                 class="btn-close btn-close-white me-2 m-auto"
                 data-bs-dismiss="toast"
-                aria-label="Close"
-              ></button>
+                aria-label="Close"></button>
             </div>
           </div>
         </div>
@@ -423,13 +410,11 @@
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
       integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
   </body>
 </html>

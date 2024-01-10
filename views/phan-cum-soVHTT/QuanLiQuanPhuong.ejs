@@ -8,7 +8,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-
+    <link rel="icon" href="/images/map.png" />
     <!-- Bootstrap CSS v5.2.1 -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
@@ -63,7 +63,7 @@
               </div>
             </div>
 
-            <div id="cards__container" class="overflow-auto">
+            <div id="cards__container" class="overflow-scroll">
                 <% for (let i = 0; i < locals.districts?.length; i++) { %>
                 <% const district = locals.districts[i]; %>
                 <% const id = district._id; %>
@@ -235,7 +235,7 @@
                         <label for="district__code" class="fw-bold" >Mã Quận/Huyện</label>
                         <input
                           type="number"
-                          onKeyPress="if(this.value.length >=3) return false";
+                          onKeyPress="if(this.value.length >=3) return false"
                           name="district_code_input"
                           class="form-control mb-3"
                           id="district__code"

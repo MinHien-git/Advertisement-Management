@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Quản lý thông tin chung - Sở VHTT</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="icon" href="/images/map.png" />
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <link rel="stylesheet" href="/styles/global.css" />
+
+    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/navbar.css" />
+    <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
+
+    <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/general_info_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/page_functions.js"></script>
+  </head>
+
+  <body>
+    <script src="/scripts/navbar.js" defer></script>
+    <div class="wrapper">
+      <%- include('../includes/header.ejs')%>
+      <main>
+        <div class="container" id="main__container">
+          <h1 class="fw-bold h2" id="page__title">
+            Quản lý thông tin chung
+          </h1>
+        <div id="main__list">
+            <div id="board__types__list" class="border" style="margin-top: 1rem; margin-bottom: 1rem">
+              <div id="info__desc">
+                <div class="list__title__container mt-3">
+                  <ul class="list__flex fw-bold">
+                    <li class="list__col2">Loại bảng quảng cáo</li>
+                    <li class="list__col4">
+                      Thao tác
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div id="cards__container" class="overflow-scroll" style="height: auto; max-height: 40vh">
+                  <% for (let i = 0; i < locals.board_types?.length; i++) { %>
+                  <% const board_type = locals.board_types[i]; %>
+                  <% const id = board_type._id; %>
+                <div id="<%= id%>"
+                  class="card shadow-sm">
+                  <div class="card-header" id="brief__info<%= id %>">
+                    <ul class="list__flex">
+                      <li class="list__col2"> 
+                        <%= board_type.type %>
+                      </li>
+                      <li class="list__col4">
+                        <ul class="buttons__container" style="flex-grow: 0;">
+                                  <li>
+                                    <button
+                                      class="btn btn-link text-primary me-3"
+                                      style="margin: 0 !important;"
+                                      onclick="passToModal(this, 'edit__type', 'board_type')"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#edit__type__modal"
+                                      data-type-id="<%=id%>"
+                                      data-type-value="<%=board_type.type%>"
+                                      >
+                                      <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                      class="btn btn-link text-danger"
+                                      onclick="passToModal(this, 'delete__type', 'board_type')"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#delete__type__modal"
+                                      data-type-id="<%=id%>"
+                                      >
+                                      <i class="bi bi-trash"></i>
+                                    </button>
+                                  </li>
+                                </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  </div>
+                <% } %>
+              </div>
+                <button
+                  class="btn btn-success me-3"
+                  onclick="passToModal(this, 'add__type', 'board_type')"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add__type__modal"
+                  >
+                  +&nbsp;Thêm loại bảng quảng cáo
+                </button>
+            </div>
+
+            <div id="ad__types__list" class="border" style="margin-top: 1rem; margin-bottom: 1rem">
+              <div id="info__desc">
+                <div class="list__title__container mt-3">
+                  <ul class="list__flex fw-bold">
+                    <li class="list__col2">Loại hình quảng cáo</li>
+                    <li class="list__col4">
+                      Thao tác
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div id="cards__container" class="overflow-scroll" style="height: auto; max-height: 40vh">
+                  <% for (let i = 0; i < locals.ad_types?.length; i++) { %>
+                  <% const ad_type = locals.ad_types[i]; %>
+                  <% const id = ad_type._id; %>
+                <div id="<%= id%>"
+                  class="card shadow-sm">
+                  <div class="card-header" id="brief__info<%= id %>">
+                    <ul class="list__flex">
+                      <li class="list__col2"> 
+                        <%= ad_type.type %>
+                      </li>
+                      <li class="list__col4">
+                        <ul class="buttons__container" style="flex-grow: 0;">
+                                  <li>
+                                    <button
+                                      class="btn btn-link text-primary me-3"
+                                      style="margin: 0 !important;"
+                                      onclick="passToModal(this, 'edit__type', 'ad_type')"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#edit__type__modal"
+                                      data-type-id="<%=id%>"
+                                      data-type-value="<%=ad_type.type%>"
+                                      >
+                                      <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                      class="btn btn-link text-danger"
+                                      onclick="passToModal(this, 'delete__type', 'ad_type')"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#delete__type__modal"
+                                      data-type-id="<%=id%>"
+                                      >
+                                      <i class="bi bi-trash"></i>
+                                    </button>
+                                  </li>
+                                </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  </div>
+                <% } %>
+              </div>
+                <button
+                  class="btn btn-success me-3"
+                  onclick="passToModal(this, 'add__type', 'ad_type')"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add__type__modal"
+                  >
+                  +&nbsp;Thêm loại hình quảng cáo
+                </button>
+            </div>
+            
+            <div id="place__types__list" class="border" style="margin-top: 1rem; margin-bottom: 1rem">
+              <div id="info__desc">
+                <div class="list__title__container mt-3">
+                  <ul class="list__flex fw-bold">
+                    <li class="list__col2">Phân loại đất</li>
+                    <li class="list__col4">
+                      Thao tác
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div id="cards__container" class="overflow-scroll" style="height: auto; max-height: 40vh">
+                  <% for (let i = 0; i < locals.place_types?.length; i++) { %>
+                  <% const place_type = locals.place_types[i]; %>
+                  <% const id = place_type._id; %>
+                <div id="<%= id%>"
+                  class="card shadow-sm">
+                  <div class="card-header" id="brief__info<%= id %>">
+                    <ul class="list__flex">
+                      <li class="list__col2"> 
+                        <%= place_type.type %>
+                      </li>
+                      <li class="list__col4">
+                        <ul class="buttons__container" style="flex-grow: 0;">
+                                  <li>
+                                    <button
+                                      class="btn btn-link text-primary me-3"
+                                      style="margin: 0 !important;"
+                                      onclick="passToModal(this, 'edit__type', 'place_type')"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#edit__type__modal"
+                                      data-type-id="<%=id%>"
+                                      data-type-value="<%=place_type.type%>"
+                                      >
+                                      <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                      class="btn btn-link text-danger"
+                                      onclick="passToModal(this, 'delete__type', 'place_type')"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#delete__type__modal"
+                                      data-type-id="<%=id%>"
+                                      >
+                                      <i class="bi bi-trash"></i>
+                                    </button>
+                                  </li>
+                                </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  </div>
+                <% } %>
+              </div>
+              <button
+                  class="btn btn-success me-3"
+                  onclick="passToModal(this, 'add__type', 'place_type')"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add__type__modal"
+                  >
+                  +&nbsp;Thêm loại đất
+                </button>
+            </div>
+
+            <div id="report__types__list" class="border" style="margin-top: 1rem; margin-bottom: 1rem">
+              <div id="info__desc">
+                <div class="list__title__container mt-3">
+                  <ul class="list__flex fw-bold">
+                    <li class="list__col2">Loại báo cáo</li>
+                    <li class="list__col4">
+                      Thao tác
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div id="cards__container" class="overflow-scroll" style="height: auto; max-height: 40vh">
+                  <% for (let i = 0; i < locals.report_types?.length; i++) { %>
+                  <% const report_type = locals.report_types[i]; %>
+                  <% const id = report_type._id; %>
+                <div id="<%= id%>"
+                  class="card shadow-sm">
+                  <div class="card-header" id="brief__info<%= id %>">
+                    <ul class="list__flex">
+                      <li class="list__col2"> 
+                        <%= report_type.type %>
+                      </li>
+                      <li class="list__col4">
+                        <ul class="buttons__container" style="flex-grow: 0;">
+                                  <li>
+                                    <button
+                                      class="btn btn-link text-primary me-3"
+                                      style="margin: 0 !important;"
+                                      onclick="passToModal(this, 'edit__type', 'report_type')"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#edit__type__modal"
+                                      data-type-id="<%=id%>"
+                                      data-type-value="<%=report_type.type%>"
+                                      >
+                                      <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                  </li>
+                                  <li>
+                                    <button
+                                      class="btn btn-link text-danger"
+                                      onclick="passToModal(this, 'delete__type', 'report_type')"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#delete__type__modal"
+                                      data-type-id="<%=id%>"
+                                      >
+                                      <i class="bi bi-trash"></i>
+                                    </button>
+                                  </li>
+                                </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  </div>
+                <% } %>
+              </div>
+              <button
+                  class="btn btn-success me-3"
+                  onclick="passToModal(this, 'add__type', 'report_type')"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add__type__modal"
+                  >
+                  +&nbsp;Thêm loại báo cáo
+                </button>
+            </div>
+
+            <div
+              class="modal fade"
+              id="add__type__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog ">
+                <form action="" id="add__type__form" onsubmit="addType(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Thêm thông tin
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                      <label for="data__type__add__type" class="fw-bold" >Loại thông tin: </label>
+                      <input name="data_type_add_type" id="data__type__add__type" value="0" disabled/>
+                      <br>
+                      <label for="data__value__add_type" class="fw-bold" >Nội dung</label>
+                      <input
+                        type="text"
+                        name="data_value_input_add_type"
+                        class="form-control mb-3"
+                        id="data__value__add_type"
+                        required
+                      />
+
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-success" id="save__changes__btn">Thêm thông tin</button>
+                    </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            <div
+              class="modal fade"
+              id="edit__type__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog ">
+                <form action="" id="edit__type__form" onsubmit="editType(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Chỉnh sửa thông tin
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      
+                      <label for="data__type__edit__type" class="fw-bold" >Loại thông tin: </label>
+                      <input name="data_type_edit_type" id="data__type__edit__type" value="0" disabled/>
+                      <br>
+                      <label for="data__value__edit__type" class="fw-bold" >Nội dung</label>
+                      <input
+                        type="text"
+                        name="data_value_input_edit_type"
+                        class="form-control mb-3"
+                        id="data__value__edit__type"
+                        required
+                      />
+
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <input type="hidden" name="data_id_edit_type" id="data__id__edit__type" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-primary" id="save__changes__btn">Lưu thay đổi</button>
+                    </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            <div
+              class="modal fade"
+              id="delete__type__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog ">
+                <form action="" id="delete__type__form" onsubmit="deleteType(event)">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fw-bold h-2" id="Modal__label">
+                        Xoá
+                      </h3>
+                      <button
+                        class="btn-close"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      Bạn có chắc chắn muốn xoá <input name="data_type_delete_type" id="data__type__delete__type" value="0" disabled/> này không?
+                    </div>
+                    <div class="modal-footer">
+                      <input type="hidden" name="data_id_delete_type" id="data__id__delete__type" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-danger" id="save__changes__btn">Xoá</button>
+                    </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+
+
+
+            <div
+              class="toast-container position-fixed bottom-0 end-0 p-3"
+              style="z-index: 1"
+            >
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="add__type__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-check-lg"></i>
+                    Đã thêm thông tin!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="save__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-check-lg"></i>
+                    Đã lưu thay đổi!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="delete__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-trash"></i>
+                    Đã xoá thông tin!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <!-- place footer here -->
+      </footer>
+    </div>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+      integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

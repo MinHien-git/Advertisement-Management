@@ -8,7 +8,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-
+    <link rel="icon" href="/images/map.png" />
     <!-- Bootstrap CSS v5.2.1 -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
@@ -74,7 +74,7 @@
                 </ul>
               </div>
             </div>
-            <div id="cards__container" class="overflow-auto">
+            <div id="cards__container" class="overflow-scroll">
                 <% for (let i = 0; i < locals.users.length; i++) { %>
                 <% const user = locals.users[i]; %>
                 <% const id = user._id; %>

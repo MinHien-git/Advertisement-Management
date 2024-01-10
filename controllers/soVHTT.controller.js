@@ -5,6 +5,7 @@ const User = require("../models/users.model");
 const { ObjectId } = require("mongodb");
 const { v4 } = require("uuid");
 const nodemailer = require("nodemailer");
+const bcrypt = require("bcrypt");
 
 function runAtSpecificTimeOfDay(hour, minutes, func) {
     const twentyFourHours = 86400000;
@@ -358,7 +359,7 @@ async function filterItems(item_list, query, path) {
     let district_arr = [];
     let type_arr = [];
     let ad_type_arr = [];
-    let land_type_arr = [];
+    let place_type_arr = [];
     let status_arr = [];
 
     if ("district" in query) {
@@ -413,12 +414,12 @@ async function filterItems(item_list, query, path) {
         });
     }
 
-    if ("land-type" in query) {
-        land_type_arr = query["land-type"].split(",");
+    if ("place-type" in query) {
+        place_type_arr = query["place-type"].split(",");
 
         item_list = item_list.filter((item) => {
-            for (let i = 0; i < land_type_arr.length; i++) {
-                if (land_type_arr[i].includes(item.properties.place_type)) {
+            for (let i = 0; i < place_type_arr.length; i++) {
+                if (place_type_arr[i].includes(item.properties.place_type)) {
                     return true;
                 }
             }
@@ -447,6 +448,19 @@ async function filterItems(item_list, query, path) {
     }
 
     return item_list;
+}
+
+function changeDateFormat(date) {
+    if (date instanceof Date) {
+        let date_string =
+            date.getDate() +
+            "/" +
+            (date.getMonth() + 1) +
+            "/" +
+            date.getFullYear();
+        return date_string;
+    }
+    return date;
 }
 
 async function processList(collection, search_queries) {
@@ -619,6 +633,54 @@ async function processList(collection, search_queries) {
         if (place.includes("Đ. ") == true) {
             place = place.replace("Đ. ", "");
         }
+
+        if (collection == "billboard") {
+            item_list[i].properties.place = place;
+            if (item_list[i].properties.boards.length > 0) {
+                for (
+                    let j = 0;
+                    j < item_list[i].properties.boards.length;
+                    j++
+                ) {
+                    if (item_list[i].properties.boards[j].license.length > 0) {
+                        item_list[i].properties.boards[
+                            j
+                        ].license[0].start_date = changeDateFormat(
+                            new Date(
+                                item_list[i].properties.boards[
+                                    j
+                                ].license[0].start_date
+                            )
+                        );
+
+                        item_list[i].properties.boards[j].license[0].end_date =
+                            changeDateFormat(
+                                new Date(
+                                    item_list[i].properties.boards[
+                                        j
+                                    ].license[0].end_date
+                                )
+                            );
+                    }
+                }
+            }
+        } else if (collection == "licenses") {
+            if (
+                item_list[i].billboard_info != null &&
+                item_list[i].billboard_info.length > 0
+            ) {
+                item_list[i].billboard_info[0].properties.place = place;
+                item_list[i].start_date = changeDateFormat(
+                    new Date(item_list[i].start_date)
+                );
+                item_list[i].end_date = changeDateFormat(
+                    new Date(item_list[i].end_date)
+                );
+            }
+        } else if (collection == "reports") {
+            item_list[i].place = place;
+        }
+
         let address = place.split(", ");
         let street = address[0];
         let ward = address[1];
@@ -691,9 +753,6 @@ async function getUniqueTypesAndStatuses(item_list, item_type) {
 
     if (item_type == "billboards") {
         for (let i = 0; i < item_list.length; i++) {
-            if (unique_types.includes(item_list[i].properties.type) == false) {
-                unique_types.push(item_list[i].properties.type);
-            }
             if (
                 unique_statuses.includes(item_list[i].properties.status) ==
                 false
@@ -739,7 +798,7 @@ async function getUniqueTypesAndStatuses(item_list, item_type) {
 
 async function getUniqueAdInfo(item_list) {
     let unique_ad_types = [];
-    let unique_land_types = [];
+    let unique_place_types = [];
 
     if (item_list[0] && "properties" in item_list[0]) {
         for (let i = 0; i < item_list.length; i++) {
@@ -752,11 +811,11 @@ async function getUniqueAdInfo(item_list) {
             }
 
             if (
-                unique_land_types.includes(
+                unique_place_types.includes(
                     item_list[i].properties.place_type
                 ) == false
             ) {
-                unique_land_types.push(item_list[i].properties.place_type);
+                unique_place_types.push(item_list[i].properties.place_type);
             }
         }
     } else if (item_list[0] && "billboard_info" in item_list[0]) {
@@ -772,11 +831,11 @@ async function getUniqueAdInfo(item_list) {
             }
 
             if (
-                unique_land_types.includes(
+                unique_place_types.includes(
                     item_list[i].billboard_info[0].properties.place_type
                 ) == false
             ) {
-                unique_land_types.push(
+                unique_place_types.push(
                     item_list[i].billboard_info[0].properties.place_type
                 );
             }
@@ -794,11 +853,11 @@ async function getUniqueAdInfo(item_list) {
             }
 
             if (
-                unique_land_types.includes(
+                unique_place_types.includes(
                     item_list[i].billboard[0].properties.place_type
                 ) == false
             ) {
-                unique_land_types.push(
+                unique_place_types.push(
                     item_list[i].billboard[0].properties.place_type
                 );
             }
@@ -812,14 +871,44 @@ async function getUniqueAdInfo(item_list) {
         })
     );
 
-    unique_land_types.sort((a, b) =>
+    unique_place_types.sort((a, b) =>
         a.localeCompare(b, undefined, {
             numeric: true,
             sensitivity: "base",
         })
     );
 
-    return { unique_ad_types, unique_land_types };
+    return { unique_ad_types, unique_place_types };
+}
+
+//Lấy thông tin loại bảng QC, loại QC, phân loại đất
+async function getBillboardVariants() {
+    const all_board_types = await db
+        .getDb()
+        .collection("billboard_types")
+        .find()
+        .toArray();
+    const all_ad_types = await db
+        .getDb()
+        .collection("ad_types")
+        .find()
+        .toArray();
+    const all_place_types = await db
+        .getDb()
+        .collection("place_types")
+        .find()
+        .toArray();
+
+    return { all_board_types, all_ad_types, all_place_types };
+}
+
+async function getAllReportTypes() {
+    const all_report_types = await db
+        .getDb()
+        .collection("report_types")
+        .find()
+        .toArray();
+    return all_report_types;
 }
 
 //Quản lí bảng quảng cáo
@@ -828,7 +917,6 @@ const _get_billboards = async (req, res) => {
     let sort_val = req.query.sort;
 
     let search_query = createSearchQuery(search_val);
-
     res.locals.type_user = 2;
     res.locals.isAuth = true;
     // res.locals.billboards = await db
@@ -851,14 +939,21 @@ const _get_billboards = async (req, res) => {
         item_list,
         "billboards"
     );
-    let { unique_ad_types, unique_land_types } = await getUniqueAdInfo(
+    let { unique_ad_types, unique_place_types } = await getUniqueAdInfo(
         item_list
     );
+
+    let { all_board_types, all_ad_types, all_place_types } =
+        await getBillboardVariants();
 
     res.locals.list_types = unique_types;
     res.locals.list_statuses = unique_statuses;
     res.locals.ad_types = unique_ad_types;
-    res.locals.land_types = unique_land_types;
+    res.locals.place_types = unique_place_types;
+    res.locals.item_list_type = "billboards";
+    res.locals.all_board_types = all_board_types;
+    res.locals.all_ad_types = all_ad_types;
+    res.locals.all_place_types = all_place_types;
 
     item_list = await filterItems(item_list, req.query, req.path);
 
@@ -876,35 +971,37 @@ const _get_billboards = async (req, res) => {
 };
 
 const _edit_billboard = async (req, res) => {
-    const {
-        id,
-        type,
-        place,
-        type_advertise,
-        place_type,
-        size,
-        amount,
-        status,
-    } = req.body;
-    const billboard = await db
-        .getDb()
-        .collection("billboard")
-        .findOne({ _id: new ObjectId(id) });
-    const globalid = billboard.properties.globalid;
-    const updateInfo = new Billboard(null, null, {
-        globalid,
-        type,
-        place,
-        type_advertise,
-        place_type,
-        size,
-        amount,
-        status,
-    });
+    const { id, place, type_advertise, place_type, status } = req.body;
     try {
-        updateInfo._update_billboard(billboard._id);
-        console.log("billboard " + id + " updated!");
-        res.send("billboard " + id + " updated!");
+        const existing_billboard = await db
+            .getDb()
+            .collection("billboard")
+            .findOne({ _id: new ObjectId(id) });
+        let boards = [];
+        let board_amount = 0;
+        if (existing_billboard.properties.status == 1) {
+            boards = existing_billboard.properties.boards;
+            board_amount = existing_billboard.properties.board_amount;
+        }
+        const updated_billboard = await db
+            .getDb()
+            .collection("billboard")
+            .findOneAndUpdate(
+                { _id: new ObjectId(id) },
+                {
+                    $set: {
+                        "properties.place": place,
+                        "properties.type_advertise": type_advertise,
+                        "properties.place_type": place_type,
+                        "properties.status": status,
+                        "properties.board_amount": board_amount,
+                        "properties.boards": boards,
+                    },
+                },
+                { returnDocument: "after" }
+            );
+        console.log(updated_billboard);
+        res.send(updated_billboard);
     } catch (err) {
         res.send(err);
         console.error(err);
@@ -918,14 +1015,14 @@ const _edit_billboard_on_map = async (req, res) => {
         billboard__type,
         ad__type,
         position,
-        land__type,
+        place__type,
         width,
         height,
         amount,
         billboard__status,
     } = req.body;
 
-    let land_type;
+    let place_type;
     let ad_type;
     let billboard_type;
 
@@ -986,27 +1083,27 @@ const _edit_billboard_on_map = async (req, res) => {
             break;
     }
 
-    switch (land__type) {
+    switch (place__type) {
         case "1":
-            land_type = "Đất công/Công viên/Hành lang an toàn giao thông";
+            place_type = "Đất công/Công viên/Hành lang an toàn giao thông";
             break;
         case "2":
-            land_type = "Đất tư nhân/Nhà ở riêng lẻ";
+            place_type = "Đất tư nhân/Nhà ở riêng lẻ";
             break;
         case "3":
-            land_type = "Trung tâm thương mại";
+            place_type = "Trung tâm thương mại";
             break;
         case "4":
-            land_type = "Chợ";
+            place_type = "Chợ";
             break;
         case "5":
-            land_type = "Cây xăng";
+            place_type = "Cây xăng";
             break;
         case "6":
-            land_type = "Nhà chờ xe buýt";
+            place_type = "Nhà chờ xe buýt";
             break;
         case "7":
-            land_type = "Trường Học";
+            place_type = "Trường Học";
             break;
     }
 
@@ -1015,7 +1112,7 @@ const _edit_billboard_on_map = async (req, res) => {
         amount: Number(amount) + " trụ/bảng",
         place: position,
         size: width + "mx" + height + "m",
-        place_type: land_type,
+        place_type: place_type,
         type_advertise: ad_type,
         type: billboard_type,
         zoning: billboard__status === "1" ? true : false,
@@ -1027,6 +1124,94 @@ const _edit_billboard_on_map = async (req, res) => {
         updateInfo._update_billboard(_id);
         console.log("billboard " + id + " updated!");
         res.send("billboard " + id + " updated!");
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+
+const _add_board = async (req, res) => {
+    const { billboard_id, board_type, board_height, board_width } = req.body;
+    try {
+        const board_size = board_height + "mx" + board_width + "m";
+        const updated_billboard = await db
+            .getDb()
+            .collection("billboard")
+            .findOneAndUpdate(
+                { _id: new ObjectId(billboard_id) },
+                {
+                    $push: {
+                        "properties.boards": {
+                            _id: new ObjectId(),
+                            board_type: board_type,
+                            size: board_size,
+                            license: null,
+                        },
+                    },
+                    $set: {
+                        "properties.board_amount":
+                            "$properties.board_amount" + 1,
+                    },
+                },
+                { returnDocument: "after" }
+            );
+        console.log(updated_billboard);
+        res.send(updated_billboard);
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+
+const _edit_board = async (req, res) => {
+    const { billboard_id, board_id, board_type, board_height, board_width } =
+        req.body;
+    try {
+        const board_size = board_height + "mx" + board_width + "m";
+        const updated_billboard = await db
+            .getDb()
+            .collection("billboard")
+            .findOneAndUpdate(
+                {
+                    _id: new ObjectId(billboard_id),
+                    "properties.boards._id": new ObjectId(board_id),
+                },
+                {
+                    $set: {
+                        "properties.boards.$.board_type": board_type,
+                        "properties.boards.$.size": board_size,
+                    },
+                },
+                { returnDocument: "after" }
+            );
+        console.log(updated_billboard);
+        res.send(updated_billboard);
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
+};
+const _delete_board = async (req, res) => {
+    const { billboard_id, board_id } = req.body;
+    try {
+        const updated_billboard = await db
+            .getDb()
+            .collection("billboard")
+            .findOneAndUpdate(
+                { _id: new ObjectId(billboard_id) },
+                {
+                    $pull: {
+                        "properties.boards": { _id: new ObjectId(board_id) },
+                    },
+                    $set: {
+                        "properties.board_amount":
+                            "$properties.board_amount" + 1,
+                    },
+                },
+                { returnDocument: "after" }
+            );
+        console.log(updated_billboard);
+        res.send(updated_billboard);
     } catch (err) {
         res.send(err);
         console.error(err);
@@ -1053,13 +1238,13 @@ const _create_billboard = async (req, res) => {
         billboard__type,
         ad__type,
         position,
-        land__type,
+        place__type,
         width,
         height,
         amount,
         billboard__status,
     } = req.body;
-    let land_type;
+    let place_type;
     let ad_type;
     let billboard_type;
     switch (billboard__type) {
@@ -1119,27 +1304,27 @@ const _create_billboard = async (req, res) => {
             break;
     }
 
-    switch (land__type) {
+    switch (place__type) {
         case "1":
-            land_type = "Đất công/Công viên/Hành lang an toàn giao thông";
+            place_type = "Đất công/Công viên/Hành lang an toàn giao thông";
             break;
         case "2":
-            land_type = "Đất tư nhân/Nhà ở riêng lẻ";
+            place_type = "Đất tư nhân/Nhà ở riêng lẻ";
             break;
         case "3":
-            land_type = "Trung tâm thương mại";
+            place_type = "Trung tâm thương mại";
             break;
         case "4":
-            land_type = "Chợ";
+            place_type = "Chợ";
             break;
         case "5":
-            land_type = "Cây xăng";
+            place_type = "Cây xăng";
             break;
         case "6":
-            land_type = "Nhà chờ xe buýt";
+            place_type = "Nhà chờ xe buýt";
             break;
         case "7":
-            land_type = "Trường Học";
+            place_type = "Trường Học";
             break;
     }
 
@@ -1153,7 +1338,7 @@ const _create_billboard = async (req, res) => {
         amount: Number(amount) + " trụ/bảng",
         place: position,
         size: width + "mx" + height + "m",
-        place_type: land_type,
+        place_type: place_type,
         type_advertise: ad_type,
         type: billboard_type,
 
@@ -1187,14 +1372,14 @@ const _get_licenses = async (req, res) => {
         item_list,
         "licenses"
     );
-    let { unique_ad_types, unique_land_types } = await getUniqueAdInfo(
+    let { unique_ad_types, unique_place_types } = await getUniqueAdInfo(
         item_list
     );
 
     res.locals.list_types = unique_types;
     res.locals.list_statuses = unique_statuses;
     res.locals.ad_types = unique_ad_types;
-    res.locals.land_types = unique_land_types;
+    res.locals.place_types = unique_place_types;
 
     item_list = await filterItems(item_list, req.query, req.path);
     item_list = await sortList(item_list, sort_val, "licenses");
@@ -1231,7 +1416,8 @@ const _approve_license = async (req, res) => {
             .collection("licenses")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { ...updateInfo } }
+                { $set: { ...updateInfo } },
+                { returnDocument: "after" }
             );
 
         await db
@@ -1239,7 +1425,8 @@ const _approve_license = async (req, res) => {
             .collection("billboard")
             .findOneAndUpdate(
                 { _id: new ObjectId(license.billboard) },
-                { $set: { license: license._id } }
+                { $set: { license: license._id } },
+                { returnDocument: "after" }
             );
         console.log("license " + id + " approved!");
         return res.send("license " + id + " approved!");
@@ -1270,18 +1457,12 @@ const _decline_license = async (req, res) => {
             .collection("licenses")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { ...updateInfo } }
+                { $set: { ...updateInfo } },
+                { returnDocument: "after" }
             );
 
-        await db
-            .getDb()
-            .collection("billboard")
-            .findOneAndUpdate(
-                { _id: new ObjectId(license.billboard) },
-                { $set: { license: license._id } }
-            );
-        console.log("license for billboard " + id + " declined.");
-        return res.send("license for billboard " + id + " declined.");
+        console.log("license" + id + " declined.");
+        return res.send("license " + id + " declined.");
     } catch (err) {
         res.send(err);
         console.error(err);
@@ -1295,7 +1476,8 @@ const _post_license_edit_request = async (req, res) => {
             .collection("licenses")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { edit_request: edit_request, state: 3 } }
+                { $set: { edit_request: edit_request, state: 3 } },
+                { returnDocument: "after" }
             );
         console.log("Edit request for license " + id + " sent!");
         return res.send("Edit request for license " + id + " sent!");
@@ -1319,14 +1501,14 @@ const _get_edit_requests = async (req, res) => {
         item_list,
         "requests"
     );
-    let { unique_ad_types, unique_land_types } = await getUniqueAdInfo(
+    let { unique_ad_types, unique_place_types } = await getUniqueAdInfo(
         item_list
     );
 
     res.locals.list_types = unique_types;
     res.locals.list_statuses = unique_statuses;
     res.locals.ad_types = unique_ad_types;
-    res.locals.land_types = unique_land_types;
+    res.locals.place_types = unique_place_types;
 
     item_list = await filterItems(item_list, req.query, req.path);
     item_list = await sortList(item_list, sort_val, "requests");
@@ -1363,7 +1545,8 @@ const _approve_edit_request = async (req, res) => {
             .collection("licenses")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { ...updateInfo } }
+                { $set: { ...updateInfo } },
+                { returnDocument: "after" }
             );
 
         await db
@@ -1371,7 +1554,8 @@ const _approve_edit_request = async (req, res) => {
             .collection("billboard")
             .findOneAndUpdate(
                 { _id: new ObjectId(license.billboard) },
-                { $set: { license: license._id } }
+                { $set: { license: license._id } },
+                { returnDocument: "after" }
             );
         console.log("license " + id + " approved!");
         return res.send("license " + id + " approved!");
@@ -1402,7 +1586,8 @@ const _decline_edit_request = async (req, res) => {
             .collection("licenses")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { ...updateInfo } }
+                { $set: { ...updateInfo } },
+                { returnDocument: "after" }
             );
 
         await db
@@ -1410,7 +1595,8 @@ const _decline_edit_request = async (req, res) => {
             .collection("billboard")
             .findOneAndUpdate(
                 { _id: new ObjectId(license.billboard) },
-                { $set: { license: license._id } }
+                { $set: { license: license._id } },
+                { returnDocument: "after" }
             );
         console.log("license for billboard " + id + " declined.");
         return res.send("license for billboard " + id + " declined.");
@@ -1463,7 +1649,8 @@ const _change_report_status = async (req, res) => {
             .collection("reports")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { state: state } }
+                { $set: { state: state } },
+                { returnDocument: "after" }
             );
         if (state == 1) {
             console.log("Report " + id + " approved!");
@@ -1485,7 +1672,8 @@ const _post_report_change_request = async (req, res) => {
             .collection("reports")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { edit_request: edit_request, state: state } }
+                { $set: { edit_request: edit_request, state: state } },
+                { returnDocument: "after" }
             );
         console.log("Edit request for report " + id + " sent!");
         return res.send("Edit request for report " + id + " sent!");
@@ -1693,7 +1881,8 @@ const _edit_district = async (req, res) => {
                             type: type,
                             wards: existing_district.wards,
                         },
-                    }
+                    },
+                    { returnDocument: "after" }
                 );
             console.log("District " + district_id + " updated!");
             return res.send("District " + district_id + " updated!");
@@ -1732,7 +1921,8 @@ const _edit_ward = async (req, res) => {
                             "wards.$.code": new_ward_code,
                             "wards.$.ward": new_ward_name,
                         },
-                    }
+                    },
+                    { returnDocument: "after" }
                 );
             console.log("Ward " + old_ward_code + " updated!");
             return res.send("Ward " + old_ward_code + " updated!");
@@ -1777,6 +1967,139 @@ const _delete_ward = async (req, res) => {
     }
 };
 
+const _get_general_info = async (req, res) => {
+    let { all_board_types, all_ad_types, all_place_types } =
+        await getBillboardVariants();
+    let all_report_types = await getAllReportTypes();
+
+    res.locals.board_types = all_board_types;
+    res.locals.ad_types = all_ad_types;
+    res.locals.place_types = all_place_types;
+    res.locals.report_types = all_report_types;
+
+    res.render("phan-cum-soVHTT/QuanLiThongTinChung");
+};
+
+const _add_general_info = async (req, res) => {
+    const { collection, type_value } = req.body;
+    try {
+        const existing_type = await db
+            .getDb()
+            .collection(collection)
+            .findOne({ type: type_value });
+
+        if (existing_type == null) {
+            await db
+                .getDb()
+                .collection(collection)
+                .insertOne({ _id: new ObjectId(), type: type_value });
+            console.log("Added!");
+            return res.send("Added!");
+        }
+    } catch (err) {
+        res.send(err);
+        console.log(err);
+    }
+};
+
+const _edit_general_info = async (req, res) => {
+    const { collection, type_id, type_value } = req.body;
+    try {
+        const existing_type = await db
+            .getDb()
+            .collection(collection)
+            .findOne({ type: type_value });
+
+        if (existing_type == null) {
+            const new_data = await db
+                .getDb()
+                .collection(collection)
+                .findOneAndUpdate(
+                    { _id: new ObjectId(type_id) },
+                    { $set: { type: type_value } },
+                    { returnDocument: "after" }
+                );
+            console.log(new_data);
+            return res.send(new_data);
+        }
+    } catch (err) {
+        res.send(err);
+        console.log(err);
+    }
+};
+
+const _delete_general_info = async (req, res) => {
+    const { collection, type_id } = req.body;
+    try {
+        db.getDb()
+            .collection(collection)
+            .deleteOne({ _id: new ObjectId(type_id) });
+        console.log("Deleted!");
+        return res.send("Deleted!");
+    } catch (err) {
+        res.send(err);
+        console.log(err);
+    }
+};
+
+const _get_profile = async (req, res) => {
+    res.locals.type_user = 2;
+    res.locals.isAuth = true;
+    const profile = await db
+        .getDb()
+        .collection("users")
+        .findOne({ _id: new ObjectId(res.locals.uid) });
+
+    res.locals.profile = profile;
+    res.render("phan-cum-soVHTT/ThongTinTaiKhoan");
+};
+
+const _update_profile = async (req, res) => {
+    const { user_id, birth, phone, name } = req.body;
+    try {
+        const updated_account = await db
+            .getDb()
+            .collection("users")
+            .findOneAndUpdate(
+                { _id: new ObjectId(user_id) },
+                { $set: { name: name, birth: birth, phone: phone } },
+                { returnDocument: "after" }
+            );
+        console.log(updated_account);
+        return res.send(updated_account);
+    } catch (err) {
+        res.send(err);
+        console.log(err);
+    }
+};
+
+const _change_password = async (req, res) => {
+    const { user_id, old_password, new_password } = req.body;
+
+    const user = await db
+        .getDb()
+        .collection("users")
+        .findOne({ _id: new ObjectId(user_id) });
+
+    if (user != null && (await bcrypt.compare(old_password, user.password))) {
+        const encrypted_new_password = await bcrypt.hash(new_password, 12);
+        const updated_user = await db
+            .getDb()
+            .collection("users")
+            .findOneAndUpdate(
+                { _id: user_id },
+                { $set: { password: encrypted_new_password } },
+                { returnDocument: "after" }
+            );
+
+        console.log(updated_user);
+        res.send(updated_user);
+    } else {
+        console.log("user doesn't exist or password does not match!");
+        res.send("user doesn't exist or password does not match!");
+    }
+};
+
 module.exports = {
     _create_account,
     _get_accounts,
@@ -1785,6 +2108,9 @@ module.exports = {
     _approve_license,
     _edit_billboard,
     _edit_billboard_on_map,
+    _add_board,
+    _edit_board,
+    _delete_board,
     _delete_billboard,
     _create_billboard,
     _get_billboards,
@@ -1804,4 +2130,11 @@ module.exports = {
     _edit_ward,
     _delete_district,
     _delete_ward,
+    _get_general_info,
+    _add_general_info,
+    _edit_general_info,
+    _delete_general_info,
+    _get_profile,
+    _update_profile,
+    _change_password,
 };

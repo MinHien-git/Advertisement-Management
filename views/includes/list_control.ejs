@@ -125,7 +125,8 @@
                                         <%}%>
                                     </div>
                                 </div>
-                                <div id="type__filter__container">
+                                <%if("types" in locals){%>
+                                    <div id="type__filter__container">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" role="switch" id="type__toggle" onchange="toggleFilter(this.id, 'type-info')">
                                         <label class="form-check-label" for="type__toggle">Phân loại</label>
@@ -144,6 +145,7 @@
                                         
                                     </div>
                                 </div>
+                                <%}%>
                                 <%if("ad_types" in locals){%>
                                         <div id="ad__type__filter__container">
                                         <div class="form-check form-switch">
@@ -163,19 +165,19 @@
                                         </div>
                                     </div>
                                 <%}%>
-                                <%if("land_types" in locals){%>
-                                    <div id="land__type__filter__container">
+                                <%if("place_types" in locals){%>
+                                    <div id="place__type__filter__container">
                                             <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="land__type__toggle" onchange="toggleFilter(this.id, 'land-type-info')">
-                                                <label class="form-check-label" for="land__type__toggle">Phân loại đất</label>
+                                                <input class="form-check-input" type="checkbox" role="switch" id="place__type__toggle" onchange="toggleFilter(this.id, 'place-type-info')">
+                                                <label class="form-check-label" for="place__type__toggle">Phân loại đất</label>
                                             </div>
-                                            <div class="border filter__info__container hidden" id="land-type-info">
+                                            <div class="border filter__info__container hidden" id="place-type-info">
                                                 
-                                                <%for (let i = 0; i < locals.land_types.length; i++){%>
+                                                <%for (let i = 0; i < locals.place_types.length; i++){%>
                                                     <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="<%=locals.land_types[i]%>">
+                                                    <input class="form-check-input" type="checkbox" value="" id="<%=locals.place_types[i]%>">
                                                     <label class="form-check-label" for="flexCheckDefault">
-                                                        <%=locals.land_types[i]%>
+                                                        <%=locals.place_types[i]%>
                                                     </label>
                                                 </div>
                                                 <%}%>
@@ -192,8 +194,13 @@
                                             <%for (let i = 0; i < locals.list_statuses.length; i++){%>
                                             <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="<%=locals.list_statuses[i]%>">
-                                            <label class="form-check-label" for="flexCheckDefault">
-                                                <%=locals.list_statuses[i]%>
+                                            <%let status_text =""; let status_color = ""%>
+                                            <%if(locals.item_list_type == "billboards"){%>
+                                                <%if(locals.list_statuses[i] == 1){status_text = "Đã quy hoạch"; status_color = "text-primary"%>
+                                                <%}else{status_text = "Chưa quy hoạch"; status_color = "text-danger"}%>
+                                            <%}%>
+                                            <label class="form-check-label fw-bold <%=status_color%>" for="flexCheckDefault">
+                                                <%=status_text%>
                                             </label>
                                         </div>
                                         <%}%>

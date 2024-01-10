@@ -152,7 +152,9 @@ const processQuery = (req, arr) => {
     });
   }
 
-  arr = arr.filter(processFilterQuery(req, (e) => e.type, [0, 1, 2, 3], "report_type"));
+  arr = arr.filter(
+    processFilterQuery(req, (e) => e.type, [0, 1, 2, 3], "report_type")
+  );
   arr = arr.filter(processFilterQuery(req, (e) => e.state, [1, 0], "request"));
 
   if (req.query.sort) {
@@ -215,18 +217,64 @@ const _post_profile = async (req, res) => {
 };
 
 const _get_map = async (req, res) => {
-  res.locals.billboards = await db
-    .getDb()
-    .collection("billboard")
-    .find({})
-    .toArray();
-  res.locals.reports = await db
-    .getDb()
-    .collection("reports")
-    .find({})
-    .toArray();
-  res.locals.billboards = processQuery(req, res.locals.billboards);
-  res.render("phan-cum-phuong/trangchu");
+  let billboards = await db.getDb().collection("billboards").find({}).toArray();
+  let ward = res.locals.ward ? res.locals.ward : "";
+  let district = res.locals.district ? res.locals.district : "";
+  let reports = [];
+
+  billboards = billboards.filter((i) => {
+    if (ward == "" && district == "") return i;
+    let address = i?.properties?.place.split(", ");
+
+    if (
+      (address.find((a) => a == ward) || !ward) &&
+      (address.find((a) => a == district) || !district)
+    ) {
+      return i;
+    }
+  });
+
+  if (res.locals.type_user == 1) {
+    reports = await db.getDb().collection("reports").find().toArray();
+
+    reports = reports.filter((i) => {
+      if (ward == "" && district == "") return i;
+      let address = i?.properties?.place.split(", ");
+
+      if (
+        (address.find((a) => a == ward) || !ward) &&
+        (address.find((a) => a == district) || !district)
+      ) {
+        return i;
+      }
+    });
+    let places = [];
+    let newRP = [];
+    for (let i = 0; i < reports.length; ++i) {
+      if (!places.includes(reports[i].properties.place)) {
+        places.push(reports[i].properties.place);
+      }
+    }
+    let temp = reports.slice();
+    for (let i = 0; i < places.length; ++i) {
+      newRP[i] = temp[i];
+      newRP[i].properties.details = temp.map((j) => {
+        if (j.properties.place === places[i]) {
+          return { ...j.properties };
+        }
+      });
+      console.log("details ", newRP[i].properties);
+    }
+
+    console.log(reports);
+    return res.render("phan-cum-phuong/trangchu", {
+      action: false,
+      billboards: billboards,
+      reports: newRP,
+    });
+  } else if (response.locals.type_user == 2) {
+    return res.redirect("/management/billboards");
+  }
 };
 
 //Danh sách bảng quảng cáo
@@ -356,10 +404,11 @@ const _get_license = async (req, res) => {
           geometry: 1,
         },
       },
-    ]).toArray();
+    ])
+    .toArray();
 
   res.locals.billboards = processQuery(req, res.locals.billboards);
-  
+
   res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachcapphep");
 };

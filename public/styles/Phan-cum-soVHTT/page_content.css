@@ -122,10 +122,12 @@ main {
   justify-content: space-between;
   width: 100%;
   padding: 1rem !important;
+  background-color:rgb(250, 250, 250);
+  border-radius: 5px;
 }
 
 #info__item {
-  max-width: 25%;
+  width: 25%;
 }
 
 .mock__image__container {
@@ -270,6 +272,10 @@ main {
   display: flex !important;
   flex-direction: row !important;
   justify-content: end;
+}
+
+.input__field{
+  font-size: 0.8rem !important;
 }
 
 /* Chrome, Safari, Edge, Opera */

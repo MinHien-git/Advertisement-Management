@@ -14,7 +14,7 @@
       rel="stylesheet"
       integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
       crossorigin="anonymous" />
-
+    <link rel="icon" href="/images/map.png" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
@@ -40,12 +40,16 @@
     <link
       rel="stylesheet"
       href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
-    <link rel="stylesheet" href="/styles/phan-cum-phuong/report.css" />
+    <link
+      rel="stylesheet"
+      href="/styles/phan-cum-nguoi-dan/authentication.css" />
+    <link rel="stylesheet" href="/styles/phan-cum-nguoi-dan/report.css" />
     <link rel="stylesheet" href="/styles/editor.css" />
     <script src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js"></script>
     <link
       href="https://cdn.quilljs.com/1.3.7/quill.snow.css"
       rel="stylesheet" />
+    <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
@@ -72,8 +76,8 @@
       </button>
     </main>
     <script>
-      let billboards = <%- JSON.stringify(locals.billboards) %>;
-      let reports = <%- JSON.stringify(locals.reports) %>;
+      let billboards = <%- JSON.stringify(billboards) %>;
+      let reports = <%- JSON.stringify(reports) %>;
     </script>
     <script src="/scripts/popup.js"></script>
     <script src="/scripts/phan-cum-phuong/trangchu.js"></script>
