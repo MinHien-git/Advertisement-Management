@@ -128,18 +128,20 @@
               </div>
             </div>
 
-            <% for (let i = 0; i < locals.billboards.length; i++) { %>
-              <% const advertisement = locals.billboards[i]; %>
-              
-              <% const id = advertisement._id; %>
-              <% const boards = advertisement.properties.boards; %>
-              <% for (let j = 0; j < boards.length; j++) { %>
-            <div id=<%='"list__item' + id + '"'%>
-              " class="card shadow-sm">
+            <% 
+              for (let i = 0; i < locals.billboards.length; i++) {
+                const advertisement = locals.billboards[i];
+                const id = advertisement._id;
+                const boards = advertisement.properties.boards;
+                for (let j = 0; j < boards.length; j++) { 
+                  let board = boards[j];
+                  advertisement.board = board;
+            %>
+            <div id="list__item<%= id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= id %>">
                 <ul class="list__flex">
                   <li class="list__col1">
-                    <%= boards[j].board_type %>
+                    <%= board.board_type %>
                   </li>
                   <li class="list__col2"><%= advertisement.properties.place %></li>
                   <li class="list__col3">
@@ -175,10 +177,9 @@
                         <li>
                           Kích thước:
                           <span class="fw-bold"
-                            ><%= boards[j].size %></span
+                            ><%= board.size %></span
                           >
                         </li>
-                      
                         <li>
                           Hình thức:
                           <span class="fw-bold"
@@ -194,17 +195,20 @@
                       </ul>
                     </li>
                     
-                    
-                   
                     <li>
                       <ul class="buttons__container">
-                        
+                        <%  
+                          const active_license = board.license.filter(
+                            e => { return e.state !== 4 && e.state !== 2} );
+                          if (active_license.length === 0) {
+                        %>
                         <li>
                           <button class="btn btn-primary" onclick='create_authorize_request(<%- JSON.stringify(advertisement) %>)'>
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C cấp phép
                           </button>
                         </li>
+                        <% } %>
         
                         <li>
                           <button class="btn btn-primary" onclick='create_edit_request(<%- JSON.stringify(advertisement) %>)'>
@@ -212,6 +216,7 @@
                             Tạo Y/C chỉnh sửa
                           </button>
                         </li>
+
                       </ul>
                     </li>
                   </ul>

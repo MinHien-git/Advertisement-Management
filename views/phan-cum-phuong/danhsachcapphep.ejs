@@ -116,22 +116,34 @@
               </div>
             </div>
 
-            <% for (let i=0; i < locals.licenses.length; i++) { %>
-            <% const advertisement = licenses[i].billboard[0] %>
-            <% const license = licenses[i] %>
+            <%
+              for (let i = 0; i < locals.billboards.length; i++) {
+                const advertisement = locals.billboards[i];
+                for (let j = 0; j < advertisement.properties.boards.length; j++) {
+                  const board = advertisement.properties.boards[j];
+                  const license = board.license[0];
+            %>
             <div id="<%='list__item' + license._id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= license._id  %>">
                 <ul class="list__flex">
                   <li class="list__col1">
-                    <%= license?.company_name %>
+                    <%= license.company_name %>
                   </li>
                   <li class="list__col2">
                     <%= advertisement.properties.place %>
                   </li>
                   <% if (license) { %> 
-                    <% if (license.state===0) {%>
+                    <% if (license.state===0) { %>
                     <li class="list__col3 fw-semibold" style="color: #329a44">
                       Đã duyệt
+                    </li>
+                    <% } else if (license.state===4) { %>
+                    <li class="list__col3 fw-semibold" style="color: #ff7b7b">
+                      Hết hạn
+                    </li>
+                    <% } else if (license.state===2) { %>
+                    <li class="list__col3 fw-semibold" style="color: #ff7b7b">
+                      Đã hủy
                     </li>
                     <% } else { %>
                     <li class="list__col3 fw-semibold" style="color: #e7b400">
@@ -166,13 +178,13 @@
                 <div class="card-body">
                   <ul id="full__info__list">
                     <li class="mock__image__container">
-                      <% if (license.images?.[0]) { %>
-                        <img class="ad__image" src="<%= advertisement.license.images[0] %>" alt="hinh1">
+                      <% if (license?.images?.[0]) { %>
+                        <img class="ad__image" src="<%= license.images[0] %>" alt="hinh1">
                       <% } else { %> 
                         <div class="mock__image">&nbsp;</div>
                       <% } %>
-                      <% if (license.images?.[1]) { %>
-                        <img class="ad__image" src="<%= advertisement.license.images[1] %>" alt="hinh1">
+                      <% if (license?.images?.[1]) { %>
+                        <img class="ad__image" src="<%= license.images[1] %>" alt="hinh2">
                       <% } else { %> 
                         <div class="mock__image">&nbsp;</div>
                       <% } %>
@@ -182,31 +194,22 @@
                       <ul>
                         <li>
                           Kích thước:
-                          <span class="fw-bold">
-                            <%= advertisement.properties?.size %>
-                          </span>
-                        </li>
-                        <li>
-                          Số lượng:
-                          <span class="fw-bold">
-                            <%= advertisement.properties?.amount %>
-                          </span>
+                          <span class="fw-bold"> <%= board.size %></span>
                         </li>
                         <li>
                           Hình thức:
-                          <span class="fw-bold">
-                            <%= advertisement.properties?.type_advertise %>
-                          </span>
+                          <span class="fw-bold"> <%= advertisement.properties.type_advertise %></span>
                         </li>
                         <li>
                           Phân loại:
-                          <span class="fw-bold">
-                            <%= advertisement.properties?.place_type %>
-                          </span>
+                          <span class="fw-bold"> <%= advertisement.properties.place_type %></span>
+                        </li>
+                        <li>
+                          Loại bảng:
+                          <span class="fw-bold"> <%= board.board_type %></span>
                         </li>
                       </ul>
                     </li>
-
                     <li>
                       <p class="fw-bold">Thông tin công ty</p>
                       <ul>
@@ -228,7 +231,6 @@
                         </li>
                       </ul>
                     </li>
-
                     <li>
                       <ul class="buttons__container">
                         <% if (license.state===1) { %>
@@ -248,7 +250,7 @@
                 </div>
               </div>
             </div>
-            <% } %>
+            <% } } %>
 
             <div
               class="modal fade"

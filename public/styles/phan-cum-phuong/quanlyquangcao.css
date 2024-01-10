@@ -4,11 +4,11 @@
 }
 
 .list__flex .list__col1 {
-    width: 8rem;
+    width: 16rem;
 }
 
 .list__flex .list__col2 {
-    width: calc(100% - 11rem);
+    width: calc(100% - 19rem);
 }
 
 .list__flex .list__col3 {

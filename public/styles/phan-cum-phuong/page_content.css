@@ -96,10 +96,10 @@ main {
 }
 
 .mock__image {
-  width: 150px;
-  height: 200px;
+  width: 160px;
+  height: 100px;
   border-radius: 5px;
-  background-color: rgba(0, 255, 255, 0.366);
+  background-color: rgba(0, 0, 0, 0.150);
 }
 
 .buttons__container {
@@ -214,6 +214,6 @@ main {
 }
 
 .ad__image {
-  width: 150px;
-  height: 150px;
+  width: 160px;
+  height: 100px;
 }

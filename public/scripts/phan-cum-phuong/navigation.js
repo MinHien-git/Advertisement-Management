@@ -14,20 +14,11 @@ document.getElementById("billboard-list").addEventListener("click", () => {
   window.location.href = "/dashboard/advertise";
 });
 
-function navigate(item_id) {
-  if (item_id == "to__list__btn") {
-    let link = "/dashboard/advertise";
-    window.location.href = link;
-  }
-  if (item_id == "map__btn") {
-    let link = "/dashboard";
-    window.location.href = link;
-  }
-}
-
 function navigate(item_id, id) {
-  if (item_id == "profile") link = "/dashboard/profile/" + id;
-  console.log(link);
+  let link = "/dashboard";
+  if (item_id == "to__list__btn")   link = "/dashboard/advertise"
+  if (item_id == "map__btn")        link = "/dashboard";
+  if (item_id == "profile")         link = "/dashboard/profile/" + id;
   window.location.href = link;
 }
 

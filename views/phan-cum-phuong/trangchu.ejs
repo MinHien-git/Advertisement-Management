@@ -72,7 +72,8 @@
       </button>
     </main>
     <script>
-      let billboards = <%- JSON.stringify(billboards) %>;
+      let billboards = <%- JSON.stringify(locals.billboards) %>;
+      let reports = <%- JSON.stringify(locals.reports) %>;
     </script>
     <script src="/scripts/popup.js"></script>
     <script src="/scripts/phan-cum-phuong/trangchu.js"></script>

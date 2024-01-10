@@ -23,17 +23,17 @@ const transporter = nodemailer.createTransport({
 });
 
 const getAddress = (req, obj) => {
-  if (req.path === "/dashboard/advertise") {
+  if (
+    req.path === "/dashboard/advertise" ||
+    req.path === "/dashboard/license"
+  ) {
     return obj.properties.place;
   }
   if (req.path === "/dashboard/report") {
     return obj.place;
   }
-  if (
-    req.path === "/dashboard/request/edit" ||
-    req.path === "/dashboard/license"
-  ) {
-    return obj?.billboard[0]?.properties?.place;
+  if (req.path === "/dashboard/request/edit") {
+    return obj.billboard[0].properties.place;
   }
 };
 
@@ -116,23 +116,26 @@ const processQuery = (req, arr) => {
       )
     );
   }
+
   if (req.path === "/dashboard/license") {
-    arr = arr.filter(
-      processFilterQuery(req, (e) => e.state, [0, 1], "license")
-    );
+    arr.map(e1 => {
+        e1.properties.boards = e1.properties.boards.filter(
+          processFilterQuery(req, e2 => e2.license.state, [0, 1], "license")
+        );
+        e1.properties.boards = e1.properties.boards.filter(e2 => e2.license.length > 0);
+        return e1;
+      });
+    arr = arr.filter(e => e.properties.boards.length > 0);
   } else if (req.path === "/dashboard/advertise") {
-    arr = arr.filter(
-      processFilterQuery(
-        req,
-        (e) => e.licenses[0]?.state,
-        [0, 1, undefined],
-        "license"
-      )
-    );
+    arr.map(e1 => {
+      e1.properties.boards = e1.properties.boards.filter(
+        processFilterQuery(req, e => e.license.state, [0, 1, undefined], "license")
+      );
+      return e1;
+    });
   }
-  arr = arr.filter(
-    processFilterQuery(req, (e) => e.type, [0, 1, 2, 3], "report_type")
-  );
+
+  arr = arr.filter(processFilterQuery(req, (e) => e.type, [0, 1, 2, 3], "report_type"));
   arr = arr.filter(processFilterQuery(req, (e) => e.state, [1, 0], "request"));
 
   if (req.query.sort) {
@@ -201,14 +204,19 @@ const _get_map = async (req, res) => {
     .collection("billboard")
     .find({})
     .toArray();
+  res.locals.reports = await db
+    .getDb()
+    .collection("reports")
+    .find({})
+    .toArray();
   res.render("phan-cum-phuong/trangchu");
 };
 
 //Danh sách bảng quảng cáo
 const _get_advertisement = async (req, res) => {
-  res.locals.billboards = await await db
+  res.locals.billboards = await db
     .getDb()
-    .collection("billboards-manage")
+    .collection("billboard")
     .aggregate([
       {
         $unwind: "$properties.boards",
@@ -266,42 +274,91 @@ const _get_advertisement = async (req, res) => {
       },
     ])
     .toArray();
-  console.log(res.locals.billboards);
-  //res.locals.billboards = processQuery(req, res.locals.billboards);
-  //res.locals.ward_list = getWardList(req);
+  res.locals.billboards = processQuery(req, res.locals.billboards);
+  res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/quanlyquangcao");
 };
 
 //Yêu cầu cấp phép biển quáng cáo
 const _get_license = async (req, res) => {
-  res.locals.licenses = await db
+  res.locals.billboards = await db
     .getDb()
-    .collection("licenses")
+    .collection("billboard")
     .aggregate([
       {
+        $unwind: "$properties.boards",
+      },
+      {
         $lookup: {
-          from: "billboard",
-          localField: "billboard",
+          from: "licenses",
+          localField: "properties.boards.license",
           foreignField: "_id",
-          as: "billboard",
+          as: "properties.boards.license",
         },
       },
-    ])
-    .toArray();
-  res.locals.licenses = processQuery(req, res.locals.licenses);
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          boards: "$properties.boards",
+          geometry: 1,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          type: {
+            $first: "$type",
+          },
+          properties: {
+            $first: "$properties",
+          },
+          boards: {
+            $push: "$boards",
+          },
+          geometry: {
+            $first: "$geometry",
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          "properties.boards": "$boards",
+          geometry: 1,
+        },
+      },
+    ]).toArray();
+
+  res.locals.billboards = processQuery(req, res.locals.billboards);
+  
   res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachcapphep");
 };
 
 const _post_license_request = async (req, res) => {
-  let { id, email, from, name, contact, start, end, details } = req.body;
+  let { id, board_id, email, from, name, contact, start, end, details } = req.body;
 
   let images = req.files.map((v) => {
     return (v.destination + "/" + v.filename).substring(6);
   });
 
   let license = new License(
-    new ObjectId(id),
+    {
+      billboard_id: new ObjectId(id),
+      board_id: new ObjectId(board_id),
+    },
     name,
     contact,
     start,
@@ -374,8 +431,6 @@ const _post_report_edit = async (req, res) => {
       <p>Vui lòng không phản hồi lại email này.</p>`,
     };
 
-    console.log(report);
-    console.log(mailOptions);
     transporter.sendMail(mailOptions, (error, _info) => {
       if (error) {
         console.error("Error sending email: ", error);
@@ -501,9 +556,7 @@ const _post_request_edit = async (req, res) => {
     req.body.type_billboard,
     null,
     {
-      amount: "1 trụ/bảng",
       place: req.body.place,
-      size: "2.5mx10m",
       place_type: land_type,
       type: billboard_type,
       type_advertise: ad_type,
@@ -511,10 +564,12 @@ const _post_request_edit = async (req, res) => {
     },
     req.body.name
       ? new License(
+          null,
           req.body.name,
           req.body.contact,
           req.body.start,
-          req.body.end
+          req.body.end,
+          images
         )
       : null
   );
