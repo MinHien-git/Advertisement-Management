@@ -1360,7 +1360,6 @@ const _create_billboard = async (req, res) => {
 
 //Cấp phép quảng cáo dựa trên yêu cầu cấp phép của phường
 const _get_licenses = async (req, res) => {
-    console.log(res.locals);
     let search_val = req.query.search;
     let sort_val = req.query.sort;
 

@@ -1,7 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { getDb } = require("../database/database");
 const User = require("../models/users.model");
-const { request, response } = require("../routes/phuongquan.route");
 const auth_ultis = require("../utils/authentication");
 const bcrypt = require("bcrypt");
 
@@ -12,7 +11,7 @@ const _get_login = (request, response) => {
 const _login = async (request, response) => {
   let { email, password } = request.body;
   let user = new User(email, password);
-  console.log(request.locals);
+  console.log(email, password);
   let _user = await user._login();
   if (_user) {
     auth_ultis.create_user_session(request, _user, () => {
@@ -33,7 +32,7 @@ const _get_register = (request, response) => {
 
 const _register = async (request, response) => {
   let { email, password, name, phone } = request.body;
-  let user = new User(email, password, phone, name);
+  let user = new User(email, password, 0, phone, name);
 
   if (await user._register()) {
     return response.redirect("/");

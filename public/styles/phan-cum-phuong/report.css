@@ -56,6 +56,7 @@
 #request-popup .date-information > * {
   width: 50%;
 }
+#report-request-section-form-container,
 #report-section-form-container {
   width: 80%;
   height: auto;
@@ -65,7 +66,11 @@
   padding: 2rem 1rem;
   position: relative;
 }
-
+#report-request-section-form-container #inscreen-report-close,
+#report-request-section-form-container #inscreen-request-close {
+  right: 1.5rem;
+  top: 2rem;
+}
 #authentication-form-button-container {
   display: flex;
   justify-content: center;
@@ -230,7 +235,11 @@ hr {
   margin-top: 1rem;
   padding-block: 0.75rem;
 }
+#report-request-section-form-container {
+  height: auto;
+}
 @media only screen and (min-width: 600px) {
+  #report-request-section-form-container,
   #report-section-form-container {
     width: 30%;
     max-width: 25rem;
@@ -241,4 +250,14 @@ hr {
     padding: 1rem 1rem;
     position: relative;
   }
+  #report-request-section-form-container {
+    height: auto;
+  }
+}
+#inscreen-form-report .container {
+  padding: 0;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

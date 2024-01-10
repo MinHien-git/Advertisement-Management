@@ -15,15 +15,19 @@
 }
 #inscreen-form-login,
 #inscreen-form-report,
-#inscreen-form-register {
+#inscreen-form-register,
+#inscreen-form-report {
   display: none;
 }
 .active#inscreen-form-login,
 .active#inscreen-form-report,
-.active#inscreen-form-register {
+.active#inscreen-form-register,
+.active#inscreen-form-report {
   display: flex;
 }
-
+#inscreen-form-report {
+  height: auto;
+}
 #authentication-section-form-container {
   width: 80%;
   height: auto;

@@ -92,6 +92,81 @@ function setInfoBoard() {
   }
 }
 
+function setReportBoard() {
+  if (current_feature) {
+    currentBoard = current_feature.properties;
+    current_index = 0;
+    infoboards.innerHTML = "";
+    let body = "";
+    for (let i = 0; i < currentBoard.details.length; ++i) {
+      body += `<div class="report-card">
+      ${currentBoard.details[i].images ? `<div class="image-container">` : ""}
+      ${
+        currentBoard.details[i].sender_email
+          ? `<p>${currentBoard.details[i].sender_email}</p>`
+          : ""
+      }
+      ${
+        currentBoard.details[i].sender_name
+          ? `<p>${currentBoard.details[i].sender_name}</p>`
+          : ""
+      }
+      ${
+        currentBoard.details[i].sender_number
+          ? `<p>${currentBoard.details[i].sender_number}</p>`
+          : ""
+      }
+      ${
+        currentBoard.details[i].send_day
+          ? `<p>${currentBoard.details[i].send_day}</p>`
+          : ""
+      }
+      ${currentBoard.details[i].details}
+      </div>`;
+    }
+
+    infoboards.innerHTML = `<div class="info_container">
+        <div class="info-close"><img src = "/images/close.png"></div>
+        ${body}
+        </div>
+        `;
+
+    $(".info-close").on("click", () => {
+      infoboards.classList.remove("active");
+    });
+    $(".navigate-left").on("click", () => {
+      current_index--;
+
+      if (current_index < 0) {
+        current_index = currentBoard.length - 1;
+      }
+      $(".billboard-type").text(currentBoard[current_index]?.board_type);
+      $(".size").html(
+        `<p class="size"><span class="bold">Kích thước: </span>` +
+          currentBoard[current_index]?.size
+      );
+    });
+    $(".navigate-right").on("click", () => {
+      current_index++;
+
+      if (current_index >= currentBoard.length) {
+        current_index = 0;
+      }
+      $(".billboard-type").text(currentBoard[current_index]?.board_type);
+      $(".size").html(
+        `<p class="size"><span class="bold">Kích thước: </span>` +
+          currentBoard[current_index]?.size
+      );
+    });
+    let request_btn = $("#info .request");
+    if (request_btn) {
+      request_btn.on("click", () => {
+        get_resquest(current_feature.properties.place);
+      });
+    }
+  }
+}
+
 function onMapClick(e) {
   let data;
   fetch(
@@ -269,11 +344,29 @@ window.onload = function () {
 
       attributionDiv.setAttribute("id", "content" + feature._id);
       attributionDiv.innerHTML = `<p>${feature.properties.place}</p>
-      <p><span class="bold">Trạng thái:</span>${
-        feature.properties?.state === 0 ? "Đã xử lí" : "Chưa xử lí"
-      } </p>
+      ${
+        feature.properties.details.constructor !== Array
+          ? `<p><span class="bold">Trạng thái:</span>
+      ${feature.properties?.state === 0 ? "Đã xử lí" : "Chưa xử lí"} </p>
       <p><span class="bold">Nội dung báo cáo:</span></p> 
-      ${feature.properties.details}`;
+      ${feature.properties.details}`
+          : `<p><span class="bold">Số báo cáo:</span>
+      ${feature.properties?.details.length} </p><button class=">Chi tiết</button>`
+      }`;
+      if (feature.properties.details.constructor === Array) {
+        const info_button = document.createElement("button");
+        info_button.classList.add("info");
+        info_button.classList.add("full");
+        info_button.innerHTML = `<img src="/images/information.png" alt="information">Thông tin`;
+        attributionDiv.appendChild(info_button);
+        info_button.addEventListener("click", (e) => {
+          current_feature = feature;
+          setReportBoard();
+          if (!infoboards.classList.contains("active"))
+            infoboards.classList.add("active");
+        });
+      }
+
       return L.circleMarker(latlng, geojsonReportMarkerOptions).bindPopup(
         attributionDiv
       );
