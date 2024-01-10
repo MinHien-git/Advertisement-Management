@@ -1,12 +1,12 @@
 let report_node;
-
-function get_report(position) {
+let report_index;
+function get_report(feature) {
   if (report_node) {
     body.removeChild(report_node);
   }
   let report = `
     <section class="active popup" id="report-popup">
-    <div id="report-section-form-container">
+    <div id="report-request-section-form-container">
     <div id="inscreen-report-close" class="inscreen-report-close">
       <img
         id="inscreen-authen-close"
@@ -15,56 +15,33 @@ function get_report(position) {
       />
     </div>
     <form
-      id="inscreen-form-login"
+      id="inscreen-form-report"
       class="form-container active"
       method="post"
       action="/dashboard/request/edit"
     >
       <h2>Yêu cầu Chỉnh sửa</h2>
       <div class="form-section">
-        <label for="street">Địa chỉ yêu cầu:</label>
-        <textarea id="street">${position}</textarea>
+        <p id="street">${feature.properties.place}</p>
       </div>
       <h5>Thông tin mới:</h5>
       <div class="form-section">
-        <label for="name">Điểm đặt quảng cáo:</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value=""
-          placeholder="dd/mm/yyyy"
+        <label for="place_type">Thông tin cần sửa:</label>
+        <select class="form-select"
+          id="select-option"
+          name="select-option"
+          aria-label="ad type selector"
+          required
         />
+          <option value="">Chọn...</option>
+          <option value="0">Trụ quảng cáo</option>
+          <option value="1">Biển quảng cáo</option>
+        </select>
       </div>
-      <div class="form-section file-section">
-        <p>Thông tin đính kèm:</p>
-        <div class="file-button">
-          <label for="attached_files">Chọn</label>
-          <input
-            type="file"
-            name="attached_files"
-            id="attached_files"
-          />
-        </div>
+      <div class="container">
       </div>
       
-      <div class="form-section">
-        <label for="name">Thời điểm chỉnh sửa:</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value=""
-          placeholder="Họ và tên người báo cáo"
-        />
-      </div>
-      <div class="form-section">
-        <label for="tel">Thông tin chỉnh sửa:</label>
-        <div id="editor"></div>
-      </div>
-      <div class="form-section">
-        <button class="submit-button submit">Gửi</button>
-      </div>
+      
     </form>
   </div>
   </section> `;
@@ -81,7 +58,101 @@ function get_report(position) {
     report_node = null;
   });
 
-  var quill = new Quill("#editor", {
-    theme: "snow",
+  $("#select-option").on("change", function (e) {
+    report_index = e.target.value;
+    console.log(report_index);
+    if (report_index == 0) {
+      $("#report-request-section-form-container .container")
+        .html(`<div class="form-section">
+      <label for="place_type">Phân loại:</label>
+      <select class="form-select"
+        id="place_type"
+        name="place_type"
+        aria-label="ad type selector"
+        required
+      />
+        <option value="">Chọn...</option>
+        <option value="">Chọn...</option>
+      </select>
+    </div>
+    <div class="form-section">
+      <label for="advertise_type">Loại quảng cáo:</label>
+      <select class="form-select"
+        id="advertise_type"
+        name="advertise_type"
+        aria-label="ad type selector"
+        required
+      />
+        <option value="">Chọn...</option>
+        <option value="">Chọn...</option>
+      </select>
+    </div>
+    <div class="form-section">
+      <label for="status">Quy hoạch:</label>
+      <select class="form-select"
+        id="status"
+        name="status"
+        aria-label="ad type selector"
+        required
+      />
+        <option value="">Chọn...</option>
+        <option value="">Chọn...</option>
+      </select>
+    </div>
+    <div class="form-section">
+      <label for="tel">Thông tin chỉnh sửa:</label>
+      <div id="editor"></div>
+    </div>
+    <div class="form-section">
+      <button class="submit-button submit">Gửi</button>
+    </div>`);
+
+      var quill = new Quill("#editor", {
+        theme: "snow",
+      });
+    } else if (report_index == 1) {
+      $("#report-request-section-form-container .container")
+        .html(`<div class="form-section">
+    <label for="place_type">Loại bảng:</label>
+    <select class="form-select"
+      id="place_type"
+      name="place_type"
+      aria-label="ad type selector"
+      required
+    />
+      <option value="">Chọn...</option>
+      <option value="">Chọn...</option>
+    </select>
+  </div>
+  <div class="form-section">
+    <label for="advertise_type">kích thước:</label>
+    <input type="text" id="name" name="name" value="" placeholder ="XxY">
+  </div>
+  <div class="form-section">
+    <label for="status">Quy hoạch:</label>
+    <select class="form-select"
+      id="status"
+      name="status"
+      aria-label="ad type selector"
+      required
+    />
+      <option value="">Chọn...</option>
+      <option value="">Chọn...</option>
+    </select>
+  </div>
+  <div class="form-section">
+    <label for="tel">Thông tin chỉnh sửa:</label>
+    <div id="editor"></div>
+  </div>
+  <div class="form-section">
+    <button class="submit-button submit">Gửi</button>
+  </div>`);
+
+      var quill = new Quill("#editor", {
+        theme: "snow",
+      });
+    } else if (report_index == "") {
+      $("#report-request-section-form-container .container").html("");
+    }
   });
 }
