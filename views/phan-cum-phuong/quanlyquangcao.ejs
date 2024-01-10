@@ -197,12 +197,18 @@
                     
                     <li>
                       <ul class="buttons__container">
+                        <%  
+                          const active_license = board.license.filter(
+                            e => { return e.state !== 4 && e.state !== 2} );
+                          if (active_license.length === 0) {
+                        %>
                         <li>
                           <button class="btn btn-primary" onclick='create_authorize_request(<%- JSON.stringify(advertisement) %>)'>
                             <i class="bi bi-card-list"></i>
                             Tạo Y/C cấp phép
                           </button>
                         </li>
+                        <% } %>
         
                         <li>
                           <button class="btn btn-primary" onclick='create_edit_request(<%- JSON.stringify(advertisement) %>)'>
@@ -210,6 +216,7 @@
                             Tạo Y/C chỉnh sửa
                           </button>
                         </li>
+
                       </ul>
                     </li>
                   </ul>

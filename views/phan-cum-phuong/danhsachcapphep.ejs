@@ -138,9 +138,13 @@
                       Đã duyệt
                     </li>
                     <% } else if (license.state===4) { %>
-                      <li class="list__col3 fw-semibold" style="color: #ff7b7b">
-                        Hết hạn
-                      </li>
+                    <li class="list__col3 fw-semibold" style="color: #ff7b7b">
+                      Hết hạn
+                    </li>
+                    <% } else if (license.state===2) { %>
+                    <li class="list__col3 fw-semibold" style="color: #ff7b7b">
+                      Đã hủy
+                    </li>
                     <% } else { %>
                     <li class="list__col3 fw-semibold" style="color: #e7b400">
                       Chưa duyệt
@@ -246,7 +250,7 @@
                 </div>
               </div>
             </div>
-            <% console.log(license); } } %>
+            } } %>
 
             <div
               class="modal fade"

@@ -204,6 +204,11 @@ const _get_map = async (req, res) => {
     .collection("billboard")
     .find({})
     .toArray();
+  res.locals.reports = await db
+    .getDb()
+    .collection("reports")
+    .find({})
+    .toArray();
   res.render("phan-cum-phuong/trangchu");
 };
 
@@ -551,9 +556,7 @@ const _post_request_edit = async (req, res) => {
     req.body.type_billboard,
     null,
     {
-      amount: "1 trụ/bảng",
       place: req.body.place,
-      size: "2.5mx10m",
       place_type: land_type,
       type: billboard_type,
       type_advertise: ad_type,
@@ -561,10 +564,12 @@ const _post_request_edit = async (req, res) => {
     },
     req.body.name
       ? new License(
+          null,
           req.body.name,
           req.body.contact,
           req.body.start,
-          req.body.end
+          req.body.end,
+          images
         )
       : null
   );
