@@ -274,6 +274,10 @@ main {
   justify-content: end;
 }
 
+.input__field{
+  font-size: 0.8rem !important;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

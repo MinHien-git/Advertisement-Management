@@ -5,6 +5,7 @@ const User = require("../models/users.model");
 const { ObjectId } = require("mongodb");
 const { v4 } = require("uuid");
 const nodemailer = require("nodemailer");
+const bcrypt = require("bcrypt");
 
 function runAtSpecificTimeOfDay(hour, minutes, func) {
     const twentyFourHours = 86400000;
@@ -672,7 +673,7 @@ async function processList(collection, search_queries) {
                 item_list[i].start_date = changeDateFormat(
                     new Date(item_list[i].start_date)
                 );
-                item_list[i].start_date = changeDateFormat(
+                item_list[i].end_date = changeDateFormat(
                     new Date(item_list[i].end_date)
                 );
             }
@@ -916,7 +917,6 @@ const _get_billboards = async (req, res) => {
     let sort_val = req.query.sort;
 
     let search_query = createSearchQuery(search_val);
-
     res.locals.type_user = 2;
     res.locals.isAuth = true;
     // res.locals.billboards = await db
@@ -1360,6 +1360,7 @@ const _create_billboard = async (req, res) => {
 
 //Cấp phép quảng cáo dựa trên yêu cầu cấp phép của phường
 const _get_licenses = async (req, res) => {
+    console.log(res.locals);
     let search_val = req.query.search;
     let sort_val = req.query.sort;
 
@@ -1461,16 +1462,8 @@ const _decline_license = async (req, res) => {
                 { returnDocument: "after" }
             );
 
-        await db
-            .getDb()
-            .collection("billboard")
-            .findOneAndUpdate(
-                { _id: new ObjectId(license.billboard) },
-                { $set: { license: license._id } },
-                { returnDocument: "after" }
-            );
-        console.log("license for billboard " + id + " declined.");
-        return res.send("license for billboard " + id + " declined.");
+        console.log("license" + id + " declined.");
+        return res.send("license " + id + " declined.");
     } catch (err) {
         res.send(err);
         console.error(err);
@@ -2050,6 +2043,64 @@ const _delete_general_info = async (req, res) => {
     }
 };
 
+const _get_profile = async (req, res) => {
+    res.locals.type_user = 2;
+    res.locals.isAuth = true;
+    const profile = await db
+        .getDb()
+        .collection("users")
+        .findOne({ _id: new ObjectId(res.locals.uid) });
+
+    res.locals.profile = profile;
+    res.render("phan-cum-soVHTT/ThongTinTaiKhoan");
+};
+
+const _update_profile = async (req, res) => {
+    const { user_id, birth, phone, name } = req.body;
+    try {
+        const updated_account = await db
+            .getDb()
+            .collection("users")
+            .findOneAndUpdate(
+                { _id: new ObjectId(user_id) },
+                { $set: { name: name, birth: birth, phone: phone } },
+                { returnDocument: "after" }
+            );
+        console.log(updated_account);
+        return res.send(updated_account);
+    } catch (err) {
+        res.send(err);
+        console.log(err);
+    }
+};
+
+const _change_password = async (req, res) => {
+    const { user_id, old_password, new_password } = req.body;
+
+    const user = await db
+        .getDb()
+        .collection("users")
+        .findOne({ _id: new ObjectId(user_id) });
+
+    if (user != null && (await bcrypt.compare(old_password, user.password))) {
+        const encrypted_new_password = await bcrypt.hash(new_password, 12);
+        const updated_user = await db
+            .getDb()
+            .collection("users")
+            .findOneAndUpdate(
+                { _id: user_id },
+                { $set: { password: encrypted_new_password } },
+                { returnDocument: "after" }
+            );
+
+        console.log(updated_user);
+        res.send(updated_user);
+    } else {
+        console.log("user doesn't exist or password does not match!");
+        res.send("user doesn't exist or password does not match!");
+    }
+};
+
 module.exports = {
     _create_account,
     _get_accounts,
@@ -2084,4 +2135,7 @@ module.exports = {
     _add_general_info,
     _edit_general_info,
     _delete_general_info,
+    _get_profile,
+    _update_profile,
+    _change_password,
 };

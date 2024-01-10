@@ -113,3 +113,9 @@ router.delete(
     "/management/general/general_types",
     SOVHTTcontroller._delete_general_info
 );
+
+
+//quản lí thông tin tài khoản cá nhân
+router.get("/management/profile",SOVHTTcontroller._get_profile);
+router.put("/management/profile",SOVHTTcontroller._update_profile);
+router.put("/management/profile/password",SOVHTTcontroller._change_password);
