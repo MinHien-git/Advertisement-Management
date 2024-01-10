@@ -10,6 +10,10 @@ router.get("/management/billboards/map", mapController._manage_map);
 
 router.put("/management/billboards/", SOVHTTcontroller._edit_billboard);
 
+router.post("/management/billboards/boards", SOVHTTcontroller._add_board);
+router.put("/management/billboards/boards", SOVHTTcontroller._edit_board);
+router.delete("/management/billboards/boards", SOVHTTcontroller._delete_board);
+
 //thao tác trên map
 router.post(
     "/management/billboards/map/create",
@@ -42,7 +46,10 @@ router.get("/management/edit_requests", SOVHTTcontroller._get_edit_requests);
 //duyệt
 router.put("/management/edit_requests", SOVHTTcontroller._approve_edit_request);
 //bác bỏ
-router.put("/management/edit_requests/decline", SOVHTTcontroller._decline_edit_request);
+router.put(
+    "/management/edit_requests/decline",
+    SOVHTTcontroller._decline_edit_request
+);
 
 //Duyệt danh sách báo cáo
 router.get("/management/reports", SOVHTTcontroller._get_reports);
@@ -59,12 +66,50 @@ router.delete("/management/accounts", SOVHTTcontroller._delete_account);
 router.post("/management/accounts", SOVHTTcontroller._create_account);
 module.exports = router;
 
-
 //Quản lí Quận, Phường
-router.get("/management/general/districts_wards", SOVHTTcontroller._get_districts_wards);
-router.post("/management/general/districts_wards/district", SOVHTTcontroller._create_district);
-router.post("/management/general/districts_wards/ward", SOVHTTcontroller._create_ward);
-router.put("/management/general/districts_wards/district", SOVHTTcontroller._edit_district);
-router.put("/management/general/districts_wards/ward", SOVHTTcontroller._edit_ward);
-router.delete("/management/general/districts_wards/district", SOVHTTcontroller._delete_district);
-router.delete("/management/general/districts_wards/ward", SOVHTTcontroller._delete_ward);
+router.get(
+    "/management/general/districts_wards",
+    SOVHTTcontroller._get_districts_wards
+);
+router.post(
+    "/management/general/districts_wards/district",
+    SOVHTTcontroller._create_district
+);
+router.post(
+    "/management/general/districts_wards/ward",
+    SOVHTTcontroller._create_ward
+);
+router.put(
+    "/management/general/districts_wards/district",
+    SOVHTTcontroller._edit_district
+);
+router.put(
+    "/management/general/districts_wards/ward",
+    SOVHTTcontroller._edit_ward
+);
+router.delete(
+    "/management/general/districts_wards/district",
+    SOVHTTcontroller._delete_district
+);
+router.delete(
+    "/management/general/districts_wards/ward",
+    SOVHTTcontroller._delete_ward
+);
+
+//Quản lí thông tin chung (thông tin loại bảng quảng cáo,...)
+router.get(
+    "/management/general/general_types",
+    SOVHTTcontroller._get_general_info
+);
+router.post(
+    "/management/general/general_types",
+    SOVHTTcontroller._add_general_info
+);
+router.put(
+    "/management/general/general_types",
+    SOVHTTcontroller._edit_general_info
+);
+router.delete(
+    "/management/general/general_types",
+    SOVHTTcontroller._delete_general_info
+);

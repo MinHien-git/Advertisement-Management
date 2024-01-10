@@ -227,7 +227,10 @@ function filterItems() {
     }
 
     let type_arr = [];
-    if (type_filter.querySelector("#type__toggle").checked) {
+    if (
+        window.location.pathname.includes("billboards") == false &&
+        type_filter.querySelector("#type__toggle").checked
+    ) {
         let type_opts = type_filter.querySelector("#type-info");
 
         let selected_opts = type_opts.querySelectorAll(

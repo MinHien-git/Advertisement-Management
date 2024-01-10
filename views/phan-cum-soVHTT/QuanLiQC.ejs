@@ -66,9 +66,8 @@
 
             <div id="cards__container" class="overflow-auto">
                 <% for (let i = 0; i < locals.billboards.length; i++) { %>
-                <% const advertisement = locals.billboards[i]; %>
+                <% const advertisement = locals.billboards[i];%>
                 <% const id = advertisement._id; %>
-                <%console.log(id)%>
               <div id="<%= id%>"
                 class="card shadow-sm">
                 <div class="card-header" id="brief__info<%= id %>">
@@ -108,6 +107,7 @@
                   id="full__info<%= id %>"
                   class="collapse"
                   aria-labelledby="brief__info<%= id %>"
+                  style="background-color:rgb(253, 253, 253);"
                 >
                   <div class="card-body">
                     <ul id="collapse__body" class="d-flex" style="flex-direction:column">
@@ -115,13 +115,10 @@
                                 <li>
                                   <button
                                     class="btn btn-success me-3"
-                                    onclick="passToEditModal(this)"
+                                    onclick="passToModal(this, 'add__board')"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#Modify__modal"
+                                    data-bs-target="#add__board__modal"
                                     data-billboard-id="<%=id%>"
-                                    data-billboard-address="<%= advertisement.properties.place %>"
-                                    data-billboard-size="<%= advertisement.properties.size %>"
-                                    data-billboard-amount="<%= advertisement.properties.amount %>"
                                     >
                                     +&nbsp;Thêm bảng quảng cáo
                                   </button>
@@ -129,13 +126,14 @@
                                 <li>
                                   <button
                                     class="btn btn-outline-primary me-3"
-                                    onclick="passToEditModal(this)"
+                                    onclick="passToModal(this, 'edit__billboard')"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#Modify__modal"
+                                    data-bs-target="#edit__billboard__modal"
                                     data-billboard-id="<%=id%>"
-                                    data-billboard-address="<%= advertisement.properties.place %>"
-                                    data-billboard-size="<%= advertisement.properties.size %>"
-                                    data-billboard-amount="<%= advertisement.properties.amount %>"
+                                    data-billboard-address="<%=advertisement.properties.place%>"
+                                    data-ad-type="<%=advertisement.properties.type_advertise%>"
+                                    data-place-type="<%=advertisement.properties.place_type%>"
+                                    data-billboard-status="<%=advertisement.properties.status%>"
                                     >
                                     <i class="bi bi-pencil"></i> Chỉnh sửa điểm
                                   </button>
@@ -143,9 +141,9 @@
                                 <li>
                                   <button
                                     class="btn btn-danger"
-                                    onclick="passToDeleteModal(this)"
+                                    onclick="passToModal(this, 'delete__billboard')"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#delete__confirm__modal"
+                                    data-bs-target="#delete__billboard__modal"
                                     data-billboard-id="<%=id%>">
                                     <i class="bi bi-trash"></i> Xoá điểm
                                   </button>
@@ -161,15 +159,15 @@
                             <p class="fw-bold">Thông tin bảng quảng cáo</p>
                             <ul>
                               <li>
-                                Kích thước:
+                                Loại bảng:
                                 <span class="fw-bold"
-                                  ><%= board.size %></span
+                                  ><%= board.board_type  %></span
                                 >
                               </li>
                               <li>
-                                Số lượng:
+                                Kích thước:
                                 <span class="fw-bold"
-                                  ><%= board.amount %> trụ/bảng</span
+                                  ><%= board.size %></span
                                 >
                               </li>
                               <%if(board.status == 1){%>
@@ -224,24 +222,27 @@
                               <div class="mock__image">&nbsp;</div>
                               <div class="mock__image">&nbsp;</div>
                             </li>
+                            
                             <% } else { %>
                               <li id="info__item">
                                 <p class="fw-bold">Chưa có giấy phép</p>
                               </li>
                             <% } %>
-                            
                             <li>
-                              <ul class="buttons__container">
+                              <ul class="buttons__container" style="flex-direction: column; flex-grow: 0;">
                                 <li>
+                                  <%const board_height = board.size.split("mx")[0];%>
+                                  <%const board_width = board.size.split("mx")[1].split("m")[0];%>
                                   <button
                                     class="btn btn-link text-primary me-3"
-                                    onclick="passToEditModal(this)"
+                                    onclick="passToModal(this, 'edit__board')"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#Modify__modal"
+                                    data-bs-target="#edit__board__modal"
                                     data-billboard-id="<%=id%>"
-                                    data-billboard-address="<%= advertisement.properties.place %>"
-                                    data-billboard-size="<%= advertisement.properties.size %>"
-                                    data-billboard-amount="<%= advertisement.properties.amount %>"
+                                    data-board-id="<%=board._id%>"
+                                    data-board-type="<%=board.board_type%>"
+                                    data-board-height="<%= board_height %>"
+                                    data-board-width="<%= board_width %>"
                                     >
                                     <i class="bi bi-pencil-square"></i>
                                   </button>
@@ -249,10 +250,13 @@
                                 <li>
                                   <button
                                     class="btn btn-link text-danger"
-                                    onclick="passToDeleteModal(this)"
+                                    onclick="passToModal(this, 'delete__board')"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#delete__confirm__modal"
-                                    data-billboard-id="<%=id%>">
+                                    data-bs-target="#delete__board__modal"
+                                    data-billboard-id="<%=id%>"
+                                    data-board-id="<%=board._id%>"
+                                    >
+                                    
                                     <i class="bi bi-trash"></i>
                                   </button>
                                 </li>
@@ -276,7 +280,7 @@
             <%- include('../includes/pagination.ejs')%>
             <div
               class="modal fade"
-              id="Modify__modal"
+              id="edit__billboard__modal"
               tabindex="-1"
               aria-labelledby="Modal__label"
               aria-hidden="true"
@@ -286,7 +290,7 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h3 class="modal-title fw-bold fs-5" id="Modal__label">
-                          Chỉnh sửa thông tin
+                          Chỉnh sửa thông tin điểm quảng cáo
                         </h3>
                         <button
                           class="btn-close"
@@ -297,37 +301,16 @@
                       </div>
                       <div class="modal-body">
                         
-                          <label for="billboard__type__edit" class="fw-bold"
-                            >Loại bảng quảng cáo</label
-                          >
-                          <select
-                            class="form-select mb-3"
-                            id="billboard__type__edit"
-                            name="billboard_type_selector_edit"
-                            aria-label="Billboard type selector"
-                            required
-                          />
-                            <option value="" selected disabled>Chọn...</option>
-                            <option value="1">Trụ/Cụm pano</option>
-                            <option value="2">Trụ bảng hiflex</option>
-                            <option value="3">Trụ màn hình điện tử LED</option>
-                            <option value="4">Trụ hộp đèn</option>
-                            <option value="5">Bảng hiflex ốp tường</option>
-                            <option value="6">Màn hình điện tử ốp tường</option>
-                            <option value="7">Trụ treo băng rôn dọc</option>
-                            <option value="8">Trụ treo băng rôn ngang</option>
-                            <option value="9">Cổng chào</option>
-                            <option value="10">Trung tâm thương mại</option>
-                          </select>
+                          
 
-                          <label for="billboard__address__edit" class="fw-bold"
+                          <label for="billboard__address__edit__billboard" class="fw-bold"
                             >Địa điểm</label
                           >
                           <input
                             type="text"
                             class="form-control mb-3"
-                            id="billboard__address__edit"
-                            name="billboard_address_input_edit"
+                            id="billboard__address__edit__billboard"
+                            name="billboard_address_input_edit_billboard"
                             placeholder="123 Đường ABC, Phường XX, Quận XY"
                             required
                           />
@@ -337,105 +320,55 @@
                           >
                           <select
                             class="form-select mb-3"
-                            id="ad__type__edit"
-                            name="ad_type_selector_edit"
+                            id="ad__type__edit__billboard"
+                            name="ad_type_selector_edit_billboard"
                             aria-label="advertisement type selector"
                             required
                           />
                             <option value="" selected disabled>Chọn...</option>
-                            <option value="1">
-                              Cổ động chính trị
-                            </option>
-                            <option value="2">An toàn giao thông</option>
-                            <option value="3">Mỹ phẩm</option>
-                            <option value="4">Đồ ăn</option>
-                            <option value="5">Điện ảnh</option>
-                            <option value="6">Dịch vụ</option>
+                            <%for(let i = 0; i < locals.all_ad_types.length; i++){%>
+                              <option value="<%=locals.all_ad_types[i].type%>"><%=locals.all_ad_types[i].type%></option>
+                            <%}%>
                           </select>
                           
 
-                          <label for="land__type__edit" class="fw-bold">Phân loại</label>
+                          <label for="place__type__edit__billboard" class="fw-bold">Phân loại</label>
                           <select
                             class="form-select mb-3"
-                            id="land__type__edit"
-                            name="land_type_selector_edit"
-                            aria-label="Land type selector"
+                            id="place__type__edit__billboard"
+                            name="place_type_selector_edit_billboard"
+                            aria-label="Place type selector"
                             required
                           />
                             <option value="" selected disabled>Chọn...</option>
-                            <option value="1">
-                              Đất công/Công viên/Hành lang an toàn giao thông
-                            </option>
-                            <option value="2">Đất tư nhân/Nhà ở riêng lẻ</option>
-                            <option value="3">Trung tâm thương mại</option>
-                            <option value="4">Chợ</option>
-                            <option value="5">Cây xăng</option>
-                            <option value="6">Nhà chờ xe buýt</option>
+                            <%for(let i = 0; i < locals.all_place_types.length; i++){%>
+                              <option value="<%=locals.all_place_types[i].type%>"><%=locals.all_place_types[i].type%></option>
+                            <%}%>
                           </select>
-
-                          <label for="billboard__size__edit" class="fw-bold"
-                            >Kích thước</label
-                          >
-                          <div class="multi__input__field" id="billboard__size__edit">
-                            <input
-                              type="text"
-                              name="billboard_height_input_edit"
-                              class="form-control small__input"
-                              id="billboard__height__edit"
-                              placeholder="Chiều cao"
-                              required
-                            />
-                            <p class="fw-bold m-0">m x &nbsp;&nbsp;</p>
-
-                            <input
-                              type="text"
-                              name="billboard_width_input_edit"
-                              class="form-control small__input"
-                              id="billboard__width__edit"
-                              placeholder="Chiều dài"
-                              required
-                            />
-                            <p class="fw-bold m-0">&nbsp;m</p>
-                          </div>
-
-                          <label for="billboard__amount__edit" class="fw-bold"
-                            >Số lượng</label
-                          >
-                          <div class="multi__input__field mb-3" id="billboard__amount__edit">
-                            <input
-                              type="text"
-                              name="billboard_amount_input_edit"
-                              class="form-control small__input"
-                              id="billboard__amount__edit__input"
-                              placeholder="Số lượng"
-                              required
-                            />
-                            <p class="fw-bold m-0">&nbsp;trụ/bảng</p>
-
-                          </div>
-
-                          <label for="billboard__status__edit" class="fw-bold"
+                          <label for="billboard__status__edit__billboard" class="fw-bold"
                             >Trạng thái</label
                           >
                           <select
                             class="form-select mb-3"
-                            id="billboard__status__edit"
-                            name="billboard_status_selector_edit"
+                            id="billboard__status__edit__billboard"
+                            name="billboard_status_selector_edit_billboard"
                             aria-label="Billboard status selector"
                             required
                           />
                             <option value="" selected disabled>Chọn...</option>
-                            <option value="1" class="link-primary">
-                              Đã quy hoạch
-                            </option>
-                            <option value="0" class="link-danger">
+                            <option value="0" class="text-danger fw-bold">
                               Chưa quy hoạch
                             </option>
+                            <option value="1" class="text-primary fw-bold">
+                              Đã quy hoạch
+                            </option>
+                            
                           </select>
                         
                       </div>
                       <div class="modal-footer">
-                        <input type="hidden" name="id_edit" id="id__edit" value="0">
+                        <input type="hidden" name="billboard_id_edit_billboard" id="billboard__id__edit__billboard" value="0">
+                        
                         <button
                           type="button"
                           class="btn btn-secondary"
@@ -452,7 +385,169 @@
 
             <div
               class="modal fade"
-              id="delete__confirm__modal"
+              id="edit__board__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <form action="" class="needs-validation" id="edit__board__form" onsubmit="editBoard(event)">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h3 class="modal-title fw-bold fs-5" id="Modal__label">
+                          Chỉnh sửa thông tin bảng quảng cáo
+                        </h3>
+                        <button
+                          class="btn-close"
+                          type="button"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        
+                          <label for="board__type__edit__board" class="fw-bold"
+                            >Loại bảng quảng cáo</label
+                          >
+                          <select
+                            class="form-select mb-3"
+                            id="board__type__edit__board"
+                            name="board_type_selector_edit_board"
+                            aria-label="Board type selector"
+                            required
+                          />
+                            <option value="" selected disabled>Chọn...</option>
+                            <%for(let i = 0; i < locals.all_board_types.length; i++){%>
+                              <option value="<%=locals.all_board_types[i].type%>"><%=locals.all_board_types[i].type%></option>
+                            <%}%>
+                          </select>
+                          <label for="board__size__edit__board" class="fw-bold"
+                            >Kích thước</label
+                          >
+                          <div class="multi__input__field" id="board__size__edit__board">
+                            <input
+                              type="text"
+                              name="board_height_input_edit_board"
+                              class="form-control small__input"
+                              id="board__height__edit__board"
+                              placeholder="Chiều cao"
+                              required
+                            />
+                            <p class="fw-bold m-0">m x &nbsp;&nbsp;</p>
+
+                            <input
+                              type="text"
+                              name="board_width_input_edit_board"
+                              class="form-control small__input"
+                              id="board__width__edit__board"
+                              placeholder="Chiều dài"
+                              required
+                            />
+                            <p class="fw-bold m-0">&nbsp;m</p>
+                        
+                      </div>
+                      
+                    </div>
+                      <div class="modal-footer">
+                        <input type="hidden" name="billboard_id_edit_board" id="billboard__id__edit__board" value="0">
+                        <input type="hidden" name="board_id_edit_board" id="board__id__edit__board" value="0">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Huỷ
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="save__changes__btn">Lưu thay đổi</button>
+                      </div>
+                    </div>
+                  </form>
+              </div>
+            </div>
+
+            <div
+              class="modal fade"
+              id="add__board__modal"
+              tabindex="-1"
+              aria-labelledby="Modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <form action="" class="needs-validation" id="add__board__form" onsubmit="addBoard(event)">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h3 class="modal-title fw-bold fs-5" id="Modal__label">
+                          Thêm bảng quảng cáo
+                        </h3>
+                        <button
+                          class="btn-close"
+                          type="button"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        
+                          <label for="board__type__add__board" class="fw-bold"
+                            >Loại bảng quảng cáo</label
+                          >
+                          <select
+                            class="form-select mb-3"
+                            id="board__type__add__board"
+                            name="board_type_selector_add_board"
+                            aria-label="Board type selector"
+                            required
+                          />
+                            <option value="" selected disabled>Chọn...</option>
+                            <%for(let i = 0; i < locals.all_board_types.length; i++){%>
+                              <option value="<%=locals.all_board_types[i].type%>"><%=locals.all_board_types[i].type%></option>
+                            <%}%>
+                          </select>
+                          <label for="board__size__add__board" class="fw-bold"
+                            >Kích thước</label
+                          >
+                          <div class="multi__input__field" id="board__size__add__board">
+                            <input
+                              type="text"
+                              name="board_height_input_add_board"
+                              class="form-control small__input"
+                              id="board__height__add__board"
+                              placeholder="Chiều cao"
+                              required
+                            />
+                            <p class="fw-bold m-0">m x &nbsp;&nbsp;</p>
+
+                            <input
+                              type="text"
+                              name="board_width_input_add_board"
+                              class="form-control small__input"
+                              id="board__width__add__board"
+                              placeholder="Chiều dài"
+                              required
+                            />
+                            <p class="fw-bold m-0">&nbsp;m</p>
+                        
+                      </div>
+                      
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="billboard_id_add_board" id="billboard__id__add__board" value="0">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Huỷ
+                        </button>
+                        <button type="submit" class="btn btn-success" id="create__bo__btn">Thêm bảng</button>
+                      </div>
+                  </form>
+              </div>
+            </div>
+          </div>
+          <div
+              class="modal fade"
+              id="delete__billboard__modal"
               tabindex="-1"
               aria-labelledby="delete__modal__label"
               aria-hidden="true"
@@ -478,7 +573,7 @@
                   </div>
                   <div class="modal-footer">
                     <form form action="" id="delete__billboard__form" onsubmit="deleteBillboard(event)">
-                      <input type="hidden" name="id_delete" id="id__delete" value="0">
+                      <input type="hidden" name="billboard_id_delete_billboard" id="billboard__id__delete__billboard" value="0">
                       <button
                         type="button"
                         class="btn btn-secondary"
@@ -492,7 +587,49 @@
                 </div>
               </div>
             </div>
-
+          <div
+              class="modal fade"
+              id="delete__board__modal"
+              tabindex="-1"
+              aria-labelledby="delete__modal__label"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3
+                      class="modal-title fw-bold fs-5"
+                      id="delete__modal__label"
+                    >
+                      Xác nhận xoá
+                    </h3>
+                    <button
+                      class="btn-close"
+                      type="button"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Bạn có chắc chắn muốn xoá bảng quảng cáo này không?
+                  </div>
+                  <div class="modal-footer">
+                    <form form action="" id="delete__board__form" onsubmit="deleteBoard(event)">
+                      <input type="hidden" name="billboard_id_delete_board" id="billboard__id__delete__board" value="0">
+                      <input type="hidden" name="board_id_delete_board" id="board__id__delete__board" value="0">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Huỷ
+                      </button>
+                      <button type="submit" class="btn btn-danger" id="delete__btn">Xoá</button>
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div
               class="toast-container position-fixed bottom-0 end-0 p-3"
               style="z-index: 1"
@@ -508,6 +645,26 @@
                   <div class="toast-body">
                     <i class="bi bi-check-lg"></i>
                     Đã lưu thay đổi!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="add__board__success__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-check-lg"></i>
+                    Đã thêm bảng quảng cáo!
                   </div>
                   <button
                     type="button"
@@ -537,8 +694,30 @@
                   ></button>
                 </div>
               </div>
+
+              <div
+                class="toast align-items-center text-bg-success border-0"
+                id="delete__board__toast"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <div class="d-flex">
+                  <div class="toast-body">
+                    <i class="bi bi-trash"></i>
+                    Đã xoá bảng quảng cáo!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
             </div>
-          </div>
+            </div>
+              
         </div>
       </main>
 
