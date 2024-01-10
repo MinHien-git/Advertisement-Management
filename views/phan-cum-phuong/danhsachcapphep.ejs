@@ -7,7 +7,7 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
+    <link rel="icon" href="/images/map.png" />
     <!-- Bootstrap CSS v5.2.1 -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
@@ -74,7 +74,13 @@
               </button>
               <div class="dropdown-content">
                 <% for (let i = 0; i < locals.ward_list.length; i++) { %>
-                <label><input type="checkbox" name="ward<%= i + 1 %>" value="<%= i %>" /> <%= locals.ward_list[i].ward %></label>
+                <label
+                  ><input
+                    type="checkbox"
+                    name="ward<%= i + 1 %>"
+                    value="<%= i %>" />
+                  <%= locals.ward_list[i].ward %></label
+                >
                 <% } %>
               </div>
             </div>
@@ -96,8 +102,14 @@
               </button>
               <div class="dropdown-content">
                 <p>Tình trạng cấp phép</p>
-                <label><input type="checkbox" name="license1" value="0" /> Đã duyệt</label>
-                <label><input type="checkbox" name="license2" value="1" /> Chưa duyệt</label>
+                <label
+                  ><input type="checkbox" name="license1" value="0" /> Đã
+                  duyệt</label
+                >
+                <label
+                  ><input type="checkbox" name="license2" value="1" /> Chưa
+                  duyệt</label
+                >
               </div>
             </div>
           </form>
@@ -116,44 +128,38 @@
               </div>
             </div>
 
-            <%
-              for (let i = 0; i < locals.billboards.length; i++) {
-                const advertisement = locals.billboards[i];
-                for (let j = 0; j < advertisement.properties.boards.length; j++) {
-                  const board = advertisement.properties.boards[j];
-                  const license = board.license[0];
-            %>
+            <% for (let i = 0; i < locals.billboards.length; i++) { const
+            advertisement = locals.billboards[i]; for (let j = 0; j <
+            advertisement.properties.boards.length; j++) { const board =
+            advertisement.properties.boards[j]; const license =
+            board.license[0]; %>
             <div id="<%='list__item' + license._id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= license._id  %>">
                 <ul class="list__flex">
-                  <li class="list__col1">
-                    <%= license.company_name %>
-                  </li>
+                  <li class="list__col1"><%= license.company_name %></li>
                   <li class="list__col2">
                     <%= advertisement.properties.place %>
                   </li>
-                  <% if (license) { %> 
-                    <% if (license.state===0) { %>
-                    <li class="list__col3 fw-semibold" style="color: #329a44">
-                      Đã duyệt
-                    </li>
-                    <% } else if (license.state===4) { %>
-                    <li class="list__col3 fw-semibold" style="color: #ff7b7b">
-                      Hết hạn
-                    </li>
-                    <% } else if (license.state===2) { %>
-                    <li class="list__col3 fw-semibold" style="color: #ff7b7b">
-                      Đã hủy
-                    </li>
-                    <% } else { %>
-                    <li class="list__col3 fw-semibold" style="color: #e7b400">
-                      Chưa duyệt
-                    </li>
-                    <% } %> 
+                  <% if (license) { %> <% if (license.state===0) { %>
+                  <li class="list__col3 fw-semibold" style="color: #329a44">
+                    Đã duyệt
+                  </li>
+                  <% } else if (license.state===4) { %>
+                  <li class="list__col3 fw-semibold" style="color: #ff7b7b">
+                    Hết hạn
+                  </li>
+                  <% } else if (license.state===2) { %>
+                  <li class="list__col3 fw-semibold" style="color: #ff7b7b">
+                    Đã hủy
+                  </li>
                   <% } else { %>
-                    <li class="list__col3 fw-semibold" style="color: #e7b400">
-                      Chưa cấp phép
-                    </li>
+                  <li class="list__col3 fw-semibold" style="color: #e7b400">
+                    Chưa duyệt
+                  </li>
+                  <% } %> <% } else { %>
+                  <li class="list__col3 fw-semibold" style="color: #e7b400">
+                    Chưa cấp phép
+                  </li>
                   <% } %>
                   <li class="list__col4">
                     <button
@@ -179,14 +185,19 @@
                   <ul id="full__info__list">
                     <li class="mock__image__container">
                       <% if (license?.images?.[0]) { %>
-                        <img class="ad__image" src="<%= license.images[0] %>" alt="hinh1">
-                      <% } else { %> 
-                        <div class="mock__image">&nbsp;</div>
-                      <% } %>
-                      <% if (license?.images?.[1]) { %>
-                        <img class="ad__image" src="<%= license.images[1] %>" alt="hinh2">
-                      <% } else { %> 
-                        <div class="mock__image">&nbsp;</div>
+                      <img
+                        class="ad__image"
+                        src="<%= license.images[0] %>"
+                        alt="hinh1" />
+                      <% } else { %>
+                      <div class="mock__image">&nbsp;</div>
+                      <% } %> <% if (license?.images?.[1]) { %>
+                      <img
+                        class="ad__image"
+                        src="<%= license.images[1] %>"
+                        alt="hinh2" />
+                      <% } else { %>
+                      <div class="mock__image">&nbsp;</div>
                       <% } %>
                     </li>
                     <li>
@@ -198,11 +209,15 @@
                         </li>
                         <li>
                           Hình thức:
-                          <span class="fw-bold"> <%= advertisement.properties.type_advertise %></span>
+                          <span class="fw-bold">
+                            <%= advertisement.properties.type_advertise %></span
+                          >
                         </li>
                         <li>
                           Phân loại:
-                          <span class="fw-bold"> <%= advertisement.properties.place_type %></span>
+                          <span class="fw-bold">
+                            <%= advertisement.properties.place_type %></span
+                          >
                         </li>
                         <li>
                           Loại bảng:
@@ -215,11 +230,15 @@
                       <ul>
                         <li>
                           Tên công ty:
-                          <span class="fw-bold"><%= license.company_name %></span>
+                          <span class="fw-bold"
+                            ><%= license.company_name %></span
+                          >
                         </li>
                         <li>
                           Email liên hệ:
-                          <span class="fw-bold"><%= license.company_contact %></span>
+                          <span class="fw-bold"
+                            ><%= license.company_contact %></span
+                          >
                         </li>
                         <li>
                           Ngày bắt đầu:
