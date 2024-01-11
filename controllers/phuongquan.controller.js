@@ -559,18 +559,18 @@ const _post_request_edit = async (req, res) => {
   if (req.body.select_option == 0) {
     let { billboard, place_type, advertise_type, status, details } = req.body;
     let request = new BillboardRequest(
-      billboard,
-      place_type,
-      advertise_type,
-      status,
-      details
+        new ObjectId(billboard),
+        place_type,
+        advertise_type,
+        status,
+        details
     );
     if (await request.send_request()) console.log("send!");
   } else {
     let { billboard, board_type, size, details } = req.body;
     let value = board_type.split("|");
     let request = new BoardRequest(
-      billboard,
+      new ObjectId(billboard),
       value[1],
       value[0],
       size,
