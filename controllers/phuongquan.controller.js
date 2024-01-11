@@ -373,7 +373,7 @@ const _get_license = async (req, res) => {
 };
 
 const _post_license_request = async (req, res) => {
-  let { id, board_id, name, contact, start, end, images } = req.body;
+  let { id, board_id, name, contact, start, end, attached_files } = req.body;
 
   let license = new License(
     {
@@ -385,7 +385,7 @@ const _post_license_request = async (req, res) => {
     start,
     end,
     1,
-    images
+    attached_files
   );
   if (license.send_licences_request()) console.log("send!");
   return res.redirect("/dashboard/license");

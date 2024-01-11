@@ -148,7 +148,9 @@ function create_authorize_request(advertisement) {
 
   request_node.innerHTML += report;
   body.append(request_node);
+
   $("#inscreen-form-login").on("submit", (e) => {
+    console.log(files);
     let data = JSON.stringify({
       id: $("#bbid").val(),
       attached_files: files,

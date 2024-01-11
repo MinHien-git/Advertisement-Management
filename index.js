@@ -22,12 +22,12 @@ require("dotenv").config();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const port = process.env.PORT;
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ limit: "150mb" }));
 app.use(
   express.urlencoded({
     extended: true,
     parameterLimit: 100000,
-    limit: "50mb",
+    limit: "150mb",
   })
 );
 
