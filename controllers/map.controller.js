@@ -53,12 +53,18 @@ const _get_map = async (request, response) => {
       },
     ])
     .toArray();
-  console.log(JSON.stringify(billboards, null, "  "), billboards.length);
 
+  let second_billboard = await getDb()
+    .collection("billboards")
+    .find({ "properties.boards": [] })
+    .toArray();
   let ward = response.locals.ward ? response.locals.ward : "";
   let district = response.locals.district ? response.locals.district : "";
 
   let reports = [];
+  billboards = [...billboards, ...second_billboard];
+
+  console.log(JSON.stringify(billboards, null, "  "), second_billboard.length);
   billboards = billboards.filter((i) => {
     if (ward == "" && district == "") return true;
     let address = i?.properties?.place.split(", ");

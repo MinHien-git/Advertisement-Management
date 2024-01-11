@@ -243,14 +243,6 @@ const _get_map = async (req, res) => {
         return e;
       });
 
-    // for (let i = 0; i < places.length; ++i) {
-    //   newRP[i] = temp[i];
-    //   newRP[i].properties.details = temp.map((j) => {
-    //     if (j.properties.place === places[i]) {
-    //       return { ...j.properties };
-    //     }
-    //   });
-    // }
     console.log(type_advertise);
     return res.render("phan-cum-phuong/trangchu", {
       action: false,
@@ -259,7 +251,7 @@ const _get_map = async (req, res) => {
       placeType: placeType,
       type_advertise: type_advertise,
     });
-  } else if (response.locals.type_user == 2) {
+  } else if (res.locals.type_user == 2) {
     return res.redirect("/management/billboards");
   } else {
     return res.redirect("/");
