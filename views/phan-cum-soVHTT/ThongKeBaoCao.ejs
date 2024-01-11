@@ -97,24 +97,24 @@
               <div class="card shadow-sm report" id="<%= report._id %>">
                 <div class="card-header" id="brief__info<%= report._id %>">
                   <ul class="list__flex">
-                    <% if (report.type == 0) { %>
+                    <% if (report.properties.type == "0") { %>
                     <li class="list__col1 text-danger">Tố giác sai phạm</li>
-                    <% } %> <% if (report.type == 1) { %>
+                    <% } %> <% if (report.properties.type == "1") { %>
                     <li class="list__col1 text-primary">Đăng ký nội dung</li>
-                    <% } %> <% if (report.type == 2) { %>
+                    <% } %> <% if (report.properties.type == "2") { %>
                     <li class="list__col1 text-success">Đóng góp ý kiến</li>
-                    <% } %> <% if (report.type == 3) { %>
+                    <% } %> <% if (report.properties.type == "3") { %>
                     <li class="list__col1 text-warning">Giải đáp thắc mắc</li>
                     <% } %>
-                    <li class="list__col2"><%= report.place %></li>
-                    <li class="list__col3"><%= report.send_day %></li>
-                    <% if (report.state == 0) {%>
+                    <li class="list__col2"><%= report.properties.place %></li>
+                    <li class="list__col3"><%= report.properties.send_day %></li>
+                    <% if (report.properties.state == 0) {%>
                     <li class="list__col4 fw-bold text-warning">Chờ xử lý</li>
-                    <% } else if (report.state == 1){ %>
+                    <% } else if (report.properties.state == 1){ %>
                     <li class="list__col4 fw-bold text-success">Đã cấp phép</li>
-                    <% } else if (report.state == 2){ %>
+                    <% } else if (report.properties.state == 2){ %>
                     <li class="list__col4 fw-bold text-danger">Đã bác bỏ</li>
-                    <% } else if (report.state == 3){ %>
+                    <% } else if (report.properties.state == 3){ %>
                     <li class="list__col4 fw-bold text-primary">
                       Đã gửi YC sửa đổi
                     </li>
@@ -128,16 +128,16 @@
                         data-bs-target="#modal"
                         style="width: 1rem"
                         data-report-id="<%=report._id%>"
-                        data-report-type="<%=report.type%>"
-                        data-sender-name="<%=report.sender_name%>"
-                        data-sender-email="<%=report.sender_email%>"
-                        data-sender-number="<%=report.sender_number%>"
-                        data-report-place="<%=report.place%>"
-                        data-report-date="<%=report.send_day%>"
-                        data-report-details="<%=report.details%>"
-                        data-report-state="<%=report.state%>"
-                        data-report-resolve="<%=report.resolve%>"
-                        data-report-edit-request="<%=report.edit_request%>"
+                        data-report-type="<%=report.properties.type%>"
+                        data-sender-name="<%=report.properties.sender_name%>"
+                        data-sender-email="<%=report.properties.sender_email%>"
+                        data-sender-number="<%=report.properties.sender_number%>"
+                        data-report-place="<%=report.properties.place%>"
+                        data-report-date="<%=report.properties.send_day%>"
+                        data-report-details="<%=report.properties.details%>"
+                        data-report-state="<%=report.properties.state%>"
+                        data-report-resolve="<%=report.properties.resolve%>"
+                        data-report-edit-request="<%=report.properties.edit_request%>"
                         onclick="passToDetailsModal(this)">
                         <i class="bi bi-three-dots"></i>
                       </button>

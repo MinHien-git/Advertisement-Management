@@ -590,6 +590,7 @@ function toggleCollapseButton(btn_id) {
     }
 }
 
+
 //change date format
 function changeDateFormat(date){
     return date.toLocaleDateString("vi-VN")
@@ -621,7 +622,8 @@ document.addEventListener("DOMContentLoaded", () => {
         toast.addEventListener("hidden.bs.toast", () => {
             location.reload();
         });
-    
+    });
+
     let function_btn_container = document.getElementById(
         "function__btn__container"
     );
@@ -668,30 +670,8 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
     }
 
-    feather.replace({ "aria-hidden": "true" });
-
-    $(".togglePassword").click(function (e) {
-        e.preventDefault();
-        var type = $(this).parent().parent().find(".password").attr("type");
-        console.log(type);
-        if (type == "password") {
-            $("svg.feather.feather-eye").replaceWith(
-                feather.icons["eye-off"].toSvg()
-            );
-            $(this).parent().parent().find(".password").attr("type", "text");
-        } else if (type == "text") {
-            $("svg.feather.feather-eye-off").replaceWith(
-                feather.icons["eye"].toSvg()
-            );
-            $(this)
-                .parent()
-                .parent()
-                .find(".password")
-                .attr("type", "password");
-        }
-    });
-    });
-
+    // let toggle_password__btns = document.querySelectorAll(".togglePassword");
+    // if(toggle_password__btns != null &&)
 
     // let ratio = 0.35;
     // let custom_scroll_short = document.getElementById("cards__container");

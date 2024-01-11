@@ -1,4 +1,15 @@
 function passToDetailsModal(btn) {
+    let report_date = "";
+    if (btn.dataset.reportDate instanceof Date) {
+        const date = btn.dataset.reportDate;
+        report_date =
+            date.getDate() +
+            "/" +
+            (date.getMonth() + 1) +
+            "/" +
+            date.getFullYear();
+    }
+
     document.querySelector("#report__id").value = btn.dataset.reportId;
     document.querySelector("#report__state").value = btn.dataset.reportState;
     document.querySelector("#sender__name").innerHTML =
@@ -8,7 +19,7 @@ function passToDetailsModal(btn) {
     document.querySelector("#sender__number").innerHTML =
         "<strong>Số điện thoại:</strong> " + btn.dataset.senderNumber;
     document.querySelector("#report__date").innerHTML =
-        "<strong>Ngày báo cáo:</strong> " + btn.dataset.reportDate;
+        "<strong>Ngày báo cáo:</strong> " + report_date;
     document.querySelector("#report__place").innerHTML =
         "<strong>Địa điểm:</strong> " + btn.dataset.reportPlace;
     document.querySelector("#report__details").innerHTML =
