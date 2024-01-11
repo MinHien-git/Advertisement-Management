@@ -1,23 +1,24 @@
 #content p {
-    margin-left: 1.5rem;
+  margin-left: 1.5rem;
 }
 
 #content button.btn.btn-primary {
-    width: 12rem;
-    height: auto;
-    margin: 1rem 2rem 0 0;
+  width: 12rem;
+  height: auto;
+  margin: 1rem 2rem 0 0;
 }
 
 div.image-placeholder {
-    width: 16rem;
-    height: 10rem;
-    margin: 1rem;
-    background-color: rgba(0, 0, 0, 0.1);
+  width: 16rem;
+  height: 10rem;
+  margin: 1rem;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 img.ad__image {
-    width: 16rem;
-    height: 10rem;
-    margin: 1rem;
-    background-color: rgba(0, 0, 0, 0.1);
+  height: 10rem;
+  margin: 1rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 100%;
+  object-fit: fill;
 }

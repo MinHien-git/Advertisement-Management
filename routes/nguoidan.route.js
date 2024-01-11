@@ -5,7 +5,7 @@ const { ObjectId } = require("mongodb");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, "public/images/user_images");
+    callback(null, "./public/images/user_images");
   },
   filename: function (req, file, callback) {
     if (file.mimetype === "image/png") {
@@ -25,13 +25,14 @@ const upload = multer({
       cb(null, false);
     }
   },
-  limits: { fieldSize: 10 * 1024 * 1024 }
+  limits: { fieldSize: 10 * 1024 * 1024 },
 });
 
 const controller = require("../controllers/nguoidan.controller");
 
-router.post("/report", 
-    upload.array("attached_files", 2),
-    controller._post_report);
+router.post(
+  "/report",
+  controller._post_report
+);
 
 module.exports = router;

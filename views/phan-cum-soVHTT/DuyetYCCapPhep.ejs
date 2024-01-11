@@ -98,7 +98,7 @@
                       Đã hết hạn
                     </li>
                     <% } else if (license.state == 5){%>
-                      <li class="list__col3 fw-semibold text-danger">
+                    <li class="list__col3 fw-semibold text-danger">
                       Đã bị huỷ
                     </li>
                     <% }%>
@@ -192,8 +192,21 @@
                       </li>
                       <% } %>
                       <li class="mock__image__container" id="info__item">
+                        <%if (license.images[0]) {%>
+                        <img
+                          src="<%= license.images[0] %>"
+                          alt="hinh1"
+                          class="mock__image" />
+                        <%}else {%>
                         <div class="mock__image">&nbsp;</div>
+                        <%}%> <%if (license.images[1]) {%>
+                        <img
+                          src="<%= license.images[1] %>"
+                          alt="hinh2"
+                          class="mock__image" />
+                        <%}else {%>
                         <div class="mock__image">&nbsp;</div>
+                        <%}%>
                       </li>
                       <li>
                         <ul

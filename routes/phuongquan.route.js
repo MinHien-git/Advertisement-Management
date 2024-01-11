@@ -45,7 +45,6 @@ router.get("/dashboard/license", phuongQuanController._get_license);
 
 router.post(
   "/dashboard/license/request",
-  upload.array("attached_files", 2),
   phuongQuanController._post_license_request
 );
 

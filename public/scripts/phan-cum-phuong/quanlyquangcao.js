@@ -39,7 +39,12 @@ function create_authorize_request(advertisement) {
   if (request_node) {
     body.removeChild(request_node);
   }
-  console.log(advertisement._id);
+  let board = "";
+  for (let i = 0; i < advertisement.properties.boards.length; ++i) {
+    board += `<option value="${advertisement.properties.boards[i].board_type}"
+    >(${i}) ${advertisement.properties.boards[i].board_type}</option>`;
+  }
+
   let report = `
 	<section class="active" id="request-popup">
 	<div id="report-section-form-container">
@@ -54,25 +59,27 @@ function create_authorize_request(advertisement) {
 	  id="inscreen-form-login"
 	  class="form-container active"
 	  method="post"
-	  enctype="multipart/form-data"
 	  action="/dashboard/license/request"
 	>
-	  <input type="hidden" name="id" value="${advertisement._id}">
-    <input type="hidden" name="board_id" value="${advertisement.board._id}">
+	  <input type="hidden" id ="bbid" name="id" value="${advertisement._id}">
+    <input type="hidden" id ="board_id" name="board_id" value="${advertisement.board._id}">
 	  <h2>Cấp phép Quảng cáo</h2>
 	  <div class="form-section">
 		<label for="street">Địa chỉ yêu cầu:</label>
-		<textarea id="street">${advertisement.properties.place}</textarea>
+      <input id="street" type="hidden" value = ${advertisement.properties.place}/>
+      <p>${advertisement.properties.place}</p>
 	  </div>
 	  <div class="form-section">
-		<label for="type-billboard">Bảng quảng cáo:</label>
-		<input
-		  type="text"
-		  name="type-billboard"
-		  id="type-billboard"
-		  value="${advertisement.board.board_type}"
-		  placeholder="Chọn..."
-		/>
+		<label for="boardId">Bảng quảng cáo:</label>
+
+    <select class="form-select"
+      name="board_Id" id="boardId"
+          aria-label="ad type selector"
+          required
+        />
+          <option value="">Chọn...</option>
+		${board}
+    </select>
 	  </div>
 	  
 	  <div class="form-section">
@@ -103,7 +110,7 @@ function create_authorize_request(advertisement) {
 		name="start"
 		id="start"
 		value=""
-		placeholder="Email công ty"
+		placeholder="DD/MM/YYYY"
 	  />
 	</div>
 	<div class="form-section">
@@ -113,7 +120,7 @@ function create_authorize_request(advertisement) {
 		name="end"
 		id="end-date"
 		value=""
-		placeholder="Email công ty"
+		placeholder="DD/MM/YYYY"
 	  />
 	</div>
 	</div>
@@ -130,11 +137,6 @@ function create_authorize_request(advertisement) {
 		  />
 		</div>
 	  </div>
-	  <div class="form-section">
-		<label for="tel">Thông tin chỉnh sửa:</label>
-		<div id="editor"></div>
-	  </div>
-	  <div class="form-section">
 		<button class="submit-button submit">Gửi</button>
 	  </div>
 	</form>
@@ -147,14 +149,33 @@ function create_authorize_request(advertisement) {
   request_node.innerHTML += report;
   body.append(request_node);
 
+  $("#inscreen-form-login").on("submit", (e) => {
+    e.preventDefault();
+    let data = JSON.stringify({
+      id: $("#bbid").val(),
+      attached_files: files,
+      name: $("#name").val(),
+      board_id: $("#board_id").val(),
+      contact: $("#company-infomation").val(),
+      start: $("#start").val(),
+      end: $("#end-date").val(),
+    });
+    fetch("http://localhost:5000/dashboard/license/request", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: data,
+    });
+  });
   var close = $("#inscreen-request-close");
   close.on("click", () => {
     body.removeChild(request_node);
     request_node = null;
   });
 
-  var quill = new Quill("#editor", {
-    theme: "snow",
+  $("#attached_files").on("change", (e) => {
+    uploadImage(e);
   });
 }
 
@@ -235,7 +256,8 @@ function create_edit_request(billboard = null) {
     }>${placeTypes[i].type}</option>`;
   }
   for (let i = 0; i < type_advertise.length; ++i) {
-    let selected = billboard.properties.type_advertise === type_advertise[i].type;
+    let selected =
+      billboard.properties.type_advertise === type_advertise[i].type;
     adtype += `<option value="${type_advertise[i].type}" ${
       selected ? "selected" : ""
     }>${placeTypes[i].type}</option>`;

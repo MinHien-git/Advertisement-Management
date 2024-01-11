@@ -72,9 +72,10 @@
           <div class="report-info">
             <h6 class="bold">Nội dung báo cáo</h6>
             <p>
-              <%= report.details %>
+              <%- report.details %>
             </p>
           </div>
+          <% if (report.images.length > 0) { %>
           <h6 class="bold">Hình ảnh đi kèm:</h6>
           <div class="image-container d-flex">
             <% if (report.images?.[0]) { %>
@@ -83,11 +84,11 @@
               <div class="image-placeholder"></div>
             <% } %>
             <% if (report.images?.[1]) { %>
-              <img class="ad__image" src="<%= report.images[1] %>" alt="hinh1">
+              <img class="ad__image" src="<%= report.images[1] %>" alt="hinh2">
             <% } else { %>
               <div class="image-placeholder"></div>
             <% } %>
-          </div>
+          </div><% } %>
 
           <div id="editor"></div>
           <div class="button-container d-flex">
@@ -135,7 +136,7 @@
         let xhr = new XMLHttpRequest();
         xhr.open("POST", window.location.href, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({ handling_method: quill.getText(), state: 1 }));
+        xhr.send(JSON.stringify({ handling_method: quill.getText(), state: 0 }));
         window.location.href = "/dashboard/report";
       });
       document.getElementById("cancel-button").addEventListener("click", () => {
