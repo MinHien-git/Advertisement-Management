@@ -99,29 +99,32 @@ function setReportBoard() {
     infoboards.innerHTML = "";
     let body = "";
     for (let i = 0; i < currentBoard.details.length; ++i) {
+      const images = currentBoard.details[i].images;
+      let image_body = "";
+      if (images) {
+        for (let i = 0; i < images.length; i++) {
+          image_body += `<img class="ad__image" src="${images[i]}" alt="hinh${i}">`
+        }
+      }
       body += `<div class="report-card">
-      ${currentBoard.details[i].images ? `<div class="image-container">` : ""}
-      ${
+      ${currentBoard.details[i].images ? `<div class="image-container">${image_body}</div>` : ""}
+      Email: ${
         currentBoard.details[i].sender_email
-          ? `<p>${currentBoard.details[i].sender_email}</p>`
-          : ""
+          ? `<p>${currentBoard.details[i].sender_email}</p>` : ""
       }
-      ${
+      Tên người gửi: ${
         currentBoard.details[i].sender_name
-          ? `<p>${currentBoard.details[i].sender_name}</p>`
-          : ""
+          ? `<p>${currentBoard.details[i].sender_name}</p>` : ""
       }
-      ${
+      SĐT: ${
         currentBoard.details[i].sender_number
-          ? `<p>${currentBoard.details[i].sender_number}</p>`
-          : ""
+          ? `<p>${currentBoard.details[i].sender_number}</p>` : ""
       }
-      ${
+      Ngày gửi: ${
         currentBoard.details[i].send_day
-          ? `<p>${currentBoard.details[i].send_day}</p>`
-          : ""
+          ? `<p>${currentBoard.details[i].send_day}</p>` : ""
       }
-      ${currentBoard.details[i].details}
+      Nội dung báo cáo: ${currentBoard.details[i].details}
       </div>`;
     }
 
@@ -155,7 +158,7 @@ function setReportBoard() {
       $(".billboard-type").text(currentBoard[current_index]?.board_type);
       $(".size").html(
         `<p class="size"><span class="bold">Kích thước: </span>` +
-          currentBoard[current_index]?.size
+          currentBoard[current_index]?.size ? currentBoard[current_index].size : ""
       );
     });
     let request_btn = $("#info .request");
@@ -341,16 +344,14 @@ window.onload = function () {
   let reportLayer = L.geoJSON(reports, {
     pointToLayer: function (feature, latlng) {
       const attributionDiv = document.createElement("div");
-
       attributionDiv.setAttribute("id", "content" + feature._id);
       attributionDiv.innerHTML = `<p>${feature.properties.place}</p>
-      ${
-        feature.properties.details.constructor !== Array
-          ? `<p><span class="bold">Trạng thái:</span>
-      ${feature.properties?.state === 0 ? "Đã xử lí" : "Chưa xử lí"} </p>
-      <p><span class="bold">Nội dung báo cáo:</span></p> 
-      ${feature.properties.details}`
-          : `<p><span class="bold">Số báo cáo:</span>
+      ${feature.properties.details.constructor !== Array ? 
+        `<p><span class="bold">Trạng thái:</span>
+        ${feature.properties?.state === 0 ? "Đã xử lí" : "Chưa xử lí"} </p>
+        <p><span class="bold">Nội dung báo cáo:</span></p> 
+        ${feature.properties.details}`
+      : `<p><span class="bold">Số báo cáo:</span>
       ${feature.properties?.details.length} </p><button class=">Chi tiết</button>`
       }`;
       if (feature.properties.details.constructor === Array) {
