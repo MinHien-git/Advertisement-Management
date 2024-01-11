@@ -2,6 +2,7 @@ let Report = require("../models/report.model");
 let db = require("../database/database");
 let request = require("request");
 const { response } = require("express");
+
 const _get_report = (request, response) => {
   const params = new Proxy(new URLSearchParams(request.url.seach), {
     get: (searchParams, prop) => searchParams.get(prop),
@@ -23,7 +24,7 @@ const _post_report = (req, res) => {
       });
     }
     let {
-      type,
+      report__type,
       geometry,
       sender_name,
       sender_email,
@@ -38,7 +39,7 @@ const _post_report = (req, res) => {
     });
 
     let report = new Report(
-      type,
+      parseInt(report__type),
       sender_email,
       sender_number,
       place,
@@ -50,6 +51,7 @@ const _post_report = (req, res) => {
     );
     const verifiedURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}`;
     request(verifiedURL, (err, response, body) => {
+      console.log(body);
       body = JSON.parse(body);
       if (err && (!body.success || body.score < 0.4)) {
         console.log(err);

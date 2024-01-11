@@ -25,18 +25,11 @@ const transporter = nodemailer.createTransport({
 });
 
 const getAddress = (req, obj) => {
-  if (
-    req.path === "/dashboard/advertise" ||
-    req.path === "/dashboard/license"   ||
-    req.path === "/dashboard"
-  ) {
-    return obj.properties.place;
-  }
-  if (req.path === "/dashboard/report") {
-    return obj.place;
-  }
   if (req.path === "/dashboard/request/edit") {
     return obj.billboard[0].properties.place;
+  }
+  else {
+    return obj.properties.place;
   }
 };
 
@@ -488,8 +481,8 @@ const _post_report_edit = async (req, res) => {
       { _id: new ObjectId(req.params.id) },
       {
         $set: {
-          state: state,
-          handling_method: handling_method,
+          "properties.state": state,
+          "properties.handling_method": handling_method,
         },
       }
     );

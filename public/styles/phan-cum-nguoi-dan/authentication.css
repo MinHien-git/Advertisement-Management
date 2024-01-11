@@ -27,6 +27,8 @@
 }
 #inscreen-form-report {
   height: auto;
+  max-height: 90%;
+  overflow-y: scroll;
 }
 #authentication-section-form-container {
   width: 80%;

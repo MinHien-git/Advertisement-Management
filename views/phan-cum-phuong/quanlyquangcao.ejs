@@ -136,6 +136,7 @@
                 for (let j = 0; j < boards.length; j++) { 
                   let board = boards[j];
                   advertisement.board = board;
+                  let license = board.license?.find(e => e.state === 0 || e.state === 1);
             %>
             <div id="list__item<%= id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= id %>">
@@ -169,7 +170,21 @@
                 <div class="card-body">
                   <ul id="full__info__list">
                     <li class="mock__image__container">
-                      
+                      <% if (license?.images?.[0]) { %>
+                      <img
+                        class="ad__image"
+                        src="<%= license.images[0] %>"
+                        alt="hinh1" />
+                      <% } else { %>
+                      <div class="mock__image">&nbsp;</div>
+                      <% } %> <% if (license?.images?.[1]) { %>
+                      <img
+                        class="ad__image"
+                        src="<%= license.images[1] %>"
+                        alt="hinh2" />
+                      <% } else { %>
+                      <div class="mock__image">&nbsp;</div>
+                      <% } %>
                     </li>
                     <li>
                       <p class="fw-bold">Thông tin bảng quảng cáo</p>

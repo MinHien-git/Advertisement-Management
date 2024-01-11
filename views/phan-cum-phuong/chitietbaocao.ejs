@@ -57,28 +57,36 @@
     <script src="/scripts/navbar.js" defer></script>
     <div class="wrapper">
       <%- include('../includes/header.ejs')%>
-
+      <% const report = locals.report.properties; %>
       <div class="flex official" id="content">
         <main>
           <h3 class="bold">Chi tiết báo cáo</h3>
           <div class="billboard-info">
             <p>
-              Tên người gửi: <%= locals.report.sender_name %> <br />
-              Email: <%= locals.report.sender_email %> <br />
-              Số điện thoại: <%= locals.report.sender_number %> <br />
-              Nơi quảng cáo: <%= locals.report.place %>
+              Tên người gửi: <%= report.sender_name %> <br />
+              Email: <%= report.sender_email %> <br />
+              Số điện thoại: <%= report.sender_number %> <br />
+              Nơi quảng cáo: <%= report.place %>
             </p>
           </div>
           <div class="report-info">
             <h6 class="bold">Nội dung báo cáo</h6>
             <p>
-              <%= locals.report.details %>
+              <%= report.details %>
             </p>
           </div>
           <h6 class="bold">Hình ảnh đi kèm:</h6>
           <div class="image-container d-flex">
-            <div class="image-placeholder"></div>
-            <div class="image-placeholder"></div>
+            <% if (report.images?.[0]) { %>
+              <img class="ad__image" src="<%= report.images[0] %>" alt="hinh1">
+            <% } else { %>
+              <div class="image-placeholder"></div>
+            <% } %>
+            <% if (report.images?.[1]) { %>
+              <img class="ad__image" src="<%= report.images[1] %>" alt="hinh1">
+            <% } else { %>
+              <div class="image-placeholder"></div>
+            <% } %>
           </div>
 
           <div id="editor"></div>
