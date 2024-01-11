@@ -357,6 +357,7 @@ const _get_license = async (req, res) => {
       { $unwind: "$billboard" },
     ])
     .toArray();
+
   res.locals.billboards = licenses.map((e) => {
     e.billboard.properties.boards = e.billboard.properties.boards.filter((b) =>
       b._id.equals(e.board_id)
@@ -372,11 +373,7 @@ const _get_license = async (req, res) => {
 };
 
 const _post_license_request = async (req, res) => {
-  let { id, board_id, email, from, name, contact, start, end, details } =
-    req.body;
-  let images = req.files.map((v) => {
-    return (v.destination + "/" + v.filename).substring(6);
-  });
+  let { id, board_id, name, contact, start, end, images } = req.body;
 
   let license = new License(
     {
@@ -459,8 +456,7 @@ const _post_report_edit = async (req, res) => {
       if (error) {
         console.error("Error sending email: ", error);
         res.status(500).send({ message: "Failed to send email" });
-      }
-      else {
+      } else {
         return res.redirect("/dashboard/report");
       }
     });
@@ -524,11 +520,11 @@ const _post_request_edit = async (req, res) => {
   if (req.body.select_option == 0) {
     let { billboard, place_type, advertise_type, status, details } = req.body;
     let request = new BillboardRequest(
-        new ObjectId(billboard),
-        place_type,
-        advertise_type,
-        status,
-        details
+      new ObjectId(billboard),
+      place_type,
+      advertise_type,
+      status,
+      details
     );
     if (await request.send_request()) console.log("send!");
   } else {

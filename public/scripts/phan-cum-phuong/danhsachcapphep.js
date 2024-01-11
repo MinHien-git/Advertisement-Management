@@ -16,6 +16,11 @@ function create_authorize_request(advertisement) {
   if (request_node) {
     body.removeChild(request_node);
   }
+  let board = "";
+  for (let i = 0; i < advertisement.properties.boards.length; ++i) {
+    board += `<option value="${i}|${billboard.properties.boards[i].board_type}"
+    >(${i}) ${billboard.properties.boards[i].board_type}</option>`;
+  }
   let report = `
   <section class="active" id="request-popup">
   <div id="report-section-form-container">
@@ -38,7 +43,8 @@ function create_authorize_request(advertisement) {
     <h2>Cấp phép Quảng cáo</h2>
     <div class="form-section">
       <label for="street">Địa chỉ yêu cầu:</label>
-      <textarea id="street">${advertisement.position}</textarea>
+      <input id="street" type="hidden" value = ${advertisement.position}/>
+      <p>${advertisement.position}</p>
     </div>
     <div class="form-section">
       <label for="type-billboard">Bảng quảng cáo:</label>
@@ -131,6 +137,8 @@ function create_authorize_request(advertisement) {
   var quill = new Quill("#editor", {
     theme: "snow",
   });
+
+  $("#inscreen-form-login").on("submit", (e) => {});
 
   $("#attached_files").on("change", (e) => {
     uploadImage(e);

@@ -18,7 +18,7 @@ module.exports = class License {
     this.start_date = start_date;
     this.end_date = end_date;
     this.state = state;
-    this.images = images;
+    this.images = [...images];
   }
 
   static async get_license(id) {
