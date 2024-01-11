@@ -2,6 +2,7 @@ let Report = require("../models/report.model");
 let db = require("../database/database");
 let request = require("request");
 const { response } = require("express");
+
 const _get_report = (request, response) => {
   const params = new Proxy(new URLSearchParams(request.url.seach), {
     get: (searchParams, prop) => searchParams.get(prop),
@@ -15,39 +16,42 @@ const _get_report = (request, response) => {
 
 const _post_report = (req, res) => {
   try {
-    console.log(req.body);
     let secretKey = "6LdBr0kpAAAAAPCqy5ZCWtLtxGGMG-DzTjAcoNZA";
     if (!req.body.captcha) {
       return res.status(400).json({
         success: false,
+        message: "have not received captcha."
       });
     }
     let {
-      type,
+      report__type,
       geometry,
       sender_name,
       sender_email,
       sender_number,
       place,
-      attached_files,
       details,
       board,
     } = req.body;
-    let ward = place.split(",")[1];
-    let district = place.split(",")[2];
+
+    let images = req.files.map((v) => {
+      return (v.destination + "/" + v.filename).substring(6);
+    });
+
     let report = new Report(
-      type,
+      parseInt(report__type),
       sender_email,
       sender_number,
       place,
       sender_name,
-      attached_files,
+      images,
       details,
       JSON.parse(geometry),
       board
     );
     const verifiedURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}`;
     request(verifiedURL, (err, response, body) => {
+      console.log(body);
       body = JSON.parse(body);
       if (err && (!body.success || body.score < 0.4)) {
         console.log(err);
@@ -61,6 +65,7 @@ const _post_report = (req, res) => {
       success: true,
     });
   } catch (error) {
+    console.log(error.message);
     return res.status(500).json({
       success: false,
       message: error.message,

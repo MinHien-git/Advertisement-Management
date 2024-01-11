@@ -7,31 +7,22 @@ const _get_map = async (request, response) => {
   let district = response.locals.district ? response.locals.district : "";
   let reports = [];
   billboards = billboards.filter((i) => {
-    if (ward == "" && district == "") return i;
+    if (ward == "" && district == "") return true;
     let address = i?.properties?.place.split(", ");
 
     if (
-      (address.find((a) => a == ward) || !ward) &&
-      (address.find((a) => a == district) || !district)
+      (address.find((a) => a == ward) || ward == "") &&
+      (address.find((a) => a == district) || district == "")
     ) {
-      return i;
+      return true;
     }
+    return false;
   });
-
+  console.log(ward);
+  console.log(district);
+  console.log(billboards);
   if (response.locals.type_user == 0 || !response.locals.type_user) {
-    if (
-      (billboards = billboards.filter((i) => {
-        if (ward == "" && district == "") return i;
-        let address = i?.properties?.place.split(", ");
-
-        if (
-          (address.find((a) => a == ward) || !ward) &&
-          (address.find((a) => a == district) || !district)
-        ) {
-          return i;
-        }
-      }))
-    ) {
+    if (true) {
       reports = await getDb()
         .collection("reports")
         .find({

@@ -54,7 +54,6 @@ function create_authorize_request(advertisement) {
 	  id="inscreen-form-login"
 	  class="form-container active"
 	  method="post"
-	  accept="image/png,image/jpeg"
 	  enctype="multipart/form-data"
 	  action="/dashboard/license/request"
 	>
@@ -126,6 +125,8 @@ function create_authorize_request(advertisement) {
 			type="file"
 			name="attached_files"
 			id="attached_files"
+      accept="image/png,image/jpeg"
+      multiple
 		  />
 		</div>
 	  </div>
@@ -177,7 +178,6 @@ function create_edit_request(billboard = null) {
 	id="inscreen-form-login"
 	class="form-container active"
 	method="post"
-	accept="image/png,image/jpeg"
 	enctype="multipart/form-data"
 	action="/dashboard/request"
   >
@@ -367,6 +367,8 @@ function create_edit_request(billboard = null) {
 	  type="file"
 	  name="attached_files"
 	  id="attached_files"
+    accept="image/png,image/jpeg"
+    multiple
 	  />
 	</div>
 	
