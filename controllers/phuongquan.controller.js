@@ -112,20 +112,32 @@ const processQuery = (req, arr) => {
     );
   }
 
-    if (req.path === "/dashboard/license") {
-        arr.map((e1) => {
-            e1.properties.boards = e1.properties.boards.filter(
-              processFilterQuery(req, (e3) => e3.license.state, [0, 1, 4, 2], "license"));
-            return e1;
-        });
-        arr = arr.filter((e) => e.properties.boards.length > 0);
-    } else if (req.path === "/dashboard/advertise") {
-        arr.map((e1) => {
-            e1.properties.boards = e1.properties.boards.filter(
-              processFilterQuery(req, (e3) => e3.license.state, [0, 1, null, 4, 2], "license"));
-            return e1;
-        });
-    }
+  if (req.path === "/dashboard/license") {
+    arr.map((e1) => {
+      e1.properties.boards = e1.properties.boards.filter(
+        processFilterQuery(
+          req,
+          (e3) => e3.license.state,
+          [0, 1, 4, 2],
+          "license"
+        )
+      );
+      return e1;
+    });
+    arr = arr.filter((e) => e.properties.boards.length > 0);
+  } else if (req.path === "/dashboard/advertise") {
+    arr.map((e1) => {
+      e1.properties.boards = e1.properties.boards.filter(
+        processFilterQuery(
+          req,
+          (e3) => e3.license.state,
+          [0, 1, null, 4, 2],
+          "license"
+        )
+      );
+      return e1;
+    });
+  }
 
   arr = arr.filter(
     processFilterQuery(req, (e) => e.type, [0, 1, 2, 3], "report_type")
@@ -329,23 +341,29 @@ const _get_advertisement = async (req, res) => {
 
 //Yêu cầu cấp phép biển quáng cáo
 const _get_license = async (req, res) => {
-    let licenses = await db.getDb().collection("licenses").aggregate([
+  let licenses = await db
+    .getDb()
+    .collection("licenses")
+    .aggregate([
       { $set: { board_id: "$billboard.board_id" } },
       {
         $lookup: {
-            from: "billboards",
-            localField: "billboard.billboard_id",
-            foreignField: "_id",
-            as: "billboard",
+          from: "billboards",
+          localField: "billboard.billboard_id",
+          foreignField: "_id",
+          as: "billboard",
         },
       },
-      { $unwind: "$billboard" }
-    ]).toArray();
-    res.locals.billboards = licenses.map(e => {
-      e.billboard.properties.boards = e.billboard.properties.boards.filter(b => b._id.equals(e.board_id));
-      e.billboard.properties.boards[0].license = e;
-      return e.billboard;
-    });
+      { $unwind: "$billboard" },
+    ])
+    .toArray();
+  res.locals.billboards = licenses.map((e) => {
+    e.billboard.properties.boards = e.billboard.properties.boards.filter((b) =>
+      b._id.equals(e.board_id)
+    );
+    e.billboard.properties.boards[0].license = e;
+    return e.billboard;
+  });
 
   res.locals.billboards = processQuery(req, res.locals.billboards);
 
@@ -495,8 +513,8 @@ const _get_request_edit = async (req, res) => {
       ])
       .toArray()
   );
-  //res.locals.requests = processQuery(req, res.locals.requests);
-  //res.locals.ward_list = getWardList(req);
+  res.locals.requests = processQuery(req, res.locals.requests);
+  res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
