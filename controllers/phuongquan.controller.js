@@ -172,6 +172,13 @@ const processQuery = (req, arr) => {
   return arr;
 };
 
+
+const _user_checkpoint = (req, res, next) => {
+  if (req.session)
+  next()
+}
+
+
 const _profile = async (req, res) => {
   let { id } = req.params;
   if (id != res.locals.uid) {
@@ -222,18 +229,6 @@ const _get_map = async (req, res) => {
   let district = res.locals.district ? res.locals.district : "";
   let reports = [];
 
-  billboards = billboards.filter((i) => {
-    if (ward == "" && district == "") return i;
-    let address = i?.properties?.place.split(", ");
-
-    if (
-      (address.find((a) => a == ward) || !ward) &&
-      (address.find((a) => a == district) || !district)
-    ) {
-      return i;
-    }
-  });
-
   if (res.locals.type_user == 1) {
     reports = await db.getDb().collection("reports").find().toArray();
 
@@ -266,7 +261,6 @@ const _get_map = async (req, res) => {
       console.log("details ", newRP[i].properties);
     }
 
-    console.log(reports);
     return res.render("phan-cum-phuong/trangchu", {
       action: false,
       billboards: billboards,
@@ -281,7 +275,7 @@ const _get_map = async (req, res) => {
 const _get_advertisement = async (req, res) => {
   res.locals.billboards = await db
     .getDb()
-    .collection("billboard")
+    .collection("billboards")
     .aggregate([
       {
         $unwind: "$properties.boards",
@@ -348,7 +342,7 @@ const _get_advertisement = async (req, res) => {
 const _get_license = async (req, res) => {
   res.locals.billboards = await db
     .getDb()
-    .collection("billboard")
+    .collection("billboards")
     .aggregate([
       {
         $unwind: "$properties.boards",
@@ -513,7 +507,7 @@ const _get_request_edit = async (req, res) => {
     .aggregate([
       {
         $lookup: {
-          from: "billboard",
+          from: "billboards",
           localField: "billboard",
           foreignField: "_id",
           as: "billboard",

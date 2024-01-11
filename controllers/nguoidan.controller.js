@@ -14,13 +14,12 @@ const _get_report = (request, response) => {
 };
 
 const _post_report = (req, res) => {
-  console.log(req);
   try {
-    console.log(req.body);
     let secretKey = "6LdBr0kpAAAAAPCqy5ZCWtLtxGGMG-DzTjAcoNZA";
     if (!req.body.captcha) {
       return res.status(400).json({
         success: false,
+        message: "have not received captcha."
       });
     }
     let {
