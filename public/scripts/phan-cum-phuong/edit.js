@@ -20,16 +20,17 @@ function get_report(feature) {
       method="post"
       action="/dashboard/request/edit"
     >
+      <input type="hidden" name = "billboard" value=${feature._id}>
       <h2>Yêu cầu Chỉnh sửa</h2>
       <div class="form-section">
         <p id="street">${feature.properties.place}</p>
       </div>
       <h5>Thông tin mới:</h5>
       <div class="form-section">
-        <label for="place_type">Thông tin cần sửa:</label>
+        <label for="select_option">Thông tin cần sửa:</label>
         <select class="form-select"
-          id="select-option"
-          name="select-option"
+          id="select_option"
+          name="select_option"
           aria-label="ad type selector"
           required
         />
@@ -48,7 +49,16 @@ function get_report(feature) {
   report_node = document.createElement("section");
   report_node.setAttribute("id", "report-popup");
   report_node.classList.add("active");
-
+  $(document).ready(function () {
+    $("#inscreen-form-report").on("submit", function () {
+      var hvalue = $(".ql-editor").html();
+      $(this).append(
+        "<textarea name='details' style='display:none'>" +
+          hvalue +
+          "</textarea>"
+      );
+    });
+  });
   report_node.innerHTML += report;
   body.append(report_node);
 
@@ -57,8 +67,26 @@ function get_report(feature) {
     body.removeChild(report_node);
     report_node = null;
   });
-
-  $("#select-option").on("change", function (e) {
+  let type = "";
+  let adtype = "";
+  let board = "";
+  for (let i = 0; i < placeTypes.length; ++i) {
+    let selected = feature.properties.place_type === placeTypes[i].type;
+    type += `<option value="${placeTypes[i].type}" ${
+      selected ? "selected" : ""
+    }>${placeTypes[i].type}</option>`;
+  }
+  for (let i = 0; i < type_advertise.length; ++i) {
+    let selected = feature.properties.type_advertise === type_advertise[i].type;
+    adtype += `<option value="${type_advertise[i].type}" ${
+      selected ? "selected" : ""
+    }>${placeTypes[i].type}</option>`;
+  }
+  for (let i = 0; i < feature.properties.boards.length; ++i) {
+    board += `<option value="${i}|${feature.properties.boards[i].board_type}"
+    >(${i}) ${feature.properties.boards[i].board_type}</option>`;
+  }
+  $("#select_option").on("change", function (e) {
     report_index = e.target.value;
     console.log(report_index);
     if (report_index == 0) {
@@ -72,7 +100,7 @@ function get_report(feature) {
         required
       />
         <option value="">Chọn...</option>
-        <option value="">Chọn...</option>
+        ${type}
       </select>
     </div>
     <div class="form-section">
@@ -84,7 +112,7 @@ function get_report(feature) {
         required
       />
         <option value="">Chọn...</option>
-        <option value="">Chọn...</option>
+        ${adtype}
       </select>
     </div>
     <div class="form-section">
@@ -95,8 +123,12 @@ function get_report(feature) {
         aria-label="ad type selector"
         required
       />
-        <option value="">Chọn...</option>
-        <option value="">Chọn...</option>
+        <option value="1" ${
+          feature.properties.status === 1 ? "selected" : ""
+        }>Đã Quy hoạch</option>
+        <option value="0" ${
+          feature.properties.status === 0 ? "selected" : ""
+        }>Chưa Quy hoạch</option>
       </select>
     </div>
     <div class="form-section">
@@ -113,32 +145,20 @@ function get_report(feature) {
     } else if (report_index == 1) {
       $("#report-request-section-form-container .container")
         .html(`<div class="form-section">
-    <label for="place_type">Loại bảng:</label>
+    <label for="board_type">Loại bảng:</label>
     <select class="form-select"
-      id="place_type"
-      name="place_type"
+      id="board_type"
+      name="board_type"
       aria-label="ad type selector"
       required
     />
       <option value="">Chọn...</option>
-      <option value="">Chọn...</option>
+      ${board}
     </select>
   </div>
   <div class="form-section">
-    <label for="advertise_type">kích thước:</label>
-    <input type="text" id="name" name="name" value="" placeholder ="XxY">
-  </div>
-  <div class="form-section">
-    <label for="status">Quy hoạch:</label>
-    <select class="form-select"
-      id="status"
-      name="status"
-      aria-label="ad type selector"
-      required
-    />
-      <option value="">Chọn...</option>
-      <option value="">Chọn...</option>
-    </select>
+    <label for="size">kích thước:</label>
+    <input type="text" id="size" name="size" value="" placeholder ="XxY">
   </div>
   <div class="form-section">
     <label for="tel">Thông tin chỉnh sửa:</label>
@@ -148,6 +168,11 @@ function get_report(feature) {
     <button class="submit-button submit">Gửi</button>
   </div>`);
 
+      $("#board_type").on("change", function (e) {
+        $("#size").val(
+          feature.properties.boards[Number(e.target.value.split("|")[0])].size
+        );
+      });
       var quill = new Quill("#editor", {
         theme: "snow",
       });
