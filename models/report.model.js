@@ -20,7 +20,7 @@ module.exports = class Report {
     this.sender_name = name;
     this.place = position;
     this.state = report_const.REPORT_STATE.INCOMPLETE;
-    this.images = images;
+    this.images = [...images];
     this.send_day = new Date();
     this.details = details;
     this.handling_method;

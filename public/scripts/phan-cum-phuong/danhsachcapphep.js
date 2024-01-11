@@ -131,6 +131,10 @@ function create_authorize_request(advertisement) {
   var quill = new Quill("#editor", {
     theme: "snow",
   });
+
+  $("#attached_files").on("change", (e) => {
+    uploadImage(e);
+  });
 }
 
 let request_node;

@@ -1,18 +1,17 @@
 function cancel_request(id) {
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       location.reload();
     }
   };
   xhr.open("POST", "/dashboard/request/cancel", true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(JSON.stringify({ id: id }));
 }
 
 const table = document.querySelector("#main__list");
 let advertisements = [];
-
 
 function create_edit_request(billboard) {
   if (edit_node) {
@@ -226,6 +225,10 @@ ${
 
   var quill = new Quill("#editor", {
     theme: "snow",
+  });
+
+  $("#attached_files").on("change", (e) => {
+    uploadImage(e);
   });
 }
 

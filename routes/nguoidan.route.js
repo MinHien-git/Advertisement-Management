@@ -25,13 +25,15 @@ const upload = multer({
       cb(null, false);
     }
   },
-  limits: { fieldSize: 10 * 1024 * 1024 }
+  limits: { fieldSize: 10 * 1024 * 1024 },
 });
 
 const controller = require("../controllers/nguoidan.controller");
 
-router.post("/report", 
-    upload.array("attached_files", 2),
-    controller._post_report);
+router.post(
+  "/report",
+
+  controller._post_report
+);
 
 module.exports = router;
