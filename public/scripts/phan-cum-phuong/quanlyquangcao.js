@@ -62,7 +62,7 @@ function create_authorize_request(advertisement) {
 	  action="/dashboard/license/request"
 	>
 	  <input type="hidden" id ="bbid" name="id" value="${advertisement._id}">
-    <input type="hidden" name="board_id" value="${advertisement.board._id}">
+    <input type="hidden" id ="board_id" name="board_id" value="${advertisement.board._id}">
 	  <h2>Cấp phép Quảng cáo</h2>
 	  <div class="form-section">
 		<label for="street">Địa chỉ yêu cầu:</label>
