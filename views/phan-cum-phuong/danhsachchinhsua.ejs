@@ -124,7 +124,7 @@
 
             <% for (let i = 0; i < locals.requests.length; i++) { %>
               <% const request = locals.requests[i]; %>
-              <% const advertisement = locals.requests[i].billboard; %>
+              <% const advertisement = request.billboard; %>
               <% const board = advertisement.[request.board_index]; %>
               <% const id = locals.requests[i]._id; %>
             <div id="list__item<%= id %>" class="card shadow-sm">
@@ -134,11 +134,11 @@
                     <%= advertisement.properties.type %>
                   </li>
                   <li class="list__col2"><%= advertisement.properties.place %></li>
-                  <% if (locals.requests[i].state === 1) { %>
+                  <% if (locals.requests[i].state == 1) { %>
                   <li class="list__col3 fw-semibold" style="color: #329a44">
                     Đã duyệt
                   </li>
-                  <% } else if (locals.requests[i].state === 2) { %>
+                  <% } else if (locals.requests[i].state == 2) { %>
                     <li class="list__col3 fw-semibold" style="color: #ff7b7b">
                       Từ chối
                     </li>

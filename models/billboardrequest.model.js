@@ -4,7 +4,7 @@ const db = require("../database/database");
 
 module.exports = class BillboardRequest {
   constructor(billboard, place_type, type_advertise, status, details) {
-    this.billboard = billboard;
+    this.billboard = new ObjectId(billboard);
     this.place_type = place_type;
     this.type_advertise = type_advertise;
     this.status = status;
