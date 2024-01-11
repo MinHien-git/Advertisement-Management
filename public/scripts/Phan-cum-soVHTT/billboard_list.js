@@ -14,7 +14,6 @@ function passToModal(btn, mode) {
         "#billboard__status__" + mode
     );
 
-    console.log(btn.dataset);
     const board_status = document.querySelector("#board__status__" + mode);
     if (billboard_id) {
         billboard_id.value = btn.dataset.billboardId;
@@ -50,7 +49,6 @@ function passToModal(btn, mode) {
         place_type.value = btn.dataset.placeType ? btn.dataset.placeType : "";
     }
     if (billboard_status) {
-        console.log(btn.dataset.billboardStatus);
         billboard_status.value = btn.dataset.billboardStatus
             ? btn.dataset.billboardStatus.toString()
             : "";
@@ -173,8 +171,6 @@ async function deleteBillboard(e) {
 function toggleTextarea(checkbox_id, textarea_id) {
     const textarea_el = document.getElementById(textarea_id);
     const checkbox_el = document.getElementById(checkbox_id);
-    console.log(textarea_el);
-    console.log(checkbox_el);
     if (checkbox_el.checked) {
         textarea_el.style.display = "flex";
     } else textarea_el.style.display = "none";

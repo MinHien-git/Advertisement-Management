@@ -6,6 +6,7 @@ const { ObjectId } = require("mongodb");
 const { v4 } = require("uuid");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
+const e = require("express");
 
 function runAtSpecificTimeOfDay(hour, minutes, func) {
     const twentyFourHours = 86400000;
@@ -216,13 +217,37 @@ async function getPageContent(req, res, item_list) {
     return page_item_list;
 }
 
-function createSearchQuery(search_val) {
-    let search_query =
-        search_val != null && search_val != ""
-            ? {
-                  "properties.place": { $regex: search_val, $options: "i" },
-              }
-            : {};
+function createSearchQuery(search_val, list_type) {
+    let search_query = {};
+
+    if (list_type == "billboards") {
+        search_query =
+            search_val != null && search_val != ""
+                ? {
+                      "properties.place": { $regex: search_val, $options: "i" },
+                  }
+                : {};
+    } else if (list_type == "licenses") {
+        search_query =
+            search_val != null && search_val != ""
+                ? {
+                      $or: [
+                          {
+                              company_name: {
+                                  $regex: search_val,
+                                  $options: "i",
+                              },
+                          },
+                          {
+                              company_contact: {
+                                  $regex: search_val,
+                                  $options: "i",
+                              },
+                          },
+                      ],
+                  }
+                : {};
+    }
 
     return search_query;
 }
@@ -467,7 +492,11 @@ async function processList(collection, search_queries) {
     //const filter_query = createFilterQuery(filterVal);
     //const sort_query = createSortQuery(sortVal);
     let item_list = [];
-    if (collection != "licenses" && collection != "requests") {
+    if (
+        collection != "licenses" &&
+        collection != "board-request" &&
+        collection != "billboard-request"
+    ) {
         item_list = await db
             .getDb()
             .collection(collection)
@@ -922,7 +951,7 @@ const _get_billboards = async (req, res) => {
     let search_val = req.query.search;
     let sort_val = req.query.sort;
 
-    let search_query = createSearchQuery(search_val);
+    let search_query = createSearchQuery(search_val, "billboards");
     res.locals.type_user = 2;
     res.locals.isAuth = true;
     // res.locals.billboards = await db
@@ -989,6 +1018,20 @@ const _edit_billboard = async (req, res) => {
             boards = existing_billboard.properties.boards;
             board_amount = existing_billboard.properties.board_amount;
         }
+        if (place.includes("Đ. ")) place = place.replace("Đ. ", "");
+        const response = await fetch(
+            `https://api.geoapify.com/v1/geocode/search?text=${place}&type=street&format=json&lang=vi&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
+            { method: "GET" }
+        );
+        const toJson = await response.json();
+        let new_lon_lat = [];
+        if (toJson.results.length > 0) {
+            if (toJson.results.length >= 2) {
+                new_lon_lat = [toJson.results[1].lon, toJson.results[1].lat];
+            } else {
+                new_lon_lat = [toJson.results[0].lon, toJson.results[0].lat];
+            }
+        }
         const updated_billboard = await db
             .getDb()
             .collection("billboards")
@@ -1002,6 +1045,7 @@ const _edit_billboard = async (req, res) => {
                         "properties.status": status,
                         "properties.board_amount": board_amount,
                         "properties.boards": boards,
+                        "geometry.coordinates": new_lon_lat,
                     },
                 },
                 { returnDocument: "after" }
@@ -1369,7 +1413,7 @@ const _get_licenses = async (req, res) => {
     let search_val = req.query.search;
     let sort_val = req.query.sort;
 
-    let search_query = createSearchQuery(search_val);
+    let search_query = createSearchQuery(search_val, "licenses");
 
     let item_list = await processList("licenses", search_query);
     res.locals.list_districts = await getUniqueDistrictsWards(item_list);
@@ -1404,38 +1448,35 @@ const _approve_license = async (req, res) => {
     const { id, state } = req.body;
 
     try {
-        const license = await db
-            .getDb()
-            .collection("licenses")
-            .findOne({ _id: new ObjectId(id) });
-        const updateInfo = new License(
-            license.billboard,
-            license.company_name,
-            license.company_contact,
-            license.start_date,
-            license.end_date,
-            state,
-            license.images
-        );
-        await db
+        const new_license = await db
             .getDb()
             .collection("licenses")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { ...updateInfo } },
+                { $set: { state: state } },
                 { returnDocument: "after" }
             );
 
-        await db
+        const new_billboard = await db
             .getDb()
             .collection("billboards")
             .findOneAndUpdate(
-                { _id: new ObjectId(license.billboard) },
-                { $set: { license: license._id } },
+                {
+                    _id: new ObjectId(new_license.billboard.billboard_id),
+                    "properties.boards._id": new ObjectId(
+                        new_license.billboard.board_id
+                    ),
+                },
+                {
+                    $set: {
+                        "properties.boards.$.license": new_license._id,
+                        "properties.boards.$.status": 1,
+                    },
+                },
                 { returnDocument: "after" }
             );
-        console.log("license " + id + " approved!");
-        return res.send("license " + id + " approved!");
+        console.log(new_license, new_billboard);
+        return res.send([new_license, new_billboard]);
     } catch (err) {
         res.send(err);
         console.error(err);
@@ -1493,6 +1534,43 @@ const _post_license_edit_request = async (req, res) => {
     }
 };
 
+const _get_board_edit_requests = async (req, res) => {
+    let search_val = req.query.search;
+    let sort_val = req.query.sort;
+
+    let search_query = createSearchQuery(search_val, "board_edit_requests");
+
+    let item_list = await processList("board-request", search_query);
+
+    res.locals.list_districts = await getUniqueDistrictsWards(item_list);
+
+    let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
+        item_list,
+        "board-requests"
+    );
+    let { unique_ad_types, unique_place_types } = await getUniqueAdInfo(
+        item_list
+    );
+
+    res.locals.list_types = unique_types;
+    res.locals.list_statuses = unique_statuses;
+    res.locals.ad_types = unique_ad_types;
+    res.locals.place_types = unique_place_types;
+
+    item_list = await filterItems(item_list, req.query, req.path);
+    item_list = await sortList(item_list, sort_val, "requests");
+    let pageItems = await getPageContent(req, res, item_list);
+
+    res.locals.edit_requests = pageItems;
+
+    res.locals.edit_requests.forEach((edit_req) => {
+        edit_req.billboard[0].properties.place =
+            edit_req.billboard[0].properties.place.split(", Thành phố")[0];
+    });
+
+    res.render("phan-cum-soVHTT/DuyetYCChinhSuaBQC");
+};
+
 const _get_edit_requests = async (req, res) => {
     let search_val = req.query.search;
     let sort_val = req.query.sort;
@@ -1529,6 +1607,7 @@ const _get_edit_requests = async (req, res) => {
 
     res.render("phan-cum-soVHTT/DuyetYCChinhSua");
 };
+
 const _approve_edit_request = async (req, res) => {
     const { id, state } = req.body;
 
@@ -1617,7 +1696,7 @@ const _get_reports = async (req, res) => {
     let search_val = req.query.search;
     let sort_val = req.query.sort;
 
-    let search_query = createSearchQuery(search_val);
+    let search_query = createSearchQuery(search_val, "reports");
 
     res.locals.type_user = 2;
     res.locals.isAuth = true;
@@ -1700,7 +1779,7 @@ const _get_accounts = async (req, res) => {
     let search_val = req.query.search;
     let sort_val = req.query.sort;
 
-    let search_query = createSearchQuery(search_val);
+    let search_query = createSearchQuery(search_val, "accounts");
 
     let item_list = await processList("users", search_query);
 
@@ -1794,7 +1873,7 @@ const _get_districts_wards = async (req, res) => {
     let search_val = req.query.search;
     let sort_val = req.query.sort;
 
-    let search_query = createSearchQuery(search_val);
+    let search_query = createSearchQuery(search_val, "districts-wards");
 
     let item_list = await processList("districts", search_query);
 
@@ -1879,7 +1958,6 @@ const _edit_district = async (req, res) => {
             .getDb()
             .collection("district-ward")
             .findOne({ _id: new ObjectId(district_id) });
-        console.log(district_id);
         if (existing_district != null) {
             await db
                 .getDb()

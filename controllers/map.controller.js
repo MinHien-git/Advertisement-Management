@@ -2,7 +2,58 @@ const { request, response } = require("express");
 const { getDb } = require("../database/database");
 
 const _get_map = async (request, response) => {
-  let billboards = await getDb().collection("billboards").find({}).toArray();
+  let billboards = await getDb()
+    .collection("billboards")
+    .aggregate([
+      {
+        $unwind: "$properties.boards",
+      },
+      {
+        $lookup: {
+          from: "licenses",
+          localField: "properties.boards.license",
+          foreignField: "_id",
+          as: "properties.boards.license",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          boards: "$properties.boards",
+          geometry: 1,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          type: { $first: "$type" },
+          properties: { $first: "$properties" },
+          boards: { $push: "$boards" },
+          geometry: { $first: "$geometry" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          "properties.boards": "$boards",
+          geometry: 1,
+        },
+      }])
+    .toArray();
+  console.log(JSON.stringify(billboards, null, "  "));
+
   let ward = response.locals.ward ? response.locals.ward : "";
   let district = response.locals.district ? response.locals.district : "";
   let reports = [];
@@ -18,9 +69,6 @@ const _get_map = async (request, response) => {
     }
     return false;
   });
-  console.log(ward);
-  console.log(district);
-  console.log(billboards);
   if (response.locals.type_user == 0 || !response.locals.type_user) {
     if (true) {
       reports = await getDb()
