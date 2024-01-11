@@ -526,19 +526,20 @@ const _post_request_edit = async (req, res) => {
         place_type,
         advertise_type,
         status,
-        details
+        details,
+        req.body.select_option
     );
     if (await request.send_request()) console.log("send!");
   } else {
     let { billboard, board_type, size, details } = req.body;
     let value = board_type.split("|");
     let request = new BoardRequest(
-      new ObjectId(billboard),
-      value[1],
-      value[0],
-      size,
-      details,
-      select_option
+        new ObjectId(billboard),
+        value[1],
+        value[0],
+        size,
+        details,
+        req.body.select_option
     );
     if (await request.send_request()) console.log("send!");
   }
