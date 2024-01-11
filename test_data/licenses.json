@@ -1,116 +1,196 @@
-[
-    {
-        "_id": {
-            "$oid": "659abbf93f943f1ccff27e9f"
-        },
-        "billboard": {
-            "billboard_id": {
-                "$oid": "65307f9eda6ef7bbc2fb6d96"
-            },
-            "board_id": {
-                "$oid": "659a93c2d1efc93ada24c925"
-            }
-        },
-        "company_contact": "ctyABC@abc",
-        "company_name": "Công ty ABC",
-        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "images": [],
-        "state": 0
+[{
+  "_id": {
+    "$oid": "659be2565a8325c97409ba82"
+  },
+  "type": "Feature",
+  "properties": {
+    "type": "0",
+    "sender_email": "lmhien21@clc.fitus.edu.vn",
+    "sender_number": null,
+    "sender_name": "Luong Minh Hien",
+    "place": "56 Hàm Nghi, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Vietnam",
+    "state": 0,
+    "images": "",
+    "send_day": {
+      "$date": "2024-01-08T11:53:58.583Z"
     },
-    {
-        "_id": {
-            "$oid": "659abbf9e0bd169df685a369"
-        },
-        "billboard": {
-            "billboard_id": {
-                "$oid": "65307f9eda6ef7bbc2fb6d98"
-            },
-            "board_id": {
-                "$oid": "659a93c2d1efc93ada24c926"
-            }
-        },
-        "company_contact": "ctyBCD@BCD",
-        "company_name": "Công ty BCD",
-        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "images": [],
-        "state": 0
+    "details": "<p>hellllllllllll</p>",
+    "handling_method": null,
+    "board": null
+  },
+  "geometry": {
+    "coordinates": [
+      106.7038702,
+      10.7711941
+    ],
+    "type": "Point"
+  }
+},
+{
+  "_id": {
+    "$oid": "659be2665a8325c97409ba83"
+  },
+  "type": "Feature",
+  "properties": {
+    "type": "0",
+    "sender_email": "lmhien21@clc.fitus.edu.vn",
+    "sender_number": null,
+    "sender_name": "Luong Minh Hien",
+    "place": "56 Đ. Lâm Văn Bền, Tân Thuận Tây, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+    "state": 0,
+    "images": "",
+    "send_day": {
+      "$date": "2024-01-08T11:54:14.342Z"
     },
-    {
-        "_id": {
-            "$oid": "659abbf99ce73b4df7ad49f0"
-        },
-        "billboard": {
-            "billboard_id": {
-                "$oid": "65307f9eda6ef7bbc2fb6d98"
-            },
-            "board_id": {
-                "$oid": "659a93c2d1efc93ada24c927"
-            }
-        },
-        "company_contact": "ctyDEF@def",
-        "company_name": "Công ty DEF",
-        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "images": [],
-        "state": 0
+    "details": "<p>hekk</p>",
+    "handling_method": null,
+    "board": null
+  },
+  "geometry": {
+    "coordinates": [
+      106.715655,
+      10.7490564
+    ],
+    "type": "Point"
+  }
+},
+{
+  "_id": {
+    "$oid": "659be2715a8325c97409ba84"
+  },
+  "type": "Feature",
+  "properties": {
+    "type": "0",
+    "sender_email": "lmhien21@clc.fitus.edu.vn",
+    "sender_number": null,
+    "sender_name": "Luong Minh Hien",
+    "place": "100 Đ. Cao Lỗ, Phường 4, Quận 8, Thành phố Hồ Chí Minh, Vietnam",
+    "state": 0,
+    "images": "",
+    "send_day": {
+      "$date": "2024-01-08T11:54:25.310Z"
     },
-    {
-        "_id": {
-            "$oid": "65307f9eda6ef7bbc2fb6d99"
-        },
-        "billboard": {
-            "billboard_id": {
-                "$oid": "65307f9eda6ef7bbc2fb6d99"
-            },
-            "board_id": {
-                "$oid": "659a93c2d1efc93ada24c928"
-            }
-        },
-        "company_contact": "ctyDEF@def",
-        "company_name": "Công ty DEF",
-        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "images": [],
-        "state": 0
+    "details": "<p>bc</p>",
+    "handling_method": null,
+    "board": null
+  },
+  "geometry": {
+    "coordinates": [
+      106.6772312,
+      10.7411779
+    ],
+    "type": "Point"
+  }
+},
+{
+  "_id": {
+    "$oid": "659be27e5a8325c97409ba85"
+  },
+  "type": "Feature",
+  "properties": {
+    "type": "0",
+    "sender_email": "hienb697@gmail.com",
+    "sender_number": null,
+    "sender_name": "Luong Minh Hien",
+    "place": "13 Số 69, Khu Phố 2, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+    "state": 0,
+    "images": "",
+    "send_day": {
+      "$date": "2024-01-08T11:54:38.307Z"
     },
-    {
-        "_id": {
-            "$oid": "659abbf9f62e08fb39218656"
-        },
-        "billboard": {
-            "billboard_id": {
-                "$oid": "65307f9eda6ef7bbc2fb6d9a"
-            },
-            "board_id": {
-                "$oid": "659a93c2d1efc93ada24c92a"
-            }
-        },
-        "company_contact": "ctyTUV@tuv",
-        "company_name": "Công ty TUV",
-        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "images": [],
-        "state": 0
+    "details": "<p>helll</p>",
+    "handling_method": null,
+    "board": "0"
+  },
+  "geometry": {
+    "coordinates": [
+      106.7051246,
+      10.7442729
+    ],
+    "type": "Point"
+  }
+},
+{
+  "_id": {
+    "$oid": "659be2895a8325c97409ba86"
+  },
+  "type": "Feature",
+  "properties": {
+    "type": "1",
+    "sender_email": "lmhien21@clc.fitus.edu.vn",
+    "sender_number": null,
+    "sender_name": "Luong Minh Hien",
+    "place": "359 Trần Xuân Soạn, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh, Vietnam",
+    "state": 0,
+    "images": "",
+    "send_day": {
+      "$date": "2024-01-08T11:54:49.840Z"
     },
-    {
-        "_id": {
-            "$oid": "659abbf98e658ebd632462d2"
-        },
-        "billboard": {
-            "billboard_id": {
-                "$oid": "65307f9eda6ef7bbc2fb6d9a"
-            },
-            "board_id": {
-                "$oid": "659a93c2d1efc93ada24c929"
-            }
-        },
-        "company_contact": "ctyXYZ@xyz",
-        "company_name": "Công ty XYZ",
-        "start_date": "Sun Jan 07 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "end_date": "Fri Jan 12 2024 07:00:00 GMT+0700 (Giờ Đông Dương)",
-        "images": [],
-        "state": 1
-    }
-]
+    "details": "<p>hellll</p>",
+    "handling_method": null,
+    "board": null
+  },
+  "geometry": {
+    "coordinates": [
+      106.6980859,
+      10.7499429
+    ],
+    "type": "Point"
+  }
+},
+{
+  "_id": {
+    "$oid": "659be2995a8325c97409ba87"
+  },
+  "type": "Feature",
+  "properties": {
+    "type": "2",
+    "sender_email": "lmhien21@clc.fitus.edu.vn",
+    "sender_number": null,
+    "sender_name": "Luong Minh Hien",
+    "place": "203 Đ. Sư Vạn Hạnh, Phường 9, Quận 10, Thành phố Hồ Chí Minh, Vietnam",
+    "state": 0,
+    "images": "",
+    "send_day": {
+      "$date": "2024-01-08T11:55:05.899Z"
+    },
+    "details": "<p>helloooo</p>",
+    "handling_method": null,
+    "board": null
+  },
+  "geometry": {
+    "coordinates": [
+      106.6731971,
+      10.7598181
+    ],
+    "type": "Point"
+  }
+},
+{
+  "_id": {
+    "$oid": "659f92ae2ff27befaa171ca0"
+  },
+  "type": "Feature",
+  "properties": {
+    "type": "3",
+    "sender_email": "test@test",
+    "sender_number": "123",
+    "sender_name": "234f3",
+    "place": "120 Đ. Hồng Bàng, Phường 12, Quận 5, Thành phố Hồ Chí Minh, Vietnam",
+    "state": 0,
+    "images": "",
+    "send_day": {
+      "$date": "2024-01-11T07:03:10.793Z"
+    },
+    "details": "<p>wqeqw2</p>",
+    "handling_method": null,
+    "board": "2"
+  },
+  "geometry": {
+    "coordinates": [
+      106.6651004,
+      10.757205
+    ],
+    "type": "Point"
+  }
+}]

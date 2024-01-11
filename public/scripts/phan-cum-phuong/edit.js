@@ -91,7 +91,7 @@ function get_report(feature) {
     console.log(report_index);
     if (report_index == 0) {
       $("#report-request-section-form-container .container")
-        .html(`<div class="form-section">
+          .html(`<div class="form-section">
       <label for="place_type">Phân loại:</label>
       <select class="form-select"
         id="place_type"
@@ -112,7 +112,7 @@ function get_report(feature) {
         required
       />
         <option value="">Chọn...</option>
-        ${adtype}
+        ${feature.properties.type_advertises}
       </select>
     </div>
     <div class="form-section">
@@ -124,10 +124,10 @@ function get_report(feature) {
         required
       />
         <option value="1" ${
-          feature.properties.status === 1 ? "selected" : ""
+            feature.properties.status === 1 ? "selected" : ""
         }>Đã Quy hoạch</option>
         <option value="0" ${
-          feature.properties.status === 0 ? "selected" : ""
+            feature.properties.status === 0 ? "selected" : ""
         }>Chưa Quy hoạch</option>
       </select>
     </div>

@@ -40,377 +40,392 @@ const getAddress = (req, obj) => {
 };
 
 const compareLocation = (req, address) => {
-  if (req.session.district) {
-    if (
-      address.split(", ")[2] !== req.session.district &&
-      address.split(", ")[2].indexOf(req.session.district + " ") < 0
-    ) {
-      return false;
+    if (req.session.district) {
+        if (
+            address?.split(", ")[2] !== req.session.district &&
+            address?.split(", ")[2].indexOf(req.session.district + " ") < 0
+        ) {
+            return false;
+        }
     }
-  }
-  if (req.session.ward) {
-    return (
-      address.split(", ")[1] === req.session.ward ||
-      address.split(", ")[1].indexOf(req.session.ward + " ") >= 0
-    );
-  }
-  return true;
+    if (req.session.ward) {
+        return (
+            address?.split(", ")[1] === req.session.ward ||
+            address?.split(", ")[1].indexOf(req.session.ward + " ") >= 0
+        );
+    }
+    return true;
 };
 
 const getWardList = (req) => {
-  if (!req.session?.ward) {
-    const district = district_list.filter((e) => {
-      return e.district == req.session.district;
-    });
-    district[0]?.wards.forEach((e) => {
-      e.ward = e.ward.replace("Phường ", "");
-      e.ward = e.ward.replace("Xã ", "");
-    });
-    return district[0]?.wards;
-  }
-  return null;
+    if (!req.session?.ward) {
+        const district = district_list.filter((e) => {
+            return e.district == req.session.district;
+        });
+        district[0]?.wards.forEach((e) => {
+            e.ward = e.ward.replace("Phường ", "");
+            e.ward = e.ward.replace("Xã ", "");
+        });
+        return district[0]?.wards;
+    }
+    return null;
 };
 
 const processFilterQuery = (req, mapping, values, query_name) => {
-  return (e) => {
-    let have_query = false;
-    for (let i = 0; i < values.length; i += 1) {
-      if (req.query[query_name + (i + 1).toString()]) {
-        if (mapping(e) == values[i]) {
-          return true;
+    return (e) => {
+        let have_query = false;
+        for (let i = 0; i < values.length; i += 1) {
+            if (req.query[query_name + (i + 1).toString()]) {
+                if (mapping(e) == values[i]) {
+                    return true;
+                }
+                have_query = true;
+            }
         }
-        have_query = true;
-      }
-    }
-    return !have_query;
-  };
+        return !have_query;
+    };
 };
 
 const processQuery = (req, arr) => {
-  arr = arr.filter((e) => {
-    return compareLocation(req, getAddress(req, e));
-  });
-
-  if (req.query.search) {
     arr = arr.filter((e) => {
-      return getAddress(req, e).indexOf(req.query.search) >= 0;
+        return compareLocation(req, getAddress(req, e));
     });
-  }
 
-  if (req.query.report) {
-    arr = arr.filter((e) => {
-      if (e.state == 0) {
-        return req.query.report == 0;
-      } else {
-        return !(req.query.report == 0);
-      }
-    });
-  }
-
-  if (!req.session.ward) {
-    const wards = getWardList(req).map((e) => e.ward);
-    arr = arr.filter(
-      processFilterQuery(
-        req,
-        (e) => getAddress(req, e).split(", ")[1],
-        wards,
-        "ward"
-      )
-    );
-  }
-
-  if (req.path === "/dashboard/license") {
-    arr.map((e1) => {
-      e1.properties.boards = e1.properties.boards.filter(
-        processFilterQuery(req, (e2) => e2.license.state, [0, 1], "license")
-      );
-      e1.properties.boards = e1.properties.boards.filter(
-        (e2) => e2.license.length > 0
-      );
-      return e1;
-    });
-    arr = arr.filter((e) => e.properties.boards.length > 0);
-  } else if (req.path === "/dashboard/advertise") {
-    arr.map((e1) => {
-      e1.properties.boards = e1.properties.boards.filter(
-        processFilterQuery(
-          req,
-          (e) => e.license.state,
-          [0, 1, undefined],
-          "license"
-        )
-      );
-      return e1;
-    });
-  }
-
-  arr = arr.filter(
-    processFilterQuery(req, (e) => e.type, [0, 1, 2, 3], "report_type")
-  );
-  arr = arr.filter(processFilterQuery(req, (e) => e.state, [1, 0], "request"));
-
-  if (req.query.sort) {
-    if (req.query.sort == 0) {
-      arr.sort((a, b) => {
-        return getAddress(req, a).localeCompare(getAddress(req, b));
-      });
-    } else {
-      arr.sort((a, b) => {
-        return getAddress(req, b).localeCompare(getAddress(req, a));
-      });
+    if (req.query.search) {
+        arr = arr.filter((e) => {
+            return getAddress(req, e).indexOf(req.query.search) >= 0;
+        });
     }
-  }
 
-  return arr;
+    if (req.query.report) {
+        arr = arr.filter((e) => {
+            if (e.state == 0) {
+                return req.query.report == 0;
+            } else {
+                return !(req.query.report == 0);
+            }
+        });
+    }
+
+    if (!req.session.ward) {
+        const wards = getWardList(req).map((e) => e.ward);
+        arr = arr.filter(
+            processFilterQuery(
+                req,
+                (e) => getAddress(req, e).split(", ")[1],
+                wards,
+                "ward"
+            )
+        );
+    }
+
+    if (req.path === "/dashboard/license") {
+        arr.map((e1) => {
+            e1.properties.boards = e1.properties.boards.filter(
+                processFilterQuery(
+                    req,
+                    (e2) => e2.license.state,
+                    [0, 1],
+                    "license"
+                )
+            );
+            e1.properties.boards = e1.properties.boards.filter(
+                (e2) => e2.license.length > 0
+            );
+            return e1;
+        });
+        arr = arr.filter((e) => e.properties.boards.length > 0);
+    } else if (req.path === "/dashboard/advertise") {
+        arr.map((e1) => {
+            e1.properties.boards = e1.properties.boards.filter(
+                processFilterQuery(
+                    req,
+                    (e) => e.license.state,
+                    [0, 1, undefined],
+                    "license"
+                )
+            );
+            return e1;
+        });
+    }
+
+    arr = arr.filter(
+        processFilterQuery(req, (e) => e.type, [0, 1, 2, 3], "report_type")
+    );
+    arr = arr.filter(
+        processFilterQuery(req, (e) => e.state, [1, 0], "request")
+    );
+
+    if (req.query.sort) {
+        if (req.query.sort == 0) {
+            arr.sort((a, b) => {
+                return getAddress(req, a).localeCompare(getAddress(req, b));
+            });
+        } else {
+            arr.sort((a, b) => {
+                return getAddress(req, b).localeCompare(getAddress(req, a));
+            });
+        }
+    }
+
+    return arr;
 };
 
 const _profile = async (req, res) => {
-  let { id } = req.params;
-  if (id != res.locals.uid) {
-    redirect("/");
-  }
-  res.locals.profile = await db
-    .getDb()
-    .collection("users")
-    .findOne({ _id: new ObjectId(id) });
-  console.log(res.locals.profile);
-  res.render("phan-cum-phuong/profilecanbo");
+    let { id } = req.params;
+    if (id != res.locals.uid) {
+        redirect("/");
+    }
+    res.locals.profile = await db
+        .getDb()
+        .collection("users")
+        .findOne({ _id: new ObjectId(id) });
+    console.log(res.locals.profile);
+    res.render("phan-cum-phuong/profilecanbo");
 };
 
 const _post_profile = async (req, res) => {
-  let { id } = req.params;
-  let { name, password, birth, phone } = req.body;
-  let new_infomation = {};
+    let { id } = req.params;
+    let { name, password, birth, phone } = req.body;
+    let new_infomation = {};
 
-  if (name !== "") {
-    new_infomation.name = name;
-  }
-  if (password !== "") {
-    new_infomation.password = password;
-  }
-  if (birth !== "") {
-    new_infomation.date = birth;
-  }
-  if (phone !== "") {
-    new_infomation.phone = phone;
-  }
+    if (name !== "") {
+        new_infomation.name = name;
+    }
+    if (password !== "") {
+        new_infomation.password = password;
+    }
+    if (birth !== "") {
+        new_infomation.date = birth;
+    }
+    if (phone !== "") {
+        new_infomation.phone = phone;
+    }
 
-  if (id != res.locals.uid) {
-    redirect("/");
-  }
-  await db
-    .getDb()
-    .collection("users")
-    .findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: { ...new_infomation } }
-    );
-  console.log(res.locals.profile);
-  res.redirect("/dashboard/profile/" + id);
+    if (id != res.locals.uid) {
+        redirect("/");
+    }
+    await db
+        .getDb()
+        .collection("users")
+        .findOneAndUpdate(
+            { _id: new ObjectId(id) },
+            { $set: { ...new_infomation } }
+        );
+    console.log(res.locals.profile);
+    res.redirect("/dashboard/profile/" + id);
 };
 
 const _get_map = async (req, res) => {
-  let billboards = await db.getDb().collection("billboards").find({}).toArray();
-  let ward = res.locals.ward ? res.locals.ward : "";
-  let district = res.locals.district ? res.locals.district : "";
-  let reports = [];
-  let placeType = await db.getDb().collection("place_types").find({}).toArray();
-  let type_advertise = await db
-    .getDb()
-    .collection("ad_types")
-    .find({})
-    .toArray();
-  billboards = billboards.filter((i) => {
-    if (ward == "" && district == "") return i;
-    let address = i?.properties?.place.split(", ");
+    let billboards = await db
+        .getDb()
+        .collection("billboards")
+        .find({})
+        .toArray();
+    let ward = res.locals.ward ? res.locals.ward : "";
+    let district = res.locals.district ? res.locals.district : "";
+    let reports = [];
+    let placeType = await db
+        .getDb()
+        .collection("place_types")
+        .find({})
+        .toArray();
+    let type_advertise = await db
+        .getDb()
+        .collection("ad_types")
+        .find({})
+        .toArray();
+    billboards = billboards.filter((i) => {
+        if (ward == "" && district == "") return i;
+        let address = i?.properties?.place.split(", ");
 
-    if (
-      (address.find((a) => a == ward) || !ward) &&
-      (address.find((a) => a == district) || !district)
-    ) {
-      return i;
-    }
-  });
-
-  if (res.locals.type_user == 1) {
-    reports = await db.getDb().collection("reports").find().toArray();
-
-    reports = reports.filter((i) => {
-      if (ward == "" && district == "") return i;
-      let address = i?.properties?.place.split(", ");
-
-      if (
-          (address?.find((a) => a == ward) || !ward) &&
-          (address?.find((a) => a == district) || !district)
-      ) {
-          return i;
-      }
-    });
-    let places = [];
-    let newRP = [];
-    for (let i = 0; i < reports.length; ++i) {
-      if (!places.includes(reports[i].properties.place)) {
-        places.push(reports[i].properties.place);
-      }
-    }
-    let temp = reports.slice();
-    for (let i = 0; i < places.length; ++i) {
-      newRP[i] = temp[i];
-      newRP[i].properties.details = temp.map((j) => {
-        if (j.properties.place === places[i]) {
-          return { ...j.properties };
+        if (
+            (address.find((a) => a == ward) || !ward) &&
+            (address.find((a) => a == district) || !district)
+        ) {
+            return i;
         }
-      });
-      console.log("details ", newRP[i].properties);
-    }
-
-    console.log(reports);
-    return res.render("phan-cum-phuong/trangchu", {
-      action: false,
-      billboards: billboards,
-      reports: newRP,
-      placeType: placeType,
-      type_advertise: type_advertise,
     });
-  } else if (response.locals.type_user == 2) {
-    return res.redirect("/management/billboards");
-  }
+
+    if (res.locals.type_user == 1) {
+        reports = await db.getDb().collection("reports").find().toArray();
+
+        reports = reports.filter((i) => {
+            if (ward == "" && district == "") return i;
+            let address = i?.properties?.place.split(", ");
+
+            if (
+                (address?.find((a) => a == ward) || !ward) &&
+                (address?.find((a) => a == district) || !district)
+            ) {
+                return i;
+            }
+        });
+        let places = [];
+        let newRP = [];
+        for (let i = 0; i < reports.length; ++i) {
+            if (!places.includes(reports[i].properties.place)) {
+                places.push(reports[i].properties.place);
+            }
+        }
+        let temp = reports.slice();
+        for (let i = 0; i < places.length; ++i) {
+            newRP[i] = temp[i];
+            newRP[i].properties.details = temp.map((j) => {
+                if (j.properties.place === places[i]) {
+                    return { ...j.properties };
+                }
+            });
+            console.log("details ", newRP[i].properties);
+        }
+
+        console.log(reports);
+        return res.render("phan-cum-phuong/trangchu", {
+            action: false,
+            billboards: billboards,
+            reports: newRP,
+            placeType: placeType,
+            type_advertise: type_advertise,
+        });
+    } else if (response.locals.type_user == 2) {
+        return res.redirect("/management/billboards");
+    }
 };
 
 //Danh sách bảng quảng cáo
 const _get_advertisement = async (req, res) => {
-  res.locals.billboards = await db
-    .getDb()
-    .collection("billboard")
-    .aggregate([
-      {
-        $unwind: "$properties.boards",
-      },
-      {
-        $lookup: {
-          from: "licenses",
-          localField: "properties.boards.license",
-          foreignField: "_id",
-          as: "properties.boards.license",
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          type: 1,
-          "properties.place": 1,
-          "properties.place_type": 1,
-          "properties.type_advertise": 1,
-          "properties.status": 1,
-          "properties.board_amount": 1,
-          boards: "$properties.boards",
-          geometry: 1,
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          type: {
-            $first: "$type",
-          },
-          properties: {
-            $first: "$properties",
-          },
-          boards: {
-            $push: "$boards",
-          },
-          geometry: {
-            $first: "$geometry",
-          },
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          type: 1,
-          "properties.place": 1,
-          "properties.place_type": 1,
-          "properties.type_advertise": 1,
-          "properties.status": 1,
-          "properties.board_amount": 1,
-          "properties.boards": "$boards",
-          geometry: 1,
-        },
-      },
-    ])
-    .toArray();
-  res.locals.billboards = processQuery(req, res.locals.billboards);
-  res.locals.ward_list = getWardList(req);
-  res.render("phan-cum-phuong/quanlyquangcao");
+    res.locals.billboards = await db
+        .getDb()
+        .collection("billboards")
+        .aggregate([
+            {
+                $unwind: "$properties.boards",
+            },
+            {
+                $lookup: {
+                    from: "licenses",
+                    localField: "properties.boards.license",
+                    foreignField: "_id",
+                    as: "properties.boards.license",
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    type: 1,
+                    "properties.place": 1,
+                    "properties.place_type": 1,
+                    "properties.type_advertise": 1,
+                    "properties.status": 1,
+                    "properties.board_amount": 1,
+                    boards: "$properties.boards",
+                    geometry: 1,
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    type: {
+                        $first: "$type",
+                    },
+                    properties: {
+                        $first: "$properties",
+                    },
+                    boards: {
+                        $push: "$boards",
+                    },
+                    geometry: {
+                        $first: "$geometry",
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    type: 1,
+                    "properties.place": 1,
+                    "properties.place_type": 1,
+                    "properties.type_advertise": 1,
+                    "properties.status": 1,
+                    "properties.board_amount": 1,
+                    "properties.boards": "$boards",
+                    geometry: 1,
+                },
+            },
+        ])
+        .toArray();
+    res.locals.billboards = processQuery(req, res.locals.billboards);
+    res.locals.ward_list = getWardList(req);
+    res.render("phan-cum-phuong/quanlyquangcao");
 };
 
 //Yêu cầu cấp phép biển quáng cáo
 const _get_license = async (req, res) => {
-  res.locals.billboards = await db
-    .getDb()
-    .collection("billboard")
-    .aggregate([
-      {
-        $unwind: "$properties.boards",
-      },
-      {
-        $lookup: {
-          from: "licenses",
-          localField: "properties.boards.license",
-          foreignField: "_id",
-          as: "properties.boards.license",
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          type: 1,
-          "properties.place": 1,
-          "properties.place_type": 1,
-          "properties.type_advertise": 1,
-          "properties.status": 1,
-          "properties.board_amount": 1,
-          boards: "$properties.boards",
-          geometry: 1,
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          type: {
-            $first: "$type",
-          },
-          properties: {
-            $first: "$properties",
-          },
-          boards: {
-            $push: "$boards",
-          },
-          geometry: {
-            $first: "$geometry",
-          },
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          type: 1,
-          "properties.place": 1,
-          "properties.place_type": 1,
-          "properties.type_advertise": 1,
-          "properties.status": 1,
-          "properties.board_amount": 1,
-          "properties.boards": "$boards",
-          geometry: 1,
-        },
-      },
-    ])
-    .toArray();
+    res.locals.billboards = await db
+        .getDb()
+        .collection("billboards")
+        .aggregate([
+            {
+                $unwind: "$properties.boards",
+            },
+            {
+                $lookup: {
+                    from: "licenses",
+                    localField: "properties.boards.license",
+                    foreignField: "_id",
+                    as: "properties.boards.license",
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    type: 1,
+                    "properties.place": 1,
+                    "properties.place_type": 1,
+                    "properties.type_advertise": 1,
+                    "properties.status": 1,
+                    "properties.board_amount": 1,
+                    boards: "$properties.boards",
+                    geometry: 1,
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    type: {
+                        $first: "$type",
+                    },
+                    properties: {
+                        $first: "$properties",
+                    },
+                    boards: {
+                        $push: "$boards",
+                    },
+                    geometry: {
+                        $first: "$geometry",
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    type: 1,
+                    "properties.place": 1,
+                    "properties.place_type": 1,
+                    "properties.type_advertise": 1,
+                    "properties.status": 1,
+                    "properties.board_amount": 1,
+                    "properties.boards": "$boards",
+                    geometry: 1,
+                },
+            },
+        ])
+        .toArray();
 
-  res.locals.billboards = processQuery(req, res.locals.billboards);
+    res.locals.billboards = processQuery(req, res.locals.billboards);
 
-  res.locals.ward_list = getWardList(req);
-  res.render("phan-cum-phuong/danhsachcapphep");
+    res.locals.ward_list = getWardList(req);
+    res.render("phan-cum-phuong/danhsachcapphep");
 };
 
 const _post_license_request = async (req, res) => {
