@@ -24,7 +24,6 @@ function get_report(current_feature) {
             id="inscreen-form-report"
             class="form-container active"
             method="post"
-            enctype="multipart/form-data"
             action="/report"
           >
             <input id="geometry" readonly name="geometry" type="hidden" value=${JSON.stringify(
@@ -152,24 +151,66 @@ function get_report(current_feature) {
           action: "report",
         })
         .then(function (token) {
-          sendData(token);
+          let type = $("#report__type").val();
+          let board = $("#report__board").val();
+          let name = $("#sender_name").val();
+          let email = $("#sender_email").val();
+          let geometry = $("#geometry").val();
+          let place = $("#place").val();
+
+          let number = $("#sender_number").val();
+          console.log(geometry);
+          sendData(
+            files,
+            place,
+            number,
+            email,
+            name,
+            geometry,
+            board,
+            type,
+            token
+          );
         });
     });
   }
 
-function sendData(token) {
-    let formData = new FormData(document.getElementById('inscreen-form-report'));
-    formData.append("captcha", token);
+  function sendData(
+    files,
+    place,
+    number,
+    email,
+    name,
+    geometry,
+    board,
+    type,
+    token
+  ) {
+    let data = JSON.stringify({
+      attached_files: files,
+      place: place,
+      details: hvalue,
+      sender_number: number,
+      sender_email: email,
+      sender_name: name,
+      geometry: geometry,
+      type: type,
+      board: board,
+      captcha: token,
+    });
     fetch("http://localhost:5000/report", {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: data,
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          alert("Gửi báo cáo thành công");
+          alert("Gửi báo cáo thành công ");
         } else {
-          alert("Gửi báo cáo thất bại!");
+          alert("Gửi báo cáo thất bại! " + data.message);
         }
       });
   }
@@ -184,5 +225,9 @@ function sendData(token) {
       );
       runCapcha();
     });
+  });
+
+  $("#attached_files").on("change", (e) => {
+    uploadImage(e);
   });
 }

@@ -20,7 +20,7 @@ const _post_report = (req, res) => {
     if (!req.body.captcha) {
       return res.status(400).json({
         success: false,
-        message: "have not received captcha."
+        message: "have not received captcha.",
       });
     }
     let {
@@ -32,19 +32,16 @@ const _post_report = (req, res) => {
       place,
       details,
       board,
+      attached_files,
     } = req.body;
-
-    let images = req.files.map((v) => {
-      return (v.destination + "/" + v.filename).substring(6);
-    });
-
+    console.log(attached_files);
     let report = new Report(
       parseInt(report__type),
       sender_email,
       sender_number,
       place,
       sender_name,
-      images,
+      attached_files,
       details,
       JSON.parse(geometry),
       board

@@ -115,4 +115,8 @@ function get_resquest(position) {
   var quill = new Quill("#editor", {
     theme: "snow",
   });
+
+  $("#attached_files").on("change", (e) => {
+    uploadImage(e);
+  });
 }

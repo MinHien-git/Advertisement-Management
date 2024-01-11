@@ -72,9 +72,10 @@
           <div class="report-info">
             <h6 class="bold">Nội dung báo cáo</h6>
             <p>
-              <%= report.details %>
+              <%- report.details %>
             </p>
           </div>
+          <% if (report.images.length > 0) { %>
           <h6 class="bold">Hình ảnh đi kèm:</h6>
           <div class="image-container d-flex">
             <% if (report.images?.[0]) { %>
@@ -87,7 +88,7 @@
             <% } else { %>
               <div class="image-placeholder"></div>
             <% } %>
-          </div>
+          </div><% } %>
 
           <div id="editor"></div>
           <div class="button-container d-flex">

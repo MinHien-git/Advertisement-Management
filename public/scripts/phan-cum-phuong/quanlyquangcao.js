@@ -235,7 +235,8 @@ function create_edit_request(billboard = null) {
     }>${placeTypes[i].type}</option>`;
   }
   for (let i = 0; i < type_advertise.length; ++i) {
-    let selected = billboard.properties.type_advertise === type_advertise[i].type;
+    let selected =
+      billboard.properties.type_advertise === type_advertise[i].type;
     adtype += `<option value="${type_advertise[i].type}" ${
       selected ? "selected" : ""
     }>${placeTypes[i].type}</option>`;
@@ -337,6 +338,10 @@ function create_edit_request(billboard = null) {
     } else if (report_index == "") {
       $("#report-request-section-form-container .container").html("");
     }
+  });
+
+  $("#attached_files").on("change", (e) => {
+    uploadImage(e);
   });
 }
 
