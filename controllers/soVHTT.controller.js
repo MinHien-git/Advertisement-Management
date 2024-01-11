@@ -357,20 +357,7 @@ async function sortList(item_list, sort_val, type) {
       return b._id.localeCompare(a._id);
     });
   }
-  item_list.sort((a, b) => {
-    a.district.localeCompare(b.district, undefined, {
-      numeric: true,
-      sensitivity: "base",
-    }) ||
-      a.ward.localeCompare(b.ward, undefined, {
-        numeric: true,
-        sensitivity: "base",
-      }) ||
-      a.street.localeCompare(b.street, undefined, {
-        numeric: true,
-        sensitivity: "base",
-      });
-  });
+
   return item_list;
 }
 
@@ -531,7 +518,10 @@ async function processList(collection, search_queries) {
           }
         }
       }
-    } else if (collection == "requests") {
+    } else if (
+      collection == "board-request" ||
+      collection == "billboard-request"
+    ) {
       item_list = await db
         .getDb()
         .collection(collection)
@@ -542,15 +532,7 @@ async function processList(collection, search_queries) {
               from: "billboards",
               localField: "billboard",
               foreignField: "_id",
-              as: "billboard",
-            },
-          },
-          {
-            $lookup: {
-              from: "users",
-              localField: "official_id",
-              foreignField: "_id",
-              as: "official",
+              as: "billboard_info",
             },
           },
         ])
@@ -650,6 +632,11 @@ async function processList(collection, search_queries) {
           new Date(item_list[i].properties.send_day)
         );
       }
+    } else if (
+      collection == "board-request" ||
+      collection == "billboard-request"
+    ) {
+      place = item_list[i].billboard_info[0].properties.place;
     }
 
     if (place.includes("Đ. ") == true) {
@@ -690,6 +677,16 @@ async function processList(collection, search_queries) {
       }
     } else if (collection == "reports") {
       item_list[i].place = place;
+    } else if (
+      collection == "board-request" ||
+      collection == "billboard-request"
+    ) {
+      if (
+        item_list[i].billboard_info != null &&
+        item_list[i].billboard_info.length > 0
+      ) {
+        item_list[i].billboard_info[0].properties.place = place;
+      }
     }
 
     let address = place.split(", ");
@@ -767,11 +764,7 @@ async function getUniqueTypesAndStatuses(item_list, item_type) {
         unique_statuses.push(item_list[i].properties.status);
       }
     }
-  } else if (
-    item_type == "licenses" ||
-    item_type == "reports" ||
-    item_type == "requests"
-  ) {
+  } else if (item_type == "licenses" || item_type == "reports") {
     for (let i = 0; i < item_list.length; i++) {
       if (unique_types.includes(item_list[i].type) == false) {
         unique_types.push(item_list[i].type);
@@ -784,6 +777,12 @@ async function getUniqueTypesAndStatuses(item_list, item_type) {
     for (let i = 0; i < item_list.length; i++) {
       if (unique_types.includes(item_list[i].level) == false) {
         unique_types.push(item_list[i].level);
+      }
+    }
+  } else if (item_type == "requests") {
+    for (let i = 0; i < item_list.length; i++) {
+      if (unique_statuses.includes(item_list[i].state) == false) {
+        unique_statuses.push(item_list[i].state);
       }
     }
   }
@@ -1425,14 +1424,8 @@ const _approve_license = async (req, res) => {
       .collection("billboards")
       .findOneAndUpdate(
         {
-          $and: [
-            { _id: new ObjectId(new_license.billboard.billboard_id) },
-            {
-              "properties.boards._id": new ObjectId(
-                new_license.billboard.board_id
-              ),
-            },
-          ],
+          _id: new ObjectId(new_license.billboard.billboard_id),
+          "properties.boards._id": new ObjectId(new_license.billboard.board_id),
         },
         {
           $set: {
@@ -1513,7 +1506,7 @@ const _get_board_edit_requests = async (req, res) => {
 
   let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
     item_list,
-    "board-requests"
+    "requests"
   );
   let { unique_ad_types, unique_place_types } = await getUniqueAdInfo(
     item_list
@@ -1544,7 +1537,10 @@ const _get_edit_requests = async (req, res) => {
 
   let search_query = createSearchQuery(search_val);
 
-  let item_list = await processList("requests", search_query);
+  let billboard_reqs = await processList("billboard-request", search_query);
+  let board_reqs = await processList("board-request", search_query);
+
+  let item_list = billboard_reqs.concat(board_reqs);
 
   res.locals.list_districts = await getUniqueDistrictsWards(item_list);
 
@@ -1568,53 +1564,36 @@ const _get_edit_requests = async (req, res) => {
   res.locals.edit_requests = pageItems;
 
   res.locals.edit_requests.forEach((edit_req) => {
-    edit_req.billboard[0].properties.place =
-      edit_req.billboard[0].properties.place.split(", Thành phố")[0];
+    edit_req.billboard_info[0].properties.place =
+      edit_req.billboard_info[0].properties.place.split(", Thành phố")[0];
+
+    if (edit_req.details != null) {
+      edit_req.details = edit_req.details.replace("<p>", "");
+      edit_req.details = edit_req.details.replace("<br>", "");
+      edit_req.details = edit_req.details.replace("</p>", "");
+    }
   });
 
-  res.render("phan-cum-soVHTT/DuyetYCChinhSua");
+  res.render("phan-cum-soVHTT/DuyetYCChinhSuaQC");
 };
 
 const _approve_edit_request = async (req, res) => {
-  const { id, state } = req.body;
+  const { request_id, state, select_option } = req.body;
 
-  try {
-    const license = await db
-      .getDb()
-      .collection("licenses")
-      .findOne({ _id: new ObjectId(id) });
-    const updateInfo = new License(
-      license.billboard,
-      license.company_name,
-      license.company_contact,
-      license.start_date,
-      license.end_date,
-      state,
-      license.images
-    );
-    await db
-      .getDb()
-      .collection("licenses")
-      .findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        { $set: { ...updateInfo } },
-        { returnDocument: "after" }
-      );
-
-    await db
-      .getDb()
-      .collection("billboards")
-      .findOneAndUpdate(
-        { _id: new ObjectId(license.billboard) },
-        { $set: { license: license._id } },
-        { returnDocument: "after" }
-      );
-    console.log("license " + id + " approved!");
-    return res.send("license " + id + " approved!");
-  } catch (err) {
-    res.send(err);
-    console.error(err);
-  }
+  // try {
+  //     const approved_request = {};
+  //     const new_billboard = {};
+  //     if(select_option == 0){
+  //         let
+  //         approved_request = await db.getDb().collection("billboard-request").findOneAndUpdate({_id: request_id}, {$set: {state: 1}});
+  //         new_billboard = await db.getDb.collection("billboards").findOneAndUpdate({_id: approved_request.billboard}, {$set: {"properties.place_type" : approved_request.place_type, "properties.type_advertise": approved_request.type_advertise}})
+  //     }
+  //     console.log("license " + id + " approved!");
+  //     return res.send("license " + id + " approved!");
+  // } catch (err) {
+  //     res.send(err);
+  //     console.error(err);
+  // }
 };
 const _decline_edit_request = async (req, res) => {
   const { id, state } = req.body;

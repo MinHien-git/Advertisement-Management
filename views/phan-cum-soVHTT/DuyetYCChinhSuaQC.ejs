@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Duyệt yêu cầu chỉnh sửa quảng cáo - Sở VHTT</title>
+    <title>Duyệt yêu cầu chỉnh sửa điểm quảng cáo - Sở VHTT</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="/styles/phan-cum-soVHTT/page_content.css" />
 
     <script src="/scripts/phan-cum-soVHTT/navigation.js"></script>
-    <script src="/scripts/phan-cum-soVHTT/license_list.js"></script>
+    <script src="/scripts/phan-cum-soVHTT/edit_request_list.js"></script>
     <script src="/scripts/phan-cum-soVHTT/page_functions.js"></script>
   </head>
 
@@ -59,8 +59,8 @@
             <div id="info__desc">
               <div class="list__title__container mt-3">
                 <ul class="list__flex fw-bold">
-                  <li class="list__col1">Tên công ty</li>
-                  <li class="list__col2">Thông tin liên lạc</li>
+                  <li class="list__col1">Yêu cầu chỉnh sửa</li>
+                  <li class="list__col2">Địa chỉ</li>
                   <li class="list__col3">Trạng thái</li>
                   <li class="list__col4">
                     <button class="btn btn-link ps-4" disabled></button>
@@ -70,30 +70,35 @@
             </div>
 
             <div id="cards__container" class="overflow-scroll">
-              <% for (let i=0; i < locals.licenses.length; i++) { %> <% const
-              license = locals.licenses[i]; %> <% const id=license._id; %>
+              <% for (let i=0; i < locals.edit_requests.length; i++) { %> <% const
+              edit_request = locals.edit_requests[i]; %> <% const id=edit_request._id; %>
               <div id="<%=id%>" class="card shadow-sm">
                 <div class="card-header" id="brief__info<%= id %>">
                   <ul class="list__flex">
-                    <li class="list__col1"><%= license.company_name %></li>
-                    <li class="list__col2"><%= license.company_contact %></li>
-                    <% if (license.state == 1) {%>
-                    <li class="list__col3 fw-semibold text-success">
-                      Đã cấp phép
+                    <%if(edit_request.select_option == 0){%>
+                      <li class="list__col1 fw-bold text-primary">Điểm quảng cáo</li>
+                    <%} else{%>
+                      <li class="list__col1 fw-bold text-success">Bảng quảng cáo</li>
+                    <%}%>
+                    
+                    <li class="list__col2"><%= edit_request.billboard_info[0].properties.place %></li>
+                    <% if (edit_request.state == 1) {%>
+                    <li class="list__col3 fw-sembold text-success">
+                      Đã chấp nhận
                     </li>
-                    <% } else if (license.state == 0){ %>
+                    <% } else if (edit_request.state == 0){ %>
                     <li class="list__col3 fw-semibold text-warning">
-                      Chờ cấp phép
+                      Chờ xử lý
                     </li>
-                    <% } else if (license.state == 2){ %>
+                    <% } else if (edit_request.state == 2){ %>
                     <li class="list__col3 fw-semibold text-danger">
                       Đã từ chối
                     </li>
-                    <% } else if (license.state == 3){ %>
+                    <% } else if (edit_request.state == 3){ %>
                     <li class="list__col3 fw-semibold text-primary">
                       Đã gửi YC sửa đổi
                     </li>
-                    <% } else if (license.state == 4){ %>
+                    <% } else if (edit_request.state == 4){ %>
                     <li class="list__col3 fw-semibold" style="color: #adadad">
                       Đã hết hạn
                     </li>
@@ -120,106 +125,118 @@
                   aria-labelledby="brief__info<%= id %>">
                   <div class="card-body">
                     <ul id="full__info__list">
+                      <%if(edit_request.select_option == 0){%>
+                        <li id="info__item">
+                          <p class="fw-bold">Thông tin cũ</p>
+                          <ul>
+                            <li>
+                              Loại hình quảng cáo:
+                              <span class="fw-bold">
+                                <%= edit_request.billboard_info[0].properties.type_advertise %>
+                              </span>
+                            </li>
+                            <li>
+                              Phân loại đất:
+                              <span class="fw-bold">
+                                <%=edit_request.billboard_info[0].properties.place_type%>
+                              </span>
+                            </li>
+                            <li>
+                              Trạng thái:
+                              <% if (edit_request.billboard_info[0].properties.status == 1) {%>
+                                <span class="fw-bold text-primary"> Đã quy hoạch </span>
+                                </li>
+                                <% } else if (edit_request.billboard_info[0].properties.status == 0){ %>
+                                <span class="fw-bold text-danger"> Chưa quy hoạch </span>
+                              <%}%>
+                              
+                            </li>
+                          </ul>
+                        </li>
+
+                        <li id="info__item">
+                          <p class="fw-bold">Thông tin mới</p>
+                          <ul>
+                            <li>
+                              Loại hình quảng cáo:
+                              <span class="fw-bold">
+                                <%= edit_request.type_advertise %>
+                              </span>
+                            </li>
+                            <li>
+                              Phân loại đất:
+                              <span class="fw-bold">
+                                <%=edit_request.place_type%>
+                              </span>
+                            </li>
+                            <li>
+                              Trạng thái:
+                              <% if (edit_request.status == 1) {%>
+                                <span class="fw-bold text-primary"> Đã quy hoạch </span>
+                                </li>
+                                <% } else if (edit_request.status == 0){ %>
+                                <span class="fw-bold text-danger"> Chưa quy hoạch </span>
+                              <%}%>
+                              
+                            </li>
+                          </ul>
+                        </li>
+                      <%}else{%>
+                        <li id="info__item">
+                          <p class="fw-bold">Thông tin cũ</p>
+                          <ul>
+                            <li>
+                              Loại bảng quảng cáo:
+                              <span class="fw-bold">
+                                <%= edit_request.billboard_info[0].properties.boards[edit_request.board_index].board_type %>
+                              </span>
+                            </li>
+                            <li>
+                              Kích thước:
+                              <span class="fw-bold">
+                                <%=edit_request.billboard_info[0].properties.boards[edit_request.board_index].size%>
+                              </span>
+                            </li>
+                          </ul>
+                        </li>
+
+                        <li id="info__item">
+                          <p class="fw-bold">Thông tin mới</p>
+                          <ul>
+                            <li>
+                              Loại bảng quảng cáo:
+                              <span class="fw-bold">
+                                <%= edit_request.board_type %>
+                              </span>
+                            </li>
+                            <li>
+                              Kích thước:
+                              <span class="fw-bold">
+                                <%=edit_request.size%>
+                              </span>
+                            </li>
+                          </ul>
+                        </li>
+                      <%}%>
                       <li id="info__item">
-                        <p class="fw-bold">Thông tin yêu cầu</p>
-                        <ul>
-                          <li>
-                            Địa điểm bảng:
-                            <span class="fw-bold">
-                              <%= license.billboard_info[0].properties.place %>
-                            </span>
-                          </li>
-                          <li>
-                            Ngày bắt đầu:
-                            <span class="fw-bold">
-                              <%=license.start_date%>
-                            </span>
-                          </li>
-                          <li>
-                            Ngày kết thúc:
-                            <span class="fw-bold"> <%=license.end_date%> </span>
-                          </li>
-                        </ul>
+                        <p class="fw-bold">Chi tiết chỉnh sửa</p>
+                        <p class=""><%=edit_request.details%></p>
+                        
                       </li>
-                      <% if (license.billboard_info[0]) { %>
-                      <li id="info__item">
-                        <p class="fw-bold">Thông tin bảng quảng cáo</p>
-                        <ul>
-                          <li>
-                            Loại bảng:
-                            <span class="fw-bold">
-                              <%=
-                              license.billboard_info[0].properties.boards.board_type
-                              %>
-                            </span>
-                          </li>
-                          <li>
-                            Kích thước:
-                            <span class="fw-bold">
-                              <%=
-                              license.billboard_info[0].properties.boards.size
-                              %>
-                            </span>
-                          </li>
-                          <li>
-                            Số lượng:
-                            <span class="fw-bold">
-                              <%=
-                              license.billboard_info[0].properties.board_amount
-                              + " trụ/bảng"%>
-                            </span>
-                          </li>
-                          <li>
-                            Hình thức:
-                            <span class="fw-bold">
-                              <%=
-                              license.billboard_info[0].properties.type_advertise
-                              %>
-                            </span>
-                          </li>
-                          <li>
-                            Phân loại:
-                            <span class="fw-bold text-wrap">
-                              <%=
-                              license.billboard_info[0].properties.place_type %>
-                            </span>
-                          </li>
-                        </ul>
-                      </li>
-                      <% } %>
-                      <li class="mock__image__container" id="info__item">
-                        <div class="mock__image">
-                          &nbsp;
-                          <img src="<%= license.images[0] %>" alt="hinh1" />
-                        </div>
-                        <div class="mock__image">
-                          &nbsp;
-                          <img src="<%= license.images[1] %>" alt="hinh2" />
-                        </div>
-                      </li>
+                      
                       <li>
                         <ul
                           class="buttons__container"
                           style="flex-direction: column">
-                          <% if (license.state == 0) { %>
+                          <% if (edit_request.state == 0) { %>
                           <li>
                             <button
                               class="btn btn-success mb-2 nowrap"
                               data-bs-toggle="modal"
                               data-bs-target="#accept__confirm__modal"
                               onclick="passToConfirmModal(this)"
-                              data-license-id="<%=id%>">
-                              <i class="bi bi-check-circle"></i> Cấp phép
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              class="btn btn-outline-warning mb-2 nowrap"
-                              data-bs-toggle="modal"
-                              data-bs-target="#require__changes__modal"
-                              data-license-id="<%=id%>"
-                              onclick="passToConfirmModal(this)">
-                              <i class="bi bi-pencil"></i> YC sửa đổi
+                              data-edit_request-id="<%=id%>">
+                              <i class="bi bi-check-circle"></i> Chấp nhận
                             </button>
                           </li>
                           <li>
@@ -228,29 +245,20 @@
                               data-bs-toggle="modal"
                               data-bs-target="#decline__confirm__modal"
                               onclick="passToConfirmModal(this)"
-                              data-license-id="<%=id%>">
+                              data-edit_request-id="<%=id%>">
                               <i class="bi bi-x-lg"></i> Từ chối
                             </button>
                           </li>
-                          <% } else if (license.state == 1) { %>
-                          <li>
-                            <button
-                              class="btn btn-outline-warning mb-2 nowrap"
-                              data-bs-toggle="modal"
-                              data-bs-target="#require__changes__modal"
-                              onclick="passToConfirmModal(this)"
-                              data-license-id="<%=id%>">
-                              <i class="bi bi-pencil"></i> YC sửa đổi
-                            </button>
-                          </li>
-                          <% } else if (license.state == 2) { %>
+                          <% } else if (edit_request.state == 1) { %>
+                          <li class="text-success fw-bold">Đã chấp nhận</li>
+                          <% } else if (edit_request.state == 2) { %>
                           <li class="text-danger fw-bold">Đã từ chối</li>
-                          <% } else if (license.state == 3) { %>
+                          <% } else if (edit_request.state == 3) { %>
                           <li class="text-primary fw-bold">
-                            Đã gửi YC sửa đổi: <%=license.edit_request ?
-                            license.edit_request : ""%>
+                            Đã gửi YC sửa đổi: <%=edit_request.edit_request ?
+                            edit_request.edit_request : ""%>
                           </li>
-                          <% } else if (license.state == 4) { %>
+                          <% } else if (edit_request.state == 4) { %>
                           <li class="fw-bold" style="color: #adadad">
                             Đã hết hạn
                           </li>
@@ -312,7 +320,7 @@
                       type="button"
                       class="btn btn-primary"
                       data-bs-dismiss="modal"
-                      onclick="sendLicenseChangeRequest(document.getElementById('id__confirm').value, document.getElementById('change__textarea').value)"
+                      onclick="sendedit_requestChangeRequest(document.getElementById('id__confirm').value, document.getElementById('change__textarea').value)"
                       id="send__changes__btn">
                       Gửi yêu cầu
                     </button>
@@ -360,7 +368,7 @@
                       type="button"
                       class="btn btn-success"
                       data-bs-dismiss="modal"
-                      onclick="approveLicense(document.getElementById('id__confirm').value)"
+                      onclick="approveedit_request(document.getElementById('id__confirm').value)"
                       id="accept__confirm__btn">
                       Cấp phép
                     </button>
@@ -408,7 +416,7 @@
                       type="button"
                       class="btn btn-danger"
                       data-bs-dismiss="modal"
-                      onclick="declineLicense(document.getElementById('id__confirm').value)"
+                      onclick="declineedit_request(document.getElementById('id__confirm').value)"
                       id="decline__btn">
                       Từ chối
                     </button>
