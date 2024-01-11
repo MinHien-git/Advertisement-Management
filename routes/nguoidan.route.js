@@ -5,7 +5,7 @@ const { ObjectId } = require("mongodb");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, "public/images/user_images");
+    callback(null, "./public/images/user_images");
   },
   filename: function (req, file, callback) {
     if (file.mimetype === "image/png") {
@@ -32,7 +32,6 @@ const controller = require("../controllers/nguoidan.controller");
 
 router.post(
   "/report",
-
   controller._post_report
 );
 
