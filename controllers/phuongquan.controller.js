@@ -480,6 +480,7 @@ const _get_request_edit = async (req, res) => {
           as: "billboard",
         },
       },
+      { $unwind: "$billboard" }
     ])
     .toArray();
   res.locals.requests = [
@@ -496,25 +497,10 @@ const _get_request_edit = async (req, res) => {
             as: "billboard",
           },
         },
+        { $unwind: "$billboard" }
       ])
       .toArray()),
   ];
-  console.log(
-    await db
-      .getDb()
-      .collection("billboard-request")
-      .aggregate([
-        {
-          $lookup: {
-            from: "billboards",
-            localField: "billboard",
-            foreignField: "_id",
-            as: "billboard",
-          },
-        },
-      ])
-      .toArray()
-  );
   res.locals.requests = processQuery(req, res.locals.requests);
   res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachchinhsua");

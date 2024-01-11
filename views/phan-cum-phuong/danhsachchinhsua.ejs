@@ -126,6 +126,7 @@
               <% const request = locals.requests[i]; %>
               <% const advertisement = request.billboard; %>
               <% const id = locals.requests[i]._id; %>
+              <% console.log(request) %>
             <div id="list__item<%= id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= id %>">
                 <ul class="list__flex">
@@ -136,7 +137,7 @@
                         Sửa bảng quảng cáo
                       <% } %>
                   </li>
-                  <li class="list__col2"><%= advertisement[0].properties.place %></li>
+                  <li class="list__col2"><%= advertisement.properties.place %></li>
                   <% if (locals.requests[i].state == 1) { %>
                   <li class="list__col3 fw-semibold" style="color: #329a44">
                     Đã duyệt
@@ -178,17 +179,17 @@
                       <p class="fw-bold">Thông tin cũ</p>
                       <ul>
                         <% if(request.select_option == 0){ %>
-                          <li>Phân loại: <%= advertisement[0].properties.place_type %></li>
-                          <li>Loại Quảng cáo: <%= advertisement[0].properties.type_advertise %></li>
-                          <% if(advertisement[0].properties.status == 0) {%>
+                          <li>Phân loại: <%= advertisement.properties.place_type %></li>
+                          <li>Loại Quảng cáo: <%= advertisement.properties.type_advertise %></li>
+                          <% if(advertisement.properties.status == 0) {%>
                             <li>Trạng thái: Chưa quy hoạch</li>
                            <%} else {%>
                             <li>Trạng thái: Đã Quy hoạch</li>
                             <%}%>       
                         <%}%>
                         <% if(request.select_option == 1){ %>
-                          <li>Loại bảng: <%= advertisement[0].properties.boards[Number(request.board_index)].board_type %></li>
-                          <li>Kích thước: <%= advertisement[0].properties.boards[Number(request.board_index)].size %></li>    
+                          <li>Loại bảng: <%= advertisement.properties.boards[Number(request.board_index)].board_type %></li>
+                          <li>Kích thước: <%= advertisement.properties.boards[Number(request.board_index)].size %></li>    
                         <%}%>
                       </ul>
                     </li>
