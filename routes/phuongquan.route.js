@@ -67,10 +67,6 @@ router.post("/dashboard/report/:id", phuongQuanController._post_report_edit);
 //Yêu cầu chỉnh sửa
 router.get("/dashboard/request/edit", phuongQuanController._get_request_edit);
 
-router.post(
-  "/dashboard/request",
-  upload.array("attached_files", 2),
-  phuongQuanController._post_request_edit
-);
+router.post("/dashboard/request/edit", phuongQuanController._post_request_edit);
 
 module.exports = router;
