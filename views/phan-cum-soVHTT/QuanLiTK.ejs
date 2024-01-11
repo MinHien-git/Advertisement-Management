@@ -119,7 +119,7 @@
                         <p><strong>SĐT:</strong> <%=user.phone%></p>
                       </li>
                       <li>
-                        <ul class="buttons__container">
+                        <ul class="buttons__container" style="flex-direction: column">
                           <li>
                             <button
                               class="btn btn-primary me-3"
@@ -141,7 +141,7 @@
                           </li>
                           <li>
                             <button
-                              class="btn btn-danger"
+                              class="btn btn-danger nowrap"
                               data-bs-toggle="modal"
                               data-bs-target="#delete__confirm__modal"
                               onclick="passToDeleteModal(this)"

@@ -97,7 +97,11 @@
                     <li class="list__col3 fw-semibold" style="color: #adadad">
                       Đã hết hạn
                     </li>
-                    <% } %>
+                    <% } else if (license.state == 5){%>
+                      <li class="list__col3 fw-semibold text-danger">
+                      Đã bị huỷ
+                    </li>
+                    <% }%>
                     <li class="list__col4">
                       <button
                         class="btn collapsed"
