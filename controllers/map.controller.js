@@ -5,11 +5,11 @@ const _get_map = async (request, response) => {
   let billboards = await getDb().collection("billboards").find({}).toArray();
   let ward = response.locals.ward ? response.locals.ward : "";
   let district = response.locals.district ? response.locals.district : "";
-
+  let reports = [];
   billboards = billboards.filter((i) => {
     if (ward == "" && district == "") return true;
     let address = i?.properties?.place.split(", ");
-    let reports = [];
+
     if (
       (address.find((a) => a == ward) || ward == "") &&
       (address.find((a) => a == district) || district == "")

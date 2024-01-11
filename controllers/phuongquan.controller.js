@@ -2,13 +2,15 @@ const User = require("../models/users.model");
 const Billboard = require("../models/bill-board.model");
 const Report = require("../models/report.model");
 const License = require("../models/license.model");
-const Request = require("../models/request.model");
+const Request = require("../models/billboardrequest.model");
 
 const fs = require("fs");
 const nodemailer = require("nodemailer");
 const db = require("../database/database");
 
 const { ObjectId } = require("mongodb");
+const BillboardRequest = require("../models/billboardrequest.model");
+const BoardRequest = require("../models/boardrequest.model");
 
 const district_list = JSON.parse(
   fs.readFileSync(__dirname + "/../district-ward-list.json")
@@ -228,6 +230,23 @@ const _get_map = async (req, res) => {
   let ward = res.locals.ward ? res.locals.ward : "";
   let district = res.locals.district ? res.locals.district : "";
   let reports = [];
+  let placeType = await db.getDb().collection("place_types").find({}).toArray();
+  let type_advertise = await db
+    .getDb()
+    .collection("ad_types")
+    .find({})
+    .toArray();
+  billboards = billboards.filter((i) => {
+    if (ward == "" && district == "") return i;
+    let address = i?.properties?.place.split(", ");
+
+    if (
+      (address.find((a) => a == ward) || !ward) &&
+      (address.find((a) => a == district) || !district)
+    ) {
+      return i;
+    }
+  });
 
   if (res.locals.type_user == 1) {
     reports = await db.getDb().collection("reports").find().toArray();
@@ -265,6 +284,8 @@ const _get_map = async (req, res) => {
       action: false,
       billboards: billboards,
       reports: newRP,
+      placeType: placeType,
+      type_advertise: type_advertise,
     });
   } else if (response.locals.type_user == 2) {
     return res.redirect("/management/billboards");
@@ -521,129 +542,29 @@ const _get_request_edit = async (req, res) => {
 };
 
 const _post_request_edit = async (req, res) => {
-  let { id, details, type, status, type_advertise, place_type } = req.body;
-  let billboard_type;
-  let land_type;
-  let ad_type;
-
-  switch (type) {
-    case "1":
-      billboard_type = "Trụ/Cụm pano";
-      break;
-    case "2":
-      billboard_type = "Trụ bảng hiflex";
-      break;
-    case "3":
-      billboard_type = "Trụ màn hình điện tử LED";
-      break;
-    case "4":
-      billboard_type = "Trụ hộp đèn";
-      break;
-    case "5":
-      billboard_type = "Bảng hiflex ốp tường";
-      break;
-    case "6":
-      billboard_type = "Màn hình điện tử ốp tường";
-      break;
-    case "7":
-      billboard_type = "Trụ treo băng rôn dọc";
-      break;
-    case "8":
-      billboard_type = "Trụ treo băng rôn ngang";
-      break;
-    case "9":
-      billboard_type = "Cổng chào";
-      break;
-    case "10":
-      billboard_type = "Trung tâm thương mại";
-      break;
+  if (req.body.select_option == 0) {
+    let { billboard, place_type, advertise_type, status, details } = req.body;
+    let request = new BillboardRequest(
+      billboard,
+      place_type,
+      advertise_type,
+      status,
+      details
+    );
+    if (await request.send_request()) console.log("send!");
+  } else {
+    let { billboard, board_type, size, details } = req.body;
+    let value = board_type.split("|");
+    let request = new BoardRequest(
+      billboard,
+      value[1],
+      value[0],
+      size,
+      details
+    );
+    if (await request.send_request()) console.log("send!");
   }
 
-  switch (type_advertise) {
-    case "1":
-      ad_type = "Cổ động chính trị";
-      break;
-    case "2":
-      ad_type = "Quảng cáo thương mại";
-      break;
-    case "3":
-      ad_type = "An toàn giao thông";
-      break;
-    case "4":
-      ad_type = "Xã hội hoá";
-      break;
-    case "5":
-      ad_type = "Mỹ phẩm";
-      break;
-    case "6":
-      ad_type = "Đồ ăn";
-      break;
-    case "7":
-      ad_type = "Điện ảnh";
-      break;
-  }
-
-  switch (place_type) {
-    case "1":
-      land_type = "Đất công/Công viên/Hành lang an toàn giao thông";
-      break;
-    case "2":
-      land_type = "Đất tư nhân/Nhà ở riêng lẻ";
-      break;
-    case "3":
-      land_type = "Trung tâm thương mại";
-      break;
-    case "4":
-      land_type = "Chợ";
-      break;
-    case "5":
-      land_type = "Cây xăng";
-      break;
-    case "6":
-      land_type = "Nhà chờ xe buýt";
-      break;
-    case "7":
-      land_type = "Trường Học";
-      break;
-  }
-
-  let images = req.files.map((v) => {
-    return (v.destination + "/" + v.filename).substring(6);
-  });
-
-  let change = new Billboard(
-    req.body.type_billboard,
-    null,
-    {
-      place: req.body.place,
-      place_type: land_type,
-      type: billboard_type,
-      type_advertise: ad_type,
-      zoning: status == 1 ? true : false,
-    },
-    req.body.name
-      ? new License(
-          null,
-          req.body.name,
-          req.body.contact,
-          req.body.start,
-          req.body.end,
-          images
-        )
-      : null
-  );
-
-  let request = new Request(
-    new ObjectId(res.locals.uid),
-    new ObjectId(id),
-    change.properties,
-    images,
-    details,
-    0,
-    change.license
-  );
-
-  if (await request.send_request()) console.log("send!");
   return res.redirect("/dashboard/license");
 };
 
