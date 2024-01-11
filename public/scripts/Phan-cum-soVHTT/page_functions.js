@@ -74,7 +74,7 @@ function sortQuery(query) {
         "ward=",
         "item-type=",
         "ad-type=",
-        "land-type=",
+        "place-type=",
         "status=",
         "sort=",
         "page=",
@@ -201,8 +201,8 @@ function filterItems() {
     );
     let type_filter = document.getElementById("type__filter__container");
     let ad_type_filter = document.getElementById("ad__type__filter__container");
-    let land_type_filter = document.getElementById(
-        "land__type__filter__container"
+    let place_type_filter = document.getElementById(
+        "place__type__filter__container"
     );
     let status_filter = document.getElementById("status__filter__container");
 
@@ -271,29 +271,30 @@ function filterItems() {
         }
     }
 
-    let land_type_arr = [];
+    let place_type_arr = [];
     if (
         (window.location.pathname.includes("billboards") ||
             window.location.pathname.includes("licenses")) &&
-        land_type_filter.querySelector("#land__type__toggle").checked
+        place_type_filter.querySelector("#place__type__toggle").checked
     ) {
-        let land_type_opts = land_type_filter.querySelector("#land-type-info");
+        let place_type_opts =
+            place_type_filter.querySelector("#place-type-info");
 
-        let selected_opts = land_type_opts.querySelectorAll(
+        let selected_opts = place_type_opts.querySelectorAll(
             "input[type=checkbox]:checked"
         );
         for (let i in selected_opts) {
-            land_type_arr.push(selected_opts[i].id);
+            place_type_arr.push(selected_opts[i].id);
         }
     }
-    land_type_arr = land_type_arr.filter((n) => n);
+    place_type_arr = place_type_arr.filter((n) => n);
 
-    for (let i in land_type_arr) {
+    for (let i in place_type_arr) {
         if (
-            land_type_arr[i] != null &&
-            land_type_arr[i].includes(",") == true
+            place_type_arr[i] != null &&
+            place_type_arr[i].includes(",") == true
         ) {
-            land_type_arr[i] = land_type_arr[i].replace(",", "/");
+            place_type_arr[i] = place_type_arr[i].replace(",", "/");
         }
     }
 
@@ -320,7 +321,7 @@ function filterItems() {
     let district_vals = district_arr.join();
     let type_vals = type_arr.join();
     let ad_type_vals = ad_type_arr.join();
-    let land_type_vals = land_type_arr.join();
+    let place_type_vals = place_type_arr.join();
     let status_vals = status_arr.join();
 
     if (district_vals != "" && district_vals != null) {
@@ -409,11 +410,11 @@ function filterItems() {
         query = query.replace("ad-type=" + old_val, "");
     }
 
-    if (land_type_vals != "" && land_type_vals != null) {
-        if (!query.includes("land-type=")) {
-            query += "land-type=" + land_type_vals;
+    if (place_type_vals != "" && place_type_vals != null) {
+        if (!query.includes("place-type=")) {
+            query += "place-type=" + place_type_vals;
         } else {
-            let splittedQuery = query.split("land-type=");
+            let splittedQuery = query.split("place-type=");
             let old_val = splittedQuery[1][0];
             let i = 1;
             while (splittedQuery[1][i] != "&") {
@@ -421,21 +422,21 @@ function filterItems() {
                 i++;
             }
             query = query.replace(
-                "land-type=" + old_val,
-                "land-type=" + land_type_vals
+                "place-type=" + old_val,
+                "place-type=" + place_type_vals
             );
         }
 
         query = addAnd(query);
-    } else if (query.includes("land-type=")) {
-        let splittedQuery = query.split("land-type=");
+    } else if (query.includes("place-type=")) {
+        let splittedQuery = query.split("place-type=");
         let old_val = splittedQuery[1][0];
         let i = 1;
         while (splittedQuery[1][i] != "&") {
             old_val += splittedQuery[1][i];
             i++;
         }
-        query = query.replace("land-type=" + old_val, "");
+        query = query.replace("place-type=" + old_val, "");
     }
 
     if (status_vals != "" && status_vals != null) {
@@ -476,7 +477,7 @@ function removeFilters() {
         query.includes("district=") ||
         query.includes("item-type=") ||
         query.includes("ad-type=") ||
-        query.includes("land-type=") ||
+        query.includes("place-type=") ||
         query.includes("status=")
     ) {
         let splittedQuery = query.split("district=");
@@ -506,13 +507,13 @@ function removeFilters() {
             ad_type_vals += splittedQuery[1][i];
         }
 
-        splittedQuery = query.split("land-type=");
-        let land_type_vals = splittedQuery[1][0];
+        splittedQuery = query.split("place-type=");
+        let place_type_vals = splittedQuery[1][0];
         for (let i = 1; i < splittedQuery[1].length; i++) {
             if (splittedQuery[1][i] == "&") {
                 break;
             }
-            land_type_vals += splittedQuery[1][i];
+            place_type_vals += splittedQuery[1][i];
         }
 
         splittedQuery = query.split("status=");
@@ -528,7 +529,7 @@ function removeFilters() {
         query = query.replace("district=" + district_vals, "");
         query = query.replace("item-type=" + type_vals, "");
         query = query.replace("ad-type=" + ad_type_vals, "");
-        query = query.replace("land-type=" + land_type_vals, "");
+        query = query.replace("place-type=" + place_type_vals, "");
         query = query.replace("status=" + status_vals, "");
 
         query = sortQuery(query);

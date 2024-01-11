@@ -36,43 +36,43 @@ module.exports = class License {
   }
 
   async send_licences_request() {
-    let request = await db
-      .getDb()
-      .collection("licenses")
-      .insertOne({ ...this });
-    let billboard = await db
-      .getDb()
-      .collection("billboard")
-      .updateOne(
-        {
-          _id: new ObjectId(this.billboard.billboard_id),
-          "properties.boards._id": new ObjectId(this.billboard.board_id),
-        },
-        [
-          {
-            $set: {
-              "properties.boards": {
-                $map: {
-                  input: "$properties.boards",
-                  as: "m",
-                  in: {
-                    $cond: {
-                      if: { $eq: ["$$m._id", new ObjectId(this.billboard.board_id)], },
-                      then: {
-                        $cond: {
-                          if: { $eq: ["$$m.license", null] },
-                          then: { $mergeObjects: [ "$$m", { license: [ new ObjectId(request.insertedId) ] }, ], },
-                          else: {
-                            $mergeObjects: [ "$$m",
-                              { license: {
-                                  $concatArrays: [ "$$m.license", [ new ObjectId(request.insertedId) ], ],
-                              },},
-                            ],
-                          },
-                        },
-                      },
-                      else: "$$m",
-    }}}}}}]);
+      let request = await db
+          .getDb()
+          .collection("licenses")
+          .insertOne({ ...this });
+      // let billboard = await db
+      //   .getDb()
+      //   .collection("billboard")
+      //   .updateOne(
+      //     {
+      //       _id: new ObjectId(this.billboard.billboard_id),
+      //       "properties.boards._id": new ObjectId(this.billboard.board_id),
+      //     },
+      //     [
+      //       {
+      //         $set: {
+      //           "properties.boards": {
+      //             $map: {
+      //               input: "$properties.boards",
+      //               as: "m",
+      //               in: {
+      //                 $cond: {
+      //                   if: { $eq: ["$$m._id", new ObjectId(this.billboard.board_id)], },
+      //                   then: {
+      //                     $cond: {
+      //                       if: { $eq: ["$$m.license", null] },
+      //                       then: { $mergeObjects: [ "$$m", { license: [ new ObjectId(request.insertedId) ] }, ], },
+      //                       else: {
+      //                         $mergeObjects: [ "$$m",
+      //                           { license: {
+      //                               $concatArrays: [ "$$m.license", [ new ObjectId(request.insertedId) ], ],
+      //                           },},
+      //                         ],
+      //                       },
+      //                     },
+      //                   },
+      //                   else: "$$m",
+      // }}}}}}]);
   }
 
   async update_request(license_id) {
