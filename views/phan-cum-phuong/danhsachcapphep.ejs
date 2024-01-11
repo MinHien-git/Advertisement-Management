@@ -128,7 +128,7 @@
             advertisement = locals.billboards[i]; for (let j = 0; j <
             advertisement.properties.boards.length; j++) { const board =
             advertisement.properties.boards[j]; const license =
-            board.license[0]; %>
+            board.license; %>
             <div id="<%='list__item' + license._id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= license._id  %>">
                 <ul class="list__flex">
