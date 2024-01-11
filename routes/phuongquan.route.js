@@ -26,7 +26,7 @@ const upload = multer({
       cb(null, false);
     }
   },
-  limits: { fieldSize: 10 * 1024 * 1024 }
+  limits: { fieldSize: 10 * 1024 * 1024 },
 });
 
 const phuongQuanController = require("../controllers/phuongquan.controller");
@@ -50,13 +50,19 @@ router.post(
 );
 
 //Từ chối Yêu cầu cấp phép
-router.post("/dashboard/license/cancel", phuongQuanController._post_cancel_license);
+router.post(
+  "/dashboard/license/cancel",
+  phuongQuanController._post_cancel_license
+);
 
 //Danh sách báo cáo
 router.get("/dashboard/report", phuongQuanController._get_report);
 
 //Thông tin báo cáo
-router.get("/dashboard/report/:id", phuongQuanController._get_report_information);
+router.get(
+  "/dashboard/report/:id",
+  phuongQuanController._get_report_information
+);
 router.post("/dashboard/report/:id", phuongQuanController._post_report_edit);
 
 //Yêu cầu chỉnh sửa
