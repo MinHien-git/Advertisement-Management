@@ -123,10 +123,11 @@
             </div>
 
             <% for (let i = 0; i < locals.requests.length; i++) { %>
-              <% const advertisement = locals.requests[i].billboard[0] %>
-              <% const id = advertisement._id; %>
-            <div id=<%='"list__item' + id + '"'%>
-              " class="card shadow-sm">
+              <% const request = locals.requests[i]; %>
+              <% const advertisement = locals.requests[i].billboard; %>
+              <% const board = advertisement.[request.board_index]; %>
+              <% const id = locals.requests[i]._id; %>
+            <div id="list__item<%= id %>" class="card shadow-sm">
               <div class="card-header" id="brief__info<%= id %>">
                 <ul class="list__flex">
                   <li class="list__col1">
@@ -170,94 +171,7 @@
               >
                 <div class="card-body">
                   <ul id="full__info__list">
-                    <li class="mock__image__container">
-                      <% if (advertisement.license?.images?.[0]) {%>
-                        <img class="ad__image" src="<%= advertisement.license.images[0] %>" alt="hinh1">
-                      <% } else { %> 
-                        <div class="mock__image">&nbsp;</div>
-                      <% } %>
-                      <% if (advertisement.license?.images?.[1]) {%>
-                        <img class="ad__image" src="<%= advertisement.license.images[1] %>" alt="hinh1">
-                      <% } else { %> 
-                        <div class="mock__image">&nbsp;</div>
-                      <% } %>
-                    </li>
-                    <li>
-                      <p class="fw-bold">Thông tin bảng quảng cáo</p>
-                      <ul>
-                        <li>
-                          Kích thước:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.size %></span
-                          >
-                        </li>
-                        <li>
-                          Số lượng:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.amount %></span
-                          >
-                        </li>
-                        <li>
-                          Hình thức:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.type_advertise %></span
-                          >
-                        </li>
-                        <li>
-                          Phân loại:
-                          <span class="fw-bold"
-                            ><%= advertisement.properties.place_type %></span
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                    <% if (advertisement.license) { %>
-                    <li>
-                      <p class="fw-bold">Thông tin công ty</p>
-                      <ul>
-                        <li>
-                          Tên công ty:
-                          <span class="fw-bold"
-                            ><%= advertisement.license?.company_name %></span
-                          >
-                        </li>
-                        <li>
-                          Email liên hệ:
-                          <span class="fw-bold"
-                            ><%= advertisement.license?.company_contact %></span
-                          >
-                        </li>
-                        <li>
-                          Ngày bắt đầu:
-                          <span class="fw-bold"
-                            ><%= advertisement.license?.start_date %></span
-                          >
-                        </li>
-                        <li>
-                          Ngày kết thúc:
-                          <span class="fw-bold"
-                            ><%= advertisement.license?.end_date %></span
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                    <% } %>
-                    <li>
-                      <ul class="buttons__container">
-                        <% if (locals.requests[i].state === 0) { %>
-                          <li>
-                            <button
-                              onclick="cancel_request('<%= id %>')"
-                              class="btn btn-danger"
-                              data-bs-toggle="modal"
-                              data-bs-target="#delete__confirm__modal"
-                            >
-                              <i class="bi bi-trash"></i> Huỷ yêu cầu
-                            </button>
-                          </li>
-                        <% } %>
-                      </ul>
-                    </li>
+                    <!-- TODO add info here -->
                   </ul>
                 </div>
               </div>
@@ -266,12 +180,6 @@
           </div>
           
         </div>
-      <div id="to__list__btn" class="d-grid gap-2">
-        <button class="btn btn-primary" onclick="create_edit_request()">
-          <i class="bi bi-card-list"></i>
-          Tạo Y/C chỉnh sửa
-        </button>
-      </div>
   </main>
     <script src="/scripts/popup.js"></script>
     <script src="/scripts/phan-cum-phuong/trangchu.js"></script>

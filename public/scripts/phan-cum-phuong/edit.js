@@ -113,7 +113,7 @@ function get_report(feature) {
         required
       />
         <option value="">Chọn...</option>
-        ${feature.properties.type_advertises}
+        <option value="">${feature.properties.type_advertises}</option>
       </select>
     </div>
     <div class="form-section">

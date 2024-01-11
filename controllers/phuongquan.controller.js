@@ -527,23 +527,48 @@ const _post_report_edit = async (req, res) => {
 };
 
 const _get_request_edit = async (req, res) => {
-    res.locals.requests = await db
-        .getDb()
-        .collection("requests")
-        .aggregate([
-            {
-                $lookup: {
-                    from: "billboards",
-                    localField: "billboard",
-                    foreignField: "_id",
-                    as: "billboard",
-                },
-            },
-        ])
-        .toArray();
-    res.locals.requests = processQuery(req, res.locals.requests);
-    res.locals.ward_list = getWardList(req);
-    res.render("phan-cum-phuong/danhsachchinhsua");
+  res.locals.requests = await db
+    .getDb()
+    .collection("board-request")
+    .aggregate([
+      {
+        $lookup: {
+          from: "billboards",
+          localField: "billboard",
+          foreignField: "_id",
+          as: "billboard",
+        },
+      },
+      {
+        $project: {
+          billboard: { $arrayElemAt: ["$billboard", 0] },
+        },
+      },
+    ])
+    .toArray();
+  res.locals.requests.concat( await db
+    .getDb()
+    .collection("billboard-request")
+    .aggregate([
+      {
+        $lookup: {
+          from: "billboards",
+          localField: "billboard",
+          foreignField: "_id",
+          as: "billboard",
+        },
+      },
+      {
+        $project: {
+          billboard: { $arrayElemAt: ["$billboard", 0] },
+        },
+      },
+    ])
+    .toArray());
+
+  res.locals.requests = processQuery(req, res.locals.requests);
+  res.locals.ward_list = getWardList(req);
+  res.render("phan-cum-phuong/danhsachchinhsua");
 };
 
 const _post_request_edit = async (req, res) => {
