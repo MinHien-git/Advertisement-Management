@@ -82,7 +82,7 @@
                       Đã quy hoạch
                     </li>
                     <% } else { %>
-                    <li class="list__col3 small__col fw-semibold text-warning">
+                    <li class="list__col3 small__col fw-semibold text-danger">
                       Chưa quy hoạch
                     </li>
                     <% } %>
@@ -112,7 +112,8 @@
                   <div class="card-body">
                     <ul id="collapse__body" class="d-flex" style="flex-direction:column">
                       <ul class="buttons__container" style="width: 50%; margin-bottom: 1rem; margin-left: auto">
-                                <li>
+                                <%if (advertisement.properties.status == 1){%>
+                                  <li>
                                   <button
                                     class="btn btn-success me-3"
                                     onclick="passToModal(this, 'add__board')"
@@ -123,6 +124,7 @@
                                     +&nbsp;Thêm bảng quảng cáo
                                   </button>
                                 </li>
+                                <%}%>
                                 <li>
                                   <button
                                     class="btn btn-outline-primary me-3"
@@ -173,7 +175,7 @@
                               <%if(board.status == 1){%>
                                 <li>
                                 Trạng thái:
-                                <span class="fw-bold text-primary"
+                                <span class="fw-bold text-success"
                                   > Đã cấp phép</span
                                 >
                               </li>
