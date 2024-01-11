@@ -30,31 +30,52 @@ function setInfoBoard() {
   if (current_feature) {
     currentBoard = current_feature.properties.boards;
     current_index = 0;
-    infoboards.innerHTML = "";
-    infoboards.innerHTML = `<div class="info_container">
+    const setInfo = (index) => {
+      if (currentBoard.length === 0) {
+        infoboards.innerHTML = `<div class="info_container">
         <div class="info-close"><img src = "/images/close.png"></div>
-        ${
-          currentBoard.length !== 0
-            ? `<h5 class="billboard-type">${currentBoard[current_index]?.board_type}</h5>
+        <div class="info-container-info">
+            <p>${current_feature.properties.place}</p>
+
+            
+        </div>
+        `
+      }
+      else {
+        const board = currentBoard[current_index];
+        const license = currentBoard[current_index]?.license;
+        infoboards.innerHTML = `<div class="info_container">
+        <div class="info-close"><img src = "/images/close.png"></div>
+        <h5 class="billboard-type">${board?.board_type}</h5>
         <button class="navigate-btn navigate-left">&#8592;</button>
 
         <button class="navigate-btn navigate-right">&#8594;</button>
         <div class="image-container">
-        <div class="image"></div>
-        <div class="image"></div>
-        </div>`
-            : ""
-        }
+          ${license?.images?.[0] ? 
+          `<img class="ad__image" src="${license.images[0]}" alt="hinh1">`: 
+          `<div class="image"></div>`}
+          ${license?.images?.[1] ? 
+            `<img class="ad__image" src="${license.images[1]}" alt="hinh2">`: 
+            `<div class="image"></div>`}
+        </div>
         <div class="info-container-info">
             <p>${current_feature.properties.place}</p>
 
-            ${
-              currentBoard.length !== 0
-                ? `<p class="size"><span class="bold">Kích thước: </span> ${currentBoard[current_index]?.size}</p>`
-                : ""
-            }
+            
+            <p class="size"><span class="bold">Kích thước: </span> ${board?.size}</p>
+            ${license ? `<p class="bold">Thông tin công ty (đã cấp phép)</p>
+            <p class="size"><span class="bold">Tên công ty: </span> ${license.company_name}</p>
+            <p class="size"><span class="bold">Email liên hệ: </span> ${license.company_contact}</p>
+            <p class="size"><span class="bold">Ngày bắt đầu: </span> ${license.start_date}</p>
+            <p class="size"><span class="bold">Ngày kết thúc: </span> ${license.end_date}</p>`: ""}
+            
+                
         </div>
         `;
+      }
+    }
+    
+    setInfo(current_index);
 
     $(".info-close").on("click", () => {
       infoboards.classList.remove("active");
@@ -65,11 +86,7 @@ function setInfoBoard() {
       if (current_index < 0) {
         current_index = currentBoard.length - 1;
       }
-      $(".billboard-type").text(currentBoard[current_index]?.board_type);
-      $(".size").html(
-        `<p class="size"><span class="bold">Kích thước: </span>` +
-          currentBoard[current_index]?.size
-      );
+      setInfo(current_index);
     });
     $(".navigate-right").on("click", () => {
       current_index++;
@@ -77,11 +94,7 @@ function setInfoBoard() {
       if (current_index >= currentBoard.length) {
         current_index = 0;
       }
-      $(".billboard-type").text(currentBoard[current_index]?.board_type);
-      $(".size").html(
-        `<p class="size"><span class="bold">Kích thước: </span>` +
-          currentBoard[current_index]?.size
-      );
+      setInfo(current_index);
     });
     let request_btn = $("#info .request");
     if (request_btn) {

@@ -442,9 +442,11 @@ const _post_report_edit = async (req, res) => {
         console.error("Error sending email: ", error);
         res.status(500).send({ message: "Failed to send email" });
       }
+      else {
+        return res.redirect("/dashboard/report");
+      }
     });
   }
-  return res.redirect("/dashboard/report");
 };
 
 const _get_request_edit = async (req, res) => {
