@@ -10,6 +10,7 @@ function navigate(item_id) {
         link = "/management/general/districts_wards";
     if (item_id == "manage__general__types")
         link = "/management/general/general_types";
+    if (item_id == "manage__profile") link = "/management/profile";
     window.location.href = link;
 }
 
@@ -31,7 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
         active_id = "manage__billboards";
         li_active_id = "billboards";
     } else if (path.includes("/management/licenses")) {
-        active_id = "check__requests";
+        active_id = "manage__billboards";
+        li_active_id = "manage__licenses";
     } else if (path.includes("/management/reports")) {
         active_id = "manage__reports";
     } else if (path.includes("/management/accounts")) {
@@ -45,6 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (path.includes("general_types")) {
             li_active_id = "manage__general__types";
         }
+    } else if (path.includes("/management/profile")) {
+        active_id = "profile";
+        li_active_id = "manage_profile";
     }
 
     let active_el = document.getElementById(active_id);
