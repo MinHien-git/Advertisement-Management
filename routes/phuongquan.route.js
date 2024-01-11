@@ -50,24 +50,18 @@ router.post(
 );
 
 //Từ chối Yêu cầu cấp phép
-router.post(
-  "/dashboard/license/cancel",
-  phuongQuanController._post_cancel_license
-);
+router.post("/dashboard/license/cancel", phuongQuanController._post_cancel_license);
 
 //Danh sách báo cáo
 router.get("/dashboard/report", phuongQuanController._get_report);
 
 //Thông tin báo cáo
-router.get(
-  "/dashboard/report/:id",
-  phuongQuanController._get_report_information
-);
+router.get("/dashboard/report/:id", phuongQuanController._get_report_information);
 router.post("/dashboard/report/:id", phuongQuanController._post_report_edit);
 
 //Yêu cầu chỉnh sửa
 router.get("/dashboard/request/edit", phuongQuanController._get_request_edit);
 
-router.post("/dashboard/request", phuongQuanController._post_request_edit);
+router.post("/dashboard/request/edit", phuongQuanController._post_request_edit);
 
 module.exports = router;

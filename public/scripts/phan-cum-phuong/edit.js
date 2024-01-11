@@ -1,5 +1,6 @@
 let report_node;
 let report_index;
+
 function get_report(feature) {
   if (report_node) {
     body.removeChild(report_node);

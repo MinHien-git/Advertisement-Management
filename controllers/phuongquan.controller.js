@@ -219,42 +219,23 @@ const _post_profile = async (req, res) => {
 };
 
 const _get_map = async (req, res) => {
-  let billboards = await db.getDb().collection("billboards").find({}).toArray();
-  let ward = res.locals.ward ? res.locals.ward : "";
-  let district = res.locals.district ? res.locals.district : "";
+  let billboards = await db.getDb().collection("billboards").find().toArray();
   let reports = [];
-  let placeType = await db.getDb().collection("place_types").find({}).toArray();
-  let type_advertise = await db
-    .getDb()
-    .collection("ad_types")
-    .find({})
-    .toArray();
-  billboards = billboards.filter((i) => {
-    if (ward == "" && district == "") return i;
-    let address = i?.properties?.place.split(", ");
+  let placeType = await db.getDb().collection("place_types").find().toArray();
+  let type_advertise = await db.getDb().collection("ad_types").find().toArray();
 
-    if (
-      (address.find((a) => a == ward) || !ward) &&
-      (address.find((a) => a == district) || !district)
-    ) {
-      return i;
-    }
+  
+  billboards = billboards.filter((i) => {
+    return compareLocation(req, i.properties.place);
   });
 
   if (res.locals.type_user == 1) {
     reports = await db.getDb().collection("reports").find().toArray();
 
     reports = reports.filter((i) => {
-      if (ward == "" && district == "") return i;
-      let address = i?.properties?.place.split(", ");
-
-      if (
-          (address?.find((a) => a == ward) || !ward) &&
-          (address?.find((a) => a == district) || !district)
-      ) {
-          return i;
-      }
+      return compareLocation(req, i.properties.place);
     });
+
     let places = [];
     let newRP = [];
     for (let i = 0; i < reports.length; ++i) {
@@ -262,16 +243,24 @@ const _get_map = async (req, res) => {
         places.push(reports[i].properties.place);
       }
     }
-    let temp = reports.slice();
-    for (let i = 0; i < places.length; ++i) {
-      newRP[i] = temp[i];
-      newRP[i].properties.details = temp.map((j) => {
-        if (j.properties.place === places[i]) {
-          return { ...j.properties };
-        }
+
+    newRP = places
+      .map(e => billboards.find(b => e == b.properties.place))
+      .map(e => {
+        e.properties.details = reports
+          .filter(e1 => e1.properties.place === e.properties.place)
+          .map(e1 => { return { ...e1.properties } });
+        return e;
       });
-      console.log("details ", newRP[i].properties);
-    }
+
+    // for (let i = 0; i < places.length; ++i) {
+    //   newRP[i] = temp[i];
+    //   newRP[i].properties.details = temp.map((j) => {
+    //     if (j.properties.place === places[i]) {
+    //       return { ...j.properties };
+    //     }
+    //   });
+    // }
 
     return res.render("phan-cum-phuong/trangchu", {
       action: false,
@@ -287,6 +276,8 @@ const _get_map = async (req, res) => {
 
 //Danh sách bảng quảng cáo
 const _get_advertisement = async (req, res) => {
+  let placeType = await db.getDb().collection("place_types").find().toArray();
+  let type_advertise = await db.getDb().collection("ad_types").find().toArray();
   res.locals.billboards = await db
     .getDb()
     .collection("billboards")
@@ -349,7 +340,11 @@ const _get_advertisement = async (req, res) => {
     .toArray();
   res.locals.billboards = processQuery(req, res.locals.billboards);
   res.locals.ward_list = getWardList(req);
-  res.render("phan-cum-phuong/quanlyquangcao");
+
+  res.render("phan-cum-phuong/quanlyquangcao", {
+    placeType: placeType,
+    type_advertise: type_advertise,
+  });
 };
 
 //Yêu cầu cấp phép biển quáng cáo
