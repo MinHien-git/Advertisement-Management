@@ -533,7 +533,24 @@ const _get_request_edit = async (req, res) => {
       },
     ])
     .toArray();
-  res.locals.requests.concat(
+  res.locals.requests = [
+    ...res.locals.requests,
+    ...(await db
+      .getDb()
+      .collection("billboard-request")
+      .aggregate([
+        {
+          $lookup: {
+            from: "billboards",
+            localField: "billboard",
+            foreignField: "_id",
+            as: "billboard",
+          },
+        },
+      ])
+      .toArray()),
+  ];
+  console.log(
     await db
       .getDb()
       .collection("billboard-request")
@@ -549,7 +566,6 @@ const _get_request_edit = async (req, res) => {
       ])
       .toArray()
   );
-  console.log(res.locals.requests);
   //res.locals.requests = processQuery(req, res.locals.requests);
   //res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachchinhsua");
