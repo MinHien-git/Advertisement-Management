@@ -114,43 +114,27 @@ const processQuery = (req, arr) => {
 
   if (req.path === "/dashboard/license") {
     arr.map((e1) => {
-      e1.properties.boards = e1.properties.boards.map((e2) => {
-        if (!e2.license) return e2;
-        e2.license = e2.license.filter(
-          processFilterQuery(req, (e3) => e3.state, [0, 1, 4, 2], "license")
-        );
-        return e2;
-      });
       e1.properties.boards = e1.properties.boards.filter(
-        (e2) => e2.license.length > 0
+        processFilterQuery(
+          req,
+          (e3) => e3.license.state,
+          [0, 1, 4, 2],
+          "license"
+        )
       );
       return e1;
     });
     arr = arr.filter((e) => e.properties.boards.length > 0);
   } else if (req.path === "/dashboard/advertise") {
     arr.map((e1) => {
-      e1.properties.boards = e1.properties.boards.map((e2) => {
-        e2.license = e2.license.filter(
-          processFilterQuery(
-            req,
-            (e3) => e3.state,
-            [0, 1, null, 4, 2],
-            "license"
-          )
-        );
-        return e2;
-      });
-      if (
-        req.query.license1 ||
-        req.query.license2 ||
-        req.query.license3 ||
-        req.query.license4 ||
-        req.query.license5
-      ) {
-        e1.properties.boards = e1.properties.boards.filter(
-          (e2) => e2.license.length > 0
-        );
-      }
+      e1.properties.boards = e1.properties.boards.filter(
+        processFilterQuery(
+          req,
+          (e3) => e3.license.state,
+          [0, 1, null, 4, 2],
+          "license"
+        )
+      );
       return e1;
     });
   }
@@ -357,66 +341,29 @@ const _get_advertisement = async (req, res) => {
 
 //Yêu cầu cấp phép biển quáng cáo
 const _get_license = async (req, res) => {
-  res.locals.billboards = await db
+  let licenses = await db
     .getDb()
-    .collection("billboards")
+    .collection("licenses")
     .aggregate([
-      {
-        $unwind: "$properties.boards",
-      },
+      { $set: { board_id: "$billboard.board_id" } },
       {
         $lookup: {
-          from: "licenses",
-          localField: "properties.boards.license",
+          from: "billboards",
+          localField: "billboard.billboard_id",
           foreignField: "_id",
-          as: "properties.boards.license",
+          as: "billboard",
         },
       },
-      {
-        $project: {
-          _id: 1,
-          type: 1,
-          "properties.place": 1,
-          "properties.place_type": 1,
-          "properties.type_advertise": 1,
-          "properties.status": 1,
-          "properties.board_amount": 1,
-          boards: "$properties.boards",
-          geometry: 1,
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          type: {
-            $first: "$type",
-          },
-          properties: {
-            $first: "$properties",
-          },
-          boards: {
-            $push: "$boards",
-          },
-          geometry: {
-            $first: "$geometry",
-          },
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          type: 1,
-          "properties.place": 1,
-          "properties.place_type": 1,
-          "properties.type_advertise": 1,
-          "properties.status": 1,
-          "properties.board_amount": 1,
-          "properties.boards": "$boards",
-          geometry: 1,
-        },
-      },
+      { $unwind: "$billboard" },
     ])
     .toArray();
+  res.locals.billboards = licenses.map((e) => {
+    e.billboard.properties.boards = e.billboard.properties.boards.filter((b) =>
+      b._id.equals(e.board_id)
+    );
+    e.billboard.properties.boards[0].license = e;
+    return e.billboard;
+  });
 
   res.locals.billboards = processQuery(req, res.locals.billboards);
 
@@ -533,7 +480,24 @@ const _get_request_edit = async (req, res) => {
       },
     ])
     .toArray();
-  res.locals.requests.concat(
+  res.locals.requests = [
+    ...res.locals.requests,
+    ...(await db
+      .getDb()
+      .collection("billboard-request")
+      .aggregate([
+        {
+          $lookup: {
+            from: "billboards",
+            localField: "billboard",
+            foreignField: "_id",
+            as: "billboard",
+          },
+        },
+      ])
+      .toArray()),
+  ];
+  console.log(
     await db
       .getDb()
       .collection("billboard-request")
@@ -549,9 +513,8 @@ const _get_request_edit = async (req, res) => {
       ])
       .toArray()
   );
-  console.log(res.locals.requests);
-  //res.locals.requests = processQuery(req, res.locals.requests);
-  //res.locals.ward_list = getWardList(req);
+  res.locals.requests = processQuery(req, res.locals.requests);
+  res.locals.ward_list = getWardList(req);
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 

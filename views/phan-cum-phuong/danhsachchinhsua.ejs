@@ -112,7 +112,7 @@
             <div id="info__desc">
               <div class="list__title__container mt-3">
                 <ul class="list__flex fw-bold">
-                  <li class="list__col1">Tên cán bộ</li>
+                  <li class="list__col1">Loại yêu cầu</li>
                   <li class="list__col2">Địa điểm</li>
                   <li class="list__col3">Trạng thái</li>
                   <li class="list__col4">
@@ -130,7 +130,11 @@
               <div class="card-header" id="brief__info<%= id %>">
                 <ul class="list__flex">
                   <li class="list__col1">
-                    <%= advertisement[0].properties.type %>
+                    <% if(request.select_option == 0){ %>
+                       Sửa trụ quảng cáo
+                      <% } else { %>
+                        Sửa bảng quảng cáo
+                      <% } %>
                   </li>
                   <li class="list__col2"><%= advertisement[0].properties.place %></li>
                   <% if (locals.requests[i].state == 1) { %>
@@ -170,7 +174,44 @@
               >
                 <div class="card-body">
                   <ul id="full__info__list">
-                    <!-- TODO add info here -->
+                    <li>
+                      <p class="fw-bold">Thông tin cũ</p>
+                      <ul>
+                        <% if(request.select_option == 0){ %>
+                          <li>Phân loại: <%= advertisement[0].properties.place_type %></li>
+                          <li>Loại Quảng cáo: <%= advertisement[0].properties.type_advertise %></li>
+                          <% if(advertisement[0].properties.status == 0) {%>
+                            <li>Trạng thái: Chưa quy hoạch</li>
+                           <%} else {%>
+                            <li>Trạng thái: Đã Quy hoạch</li>
+                            <%}%>       
+                        <%}%>
+                        <% if(request.select_option == 1){ %>
+                          <li>Loại bảng: <%= advertisement[0].properties.boards[Number(request.board_index)].board_type %></li>
+                          <li>Kích thước: <%= advertisement[0].properties.boards[Number(request.board_index)].size %></li>    
+                        <%}%>
+                      </ul>
+                    </li>
+                    <li>
+                      <p class="fw-bold">Thông tin mới</p>
+                      <ul>
+                        <% if(request.select_option == 0){ %>
+                          <li>Phân loại: <%= request.place_type %></li>
+                          <li>Loại Quảng cáo: <%= request.type_advertise %></li>
+                          <% if(request.status == 0) {%>
+                            <li>Trạng thái: Chưa quy hoạch</li>
+                           <%} else {%>
+                            <li>trạng thái: Đã Quy hoạch</li>
+                            <%}%>
+                          <li>Chi tiết: <%- request.details %></li>        
+                        <%}%>
+                        <% if(request.select_option == 1){ %>
+                          <li>Loại bảng: <%= request.board_type %></li>
+                          <li>Kích thước: <%= request.size %></li>  
+                          <li>Chi tiết: <%- request.details %></li>     
+                        <%}%>
+                      </ul>
+                    </li>
                   </ul>
                 </div>
               </div>
