@@ -357,18 +357,22 @@ const _get_license = async (req, res) => {
       { $unwind: "$billboard" },
     ])
     .toArray();
+  if (licenses.length > 0) {
+    res.locals.billboards = licenses.map((e) => {
+      e.billboard.properties.boards = e.billboard.properties.boards.filter(
+        (b) => b._id.equals(e.board_id)
+      );
+      e.billboard.properties.boards[0].license = e;
+      return e.billboard;
+    });
 
-  res.locals.billboards = licenses.map((e) => {
-    e.billboard.properties.boards = e.billboard.properties.boards.filter((b) =>
-      b._id.equals(e.board_id)
-    );
-    e.billboard.properties.boards[0].license = e;
-    return e.billboard;
-  });
-
-  res.locals.billboards = processQuery(req, res.locals.billboards);
+    res.locals.billboards = processQuery(req, res.locals.billboards);
+  } else {
+    res.locals.billboards = [];
+  }
 
   res.locals.ward_list = getWardList(req);
+
   res.render("phan-cum-phuong/danhsachcapphep");
 };
 
@@ -384,7 +388,7 @@ const _post_license_request = async (req, res) => {
     contact,
     start,
     end,
-    1,
+    0,
     attached_files
   );
   if (license.send_licences_request()) console.log("send!");
@@ -476,7 +480,7 @@ const _get_request_edit = async (req, res) => {
           as: "billboard",
         },
       },
-      { $unwind: "$billboard" }
+      { $unwind: "$billboard" },
     ])
     .toArray();
   res.locals.requests = [
@@ -493,12 +497,14 @@ const _get_request_edit = async (req, res) => {
             as: "billboard",
           },
         },
-        { $unwind: "$billboard" }
+        { $unwind: "$billboard" },
       ])
       .toArray()),
   ];
+  console.log(res.locals.requests);
   res.locals.requests = processQuery(req, res.locals.requests);
   res.locals.ward_list = getWardList(req);
+
   res.render("phan-cum-phuong/danhsachchinhsua");
 };
 

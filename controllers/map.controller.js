@@ -50,12 +50,14 @@ const _get_map = async (request, response) => {
           "properties.boards": "$boards",
           geometry: 1,
         },
-      }])
+      },
+    ])
     .toArray();
-  console.log(JSON.stringify(billboards, null, "  "));
+  console.log(JSON.stringify(billboards, null, "  "), billboards.length);
 
   let ward = response.locals.ward ? response.locals.ward : "";
   let district = response.locals.district ? response.locals.district : "";
+
   let reports = [];
   billboards = billboards.filter((i) => {
     if (ward == "" && district == "") return true;

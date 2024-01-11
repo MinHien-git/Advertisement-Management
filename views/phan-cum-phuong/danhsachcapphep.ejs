@@ -168,11 +168,11 @@
                   <li class="list__col3 fw-semibold" style="color: #ff9a7b">
                     Hết hạn
                   </li>
-                  <% } %> <% } else{ %>
+                  <% } else if (license.state===5){ %>
                   <li class="list__col3 fw-semibold" style="color: #ff7b7b">
                     Từ chối
                   </li>
-                  <% } %>
+                  <% }} %>
                   <li class="list__col4">
                     <button
                       class="btn collapsed"
@@ -264,7 +264,7 @@
                     </li>
                     <li>
                       <ul class="buttons__container">
-                        <% if (license.state===1) { %>
+                        <% if (license.state===0) { %>
                         <li>
                           <button
                             onclick="cancel_license('<%= license._id %>')"

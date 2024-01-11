@@ -150,7 +150,7 @@ function create_authorize_request(advertisement) {
   body.append(request_node);
 
   $("#inscreen-form-login").on("submit", (e) => {
-    console.log(files);
+    e.preventDefault();
     let data = JSON.stringify({
       id: $("#bbid").val(),
       attached_files: files,

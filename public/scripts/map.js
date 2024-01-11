@@ -37,12 +37,10 @@ function setInfoBoard() {
         <div class="info-close"><img src = "/images/close.png"></div>
         <div class="info-container-info">
             <p>${current_feature.properties.place}</p>
-
-            
+            <p>Chưa có bảng quảng cáo</p>
         </div>
-        `
-      }
-      else {
+        `;
+      } else {
         const board = currentBoard[current_index];
         const license = currentBoard[current_index]?.license?.[0];
         infoboards.innerHTML = `<div class="info_container">
@@ -52,25 +50,33 @@ function setInfoBoard() {
 
         <button class="navigate-btn navigate-right">&#8594;</button>
         <div class="image-container">
-          ${license?.images?.[0] ? 
-          `<img class="ad__image" src="${license.images[0]}" alt="hinh1">`: 
-          `<div class="image"></div>`}
-          ${license?.images?.[1] ? 
-            `<img class="ad__image" src="${license.images[1]}" alt="hinh2">`: 
-            `<div class="image"></div>`}
+          ${
+            license?.images?.[0]
+              ? `<img class="ad__image" src="${license.images[0]}" alt="hinh1">`
+              : `<div class="image"></div>`
+          }
+          ${
+            license?.images?.[1]
+              ? `<img class="ad__image" src="${license.images[1]}" alt="hinh2">`
+              : `<div class="image"></div>`
+          }
         </div>
         <div class="info-container-info">
             <p>${current_feature.properties.place}</p>
 
             
-            <p class="size"><span class="bold">Kích thước: </span> ${board?.size}</p>
-            ${license ? `<p class="bold">Thông tin công ty (đã cấp phép)</p>
+            <p class="size"><span class="bold">Kích thước: </span> ${
+              board?.size
+            }</p>
+            ${
+              license
+                ? `<p class="bold">Thông tin công ty (đã cấp phép)</p>
             <p class="size"><span class="bold">Tên công ty: </span> ${license.company_name}</p>
             <p class="size"><span class="bold">Email liên hệ: </span> ${license.company_contact}</p>
             <p class="size"><span class="bold">Ngày bắt đầu: </span> ${license.start_date}</p>
-            <p class="size"><span class="bold">Ngày kết thúc: </span> ${license.end_date}</p>`: ""}
-            
-                
+            <p class="size"><span class="bold">Ngày kết thúc: </span> ${license.end_date}</p>`
+                : ""
+            }  
         </div>
         `;
         $(".info-close").on("click", () => {
@@ -78,7 +84,7 @@ function setInfoBoard() {
         });
         $(".navigate-left").on("click", () => {
           current_index--;
-    
+
           if (current_index < 0) {
             current_index = currentBoard.length - 1;
           }
@@ -86,7 +92,7 @@ function setInfoBoard() {
         });
         $(".navigate-right").on("click", () => {
           current_index++;
-    
+
           if (current_index >= currentBoard.length) {
             current_index = 0;
           }
@@ -99,9 +105,8 @@ function setInfoBoard() {
           });
         }
       }
+    };
 
-    }
-    
     setInfo(current_index);
   }
 }
@@ -117,26 +122,34 @@ function setReportBoard() {
       let image_body = "";
       if (images) {
         for (let i = 0; i < images.length; i++) {
-          image_body += `<img class="ad__image" src="${images[i]}" alt="hinh${i}">`
+          image_body += `<img class="ad__image" src="${images[i]}" alt="hinh${i}">`;
         }
       }
       body += `<div class="report-card">
-      ${currentBoard.details[i].images ? `<div class="image-container">${image_body}</div>` : ""}
+      ${
+        currentBoard.details[i].images
+          ? `<div class="image-container">${image_body}</div>`
+          : ""
+      }
       Email: ${
         currentBoard.details[i].sender_email
-          ? `<p>${currentBoard.details[i].sender_email}</p>` : ""
+          ? `<p>${currentBoard.details[i].sender_email}</p>`
+          : ""
       }
       Tên người gửi: ${
         currentBoard.details[i].sender_name
-          ? `<p>${currentBoard.details[i].sender_name}</p>` : ""
+          ? `<p>${currentBoard.details[i].sender_name}</p>`
+          : ""
       }
       SĐT: ${
         currentBoard.details[i].sender_number
-          ? `<p>${currentBoard.details[i].sender_number}</p>` : ""
+          ? `<p>${currentBoard.details[i].sender_number}</p>`
+          : ""
       }
       Ngày gửi: ${
         currentBoard.details[i].send_day
-          ? `<p>${currentBoard.details[i].send_day}</p>` : ""
+          ? `<p>${currentBoard.details[i].send_day}</p>`
+          : ""
       }
       Nội dung báo cáo: ${currentBoard.details[i].details}
       </div>`;
@@ -172,7 +185,9 @@ function setReportBoard() {
       $(".billboard-type").text(currentBoard[current_index]?.board_type);
       $(".size").html(
         `<p class="size"><span class="bold">Kích thước: </span>` +
-          currentBoard[current_index]?.size ? currentBoard[current_index].size : ""
+          currentBoard[current_index]?.size
+          ? currentBoard[current_index].size
+          : ""
       );
     });
     let request_btn = $("#info .request");
@@ -360,12 +375,13 @@ window.onload = function () {
       const attributionDiv = document.createElement("div");
       attributionDiv.setAttribute("id", "content" + feature._id);
       attributionDiv.innerHTML = `<p>${feature.properties.place}</p>
-      ${feature.properties.details.constructor !== Array ? 
-        `<p><span class="bold">Trạng thái:</span>
+      ${
+        feature.properties.details.constructor !== Array
+          ? `<p><span class="bold">Trạng thái:</span>
         ${feature.properties?.state === 0 ? "Đã xử lí" : "Chưa xử lí"} </p>
         <p><span class="bold">Nội dung báo cáo:</span></p> 
         ${feature.properties.details}`
-      : `<p><span class="bold">Số báo cáo:</span>
+          : `<p><span class="bold">Số báo cáo:</span>
       ${feature.properties?.details.length} </p><button class=">Chi tiết</button>`
       }`;
       if (feature.properties.details.constructor === Array) {
