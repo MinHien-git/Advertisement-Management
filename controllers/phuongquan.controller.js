@@ -574,7 +574,8 @@ const _post_request_edit = async (req, res) => {
       value[1],
       value[0],
       size,
-      details
+      details,
+      select_option
     );
     if (await request.send_request()) console.log("send!");
   }

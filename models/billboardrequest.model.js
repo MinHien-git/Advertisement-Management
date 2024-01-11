@@ -3,13 +3,21 @@ const report_const = require("../constants/report.type");
 const db = require("../database/database");
 
 module.exports = class BillboardRequest {
-  constructor(billboard, place_type, type_advertise, status, details) {
+  constructor(
+    billboard,
+    place_type,
+    type_advertise,
+    status,
+    details,
+    select_option
+  ) {
     this.billboard = new ObjectId(billboard);
     this.place_type = place_type;
     this.type_advertise = type_advertise;
     this.status = status;
     this.details = details;
     this.state = 0;
+    this.select_option = select_option;
   }
 
   async send_request() {
