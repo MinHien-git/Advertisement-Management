@@ -59,10 +59,10 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
         .aggregate([
             {
                 $lookup: {
-                    from: "billboard",
-                    localField: "billboard",
+                    from: "billboards",
+                    localField: "billboards",
                     foreignField: "_id",
-                    as: "billboard",
+                    as: "billboards",
                 },
             },
         ])
@@ -107,7 +107,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
         for (let i = 0; i < expired_licenses.length; i++) {
             await db
                 .getDb()
-                .collection("billboard")
+                .collection("billboards")
                 .findOneAndUpdate(
                     { license: expired_licenses[i] },
                     { $unset: { license: "" } }
@@ -147,7 +147,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
         for (let i = 0; i < expired_pending_licenses.length; i++) {
             await db
                 .getDb()
-                .collection("billboard")
+                .collection("billboards")
                 .findOneAndUpdate(
                     { license: expired_pending_licenses[i] },
                     { $unset: { license: "" } }
@@ -482,7 +482,7 @@ async function processList(collection, search_queries) {
                     { $match: search_queries },
                     {
                         $lookup: {
-                            from: "billboard",
+                            from: "billboards",
                             localField: "billboard.billboard_id",
                             foreignField: "_id",
                             as: "billboard_info",
@@ -523,7 +523,7 @@ async function processList(collection, search_queries) {
                     { $match: search_queries },
                     {
                         $lookup: {
-                            from: "billboard",
+                            from: "billboards",
                             localField: "billboard",
                             foreignField: "_id",
                             as: "billboard",
@@ -542,11 +542,12 @@ async function processList(collection, search_queries) {
         }
     }
 
-    if (collection == "billboard") {
+    if (collection == "billboards") {
         item_list = await db
             .getDb()
             .collection(collection)
             .aggregate([
+                { $match: search_queries },
                 {
                     $unwind: "$properties.boards",
                 },
@@ -617,7 +618,7 @@ async function processList(collection, search_queries) {
     for (let i = 0; i < item_list.length; i++) {
         let place = "";
         if (collection == "users") return item_list;
-        if (collection == "billboard") {
+        if (collection == "billboards") {
             place = item_list[i].properties.place;
         } else if (collection == "licenses") {
             if (
@@ -627,14 +628,19 @@ async function processList(collection, search_queries) {
                 place = item_list[i].billboard_info[0].properties.place;
             }
         } else if (collection == "reports") {
-            place = item_list[i].place;
+            place = item_list[i].properties.place;
+            if (item_list[i].properties.send_day instanceof Date) {
+                item_list[i].properties.send_day = changeDateFormat(
+                    new Date(item_list[i].properties.send_day)
+                );
+            }
         }
 
         if (place.includes("Đ. ") == true) {
             place = place.replace("Đ. ", "");
         }
 
-        if (collection == "billboard") {
+        if (collection == "billboards") {
             item_list[i].properties.place = place;
             if (item_list[i].properties.boards.length > 0) {
                 for (
@@ -921,7 +927,7 @@ const _get_billboards = async (req, res) => {
     res.locals.isAuth = true;
     // res.locals.billboards = await db
     //     .getDb()
-    //     .collection("billboard")
+    //     .collection("billboards")
     //     .find(
     //         search_query
     //     )
@@ -931,7 +937,7 @@ const _get_billboards = async (req, res) => {
     //     .limit(ITEMS_PER_PAGE)
     //     .toArray();
 
-    let item_list = await processList("billboard", search_query);
+    let item_list = await processList("billboards", search_query);
 
     res.locals.list_districts = await getUniqueDistrictsWards(item_list);
 
@@ -975,7 +981,7 @@ const _edit_billboard = async (req, res) => {
     try {
         const existing_billboard = await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .findOne({ _id: new ObjectId(id) });
         let boards = [];
         let board_amount = 0;
@@ -985,7 +991,7 @@ const _edit_billboard = async (req, res) => {
         }
         const updated_billboard = await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
                 {
@@ -1136,7 +1142,7 @@ const _add_board = async (req, res) => {
         const board_size = board_height + "mx" + board_width + "m";
         const updated_billboard = await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .findOneAndUpdate(
                 { _id: new ObjectId(billboard_id) },
                 {
@@ -1170,7 +1176,7 @@ const _edit_board = async (req, res) => {
         const board_size = board_height + "mx" + board_width + "m";
         const updated_billboard = await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .findOneAndUpdate(
                 {
                     _id: new ObjectId(billboard_id),
@@ -1196,7 +1202,7 @@ const _delete_board = async (req, res) => {
     try {
         const updated_billboard = await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .findOneAndUpdate(
                 { _id: new ObjectId(billboard_id) },
                 {
@@ -1222,7 +1228,7 @@ const _delete_billboard = async (req, res) => {
     const { id } = req.body;
     try {
         db.getDb()
-            .collection("billboard")
+            .collection("billboards")
             .deleteOne({ _id: new ObjectId(id) });
         console.log("billboard " + id + " deleted!");
         res.send("billboard " + id + " deleted!");
@@ -1349,7 +1355,7 @@ const _create_billboard = async (req, res) => {
     try {
         await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .insertOne({ geometry, type: "Feature", properties });
         res.send("billboard " + id + " created!");
     } catch (err) {
@@ -1422,7 +1428,7 @@ const _approve_license = async (req, res) => {
 
         await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .findOneAndUpdate(
                 { _id: new ObjectId(license.billboard) },
                 { $set: { license: license._id } },
@@ -1551,7 +1557,7 @@ const _approve_edit_request = async (req, res) => {
 
         await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .findOneAndUpdate(
                 { _id: new ObjectId(license.billboard) },
                 { $set: { license: license._id } },
@@ -1592,7 +1598,7 @@ const _decline_edit_request = async (req, res) => {
 
         await db
             .getDb()
-            .collection("billboard")
+            .collection("billboards")
             .findOneAndUpdate(
                 { _id: new ObjectId(license.billboard) },
                 { $set: { license: license._id } },
@@ -1635,7 +1641,8 @@ const _get_reports = async (req, res) => {
     res.locals.reports = pageItems;
 
     res.locals.reports.forEach((report) => {
-        report.place = report.place.split(", Thành phố")[0];
+        report.properties.place =
+            report.properties.place.split(", Thành phố")[0];
     });
     res.render("phan-cum-soVHTT/ThongKeBaoCao");
 };
@@ -1649,7 +1656,7 @@ const _change_report_status = async (req, res) => {
             .collection("reports")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { state: state } },
+                { $set: { "properties.state": state } },
                 { returnDocument: "after" }
             );
         if (state == 1) {
@@ -1672,7 +1679,12 @@ const _post_report_change_request = async (req, res) => {
             .collection("reports")
             .findOneAndUpdate(
                 { _id: new ObjectId(id) },
-                { $set: { edit_request: edit_request, state: state } },
+                {
+                    $set: {
+                        "properties.edit_request": edit_request,
+                        "properties.state": state,
+                    },
+                },
                 { returnDocument: "after" }
             );
         console.log("Edit request for report " + id + " sent!");

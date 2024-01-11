@@ -233,10 +233,10 @@ const _get_map = async (req, res) => {
       let address = i?.properties?.place.split(", ");
 
       if (
-        (address.find((a) => a == ward) || !ward) &&
-        (address.find((a) => a == district) || !district)
+          (address?.find((a) => a == ward) || !ward) &&
+          (address?.find((a) => a == district) || !district)
       ) {
-        return i;
+          return i;
       }
     });
     let places = [];
