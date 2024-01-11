@@ -26,6 +26,7 @@ var geojsonReportMarkerOptions = {
   opacity: 0.5,
   fillOpacity: 0.8,
 };
+
 function setInfoBoard() {
   if (current_feature) {
     currentBoard = current_feature.properties.boards;
@@ -43,7 +44,7 @@ function setInfoBoard() {
       }
       else {
         const board = currentBoard[current_index];
-        const license = currentBoard[current_index]?.license;
+        const license = currentBoard[current_index]?.license?.[0];
         infoboards.innerHTML = `<div class="info_container">
         <div class="info-close"><img src = "/images/close.png"></div>
         <h5 class="billboard-type">${board?.board_type}</h5>
@@ -72,36 +73,36 @@ function setInfoBoard() {
                 
         </div>
         `;
+        $(".info-close").on("click", () => {
+          infoboards.classList.remove("active");
+        });
+        $(".navigate-left").on("click", () => {
+          current_index--;
+    
+          if (current_index < 0) {
+            current_index = currentBoard.length - 1;
+          }
+          setInfo(current_index);
+        });
+        $(".navigate-right").on("click", () => {
+          current_index++;
+    
+          if (current_index >= currentBoard.length) {
+            current_index = 0;
+          }
+          setInfo(current_index);
+        });
+        let request_btn = $("#info .request");
+        if (request_btn) {
+          request_btn.on("click", () => {
+            get_resquest(current_feature.properties.place);
+          });
+        }
       }
+
     }
     
     setInfo(current_index);
-
-    $(".info-close").on("click", () => {
-      infoboards.classList.remove("active");
-    });
-    $(".navigate-left").on("click", () => {
-      current_index--;
-
-      if (current_index < 0) {
-        current_index = currentBoard.length - 1;
-      }
-      setInfo(current_index);
-    });
-    $(".navigate-right").on("click", () => {
-      current_index++;
-
-      if (current_index >= currentBoard.length) {
-        current_index = 0;
-      }
-      setInfo(current_index);
-    });
-    let request_btn = $("#info .request");
-    if (request_btn) {
-      request_btn.on("click", () => {
-        get_resquest(current_feature.properties.place);
-      });
-    }
   }
 }
 
