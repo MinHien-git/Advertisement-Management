@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
 
 const getAddress = (req, obj) => {
   if (req.path === "/dashboard/request/edit") {
-    return obj.billboard[0]?.properties?.place;
+    return obj.billboard?.properties?.place;
   } else {
     return obj.properties.place;
   }
@@ -118,7 +118,7 @@ const processQuery = (req, arr) => {
         processFilterQuery(
           req,
           (e3) => e3.license.state,
-          [0, 1, 4, 2],
+          [1, 0, 4, 2],
           "license"
         )
       );
@@ -130,8 +130,8 @@ const processQuery = (req, arr) => {
       e1.properties.boards = e1.properties.boards.filter(
         processFilterQuery(
           req,
-          (e3) => e3.license.state,
-          [0, 1, null, 4, 2],
+          (e3) => e3?.license.state,
+          [1, 0, null],
           "license"
         )
       );
@@ -531,6 +531,7 @@ const _get_request_edit = async (req, res) => {
         },
       },
       { $unwind: "$billboard" },
+      { $set: { select_option: 1 } }
     ])
     .toArray();
   res.locals.requests = [
@@ -548,6 +549,7 @@ const _get_request_edit = async (req, res) => {
           },
         },
         { $unwind: "$billboard" },
+        { $set: { select_option: 0 } }
       ])
       .toArray()),
   ];

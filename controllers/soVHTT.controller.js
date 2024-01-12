@@ -61,7 +61,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
       {
         $lookup: {
           from: "billboards",
-          localField: "billboards",
+          localField: "billboard.billboard_id",
           foreignField: "_id",
           as: "billboards",
         },
@@ -79,7 +79,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
     if (licenses[i].state == 1 && today >= end_date) {
       expired_licenses.push(licenses[i]._id);
       company_emails.push(licenses[i].company_contact);
-      let address = licenses[i].billboard[0].properties.place;
+      let address = licenses[i].billboards[0].properties.place;
       address = address.split(", Thành")[0];
       address = address.replace("Đ. ", "");
       email_contents.push(
