@@ -1023,14 +1023,8 @@ const _edit_billboard = async (req, res) => {
             { method: "GET" }
         );
         const toJson = await response.json();
-        let new_lon_lat = [];
-        if (toJson.results.length > 0) {
-            if (toJson.results.length >= 2) {
-                new_lon_lat = [toJson.results[1].lon, toJson.results[1].lat];
-            } else {
-                new_lon_lat = [toJson.results[0].lon, toJson.results[0].lat];
-            }
-        }
+        let new_lon_lat = [toJson.results[0].lon, toJson.results[0].lat];
+        
         const updated_billboard = await db
             .getDb()
             .collection("billboards")
