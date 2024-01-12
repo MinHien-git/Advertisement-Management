@@ -25,8 +25,10 @@ function get_report(current_feature) {
             class="form-container active"
             method="post"
             action="/report"
-          > <input type ="hidden" name = "lat" value= ${lat_lnt.lat} >
-          <input type ="hidden" name = "lnt" value= ${lat_lnt.lng} >
+          >
+            <input id="geometry" readonly name="geometry" type="hidden" value=${JSON.stringify(
+              current_feature.geometry
+            )}>
 
             <input id="place" readonly name="place" type="hidden" value="${
               current_feature.properties.place
