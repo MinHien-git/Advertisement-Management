@@ -208,7 +208,58 @@ const _post_profile = async (req, res) => {
 };
 
 const _get_map = async (req, res) => {
-  let billboards = await db.getDb().collection("billboards").find().toArray();
+  let billboards = await db
+    .getDb()
+    .collection("billboards")
+    .aggregate([
+      {
+        $unwind: "$properties.boards",
+      },
+      {
+        $lookup: {
+          from: "licenses",
+          localField: "properties.boards.license",
+          foreignField: "_id",
+          as: "properties.boards.license",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          boards: "$properties.boards",
+          geometry: 1,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          type: { $first: "$type" },
+          properties: { $first: "$properties" },
+          boards: { $push: "$boards" },
+          geometry: { $first: "$geometry" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          "properties.boards": "$boards",
+          geometry: 1,
+        },
+      },
+    ])
+    .toArray();
   let reports = [];
   let placeType = await db.getDb().collection("place_types").find().toArray();
   let type_advertise = await db.getDb().collection("ad_types").find().toArray();
@@ -231,17 +282,16 @@ const _get_map = async (req, res) => {
         places.push(reports[i].properties.place);
       }
     }
-
-    newRP = places
-      .map((e) => billboards.find((b) => e == b.properties.place))
-      .map((e) => {
-        e.properties.details = reports
-          .filter((e1) => e1.properties.place === e.properties.place)
-          .map((e1) => {
-            return { ...e1.properties };
-          });
-        return e;
+    let temp = reports.slice();
+    for (let i = 0; i < places.length; ++i) {
+      newRP[i] = temp[i];
+      newRP[i].properties.details = temp.map((j) => {
+        if (j.properties.place === places[i]) {
+          return { ...j.properties };
+        }
       });
+      console.log("details ", newRP[i].properties);
+    }
 
     // for (let i = 0; i < places.length; ++i) {
     //   newRP[i] = temp[i];
