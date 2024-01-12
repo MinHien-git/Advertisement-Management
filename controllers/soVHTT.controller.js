@@ -1275,8 +1275,8 @@ const _delete_billboard = async (req, res) => {
     }
 };
 const _create_billboard = async (req, res) => {
-    let { lat, lnt, place_type, ad_type, place, billboard__status } = req.body;
-
+    let { lat, lnt, land__type, ad__type, place, billboard__status } = req.body;
+    console.log(req.body);
     let geometry = {
         coordinates: [lnt, lat],
         type: "Point",
@@ -1284,9 +1284,10 @@ const _create_billboard = async (req, res) => {
 
     let properties = {
         place: place,
-        type_advertise: ad_type,
-        place_type: place_type,
+        type_advertise: ad__type,
+        place_type: land__type,
         state: billboard__status === "1" ? 1 : 0,
+        board_amount: 0,
         boards: [],
     };
 

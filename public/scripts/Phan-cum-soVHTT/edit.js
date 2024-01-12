@@ -23,15 +23,12 @@ function get_report(feature) {
       action="/management/billboards/map/create"
       style="height:auto"
     >
-    <input type="hidden" name="geometry" value=${JSON.stringify(
-      feature.geometry
-    )} >
+    <input type="hidden" name="lat" value=${lat_lnt.lat}>
+    <input type="hidden" name="lnt" value=${lat_lnt.lon}>
       <h2>Thêm Bảng Quảng Cáo</h2>
       
       <div class="form-section">
-        <input id="street" type="hidden" name = "place" value ="${
-          feature.properties.address_line2
-        }">
+        <input id="street" type="hidden" name = "place" value ="${feature.properties.address_line2}">
         <p>${feature.properties.address_line2}</p>
       </div>
 
