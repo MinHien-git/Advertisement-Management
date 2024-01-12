@@ -61,9 +61,9 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
             {
                 $lookup: {
                     from: "billboards",
-                    localField: "billboards",
+                    localField: "billboard.billboard_id",
                     foreignField: "_id",
-                    as: "billboards",
+                    as: "billboard_info",
                 },
             },
         ])
@@ -79,7 +79,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
         if (licenses[i].state == 1 && today >= end_date) {
             expired_licenses.push(licenses[i]._id);
             company_emails.push(licenses[i].company_contact);
-            let address = licenses[i].billboard[0].properties.place;
+            let address = licenses[i].billboard_info[0].properties.place;
             address = address.split(", Thành")[0];
             address = address.replace("Đ. ", "");
             email_contents.push(
@@ -1533,43 +1533,6 @@ const _post_license_edit_request = async (req, res) => {
     }
 };
 
-const _get_board_edit_requests = async (req, res) => {
-    let search_val = req.query.search;
-    let sort_val = req.query.sort;
-
-    let search_query = createSearchQuery(search_val, "board_edit_requests");
-
-    let item_list = await processList("board-request", search_query);
-
-    res.locals.list_districts = await getUniqueDistrictsWards(item_list);
-
-    let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
-        item_list,
-        "requests"
-    );
-    let { unique_ad_types, unique_place_types } = await getUniqueAdInfo(
-        item_list
-    );
-
-    res.locals.list_types = unique_types;
-    res.locals.list_statuses = unique_statuses;
-    res.locals.ad_types = unique_ad_types;
-    res.locals.place_types = unique_place_types;
-
-    item_list = await filterItems(item_list, req.query, req.path);
-    item_list = await sortList(item_list, sort_val, "requests");
-    let pageItems = await getPageContent(req, res, item_list);
-
-    res.locals.edit_requests = pageItems;
-
-    res.locals.edit_requests.forEach((edit_req) => {
-        edit_req.billboard[0].properties.place =
-            edit_req.billboard[0].properties.place.split(", Thành phố")[0];
-    });
-
-    res.render("phan-cum-soVHTT/DuyetYCChinhSuaBQC");
-};
-
 const _get_edit_requests = async (req, res) => {
     let search_val = req.query.search;
     let sort_val = req.query.sort;
@@ -1606,91 +1569,135 @@ const _get_edit_requests = async (req, res) => {
         edit_req.billboard_info[0].properties.place =
             edit_req.billboard_info[0].properties.place.split(", Thành phố")[0];
 
-        edit_req = edit_req.details.replace("<p>", "");
-        edit_req = edit_req.details.replace("<br>", "");
-        edit_req = edit_req.details.replace("</p>", "");
+        if (edit_req.details != null) {
+            edit_req.details = edit_req.details.replace("<p>", "");
+            edit_req.details = edit_req.details.replace("<br>", "");
+            edit_req.details = edit_req.details.replace("</p>", "");
+        }
     });
 
     res.render("phan-cum-soVHTT/DuyetYCChinhSuaQC");
 };
 
 const _approve_edit_request = async (req, res) => {
-    const { id, state } = req.body;
+    const { request_id, select_option } = req.body;
 
     try {
-        const license = await db
-            .getDb()
-            .collection("licenses")
-            .findOne({ _id: new ObjectId(id) });
-        const updateInfo = new License(
-            license.billboard,
-            license.company_name,
-            license.company_contact,
-            license.start_date,
-            license.end_date,
-            state,
-            license.images
-        );
-        await db
-            .getDb()
-            .collection("licenses")
-            .findOneAndUpdate(
-                { _id: new ObjectId(id) },
-                { $set: { ...updateInfo } },
-                { returnDocument: "after" }
-            );
+        let approved_request = {};
+        let new_billboard = {};
+        if (select_option == 0) {
+            approved_request = await db
+                .getDb()
+                .collection("billboard-request")
+                .findOneAndUpdate(
+                    { _id: new ObjectId(request_id) },
+                    { $set: { state: 1 } }
+                );
 
-        await db
-            .getDb()
-            .collection("billboards")
-            .findOneAndUpdate(
-                { _id: new ObjectId(license.billboard) },
-                { $set: { license: license._id } },
-                { returnDocument: "after" }
-            );
-        console.log("license " + id + " approved!");
-        return res.send("license " + id + " approved!");
+            const old_billboard = await db
+                .getDb()
+                .collection("billboards")
+                .findOne({ _id: new ObjectId(approved_request.billboard) });
+
+            let boards_set = [];
+            if (approved_request.status == 1) {
+                boards_set = old_billboard.properties.boards;
+            } else if (approved_request.status == 0) {
+                await db
+                    .getDb()
+                    .collection("licenses")
+                    .deleteMany({
+                        "billboard.billboard_id": new ObjectId(
+                            old_billboard._id
+                        ),
+                    });
+
+                await db
+                    .getDb()
+                    .collection("board-request")
+                    .deleteMany({
+                        billboard: new ObjectId(old_billboard._id),
+                    });
+            }
+            new_billboard = await db
+                .getDb()
+                .collection("billboards")
+                .findOneAndUpdate(
+                    { _id: approved_request.billboard },
+                    {
+                        $set: {
+                            "properties.place_type":
+                                approved_request.place_type,
+                            "properties.type_advertise":
+                                approved_request.type_advertise,
+                            "properties.status": Number(
+                                approved_request.status
+                            ),
+                            "properties.boards": boards_set,
+                        },
+                    }
+                );
+        } else if (select_option == 1) {
+            approved_request = await db
+                .getDb()
+                .collection("board-request")
+                .findOneAndUpdate(
+                    { _id: new ObjectId(request_id) },
+                    { $set: { state: 1 } }
+                );
+
+            const old_billboard = await db
+                .getDb()
+                .collection("billboards")
+                .findOne({ _id: new ObjectId(approved_request.billboard) });
+
+            let board_id =
+                old_billboard.properties.boards[approved_request.board_index]
+                    ._id;
+            new_billboard = await db
+                .getDb()
+                .collection("billboards")
+                .findOneAndUpdate(
+                    {
+                        _id: new ObjectId(approved_request.billboard),
+                        "properties.boards._id": new ObjectId(board_id),
+                    },
+                    {
+                        $set: {
+                            "properties.boards.$.board_type":
+                                approved_request.board_type,
+                            "properties.boards.$.size": approved_request.size,
+                        },
+                    }
+                );
+        }
+        console.log(approved_request, new_billboard);
+        return res.send([approved_request, new_billboard]);
     } catch (err) {
         res.send(err);
         console.error(err);
     }
 };
 const _decline_edit_request = async (req, res) => {
-    const { id, state } = req.body;
+    const { request_id, select_option } = req.body;
 
     try {
-        const license = await db
+        let collection = "";
+        if (select_option == 0) {
+            collection = "billboard-request";
+        } else if (select_option == 1) {
+            collection = "board-request";
+        }
+        const declined_request = await db
             .getDb()
-            .collection("licenses")
-            .findOne({ _id: new ObjectId(id) });
-        const updateInfo = new License(
-            license.billboard,
-            license.company_name,
-            license.company_contact,
-            license.start_date,
-            license.end_date,
-            state,
-            license.images
-        );
-        await db
-            .getDb()
-            .collection("licenses")
+            .collection(collection)
             .findOneAndUpdate(
-                { _id: new ObjectId(id) },
-                { $set: { ...updateInfo } },
-                { returnDocument: "after" }
+                { _id: new ObjectId(request_id) },
+                { $set: { state: 2 } }
             );
 
-        await db
-            .getDb()
-            .collection("billboards")
-            .findOneAndUpdate(
-                { _id: new ObjectId(license.billboard) },
-                { $set: { license: license._id } },
-                { returnDocument: "after" }
-            );
-        console.log("license for billboard " + id + " declined.");
-        return res.send("license for billboard " + id + " declined.");
+        console.log(declined_request);
+        res.send(declined_request);
     } catch (err) {
         res.send(err);
         console.error(err);
