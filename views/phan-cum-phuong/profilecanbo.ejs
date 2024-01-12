@@ -57,41 +57,125 @@
     <script src="/scripts/navbar.js" defer></script>
     <div class="wrapper">
       <%- include('../includes/header.ejs')%>
+      <main>
+        <div class="container" id="main__container">
+          <h1 class="fw-bold h2 mb-0" id="page__title">Thông tin tài khoản</h1>
+          <h5 class="fw-bold ms-3 mt-5 mb-2" id="page__title">
+            Thông tin chung
+          </h5>
+          <div
+            id="account__info"
+            class="border border-primary rounded p-2"
+            style="margin-top: 1rem; --bs-border-opacity: 0.5">
+            <form action="/update/<%=locals.profile._id%>" method="post">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col">
+                    <label for="account__name" class="fw-bold"
+                      >Tên tài khoản</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control mb-3 input__field"
+                      name="name"
+                      id="account__name"
+                      value="<%=locals.profile.name%>" />
+                  </div>
+                  <div class="col">
+                    <label for="account__name" class="fw-bold">Email</label>
+                    <input
+                      type="email"
+                      class="form-control mb-3 input__field"
+                      name="email"
+                      id="account__email"
+                      value="<%=locals.profile.email%>"
+                      disabled />
+                  </div>
+                  <div class="w-100"></div>
+                  <div class="col">
+                    <label for="account__name" class="fw-bold"
+                      >Số điện thoại</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control mb-3 input__field"
+                      name="phone"
+                      id="account__phone"
+                      onkeypress="if(this.value.length >=10) return false;"
+                      value="<%=locals.profile.phone%>" />
+                  </div>
+                  <div class="col">
+                    <label for="account__birth" class="fw-bold">Ngày sinh</label>
+                    <input
+                      type="date"
+                      class="form-control mb-3 input__field"
+                      name="birth"
+                      id="account__birth"
+                      value="<%=locals.profile.birth%>" />
+                  </div>
+                </div>
+                <div class="row d-flex" style="justify-content: end">
+                  <button class="btn btn-primary me-3">Lưu thay đổi</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <h5 class="fw-bold ms-3 mt-5 mb-2" id="page__title">
+            Thay đổi mật khẩu
+          </h5>
+          <div
+            id="change__password"
+            class="border border-primary rounded p-2"
+            style="margin-top: 1rem; --bs-border-opacity: 0.5">
+            <form action="/update/password/<%=locals.profile._id%>" method="post">
+              <div class="row">
+                <div class="col">
+                  <label for="current__password" class="fw-bold"
+                    >Mật khẩu hiện tại</label
+                  >
+                  <div class="d-flex" style="align-items: center">
+                    <input
+                      type="password"
+                      class="form-control mb-3 input__field"
+                      name="old_password"
+                      id="current__password" />
+                    <button
+                      class="btn btn-light mb-3"
+                      type="button"
+                      onclick="console.log('ok')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="w-100"></div>
+                <div class="col">
+                  <label for="new__password" class="fw-bold"
+                    >Mật khẩu mới</label
+                  > <div class="d-flex" style="align-items: center">
+                  <input
+                    type="password"
+                    class="form-control mb-3 input__field"
+                    name="new_password"
+                    id="new__password" />
+                    <button
+                    class="btn btn-light mb-3"
+                    type="button"
+                    onclick="console.log('ok')">
+                    <i class="bi bi-eye"></i>
+                </div></div>
+              </div>
 
-      
-        <main>
-
-          <div class="container" id="main__container">
-            <h1 class="fw-bold h2 mb-0" id="page__title">Quản lý tài khoản</h1>
-          <div class="profile-wrapper">
-          <form class="profile-form" method="POST" action="/dashboard/profile/<%=locals.profile._id%>">
-            <div class="input-group mb-3">
-              <span class="input-group-text">@</span>
-              <input type="text" class="form-control" value="<%= locals?.profile?.name %>" placeholder="Họ tên" aria-label="Họ tên" name ="name">
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">@</span>
-              <input type="text" class="form-control" value="<%= locals?.profile?.email %>" placeholder="Email" aria-label="Email" disabled>
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">@</span>
-              <input type="date" class="form-control" value="<%= locals?.profile?.birth %>" placeholder="Ngày sinh" aria-label="Ngày sinh" name="birth">
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">@</span>
-              <input type="text" class="form-control" value="<%= locals?.profile?.phone %>"  placeholder="Số điện thoại" aria-label="Số điện thoại" name="phone">
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">*</span>
-              <input type="text" class="form-control" placeholder="Mật khẩu" aria-label="Mật khẩu">
-            </div>
-            <button type="submit
-            " class="btn btn-primary">Cập nhật</button>
-          </form></div></div>
-        </main>
-        
+              <div class="row d-flex" style="justify-content: end">
+                <button class="btn btn-primary me-3">Đổi mật khẩu</button>
+              </div>
+            </form>
+          </div>
         </div>
-      
+      </main>
+
+      <footer>
+        <!-- place footer here -->
+      </footer>
     </div>
     <script src="/scripts/popup.js"></script>
     <script src="/scripts/phan-cum-phuong/navigation.js"></script>

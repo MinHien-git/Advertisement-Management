@@ -3,6 +3,7 @@ const { getDb } = require("../database/database");
 const User = require("../models/users.model");
 const auth_ultis = require("../utils/authentication");
 const bcrypt = require("bcrypt");
+const database = require("../database/database");
 
 const _get_login = (request, response) => {
   response.render("users/authentication/login");
@@ -48,13 +49,56 @@ const _logout = (request, response) => {
 
 const _update_infomation = async (request, response) => {
   let { email, birth, name, phone } = request.body;
-  let user = new User(email, "", phone, name, birth);
   let { id } = request.params;
+  let params = {
+    name: name,
+    email: email,
+    birth: birth,
+    phone: phone,
+  };
 
-  if (await user._update(id)) {
-  }
+  for (let prop in params) if (!params[prop]) delete params[prop];
+
+  const user = await getDb()
+    .collection("users")
+    .findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { ...params } },
+      {
+        returnDocument: "after",
+      }
+    );
+  response.redirect("/");
 };
-
+const _change_password = async (request, response) => {
+  let { old_password, new_password } = request.body;
+  console.log(request.body);
+  let { id } = request.params;
+  let user = await database
+    .getDb()
+    .collection("users")
+    .findOne({ _id: new ObjectId(id) });
+  if (user && !user.password) {
+    let password = await bcrypt.hash(new_password, 12);
+    const user = await getDb()
+      .collection("users")
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { password: password } },
+        { returnDocument: "after" }
+      );
+  } else if (user && (await bcrypt.compare(old_password, user.password))) {
+    let password = await bcrypt.hash(new_password, 12);
+    const user = await getDb()
+      .collection("users")
+      .findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { password: password } },
+        { returnDocument: "after" }
+      );
+  }
+  response.redirect("/");
+};
 const _update_password = async (request, response) => {
   let { old_password, new_password } = request.body;
   let user = new User(email, old_password, phone, name, birth);
@@ -91,4 +135,5 @@ module.exports = {
   _update_infomation,
   _update_password,
   _reset_password,
+  _change_password,
 };
