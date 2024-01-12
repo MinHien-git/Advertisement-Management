@@ -26,27 +26,27 @@ const _post_report = (req, res) => {
       });
     }
     let {
-      report__type,
-      geometry,
-      sender_name,
-      sender_email,
-      sender_number,
-      place,
-      details,
-      board,
-      attached_files,
+        type,
+        geometry,
+        sender_name,
+        sender_email,
+        sender_number,
+        place,
+        details,
+        board,
+        attached_files,
     } = req.body;
     console.log(attached_files);
     let report = new Report(
-      parseInt(report__type),
-      sender_email,
-      sender_number,
-      place,
-      sender_name,
-      attached_files,
-      details,
-      JSON.parse(geometry),
-      board
+        Number(type),
+        sender_email,
+        sender_number,
+        place,
+        sender_name,
+        attached_files,
+        details,
+        JSON.parse(geometry),
+        board
     );
     const verifiedURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}`;
     request(verifiedURL, (err, response, body) => {
@@ -59,6 +59,7 @@ const _post_report = (req, res) => {
         });
       }
     });
+
     if (report._send_report()) console.log("send!");
     return res.status(200).json({
       success: true,

@@ -247,6 +247,16 @@ function createSearchQuery(search_val, list_type) {
                       ],
                   }
                 : {};
+    } else if (list_type == "billboards") {
+        search_query =
+            search_val != null && search_val != ""
+                ? {
+                      "billboard_info[0].properties.place": {
+                          $regex: search_val,
+                          $options: "i",
+                      },
+                  }
+                : {};
     }
 
     return search_query;
@@ -1024,7 +1034,7 @@ const _edit_billboard = async (req, res) => {
         );
         const toJson = await response.json();
         let new_lon_lat = [toJson.results[0].lon, toJson.results[0].lat];
-        
+
         const updated_billboard = await db
             .getDb()
             .collection("billboards")
