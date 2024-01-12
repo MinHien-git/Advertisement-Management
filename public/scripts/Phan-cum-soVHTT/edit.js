@@ -8,7 +8,7 @@ function get_report(feature) {
   console.log(feature);
   let report = `
     <section class="active popup" id="report-popup">
-    <div id="report-section-form-container">
+    <div id="report-section-form-container" style="height:auto">
     <div id="inscreen-report-close" class="inscreen-report-close">
       <img
         id="inscreen-authen-close"
@@ -21,34 +21,20 @@ function get_report(feature) {
       class="form-container active"
       method="post"
       action="/management/billboards/map/create"
+      style="height:auto"
     >
-    <input type ="hidden" name = "lat" value= ${lat_lnt.lat} >
-    <input type ="hidden" name = "lnt" value= ${lat_lnt.lng} >
+    <input type="hidden" name="geometry" value=${JSON.stringify(
+      feature.geometry
+    )} >
       <h2>Thêm Bảng Quảng Cáo</h2>
+      
       <div class="form-section">
-        <label for="type">Loại quảng cáo:</label>
-        <select class="form-select mb-3"
-  id="billboard__type__edit"
-  name="billboard__type"
-  aria-label="billboard type selector"
-  required>
-  <option value="">Chọn...</option>
-  <option value="1">Trụ/Cụm pano</option>
-  <option value="2">Trụ bảng hiflex</option>
-  <option value="3">Trụ màn hình điện tử LED</option>
-  <option value="4">Trụ hộp đèn</option>
-  <option value="5">Bảng hiflex ốp tường</option>
-  <option value="6">Màn hình điện tử ốp tường</option>
-  <option value="7">Trụ treo băng rôn dọc</option>
-  <option value="8">Trụ treo băng rôn ngang</option>
-  <option value="9">Cổng chào</option>
-  <option value="10" >Trung tâm thương mại</option>
-</select>
+        <input id="street" type="hidden" name = "place" value ="${
+          feature.properties.address_line2
+        }">
+        <p>${feature.properties.address_line2}</p>
       </div>
-      <div class="form-section">
-        <label for="street">Địa điểm:</label>
-        <textarea id="street" name = "position" >${position}</textarea>
-      </div>
+
       <div class="form-section">
       <label for="form">Hình thức:</label>
       <select
@@ -57,13 +43,10 @@ function get_report(feature) {
         name ="ad__type"
         aria-label="advertisement type selector">
         <option selected>Chọn...</option>
-        <option value="1">Cổ động chính trị</option>
-        <option value="2">Quảng cáo thương mại</option>
-        <option value="3">An toàn giao thông</option>
-        <option value="4">Xã hội hoá</option>
-        <option value="5">Mỹ phẩm</option>
-        <option value="6">Đồ ăn</option>
-        <option value="7">Điện ảnh</option>
+        <option value="Cổ động chính trị">Cổ động chính trị</option>
+        <option value="Quảng cáo thương mại">Quảng cáo thương mại</option>
+        <option value="Xã hội hoá">Xã hội hoá</option>
+
       </select>
     </div>
     <div class="form-section">
@@ -76,53 +59,17 @@ function get_report(feature) {
     required
   />
     <option value="">Chọn...</option>
-    <option value="1">
+    <option value="Đất công/Công viên/Hành lang an toàn giao thông">
       Đất công/Công viên/Hành lang an toàn giao thông
     </option>
-    <option value="2">Đất tư nhân/Nhà ở riêng lẻ</option>
-    <option value="3">Trung tâm thương mại</option>
-    <option value="4">Chợ</option>
-    <option value="5">Cây xăng</option>
-    <option value="6">Nhà chờ xe buýt</option>
+    <option value="Đất tư nhân/Nhà ở riêng lẻ">Đất tư nhân/Nhà ở riêng lẻ</option>
+    <option value="Trung tâm thương mại">Trung tâm thương mại</option>
+    <option value="Chợ">Chợ</option>
+    <option value="Cây xăng">Cây xăng</option>
+    <option value="Nhà chờ xe buýt">Nhà chờ xe buýt</option>
   </select>
     </div>
-    <div class="flex size-information inline">
-    <div class="form-section">
-      <label for="width">Dài:</label>
-      <input
-        type="number"
-        name="width"
-        id="width"
-        value=""
-        placeholder="XY"
-      />
-    </div>
-    <div class="form-section">
-    <label for="height">Rộng</label>
-    <input
-      type="number"
-      name="height"
-      id="height"
-      value=""
-      placeholder="XY"
-    />
-  </div>
-    </div>
     
-    <div class="flex size-information inline">
-      <div class="form-section">
-        <label for="=amount">Số lượng:</label>
-        <input
-          type="number"
-          name="amount"
-          id="amount"
-          value=""
-          placeholder="XY"
-          style="width: auto"
-        />
-      </div>
-      <p style="font-size: 0.7rem">trụ/bảng</p>
-    </div>
     <div class="form-section">
         <label for="state">Trạng thái:</label>
         <select
@@ -140,9 +87,7 @@ function get_report(feature) {
       </div>
 
       <div class ="px-4 d-flex justify-content-evenly w-100 btn-container">
-      <div class="form-section">
-        <button class="delete">Xoá</button>
-      </div>
+
       <div class="form-section">
         <button class="submit-button submit">Thêm Bảng</button>
       </div>
