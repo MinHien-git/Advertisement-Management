@@ -38,7 +38,7 @@ const _post_report = (req, res) => {
     } = req.body;
     console.log(attached_files);
     let report = new Report(
-      Number(report__type),
+      report__type,
       sender_email,
       sender_number,
       place,

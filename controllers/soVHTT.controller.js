@@ -608,7 +608,7 @@ async function processList(collection, search_queries) {
       .find(search_queries)
       .toArray();
     for (let i = 0; i < full_list.length; i++) {
-      if (full_list[i].properties.boards.length == 0) {
+      if (full_list[i].properties?.boards.length == 0) {
         item_list.push(full_list[i]);
       }
     }
