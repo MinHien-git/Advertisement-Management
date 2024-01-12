@@ -436,7 +436,7 @@ window.onload = function () {
         }
       });
 
-      container.title = "Title";
+      container.title = "Show Billboard";
 
       return container;
     },
@@ -462,7 +462,7 @@ window.onload = function () {
         }
       });
 
-      container.title = "Title";
+      container.title = "Show report";
 
       return container;
     },

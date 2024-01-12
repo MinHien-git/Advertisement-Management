@@ -247,16 +247,6 @@ function createSearchQuery(search_val, list_type) {
                       ],
                   }
                 : {};
-    } else if (list_type == "billboards") {
-        search_query =
-            search_val != null && search_val != ""
-                ? {
-                      "billboard_info[0].properties.place": {
-                          $regex: search_val,
-                          $options: "i",
-                      },
-                  }
-                : {};
     }
 
     return search_query;
@@ -631,7 +621,7 @@ async function processList(collection, search_queries) {
             .find(search_queries)
             .toArray();
         for (let i = 0; i < full_list.length; i++) {
-            if (full_list[i].properties.boards.length == 0) {
+            if (full_list[i].properties?.boards.length == 0) {
                 item_list.push(full_list[i]);
             }
         }
@@ -1059,6 +1049,50 @@ const _edit_billboard = async (req, res) => {
         res.send(err);
         console.error(err);
     }
+    const { id, place, type_advertise, place_type, status } = req.body;
+    try {
+        const existing_billboard = await db
+            .getDb()
+            .collection("billboards")
+            .findOne({ _id: new ObjectId(id) });
+        let boards = [];
+        let board_amount = 0;
+        if (existing_billboard.properties.status == 1) {
+            boards = existing_billboard.properties.boards;
+            board_amount = existing_billboard.properties.board_amount;
+        }
+        if (place.includes("Đ. ")) place = place.replace("Đ. ", "");
+        const response = await fetch(
+            `https://api.geoapify.com/v1/geocode/search?text=${place}&type=street&format=json&lang=vi&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
+            { method: "GET" }
+        );
+        const toJson = await response.json();
+        let new_lon_lat = [toJson.results[0].lon, toJson.results[0].lat];
+
+        const updated_billboard = await db
+            .getDb()
+            .collection("billboards")
+            .findOneAndUpdate(
+                { _id: new ObjectId(id) },
+                {
+                    $set: {
+                        "properties.place": place,
+                        "properties.type_advertise": type_advertise,
+                        "properties.place_type": place_type,
+                        "properties.status": status,
+                        "properties.board_amount": board_amount,
+                        "properties.boards": boards,
+                        "geometry.coordinates": new_lon_lat,
+                    },
+                },
+                { returnDocument: "after" }
+            );
+        console.log(updated_billboard);
+        res.send(updated_billboard);
+    } catch (err) {
+        res.send(err);
+        console.error(err);
+    }
 };
 
 const _edit_billboard_on_map = async (req, res) => {
@@ -1285,101 +1319,7 @@ const _delete_billboard = async (req, res) => {
     }
 };
 const _create_billboard = async (req, res) => {
-    let {
-        lat,
-        lnt,
-        billboard__type,
-        ad__type,
-        position,
-        place__type,
-        width,
-        height,
-        amount,
-        billboard__status,
-    } = req.body;
-    let place_type;
-    let ad_type;
-    let billboard_type;
-    switch (billboard__type) {
-        case "1":
-            billboard_type = "Trụ/Cụm pano";
-            break;
-        case "2":
-            billboard_type = "Trụ bảng hiflex";
-            break;
-        case "3":
-            billboard_type = "Trụ màn hình điện tử LED";
-            break;
-        case "4":
-            billboard_type = "Trụ hộp đèn";
-            break;
-        case "5":
-            billboard_type = "Bảng hiflex ốp tường";
-            break;
-        case "6":
-            billboard_type = "Màn hình điện tử ốp tường";
-            break;
-        case "7":
-            billboard_type = "Trụ treo băng rôn dọc";
-            break;
-        case "8":
-            billboard_type = "Trụ treo băng rôn ngang";
-            break;
-        case "9":
-            billboard_type = "Cổng chào";
-            break;
-        case "10":
-            billboard_type = "Trung tâm thương mại";
-            break;
-    }
-
-    switch (ad__type) {
-        case "1":
-            ad_type = "Cổ động chính trị";
-            break;
-        case "2":
-            ad_type = "Quảng cáo thương mại";
-            break;
-        case "3":
-            ad_type = "An toàn giao thông";
-            break;
-        case "4":
-            ad_type = "Xã hội hoá";
-            break;
-        case "5":
-            ad_type = "Mỹ phẩm";
-            break;
-        case "6":
-            ad_type = "Đồ ăn";
-            break;
-        case "7":
-            ad_type = "Điện ảnh";
-            break;
-    }
-
-    switch (place__type) {
-        case "1":
-            place_type = "Đất công/Công viên/Hành lang an toàn giao thông";
-            break;
-        case "2":
-            place_type = "Đất tư nhân/Nhà ở riêng lẻ";
-            break;
-        case "3":
-            place_type = "Trung tâm thương mại";
-            break;
-        case "4":
-            place_type = "Chợ";
-            break;
-        case "5":
-            place_type = "Cây xăng";
-            break;
-        case "6":
-            place_type = "Nhà chờ xe buýt";
-            break;
-        case "7":
-            place_type = "Trường Học";
-            break;
-    }
+    let { lat, lnt, place_type, ad_type, place, billboard__status } = req.body;
 
     let geometry = {
         coordinates: [lnt, lat],
@@ -1387,16 +1327,11 @@ const _create_billboard = async (req, res) => {
     };
 
     let properties = {
-        globalid: v4(),
-        amount: Number(amount) + " trụ/bảng",
-        place: position,
-        size: width + "mx" + height + "m",
-        place_type: place_type,
+        place: place,
         type_advertise: ad_type,
-        type: billboard_type,
-
-        zoning: billboard__status === "1" ? true : false,
-        image: [],
+        place_type: place_type,
+        state: billboard__status === "1" ? 1 : 0,
+        boards: [],
     };
 
     try {
@@ -1404,11 +1339,9 @@ const _create_billboard = async (req, res) => {
             .getDb()
             .collection("billboards")
             .insertOne({ geometry, type: "Feature", properties });
-        res.send("billboard " + id + " created!");
-    } catch (err) {
-        res.send(err);
-        console.error(err);
-    }
+    } catch (err) {}
+
+    res.redirect("/management/billboards/map");
 };
 
 //Cấp phép quảng cáo dựa trên yêu cầu cấp phép của phường
