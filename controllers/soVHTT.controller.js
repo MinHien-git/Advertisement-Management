@@ -1049,50 +1049,6 @@ const _edit_billboard = async (req, res) => {
         res.send(err);
         console.error(err);
     }
-    const { id, place, type_advertise, place_type, status } = req.body;
-    try {
-        const existing_billboard = await db
-            .getDb()
-            .collection("billboards")
-            .findOne({ _id: new ObjectId(id) });
-        let boards = [];
-        let board_amount = 0;
-        if (existing_billboard.properties.status == 1) {
-            boards = existing_billboard.properties.boards;
-            board_amount = existing_billboard.properties.board_amount;
-        }
-        if (place.includes("Đ. ")) place = place.replace("Đ. ", "");
-        const response = await fetch(
-            `https://api.geoapify.com/v1/geocode/search?text=${place}&type=street&format=json&lang=vi&apiKey=3dbf2ce56c45401b855931d7f3828a85`,
-            { method: "GET" }
-        );
-        const toJson = await response.json();
-        let new_lon_lat = [toJson.results[0].lon, toJson.results[0].lat];
-
-        const updated_billboard = await db
-            .getDb()
-            .collection("billboards")
-            .findOneAndUpdate(
-                { _id: new ObjectId(id) },
-                {
-                    $set: {
-                        "properties.place": place,
-                        "properties.type_advertise": type_advertise,
-                        "properties.place_type": place_type,
-                        "properties.status": status,
-                        "properties.board_amount": board_amount,
-                        "properties.boards": boards,
-                        "geometry.coordinates": new_lon_lat,
-                    },
-                },
-                { returnDocument: "after" }
-            );
-        console.log(updated_billboard);
-        res.send(updated_billboard);
-    } catch (err) {
-        res.send(err);
-        console.error(err);
-    }
 };
 
 const _edit_billboard_on_map = async (req, res) => {
