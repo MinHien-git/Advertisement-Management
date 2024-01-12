@@ -36,6 +36,7 @@ module.exports = class Report {
     return report;
   }
   async _send_report() {
+    console.log("report model: ", this.type);
     const report = await db
       .getDb()
       .collection("reports")
