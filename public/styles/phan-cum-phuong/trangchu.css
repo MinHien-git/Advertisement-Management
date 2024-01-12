@@ -15,5 +15,11 @@ img.ad__image {
   margin: 1rem;
   background-color: rgba(0, 0, 0, 0.1);
   width: 100%;
+
+  max-width: 12rem;
   object-fit: fill;
+}
+.card-body span {
+  text-wrap: nowrap;
+  max-width: 10ch;
 }

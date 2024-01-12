@@ -63,7 +63,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
           from: "billboards",
           localField: "billboard.billboard_id",
           foreignField: "_id",
-          as: "billboards",
+          as: "billboard_info",
         },
       },
     ])
@@ -79,7 +79,7 @@ runAtSpecificTimeOfDay(start_hour, start_minutes + 1, async () => {
     if (licenses[i].state == 1 && today >= end_date) {
       expired_licenses.push(licenses[i]._id);
       company_emails.push(licenses[i].company_contact);
-      let address = licenses[i].billboards[0].properties.place;
+      let address = licenses[i].billboard_info[0].properties.place;
       address = address.split(", Thành")[0];
       address = address.replace("Đ. ", "");
       email_contents.push(
@@ -988,14 +988,8 @@ const _edit_billboard = async (req, res) => {
       { method: "GET" }
     );
     const toJson = await response.json();
-    let new_lon_lat = [];
-    if (toJson.results.length > 0) {
-      if (toJson.results.length >= 2) {
-        new_lon_lat = [toJson.results[1].lon, toJson.results[1].lat];
-      } else {
-        new_lon_lat = [toJson.results[0].lon, toJson.results[0].lat];
-      }
-    }
+    let new_lon_lat = [toJson.results[0].lon, toJson.results[0].lat];
+
     const updated_billboard = await db
       .getDb()
       .collection("billboards")
@@ -1244,101 +1238,7 @@ const _delete_billboard = async (req, res) => {
   }
 };
 const _create_billboard = async (req, res) => {
-  let {
-    lat,
-    lnt,
-    billboard__type,
-    ad__type,
-    position,
-    place__type,
-    width,
-    height,
-    amount,
-    billboard__status,
-  } = req.body;
-  let place_type;
-  let ad_type;
-  let billboard_type;
-  switch (billboard__type) {
-    case "1":
-      billboard_type = "Trụ/Cụm pano";
-      break;
-    case "2":
-      billboard_type = "Trụ bảng hiflex";
-      break;
-    case "3":
-      billboard_type = "Trụ màn hình điện tử LED";
-      break;
-    case "4":
-      billboard_type = "Trụ hộp đèn";
-      break;
-    case "5":
-      billboard_type = "Bảng hiflex ốp tường";
-      break;
-    case "6":
-      billboard_type = "Màn hình điện tử ốp tường";
-      break;
-    case "7":
-      billboard_type = "Trụ treo băng rôn dọc";
-      break;
-    case "8":
-      billboard_type = "Trụ treo băng rôn ngang";
-      break;
-    case "9":
-      billboard_type = "Cổng chào";
-      break;
-    case "10":
-      billboard_type = "Trung tâm thương mại";
-      break;
-  }
-
-  switch (ad__type) {
-    case "1":
-      ad_type = "Cổ động chính trị";
-      break;
-    case "2":
-      ad_type = "Quảng cáo thương mại";
-      break;
-    case "3":
-      ad_type = "An toàn giao thông";
-      break;
-    case "4":
-      ad_type = "Xã hội hoá";
-      break;
-    case "5":
-      ad_type = "Mỹ phẩm";
-      break;
-    case "6":
-      ad_type = "Đồ ăn";
-      break;
-    case "7":
-      ad_type = "Điện ảnh";
-      break;
-  }
-
-  switch (place__type) {
-    case "1":
-      place_type = "Đất công/Công viên/Hành lang an toàn giao thông";
-      break;
-    case "2":
-      place_type = "Đất tư nhân/Nhà ở riêng lẻ";
-      break;
-    case "3":
-      place_type = "Trung tâm thương mại";
-      break;
-    case "4":
-      place_type = "Chợ";
-      break;
-    case "5":
-      place_type = "Cây xăng";
-      break;
-    case "6":
-      place_type = "Nhà chờ xe buýt";
-      break;
-    case "7":
-      place_type = "Trường Học";
-      break;
-  }
+  let { lat, lnt, place_type, ad_type, place, billboard__status } = req.body;
 
   let geometry = {
     coordinates: [lnt, lat],
@@ -1346,16 +1246,10 @@ const _create_billboard = async (req, res) => {
   };
 
   let properties = {
-    globalid: v4(),
-    amount: Number(amount) + " trụ/bảng",
-    place: position,
-    size: width + "mx" + height + "m",
-    place_type: place_type,
+    place: place,
     type_advertise: ad_type,
-    type: billboard_type,
-
-    zoning: billboard__status === "1" ? true : false,
-    image: [],
+    place_type: place_type,
+    state: billboard__status === "1" ? 1 : 0,
   };
 
   try {
@@ -1363,11 +1257,9 @@ const _create_billboard = async (req, res) => {
       .getDb()
       .collection("billboards")
       .insertOne({ geometry, type: "Feature", properties });
-    res.send("billboard " + id + " created!");
-  } catch (err) {
-    res.send(err);
-    console.error(err);
-  }
+  } catch (err) {}
+
+  res.redirect("/management/billboards/map");
 };
 
 //Cấp phép quảng cáo dựa trên yêu cầu cấp phép của phường
@@ -1494,43 +1386,6 @@ const _post_license_edit_request = async (req, res) => {
   }
 };
 
-const _get_board_edit_requests = async (req, res) => {
-  let search_val = req.query.search;
-  let sort_val = req.query.sort;
-
-  let search_query = createSearchQuery(search_val, "board_edit_requests");
-
-  let item_list = await processList("board-request", search_query);
-
-  res.locals.list_districts = await getUniqueDistrictsWards(item_list);
-
-  let { unique_types, unique_statuses } = await getUniqueTypesAndStatuses(
-    item_list,
-    "requests"
-  );
-  let { unique_ad_types, unique_place_types } = await getUniqueAdInfo(
-    item_list
-  );
-
-  res.locals.list_types = unique_types;
-  res.locals.list_statuses = unique_statuses;
-  res.locals.ad_types = unique_ad_types;
-  res.locals.place_types = unique_place_types;
-
-  item_list = await filterItems(item_list, req.query, req.path);
-  item_list = await sortList(item_list, sort_val, "requests");
-  let pageItems = await getPageContent(req, res, item_list);
-
-  res.locals.edit_requests = pageItems;
-
-  res.locals.edit_requests.forEach((edit_req) => {
-    edit_req.billboard[0].properties.place =
-      edit_req.billboard[0].properties.place.split(", Thành phố")[0];
-  });
-
-  res.render("phan-cum-soVHTT/DuyetYCChinhSuaBQC");
-};
-
 const _get_edit_requests = async (req, res) => {
   let search_val = req.query.search;
   let sort_val = req.query.sort;
@@ -1578,59 +1433,116 @@ const _get_edit_requests = async (req, res) => {
 };
 
 const _approve_edit_request = async (req, res) => {
-  const { request_id, state, select_option } = req.body;
-
-  // try {
-  //     const approved_request = {};
-  //     const new_billboard = {};
-  //     if(select_option == 0){
-  //         let
-  //         approved_request = await db.getDb().collection("billboard-request").findOneAndUpdate({_id: request_id}, {$set: {state: 1}});
-  //         new_billboard = await db.getDb.collection("billboards").findOneAndUpdate({_id: approved_request.billboard}, {$set: {"properties.place_type" : approved_request.place_type, "properties.type_advertise": approved_request.type_advertise}})
-  //     }
-  //     console.log("license " + id + " approved!");
-  //     return res.send("license " + id + " approved!");
-  // } catch (err) {
-  //     res.send(err);
-  //     console.error(err);
-  // }
-};
-const _decline_edit_request = async (req, res) => {
-  const { id, state } = req.body;
+  const { request_id, select_option } = req.body;
 
   try {
-    const license = await db
+    let approved_request = {};
+    let new_billboard = {};
+    if (select_option == 0) {
+      approved_request = await db
+        .getDb()
+        .collection("billboard-request")
+        .findOneAndUpdate(
+          { _id: new ObjectId(request_id) },
+          { $set: { state: 1 } }
+        );
+
+      const old_billboard = await db
+        .getDb()
+        .collection("billboards")
+        .findOne({ _id: new ObjectId(approved_request.billboard) });
+
+      let boards_set = [];
+      if (approved_request.status == 1) {
+        boards_set = old_billboard.properties.boards;
+      } else if (approved_request.status == 0) {
+        await db
+          .getDb()
+          .collection("licenses")
+          .deleteMany({
+            "billboard.billboard_id": new ObjectId(old_billboard._id),
+          });
+
+        await db
+          .getDb()
+          .collection("board-request")
+          .deleteMany({
+            billboard: new ObjectId(old_billboard._id),
+          });
+      }
+      new_billboard = await db
+        .getDb()
+        .collection("billboards")
+        .findOneAndUpdate(
+          { _id: approved_request.billboard },
+          {
+            $set: {
+              "properties.place_type": approved_request.place_type,
+              "properties.type_advertise": approved_request.type_advertise,
+              "properties.status": Number(approved_request.status),
+              "properties.boards": boards_set,
+            },
+          }
+        );
+    } else if (select_option == 1) {
+      approved_request = await db
+        .getDb()
+        .collection("board-request")
+        .findOneAndUpdate(
+          { _id: new ObjectId(request_id) },
+          { $set: { state: 1 } }
+        );
+
+      const old_billboard = await db
+        .getDb()
+        .collection("billboards")
+        .findOne({ _id: new ObjectId(approved_request.billboard) });
+
+      let board_id =
+        old_billboard.properties.boards[approved_request.board_index]._id;
+      new_billboard = await db
+        .getDb()
+        .collection("billboards")
+        .findOneAndUpdate(
+          {
+            _id: new ObjectId(approved_request.billboard),
+            "properties.boards._id": new ObjectId(board_id),
+          },
+          {
+            $set: {
+              "properties.boards.$.board_type": approved_request.board_type,
+              "properties.boards.$.size": approved_request.size,
+            },
+          }
+        );
+    }
+    console.log(approved_request, new_billboard);
+    return res.send([approved_request, new_billboard]);
+  } catch (err) {
+    res.send(err);
+    console.error(err);
+  }
+};
+const _decline_edit_request = async (req, res) => {
+  const { request_id, select_option } = req.body;
+
+  try {
+    let collection = "";
+    if (select_option == 0) {
+      collection = "billboard-request";
+    } else if (select_option == 1) {
+      collection = "board-request";
+    }
+    const declined_request = await db
       .getDb()
-      .collection("licenses")
-      .findOne({ _id: new ObjectId(id) });
-    const updateInfo = new License(
-      license.billboard,
-      license.company_name,
-      license.company_contact,
-      license.start_date,
-      license.end_date,
-      state,
-      license.images
-    );
-    await db
-      .getDb()
-      .collection("licenses")
+      .collection(collection)
       .findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        { $set: { ...updateInfo } },
-        { returnDocument: "after" }
+        { _id: new ObjectId(request_id) },
+        { $set: { state: 2 } }
       );
 
-    await db
-      .getDb()
-      .collection("billboards")
-      .findOneAndUpdate(
-        { _id: new ObjectId(license.billboard) },
-        { $set: { license: license._id } },
-        { returnDocument: "after" }
-      );
-    console.log("license for billboard " + id + " declined.");
-    return res.send("license for billboard " + id + " declined.");
+    console.log(declined_request);
+    res.send(declined_request);
   } catch (err) {
     res.send(err);
     console.error(err);

@@ -3,6 +3,7 @@ function navigate(item_id) {
     if (item_id == "manage__billboards" || item_id == "to__list__btn")
         link = "/management/billboards";
     if (item_id == "manage__licenses") link = "/management/licenses";
+    if (item_id == "manage__edit__requests") link = "/management/edit_requests";
     if (item_id == "manage__reports") link = "/management/reports";
     if (item_id == "manage__accounts") link = "/management/accounts";
     if (item_id == "map__btn") link = "/management/billboards/map";
@@ -34,6 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (path.includes("/management/licenses")) {
         active_id = "manage__billboards";
         li_active_id = "manage__licenses";
+    } else if (path.includes("/management/edit_requests")) {
+        active_id = "manage__billboards";
+        li_active_id = "manage__edit__requests";
     } else if (path.includes("/management/reports")) {
         active_id = "manage__reports";
     } else if (path.includes("/management/accounts")) {

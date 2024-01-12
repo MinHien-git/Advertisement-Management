@@ -234,8 +234,10 @@
                               class="btn btn-success mb-2 nowrap"
                               data-bs-toggle="modal"
                               data-bs-target="#accept__confirm__modal"
-                              onclick="passToConfirmModal(this)"
-                              data-edit_request-id="<%=id%>">
+                              onclick="passToConfirmModal(this, 'approve')"
+                              data-edit-request-id="<%=id%>"
+                              data-edit-request-option="<%=edit_request.select_option%>"
+                              >
                               <i class="bi bi-check-circle"></i> Chấp nhận
                             </button>
                           </li>
@@ -244,8 +246,10 @@
                               class="btn btn-danger nowrap"
                               data-bs-toggle="modal"
                               data-bs-target="#decline__confirm__modal"
-                              onclick="passToConfirmModal(this)"
-                              data-edit_request-id="<%=id%>">
+                              onclick="passToConfirmModal(this, 'decline')"
+                              data-edit-request-id="<%=id%>"
+                              data-edit-request-option="<%=edit_request.select_option%>"
+                              >
                               <i class="bi bi-x-lg"></i> Từ chối
                             </button>
                           </li>
@@ -272,62 +276,6 @@
               <% } %>
             </div>
             <%- include('../includes/pagination.ejs')%>
-            <div
-              class="modal fade"
-              id="require__changes__modal"
-              tabindex="-1"
-              aria-labelledby="require__changes__label"
-              aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h3
-                      class="modal-title fw-bold fs-5"
-                      id="require__changes__label">
-                      Yêu cầu sửa đổi nội dung
-                    </h3>
-                    <button
-                      class="btn-close"
-                      type="button"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="">
-                      <div class="form-floating" id="change__input">
-                        <textarea
-                          class="form-control"
-                          placeholder="Nhập nội dung muốn sửa đổi"
-                          id="change__textarea"
-                          style="height: 25vh"></textarea>
-                        <label for="change__textarea">Nhập nội dung...</label>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <input
-                      type="hidden"
-                      name="id_confirm"
-                      id="id__confirm"
-                      value="0" />
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal">
-                      Huỷ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-primary"
-                      data-bs-dismiss="modal"
-                      onclick="sendedit_requestChangeRequest(document.getElementById('id__confirm').value, document.getElementById('change__textarea').value)"
-                      id="send__changes__btn">
-                      Gửi yêu cầu
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <div
               class="modal fade"
@@ -350,13 +298,20 @@
                       aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    Bạn có chắc chắn muốn cấp phép cho yêu cầu này không?
+                    Bạn có chắc chắn muốn chấp nhận yêu cầu không? Chấp nhận yêu cầu cũng sẽ thay đổi thông tin của điểm/bảng QC.
+                    <br>
+                    <p class="fs-1 text-danger fs-1"><strong>Lưu ý:</strong> Nếu chuyển trạng thái điểm quảng cáo sang chưa quy hoạch cũng sẽ xoá các bảng quảng cáo của điểm đó.</p>
                   </div>
                   <div class="modal-footer">
                     <input
                       type="hidden"
                       name="id_confirm"
-                      id="id__confirm"
+                      id="request__id__approve"
+                      value="0" />
+                    <input
+                      type="hidden"
+                      name="id_confirm"
+                      id="request__option__approve"
                       value="0" />
                     <button
                       type="button"
@@ -368,7 +323,7 @@
                       type="button"
                       class="btn btn-success"
                       data-bs-dismiss="modal"
-                      onclick="approveedit_request(document.getElementById('id__confirm').value)"
+                      onclick="approveRequest(document.getElementById('request__id__approve').value, document.getElementById('request__option__approve').value)"
                       id="accept__confirm__btn">
                       Cấp phép
                     </button>
@@ -394,7 +349,7 @@
                     <button
                       class="btn-close"
                       type="button"
-                      data-bs-dismiss="modal"
+
                       aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
@@ -404,23 +359,30 @@
                     <input
                       type="hidden"
                       name="id_confirm"
-                      id="id__confirm"
+                      id="request__id__decline"
+                      value="0" />
+                    <input
+                      type="hidden"
+                      name="id_confirm"
+                      id="request__option__decline"
                       value="0" />
                     <button
                       type="button"
                       class="btn btn-secondary"
-                      data-bs-dismiss="modal">
+                      data-bs-dismiss="modal"
+                      >
                       Huỷ
                     </button>
                     <button
                       type="button"
                       class="btn btn-danger"
-                      data-bs-dismiss="modal"
-                      onclick="declineedit_request(document.getElementById('id__confirm').value)"
-                      id="decline__btn">
+                      
+                      id="decline__btn"
+                      onclick="declineRequest(document.getElementById('request__id__decline').value, document.getElementById('request__option__decline').value)"
+                      >
                       Từ chối
                     </button>
-                  </div>
+                  </div>    
                 </div>
               </div>
             </div>
@@ -437,7 +399,7 @@
                 <div class="d-flex">
                   <div class="toast-body">
                     <i class="bi bi-check-lg"></i>
-                    Cấp phép thành công!
+                    Đã chấp nhận yêu cầu!
                   </div>
                   <button
                     type="button"
@@ -446,24 +408,7 @@
                     aria-label="Close"></button>
                 </div>
               </div>
-              <div
-                class="toast align-items-center text-bg-success border-0"
-                id="send__success__toast"
-                role="alert"
-                aria-live="assertive"
-                aria-atomic="true">
-                <div class="d-flex">
-                  <div class="toast-body">
-                    <i class="bi bi-envelope-check"></i>
-                    Đã gửi yêu cầu sửa đổi!
-                  </div>
-                  <button
-                    type="button"
-                    class="btn-close btn-close-white me-2 m-auto"
-                    data-bs-dismiss="toast"
-                    aria-label="Close"></button>
-                </div>
-              </div>
+              
               <div
                 class="toast align-items-center text-bg-success border-0"
                 id="decline__success__toast"
