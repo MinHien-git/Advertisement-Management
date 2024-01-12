@@ -151,7 +151,7 @@ router.post("/logout", authentication_controller._logout);
 
 router.get("/update", (request, response) => {});
 router.post("/update/:id", authentication_controller._update_infomation);
-
+router.post("/update/password/:id", authentication_controller._change_password);
 router.post("/update-password", authentication_controller._update_password);
 
 module.exports = router;

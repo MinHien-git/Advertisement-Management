@@ -151,7 +151,7 @@ function get_report(current_feature) {
           action: "report",
         })
         .then(function (token) {
-          let type = $("#report__type").val();
+          let type = Number($("#report__type").val());
           let board = $("#report__board").val();
           let name = $("#sender_name").val();
           let email = $("#sender_email").val();

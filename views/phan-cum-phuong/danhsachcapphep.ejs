@@ -260,23 +260,23 @@
                           Ngày kết thúc:
                           <span class="fw-bold"><%= license.end_date %> </span>
                         </li>
+
+                        <ul class="buttons__container mt-3">
+                          <% if (license.state===0) { %>
+                          <li>
+                            <button
+                              onclick="cancel_license('<%= license._id %>')"
+                              class="btn btn-danger"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete__confirm__modal">
+                              <i class="bi bi-trash"></i> Huỷ yêu cầu
+                            </button>
+                          </li>
+                          <% } %>
+                        </ul>
                       </ul>
                     </li>
-                    <li>
-                      <ul class="buttons__container">
-                        <% if (license.state===0) { %>
-                        <li>
-                          <button
-                            onclick="cancel_license('<%= license._id %>')"
-                            class="btn btn-danger"
-                            data-bs-toggle="modal"
-                            data-bs-target="#delete__confirm__modal">
-                            <i class="bi bi-trash"></i> Huỷ yêu cầu
-                          </button>
-                        </li>
-                        <% } %>
-                      </ul>
-                    </li>
+                    <li></li>
                   </ul>
                 </div>
               </div>

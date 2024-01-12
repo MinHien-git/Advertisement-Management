@@ -10,3 +10,16 @@
   height: 90vh;
   overflow-y: auto;
 }
+img.ad__image {
+  height: 10rem;
+  margin: 1rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 100%;
+
+  max-width: 12rem;
+  object-fit: fill;
+}
+.card-body span {
+  text-wrap: nowrap;
+  max-width: 10ch;
+}

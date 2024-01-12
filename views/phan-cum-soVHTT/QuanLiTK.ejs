@@ -80,6 +80,7 @@
                 <% const id = user._id; %>
                 <% let level = ""%>
                 <% let location = ""%>
+                <%if(user.type_user) {%>
                 <%if(user.ward == "" || user.ward == null){ %>
                   <%if(user.district == "" || user.district == null){level = "Sở"; location = "Sở VHTT TP.HCM"%>
                   <%}else{level = "Quận/Huyện"; location = user.district}%>
@@ -156,7 +157,7 @@
                   </div>
                 </div>
               </div>
-              <%}%>
+              <%}}%>
             </div>
             <%- include('../includes/pagination.ejs')%>
             <div

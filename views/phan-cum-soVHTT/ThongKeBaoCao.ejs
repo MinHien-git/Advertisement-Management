@@ -97,27 +97,23 @@
               <div class="card shadow-sm report" id="<%= report._id %>">
                 <div class="card-header" id="brief__info<%= report._id %>">
                   <ul class="list__flex">
-                    <% if (report.properties.type == "0") { %>
-                    <li class="list__col1 fw-semibold text-danger">Tố giác sai phạm</li>
-                    <% } %> <% if (report.properties.type == "1") { %>
-                    <li class="list__col1 fw-semibold text-primary">Đăng ký nội dung</li>
-                    <% } %> <% if (report.properties.type == "2") { %>
-                    <li class="list__col1 fw-semibold text-success">Đóng góp ý kiến</li>
-                    <% } %> <% if (report.properties.type == "3") { %>
-                    <li class="list__col1 fw-semibold text-warning">Giải đáp thắc mắc</li>
+                    <% if (report.properties.type == 0) { %>
+                    <li class="list__col1 text-danger">Tố giác sai phạm</li>
+                    <% } %> <% if (report.properties.type ==1) { %>
+                    <li class="list__col1 text-primary">Đăng ký nội dung</li>
+                    <% } %> <% if (report.properties.type == 2) { %>
+                    <li class="list__col1 text-success">Đóng góp ý kiến</li>
+                    <% } %> <% if (report.properties.type == 3) { %>
+                    <li class="list__col1 text-warning">Giải đáp thắc mắc</li>
                     <% } %>
                     <li class="list__col2"><%= report.properties.place %></li>
-                    <li class="list__col3"><%= report.properties.send_day %></li>
-                    <% if (report.properties.state == 0) {%>
-                    <li class="list__col4 fw-bold text-warning">Chờ xử lý</li>
-                    <% } else if (report.properties.state == 1){ %>
-                    <li class="list__col4 fw-bold text-success">Đã cấp phép</li>
-                    <% } else if (report.properties.state == 2){ %>
-                    <li class="list__col4 fw-bold text-danger">Đã bác bỏ</li>
-                    <% } else if (report.properties.state == 3){ %>
-                    <li class="list__col4 fw-bold text-primary">
-                      Đã gửi YC sửa đổi
+                    <li class="list__col3">
+                      <%= report.properties.send_day %>
                     </li>
+                    <% if (report.properties.state == 1) {%>
+                    <li class="list__col4 fw-bold text-warning">Chờ xử lý</li>
+                    <% } else if (report.properties.state == 0){ %>
+                    <li class="list__col4 fw-bold text-success">Đã xử lý</li>
                     <% }%>
                     <li class="list__col5">
                       <button

@@ -53,12 +53,18 @@ const _get_map = async (request, response) => {
       },
     ])
     .toArray();
-  console.log(JSON.stringify(billboards, null, "  "), billboards.length);
 
+  let second_billboard = await getDb()
+    .collection("billboards")
+    .find({ "properties.boards": [] })
+    .toArray();
   let ward = response.locals.ward ? response.locals.ward : "";
   let district = response.locals.district ? response.locals.district : "";
 
   let reports = [];
+  billboards = [...billboards, ...second_billboard];
+
+  console.log(JSON.stringify(billboards, null, "  "), second_billboard.length);
   billboards = billboards.filter((i) => {
     if (ward == "" && district == "") return true;
     let address = i?.properties?.place.split(", ");
@@ -93,7 +99,57 @@ const _get_map = async (request, response) => {
 };
 
 const _manage_map = async (request, response) => {
-  let billboards = await getDb().collection("billboards").find({}).toArray();
+  let billboards = await getDb()
+    .collection("billboards")
+    .aggregate([
+      {
+        $unwind: "$properties.boards",
+      },
+      {
+        $lookup: {
+          from: "licenses",
+          localField: "properties.boards.license",
+          foreignField: "_id",
+          as: "properties.boards.license",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          boards: "$properties.boards",
+          geometry: 1,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          type: { $first: "$type" },
+          properties: { $first: "$properties" },
+          boards: { $push: "$boards" },
+          geometry: { $first: "$geometry" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          "properties.place": 1,
+          "properties.place_type": 1,
+          "properties.type_advertise": 1,
+          "properties.status": 1,
+          "properties.board_amount": 1,
+          "properties.boards": "$boards",
+          geometry: 1,
+        },
+      },
+    ])
+    .toArray();
   let reports = await getDb().collection("reports").find({}).toArray();
   return response.render("phan-cum-soVHTT/map", {
     billboards: billboards,
