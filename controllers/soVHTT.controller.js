@@ -1250,6 +1250,7 @@ const _create_billboard = async (req, res) => {
     type_advertise: ad_type,
     place_type: place_type,
     state: billboard__status === "1" ? 1 : 0,
+    boards: [],
   };
 
   try {
