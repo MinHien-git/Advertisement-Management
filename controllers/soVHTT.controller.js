@@ -1755,8 +1755,12 @@ const _delete_account = (req, res) => {
     }
 };
 const _create_account = (req, res) => {
-    const { name, email, phone, birth, type_user, district, ward } = req.body;
+    let { name, email, phone, birth, type_user, district, ward } = req.body;
     try {
+        ward = ward.replace("Phường ", "");
+        ward = ward.replace("Xã ", "");
+        ward = ward.replace("Thị trấn ", "");
+
         const createInfo = new User(
             email,
             "acc123",

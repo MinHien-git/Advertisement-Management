@@ -1,0 +1,32 @@
+[
+    {
+        "email": "sovhtt@test.test",
+        "password": "$2b$12$HKssIeU9TNxo6ySSLrhkEeSz7kiyvYPrmiBoFfU.kGSkdNXrJ3qSe",
+        "birth": "",
+        "phone": "0123456789",
+        "name": "tai khoan SoVHTT",
+        "type_user": 2,
+        "ward": null,
+        "district": ""
+    },
+    {
+        "email": "quan1@test.test",
+        "password": "$2b$12$YIbNBR9FiVXEmFSdkRrQXeL/yXqHWqqUtYZDY72S4mN7ralE11Nka",
+        "birth": "",
+        "phone": "0123456789",
+        "name": "Tai khoan Quan 1",
+        "type_user": 1,
+        "ward": null,
+        "district": "Quận 1"
+    },
+    {
+        "email": "dakaoQ1@test.test",
+        "password": "$2b$12$hkJ1mv43MoTPesnQ.9qKyOqjt34Ejfb8iZJF2N0am95Xiw6JKP7Ba",
+        "birth": "",
+        "phone": "0123456789",
+        "name": "Tai khoan Phuong Da Kao Quan 1",
+        "type_user": 1,
+        "ward": "Đa Kao",
+        "district": "Quận 1"
+    }
+]

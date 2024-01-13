@@ -1,0 +1,1404 @@
+[
+    {
+        "district": "Quận 1",
+        "code": "760",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường Tân Định",
+                "code": "26734"
+            },
+            {
+                "ward": "Phường Đa Kao",
+                "code": "26737"
+            },
+            {
+                "ward": "Phường Bến Nghé",
+                "code": "26740"
+            },
+            {
+                "ward": "Phường Bến Thành",
+                "code": "26743"
+            },
+            {
+                "ward": "Phường Nguyễn Thái Bình",
+                "code": "26746"
+            },
+            {
+                "ward": "Phường Phạm Ngũ Lão",
+                "code": "26749"
+            },
+            {
+                "ward": "Phường Cầu Ông Lãnh",
+                "code": "26752"
+            },
+            {
+                "ward": "Phường Cô Giang",
+                "code": "26755"
+            },
+            {
+                "ward": "Phường Nguyễn Cư Trinh",
+                "code": "26758"
+            },
+            {
+                "ward": "Phường Cầu Kho",
+                "code": "26761"
+            }
+        ]
+    },
+    {
+        "district": "Quận 12",
+        "code": "761",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường Thạnh Xuân",
+                "code": "26764"
+            },
+            {
+                "ward": "Phường Thạnh Lộc",
+                "code": "26767"
+            },
+            {
+                "ward": "Phường Hiệp Thành",
+                "code": "26770"
+            },
+            {
+                "ward": "Phường Thới An",
+                "code": "26773"
+            },
+            {
+                "ward": "Phường Tân Chánh Hiệp",
+                "code": "26776"
+            },
+            {
+                "ward": "Phường An Phú Đông",
+                "code": "26779"
+            },
+            {
+                "ward": "Phường Tân Thới Hiệp",
+                "code": "26782"
+            },
+            {
+                "ward": "Phường Trung Mỹ Tây",
+                "code": "26785"
+            },
+            {
+                "ward": "Phường Tân Hưng Thuận",
+                "code": "26787"
+            },
+            {
+                "ward": "Phường Đông Hưng Thuận",
+                "code": "26788"
+            },
+            {
+                "ward": "Phường Tân Thới Nhất",
+                "code": "26791"
+            }
+        ]
+    },
+    {
+        "district": "Quận Gò Vấp",
+        "code": "764",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 15",
+                "code": "26869"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "26872"
+            },
+            {
+                "ward": "Phường 17",
+                "code": "26875"
+            },
+            {
+                "ward": "Phường 6",
+                "code": "26876"
+            },
+            {
+                "ward": "Phường 16",
+                "code": "26878"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "26881"
+            },
+            {
+                "ward": "Phường 14",
+                "code": "26882"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "26884"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "26887"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "26890"
+            },
+            {
+                "ward": "Phường 04",
+                "code": "26893"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "26896"
+            },
+            {
+                "ward": "Phường 9",
+                "code": "26897"
+            },
+            {
+                "ward": "Phường 8",
+                "code": "26898"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "26899"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "26902"
+            }
+        ]
+    },
+    {
+        "district": "Quận Bình Thạnh",
+        "code": "765",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 13",
+                "code": "26905"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "26908"
+            },
+            {
+                "ward": "Phường 27",
+                "code": "26911"
+            },
+            {
+                "ward": "Phường 26",
+                "code": "26914"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "26917"
+            },
+            {
+                "ward": "Phường 25",
+                "code": "26920"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "26923"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "26926"
+            },
+            {
+                "ward": "Phường 24",
+                "code": "26929"
+            },
+            {
+                "ward": "Phường 06",
+                "code": "26932"
+            },
+            {
+                "ward": "Phường 14",
+                "code": "26935"
+            },
+            {
+                "ward": "Phường 15",
+                "code": "26938"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "26941"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "26944"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "26947"
+            },
+            {
+                "ward": "Phường 17",
+                "code": "26950"
+            },
+            {
+                "ward": "Phường 21",
+                "code": "26953"
+            },
+            {
+                "ward": "Phường 22",
+                "code": "26956"
+            },
+            {
+                "ward": "Phường 19",
+                "code": "26959"
+            },
+            {
+                "ward": "Phường 28",
+                "code": "26962"
+            }
+        ]
+    },
+    {
+        "district": "Quận Tân Bình",
+        "code": "766",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 02",
+                "code": "26965"
+            },
+            {
+                "ward": "Phường 04",
+                "code": "26968"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "26971"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "26974"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "26977"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "26980"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "26983"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "26986"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "26989"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "26992"
+            },
+            {
+                "ward": "Phường 06",
+                "code": "26995"
+            },
+            {
+                "ward": "Phường 08",
+                "code": "26998"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27001"
+            },
+            {
+                "ward": "Phường 14",
+                "code": "27004"
+            },
+            {
+                "ward": "Phường 15",
+                "code": "27007"
+            }
+        ]
+    },
+    {
+        "district": "Quận Tân Phú",
+        "code": "767",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường Tân Sơn Nhì",
+                "code": "27010"
+            },
+            {
+                "ward": "Phường Tây Thạnh",
+                "code": "27013"
+            },
+            {
+                "ward": "Phường Sơn Kỳ",
+                "code": "27016"
+            },
+            {
+                "ward": "Phường Tân Quý",
+                "code": "27019"
+            },
+            {
+                "ward": "Phường Tân Thành",
+                "code": "27022"
+            },
+            {
+                "ward": "Phường Phú Thọ Hòa",
+                "code": "27025"
+            },
+            {
+                "ward": "Phường Phú Thạnh",
+                "code": "27028"
+            },
+            {
+                "ward": "Phường Phú Trung",
+                "code": "27031"
+            },
+            {
+                "ward": "Phường Hòa Thạnh",
+                "code": "27034"
+            },
+            {
+                "ward": "Phường Hiệp Tân",
+                "code": "27037"
+            },
+            {
+                "ward": "Phường Tân Thới Hòa",
+                "code": "27040"
+            }
+        ]
+    },
+    {
+        "district": "Quận Phú Nhuận",
+        "code": "768",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 04",
+                "code": "27043"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "27046"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27049"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "27052"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "27055"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "27058"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "27061"
+            },
+            {
+                "ward": "Phường 08",
+                "code": "27064"
+            },
+            {
+                "ward": "Phường 15",
+                "code": "27067"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "27070"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "27073"
+            },
+            {
+                "ward": "Phường 17",
+                "code": "27076"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "27085"
+            }
+        ]
+    },
+    {
+        "district": "Thành phố Thủ Đức",
+        "code": "769",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường Linh Xuân",
+                "code": "26794"
+            },
+            {
+                "ward": "Phường Bình Chiểu",
+                "code": "26797"
+            },
+            {
+                "ward": "Phường Linh Trung",
+                "code": "26800"
+            },
+            {
+                "ward": "Phường Tam Bình",
+                "code": "26803"
+            },
+            {
+                "ward": "Phường Tam Phú",
+                "code": "26806"
+            },
+            {
+                "ward": "Phường Hiệp Bình Phước",
+                "code": "26809"
+            },
+            {
+                "ward": "Phường Hiệp Bình Chánh",
+                "code": "26812"
+            },
+            {
+                "ward": "Phường Linh Chiểu",
+                "code": "26815"
+            },
+            {
+                "ward": "Phường Linh Tây",
+                "code": "26818"
+            },
+            {
+                "ward": "Phường Linh Đông",
+                "code": "26821"
+            },
+            {
+                "ward": "Phường Bình Thọ",
+                "code": "26824"
+            },
+            {
+                "ward": "Phường Trường Thọ",
+                "code": "26827"
+            },
+            {
+                "ward": "Phường Long Bình",
+                "code": "26830"
+            },
+            {
+                "ward": "Phường Long Thạnh Mỹ",
+                "code": "26833"
+            },
+            {
+                "ward": "Phường Tân Phú",
+                "code": "26836"
+            },
+            {
+                "ward": "Phường Hiệp Phú",
+                "code": "26839"
+            },
+            {
+                "ward": "Phường Tăng Nhơn Phú A",
+                "code": "26842"
+            },
+            {
+                "ward": "Phường Tăng Nhơn Phú B",
+                "code": "26845"
+            },
+            {
+                "ward": "Phường Phước Long B",
+                "code": "26848"
+            },
+            {
+                "ward": "Phường Phước Long A",
+                "code": "26851"
+            },
+            {
+                "ward": "Phường Trường Thạnh",
+                "code": "26854"
+            },
+            {
+                "ward": "Phường Long Phước",
+                "code": "26857"
+            },
+            {
+                "ward": "Phường Long Trường",
+                "code": "26860"
+            },
+            {
+                "ward": "Phường Phước Bình",
+                "code": "26863"
+            },
+            {
+                "ward": "Phường Phú Hữu",
+                "code": "26866"
+            },
+            {
+                "ward": "Phường Thảo Điền",
+                "code": "27088"
+            },
+            {
+                "ward": "Phường An Phú",
+                "code": "27091"
+            },
+            {
+                "ward": "Phường An Khánh",
+                "code": "27094"
+            },
+            {
+                "ward": "Phường Bình Trưng Đông",
+                "code": "27097"
+            },
+            {
+                "ward": "Phường Bình Trưng Tây",
+                "code": "27100"
+            },
+            {
+                "ward": "Phường Cát Lái",
+                "code": "27109"
+            },
+            {
+                "ward": "Phường Thạnh Mỹ Lợi",
+                "code": "27112"
+            },
+            {
+                "ward": "Phường An Lợi Đông",
+                "code": "27115"
+            },
+            {
+                "ward": "Phường Thủ Thiêm",
+                "code": "27118"
+            }
+        ]
+    },
+    {
+        "district": "Quận 3",
+        "code": "770",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 14",
+                "code": "27127"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "27130"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "27133"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "27136"
+            },
+            {
+                "ward": "Phường Võ Thị Sáu",
+                "code": "27139"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27142"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "27145"
+            },
+            {
+                "ward": "Phường 04",
+                "code": "27148"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "27151"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "27154"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "27157"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "27160"
+            }
+        ]
+    },
+    {
+        "district": "Quận 10",
+        "code": "771",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 15",
+                "code": "27163"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "27166"
+            },
+            {
+                "ward": "Phường 14",
+                "code": "27169"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "27172"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "27175"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "27178"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27181"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "27184"
+            },
+            {
+                "ward": "Phường 08",
+                "code": "27187"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "27190"
+            },
+            {
+                "ward": "Phường 04",
+                "code": "27193"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "27196"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "27199"
+            },
+            {
+                "ward": "Phường 06",
+                "code": "27202"
+            }
+        ]
+    },
+    {
+        "district": "Quận 11",
+        "code": "772",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 15",
+                "code": "27208"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "27211"
+            },
+            {
+                "ward": "Phường 14",
+                "code": "27214"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "27217"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "27220"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "27223"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "27226"
+            },
+            {
+                "ward": "Phường 08",
+                "code": "27229"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27232"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "27235"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "27238"
+            },
+            {
+                "ward": "Phường 06",
+                "code": "27241"
+            },
+            {
+                "ward": "Phường 04",
+                "code": "27244"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "27247"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "27250"
+            },
+            {
+                "ward": "Phường 16",
+                "code": "27253"
+            }
+        ]
+    },
+    {
+        "district": "Quận 4",
+        "code": "773",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 13",
+                "code": "27259"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27262"
+            },
+            {
+                "ward": "Phường 06",
+                "code": "27265"
+            },
+            {
+                "ward": "Phường 08",
+                "code": "27268"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "27271"
+            },
+            {
+                "ward": "Phường 18",
+                "code": "27277"
+            },
+            {
+                "ward": "Phường 14",
+                "code": "27280"
+            },
+            {
+                "ward": "Phường 04",
+                "code": "27283"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "27286"
+            },
+            {
+                "ward": "Phường 16",
+                "code": "27289"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "27292"
+            },
+            {
+                "ward": "Phường 15",
+                "code": "27295"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "27298"
+            }
+        ]
+    },
+    {
+        "district": "Quận 5",
+        "code": "774",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 04",
+                "code": "27301"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27304"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "27307"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "27310"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "27313"
+            },
+            {
+                "ward": "Phường 08",
+                "code": "27316"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "27322"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "27325"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "27328"
+            },
+            {
+                "ward": "Phường 14",
+                "code": "27331"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "27334"
+            },
+            {
+                "ward": "Phường 06",
+                "code": "27337"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "27340"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "27343"
+            }
+        ]
+    },
+    {
+        "district": "Quận 6",
+        "code": "775",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 14",
+                "code": "27346"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "27349"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27352"
+            },
+            {
+                "ward": "Phường 06",
+                "code": "27355"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "27358"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "27361"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "27364"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "27367"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "27370"
+            },
+            {
+                "ward": "Phường 04",
+                "code": "27373"
+            },
+            {
+                "ward": "Phường 08",
+                "code": "27376"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "27379"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "27382"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "27385"
+            }
+        ]
+    },
+    {
+        "district": "Quận 8",
+        "code": "776",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường 08",
+                "code": "27388"
+            },
+            {
+                "ward": "Phường 02",
+                "code": "27391"
+            },
+            {
+                "ward": "Phường 01",
+                "code": "27394"
+            },
+            {
+                "ward": "Phường 03",
+                "code": "27397"
+            },
+            {
+                "ward": "Phường 11",
+                "code": "27400"
+            },
+            {
+                "ward": "Phường 09",
+                "code": "27403"
+            },
+            {
+                "ward": "Phường 10",
+                "code": "27406"
+            },
+            {
+                "ward": "Phường 04",
+                "code": "27409"
+            },
+            {
+                "ward": "Phường 13",
+                "code": "27412"
+            },
+            {
+                "ward": "Phường 12",
+                "code": "27415"
+            },
+            {
+                "ward": "Phường 05",
+                "code": "27418"
+            },
+            {
+                "ward": "Phường 14",
+                "code": "27421"
+            },
+            {
+                "ward": "Phường 06",
+                "code": "27424"
+            },
+            {
+                "ward": "Phường 15",
+                "code": "27427"
+            },
+            {
+                "ward": "Phường 16",
+                "code": "27430"
+            },
+            {
+                "ward": "Phường 07",
+                "code": "27433"
+            }
+        ]
+    },
+    {
+        "district": "Quận Bình Tân",
+        "code": "777",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường Bình Hưng Hòa",
+                "code": "27436"
+            },
+            {
+                "ward": "Phường Bình Hưng Hoà A",
+                "code": "27439"
+            },
+            {
+                "ward": "Phường Bình Hưng Hoà B",
+                "code": "27442"
+            },
+            {
+                "ward": "Phường Bình Trị Đông",
+                "code": "27445"
+            },
+            {
+                "ward": "Phường Bình Trị Đông A",
+                "code": "27448"
+            },
+            {
+                "ward": "Phường Bình Trị Đông B",
+                "code": "27451"
+            },
+            {
+                "ward": "Phường Tân Tạo",
+                "code": "27454"
+            },
+            {
+                "ward": "Phường Tân Tạo A",
+                "code": "27457"
+            },
+            {
+                "ward": "Phường  An Lạc",
+                "code": "27460"
+            },
+            {
+                "ward": "Phường An Lạc A",
+                "code": "27463"
+            }
+        ]
+    },
+    {
+        "district": "Quận 7",
+        "code": "778",
+        "type": 1,
+        "wards": [
+            {
+                "ward": "Phường Tân Thuận Đông",
+                "code": "27466"
+            },
+            {
+                "ward": "Phường Tân Thuận Tây",
+                "code": "27469"
+            },
+            {
+                "ward": "Phường Tân Kiểng",
+                "code": "27472"
+            },
+            {
+                "ward": "Phường Tân Hưng",
+                "code": "27475"
+            },
+            {
+                "ward": "Phường Bình Thuận",
+                "code": "27478"
+            },
+            {
+                "ward": "Phường Tân Quy",
+                "code": "27481"
+            },
+            {
+                "ward": "Phường Phú Thuận",
+                "code": "27484"
+            },
+            {
+                "ward": "Phường Tân Phú",
+                "code": "27487"
+            },
+            {
+                "ward": "Phường Tân Phong",
+                "code": "27490"
+            },
+            {
+                "ward": "Phường Phú Mỹ",
+                "code": "27493"
+            }
+        ]
+    },
+    {
+        "district": "Huyện Củ Chi",
+        "code": "783",
+        "type": 2,
+        "wards": [
+            {
+                "ward": "Thị trấn Củ Chi",
+                "code": "27496"
+            },
+            {
+                "ward": "Xã Phú Mỹ Hưng",
+                "code": "27499"
+            },
+            {
+                "ward": "Xã An Phú",
+                "code": "27502"
+            },
+            {
+                "ward": "Xã Trung Lập Thượng",
+                "code": "27505"
+            },
+            {
+                "ward": "Xã An Nhơn Tây",
+                "code": "27508"
+            },
+            {
+                "ward": "Xã Nhuận Đức",
+                "code": "27511"
+            },
+            {
+                "ward": "Xã Phạm Văn Cội",
+                "code": "27514"
+            },
+            {
+                "ward": "Xã Phú Hòa Đông",
+                "code": "27517"
+            },
+            {
+                "ward": "Xã Trung Lập Hạ",
+                "code": "27520"
+            },
+            {
+                "ward": "Xã Trung An",
+                "code": "27523"
+            },
+            {
+                "ward": "Xã Phước Thạnh",
+                "code": "27526"
+            },
+            {
+                "ward": "Xã Phước Hiệp",
+                "code": "27529"
+            },
+            {
+                "ward": "Xã Tân An Hội",
+                "code": "27532"
+            },
+            {
+                "ward": "Xã Phước Vĩnh An",
+                "code": "27535"
+            },
+            {
+                "ward": "Xã Thái Mỹ",
+                "code": "27538"
+            },
+            {
+                "ward": "Xã Tân Thạnh Tây",
+                "code": "27541"
+            },
+            {
+                "ward": "Xã Hòa Phú",
+                "code": "27544"
+            },
+            {
+                "ward": "Xã Tân Thạnh Đông",
+                "code": "27547"
+            },
+            {
+                "ward": "Xã Bình Mỹ",
+                "code": "27550"
+            },
+            {
+                "ward": "Xã Tân Phú Trung",
+                "code": "27553"
+            },
+            {
+                "ward": "Xã Tân Thông Hội",
+                "code": "27556"
+            }
+        ]
+    },
+    {
+        "district": "Huyện Hóc Môn",
+        "code": "784",
+        "type": 2,
+        "wards": [
+            {
+                "ward": "Thị trấn Hóc Môn",
+                "code": "27559"
+            },
+            {
+                "ward": "Xã Tân Hiệp",
+                "code": "27562"
+            },
+            {
+                "ward": "Xã Nhị Bình",
+                "code": "27565"
+            },
+            {
+                "ward": "Xã Đông Thạnh",
+                "code": "27568"
+            },
+            {
+                "ward": "Xã Tân Thới Nhì",
+                "code": "27571"
+            },
+            {
+                "ward": "Xã Thới Tam Thôn",
+                "code": "27574"
+            },
+            {
+                "ward": "Xã Xuân Thới Sơn",
+                "code": "27577"
+            },
+            {
+                "ward": "Xã Tân Xuân",
+                "code": "27580"
+            },
+            {
+                "ward": "Xã Xuân Thới Đông",
+                "code": "27583"
+            },
+            {
+                "ward": "Xã Trung Chánh",
+                "code": "27586"
+            },
+            {
+                "ward": "Xã Xuân Thới Thượng",
+                "code": "27589"
+            },
+            {
+                "ward": "Xã Bà Điểm",
+                "code": "27592"
+            }
+        ]
+    },
+    {
+        "district": "Huyện Bình Chánh",
+        "code": "785",
+        "type": 2,
+        "wards": [
+            {
+                "ward": "Thị trấn Tân Túc",
+                "code": "27595"
+            },
+            {
+                "ward": "Xã Phạm Văn Hai",
+                "code": "27598"
+            },
+            {
+                "ward": "Xã Vĩnh Lộc A",
+                "code": "27601"
+            },
+            {
+                "ward": "Xã Vĩnh Lộc B",
+                "code": "27604"
+            },
+            {
+                "ward": "Xã Bình Lợi",
+                "code": "27607"
+            },
+            {
+                "ward": "Xã Lê Minh Xuân",
+                "code": "27610"
+            },
+            {
+                "ward": "Xã Tân Nhựt",
+                "code": "27613"
+            },
+            {
+                "ward": "Xã Tân Kiên",
+                "code": "27616"
+            },
+            {
+                "ward": "Xã Bình Hưng",
+                "code": "27619"
+            },
+            {
+                "ward": "Xã Phong Phú",
+                "code": "27622"
+            },
+            {
+                "ward": "Xã An Phú Tây",
+                "code": "27625"
+            },
+            {
+                "ward": "Xã Hưng Long",
+                "code": "27628"
+            },
+            {
+                "ward": "Xã Đa Phước",
+                "code": "27631"
+            },
+            {
+                "ward": "Xã Tân Quý Tây",
+                "code": "27634"
+            },
+            {
+                "ward": "Xã Bình Chánh",
+                "code": "27637"
+            },
+            {
+                "ward": "Xã Quy Đức",
+                "code": "27640"
+            }
+        ]
+    },
+    {
+        "district": "Huyện Nhà Bè",
+        "code": "786",
+        "type": 2,
+        "wards": [
+            {
+                "ward": "Thị trấn Nhà Bè",
+                "code": "27643"
+            },
+            {
+                "ward": "Xã Phước Kiển",
+                "code": "27646"
+            },
+            {
+                "ward": "Xã Phước Lộc",
+                "code": "27649"
+            },
+            {
+                "ward": "Xã Nhơn Đức",
+                "code": "27652"
+            },
+            {
+                "ward": "Xã Phú Xuân",
+                "code": "27655"
+            },
+            {
+                "ward": "Xã Long Thới",
+                "code": "27658"
+            },
+            {
+                "ward": "Xã Hiệp Phước",
+                "code": "27661"
+            }
+        ]
+    },
+    {
+        "district": "Huyện Cần Giờ",
+        "code": "787",
+        "type": 2,
+        "wards": [
+            {
+                "ward": "Thị trấn Cần Thạnh",
+                "code": "27664"
+            },
+            {
+                "ward": "Xã Bình Khánh",
+                "code": "27667"
+            },
+            {
+                "ward": "Xã Tam Thôn Hiệp",
+                "code": "27670"
+            },
+            {
+                "ward": "Xã An Thới Đông",
+                "code": "27673"
+            },
+            {
+                "ward": "Xã Thạnh An",
+                "code": "27676"
+            },
+            {
+                "ward": "Xã Long Hòa",
+                "code": "27679"
+            },
+            {
+                "ward": "Xã Lý Nhơn",
+                "code": "27682"
+            }
+        ]
+    }
+]

@@ -1,5 +1,5 @@
 function passToDetailsModal(btn) {
-    let report_date = "";
+    let report_date = btn.dataset.reportDate;
     if (btn.dataset.reportDate instanceof Date) {
         const date = btn.dataset.reportDate;
         report_date =

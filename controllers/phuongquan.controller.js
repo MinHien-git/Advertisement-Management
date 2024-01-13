@@ -12,9 +12,11 @@ const { ObjectId } = require("mongodb");
 const BillboardRequest = require("../models/billboardrequest.model");
 const BoardRequest = require("../models/boardrequest.model");
 
-const district_list = JSON.parse(
-  fs.readFileSync(__dirname + "/../district-ward-list.json")
-);
+const dist_ward_db = async () => {
+    const arr = await db.getDb().collection("district-ward").find().toArray();
+    return JSON.parse(arr);
+};
+const district_list = dist_ward_db;
 
 const transporter = nodemailer.createTransport({
   service: "gmail",

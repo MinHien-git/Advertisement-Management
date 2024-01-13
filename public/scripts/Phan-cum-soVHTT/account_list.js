@@ -144,7 +144,7 @@ function passToEditModal(btn) {
                 document.querySelector("#district__selector__edit")
             );
             for (let j = 0; j < ward_list.length; j++) {
-                if (ward === ward_list[j].innerHTML) {
+                if (ward_list[j].innerHTML.includes(ward)) {
                     ward_value = j - 1;
                     break;
                 }

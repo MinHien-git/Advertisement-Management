@@ -1,0 +1,56 @@
+[{
+  "_id": {
+    "$oid": "65a279481d8bb90d6225c6ec"
+  },
+  "billboard": {
+    "$oid": "65307f9eda6ef7bbc2fb6da4"
+  },
+  "board_type": "Trung tâm thương mại",
+  "size": "4mx3m",
+  "board_index": "1",
+  "details": "<p>chỉnh sửa kích thước</p>",
+  "state": 0,
+  "select_option": "1"
+},
+{
+  "_id": {
+    "$oid": "65a279601d8bb90d6225c6ed"
+  },
+  "billboard": {
+    "$oid": "65307f9eda6ef7bbc2fb6d96"
+  },
+  "board_type": "Cổng chào",
+  "size": "3mx12m",
+  "board_index": "0",
+  "details": "<p>to hơn</p>",
+  "state": 0,
+  "select_option": "1"
+},
+{
+  "_id": {
+    "$oid": "65a2799d1d8bb90d6225c6ef"
+  },
+  "billboard": {
+    "$oid": "65307f9eda6ef7bbc2fb6da3"
+  },
+  "board_type": "Bảng hiflex ốp tường",
+  "size": "3mx3m",
+  "board_index": "1",
+  "details": "<p>qwerty</p>",
+  "state": 0,
+  "select_option": "1"
+},
+{
+  "_id": {
+    "$oid": "65a279b31d8bb90d6225c6f0"
+  },
+  "billboard": {
+    "$oid": "65307f9eda6ef7bbc2fb6da4"
+  },
+  "board_type": "Trụ hộp đèn",
+  "size": "3mx6m",
+  "board_index": "2",
+  "details": "<p>swrf</p>",
+  "state": 0,
+  "select_option": "1"
+}]

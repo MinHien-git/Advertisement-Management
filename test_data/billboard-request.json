@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "65a2792b1d8bb90d6225c6eb"
+  },
+  "billboard": {
+    "$oid": "65307f9eda6ef7bbc2fb6d96"
+  },
+  "place_type": "Trung tâm thương mại",
+  "type_advertise": "Xã hội hoá",
+  "status": "0",
+  "details": "<p>chỉnh sửa...</p>",
+  "state": 0,
+  "select_option": "0"
+},
+{
+  "_id": {
+    "$oid": "65a2797d1d8bb90d6225c6ee"
+  },
+  "billboard": {
+    "$oid": "65307f9eda6ef7bbc2fb6da4"
+  },
+  "place_type": "Nhà chờ xe buýt",
+  "type_advertise": "Xã hội hoá",
+  "status": "1",
+  "details": "<p>acd</p>",
+  "state": 0,
+  "select_option": "0"
+},
+{
+  "_id": {
+    "$oid": "65a279e31d8bb90d6225c6f1"
+  },
+  "billboard": {
+    "$oid": "65307f9eda6ef7bbc2fb6da3"
+  },
+  "place_type": "Cây xăng",
+  "type_advertise": "Xã hội hoá",
+  "status": "1",
+  "details": "<p>dfeee</p>",
+  "state": 0,
+  "select_option": "0"
+}]
