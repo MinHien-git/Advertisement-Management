@@ -10,3 +10,4 @@
     * Tài khoản Quận 1: **quan1@test.test**.
     * Tài khoản Phường Đa Kao, Quận 1: **dakaoQ1@test.test**.
 
+    _**Chương trình sẽ chạy ứng dụng ở port 5000.**_
