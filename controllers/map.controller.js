@@ -150,7 +150,15 @@ const _manage_map = async (request, response) => {
       },
     ])
     .toArray();
-  let reports = await getDb().collection("reports").find({}).toArray();
+
+  let second_billboard = await getDb()
+    .collection("billboards")
+    .find({ "properties.boards": [] })
+    .toArray();
+
+  let reports = [];
+  billboards = [...billboards, ...second_billboard];
+  reports = await getDb().collection("reports").find({}).toArray();
   return response.render("phan-cum-soVHTT/map", {
     billboards: billboards,
     reports: reports,

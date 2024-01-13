@@ -5,7 +5,8 @@ function get_report(feature) {
   if (report_node) {
     body.removeChild(report_node);
   }
-  console.log(feature);
+
+  console.log(lat_lnt);
   let report = `
     <section class="active popup" id="report-popup">
     <div id="report-section-form-container" style="height:auto">
@@ -24,7 +25,7 @@ function get_report(feature) {
       style="height:auto"
     >
     <input type="hidden" name="lat" value=${lat_lnt.lat}>
-    <input type="hidden" name="lnt" value=${lat_lnt.lon}>
+    <input type="hidden" name="lnt" value=${lat_lnt.lng}>
       <h2>Thêm Bảng Quảng Cáo</h2>
       
       <div class="form-section">
